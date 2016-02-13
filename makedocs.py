@@ -60,9 +60,9 @@ factory.addStep(steps.ShellCommand(command=["make", "latexpdf"],
 # 3. build html
 factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
 factory.addStep(DirectoryUpload(slavesrc="_build/html", masterdest="/usr/share/nginx/doc"))
-#factory.addStep(MasterShellCommand(name="chmod", description=["fixing", "permissions"],
-#                                 descriptionDone=["fix", "permissions"], haltOnFailure=True,
-#                                 command=["/bin/bash", "-c", "chmod -R 0755 /usr/share/nginx/doc/"]))
+factory.addStep(MasterShellCommand(name="chmod", description=["fixing", "permissions"],
+                                 descriptionDone=["fix", "permissions"], haltOnFailure=True,
+                                 command=["/bin/bash", "-c", "chmod -R 0755 /usr/share/nginx/doc/"]))
 
 ftp_upload_command = "find . -type f -exec curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T {} ftp://nextgis.ru/{} \;"
 
