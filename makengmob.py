@@ -44,8 +44,8 @@ factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty
                                  description=["log", "last 5 comments"],
                                  descriptionDone=["logged", "last 5 comments"], haltOnFailure=True))  
 factory.addStep(steps.ShellCommand(command=["/bin/bash", "testfairy-upload-android.sh", "app/build/outputs/apk"], 
-                                 description=["fix", "permissions"],
-                                 descriptionDone=["fixed", "permissions"], haltOnFailure=True))                                 
+                                 description=["upload", "testfairy"],
+                                 descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))                                 
 
                                             
 builder = BuilderConfig(name = 'makengmob', slavenames = ['build-nix'], factory = factory)
