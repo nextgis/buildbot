@@ -37,15 +37,15 @@ factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "chmod +x gradlew
                                  descriptionDone=["fixed", "permissions"], haltOnFailure=True))                                 
 factory.addStep(steps.RemoveDirectory(dir="build/app/build/outputs/apk"))                                 
 factory.addStep(steps.ShellCommand(command=["/bin/bash", "gradlew", "assembleRelease" ], 
-                                            description=["make", "prepare environment for build"],
-                                            descriptionDone=["made", "prepared environment for build"],
+                                            description=["prepare", "environment for build"],
+                                            descriptionDone=["prepared", "environment for build"],
                                             env={'ANDROID_HOME': '/opt/android-sdk-linux'}))
 factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty=format:\"%h - %an, %ar : %s\" -5 > app/build/outputs/apk/git.log"], 
                                  description=["log", "last 5 comments"],
                                  descriptionDone=["logged", "last 5 comments"], haltOnFailure=True))  
 factory.addStep(steps.ShellCommand(command=["/bin/bash", "testfairy-upload-android.sh", "app/build/outputs/apk"], 
-                                 description=["fix", "permissions"],
-                                 descriptionDone=["fixed", "permissions"], haltOnFailure=True))                                 
+                                 description=["upload", "testfairy"],
+                                 descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))                                 
 
                                             
 builder = BuilderConfig(name = 'makengmob', slavenames = ['build-nix'], factory = factory)
