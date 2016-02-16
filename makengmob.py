@@ -41,7 +41,7 @@ factory.addStep(steps.ShellCommand(command=["/bin/bash", "gradlew", "assembleRel
                                             descriptionDone=["made", "prepared environment for build"],
                                             env={'ANDROID_HOME': '/opt/android-sdk-linux'}))
 # android_gisapp/app/build/outputs/apk generate and upload
-factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty=format:\"%h - %an, %ar : %s\" -2 > build/app/build/outputs/apk/git.log"], 
+factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty=format:\"%h - %an, %ar : %s\" -2 > app/build/outputs/apk/git.log"], 
                                  description=["log", "comments"],
                                  descriptionDone=["logged", "comments"], haltOnFailure=True))  
                                             
