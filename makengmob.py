@@ -40,10 +40,13 @@ factory.addStep(steps.ShellCommand(command=["/bin/bash", "gradlew", "assembleRel
                                             description=["make", "prepare environment for build"],
                                             descriptionDone=["made", "prepared environment for build"],
                                             env={'ANDROID_HOME': '/opt/android-sdk-linux'}))
-# android_gisapp/app/build/outputs/apk generate and upload
-factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty=format:\"%h - %an, %ar : %s\" -2 > build/app/build/outputs/apk/git.log"], 
-                                 description=["log", "comments"],
-                                 descriptionDone=["logged", "comments"], haltOnFailure=True))  
+factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty=format:\"%h - %an, %ar : %s\" -5 > app/build/outputs/apk/git.log"], 
+                                 description=["log", "last 5 comments"],
+                                 descriptionDone=["logged", "last 5 comments"], haltOnFailure=True))  
+factory.addStep(steps.ShellCommand(command=["/bin/bash", "testfairy-upload-android.sh", "app/build/outputs/apk"], 
+                                 description=["fix", "permissions"],
+                                 descriptionDone=["fixed", "permissions"], haltOnFailure=True))                                 
+
                                             
 builder = BuilderConfig(name = 'makengmob', slavenames = ['build-nix'], factory = factory)
                             
