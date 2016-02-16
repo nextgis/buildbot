@@ -12,7 +12,7 @@ from buildbot.config import BuilderConfig
 from buildbot.steps.master import MasterShellCommand
 from buildbot.steps.shell import WithProperties
 
-repourl = 'git@github.com:nextgis-extra/lib_gdal.git'
+repourl = 'git://github.com/nextgis-extra/lib_gdal.git'
 
 git_poller = GitPoller(project = 'makegdal',
                        repourl = repourl,

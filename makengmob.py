@@ -12,7 +12,7 @@ from buildbot.steps.master import MasterShellCommand
 
 import bbconf
 
-repourl = 'git@github.com:nextgis/android_gisapp.git'
+repourl = 'git://github.com/nextgis/android_gisapp.git'
 
 git_poller = GitPoller(project = 'makengmob',
                        repourl = repourl,
