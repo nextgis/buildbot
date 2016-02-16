@@ -40,7 +40,7 @@ factory.addStep(steps.ShellCommand(command=["/bin/bash", "gradlew", "assembleRel
                                             description=["prepare", "environment for build"],
                                             descriptionDone=["prepared", "environment for build"],
                                             env={'ANDROID_HOME': '/opt/android-sdk-linux'}))
-factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty=format:\"%h - %an, %ar : %s\" -5 > app/build/outputs/apk/git.log"], 
+factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty=format:\"%h - %an : %s\" -5 > app/build/outputs/apk/git.log"], 
                                  description=["log", "last 5 comments"],
                                  descriptionDone=["logged", "last 5 comments"], haltOnFailure=True))  
 factory.addStep(steps.ShellCommand(command=["/bin/bash", "testfairy-upload-android.sh", "app/build/outputs/apk"], 
