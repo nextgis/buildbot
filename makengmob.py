@@ -35,13 +35,11 @@ factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True))
 factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "chmod +x gradlew"], 
                                  description=["fix", "permissions"],
                                  descriptionDone=["fixed", "permissions"], haltOnFailure=True))                                 
-factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "chmod +x gradlew"], 
-                                 description=["fix", "permissions"],
-                                 descriptionDone=["fixed", "permissions"], haltOnFailure=True))
 # f.addStep(steps.RemoveDirectory(dir="build/build"))                                 
-factory.addStep(steps.ShellCommand(command=["/bin/bash", "export ANDROID_HOME=/opt/android-sdk-linux && ./gradlew"], 
+factory.addStep(steps.ShellCommand(command=["sh", "./gradlew"], 
                                             description=["make", "prepare environment for build"],
-                                            descriptionDone=["made", "prepared environment for build"]))
+                                            descriptionDone=["made", "prepared environment for build"],
+                                            env={'ANDROID_HOME': '/opt/android-sdk-linux'}))
 # android_gisapp/app/build/outputs/apk generate and upload
                                             
 builder = BuilderConfig(name = 'makengmob', slavenames = ['build-nix'], factory = factory)
