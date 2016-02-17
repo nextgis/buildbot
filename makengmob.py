@@ -18,7 +18,7 @@ git_poller = GitPoller(project = 'makengmob',
                        repourl = repourl,
                        workdir = 'makengmob-workdir',
                        branch = 'master',
-                       pollinterval = 21600,) # each 6 hours
+                       pollinterval = 7200,) # each 2 hours
 
 scheduler = schedulers.SingleBranchScheduler(
                             name="makengmob",
