@@ -23,7 +23,7 @@ git_poller = GitPoller(project = 'makedocs',
 scheduler = schedulers.SingleBranchScheduler(
                             name="makedocs",
                             change_filter=util.ChangeFilter(project = 'makedocs'),
-                            treeStableTimer=None,
+                            treeStableTimer=5*60,
                             builderNames=["makedocs"])
                             
 #### build docs
