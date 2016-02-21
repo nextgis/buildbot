@@ -43,7 +43,7 @@ factory.addStep(steps.ShellCommand(command=["/bin/bash", "gradlew", "assembleRel
 factory.addStep(steps.ShellCommand(command=["/bin/bash", "-c", "git log --pretty=format:\"%h - %an : %s\" -5 > app/build/outputs/apk/git.log"], 
                                  description=["log", "last 5 comments"],
                                  descriptionDone=["logged", "last 5 comments"], haltOnFailure=True))  
-factory.addStep(steps.ShellCommand(command=["/bin/bash", "/home/ngw_admin/ngw/env/bin/testfairy-upload-android.sh", "app/build/outputs/apk"], 
+factory.addStep(steps.ShellCommand(command=["/bin/bash", "testfairy-upload-android.sh", "app/build/outputs/apk"], 
                                  description=["upload", "testfairy"],
                                  descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))                                 
 
