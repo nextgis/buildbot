@@ -23,7 +23,7 @@ git_poller = GitPoller(project = 'makengmob',
 scheduler = schedulers.SingleBranchScheduler(
                             name="makengmob",
                             change_filter=util.ChangeFilter(project = 'makengmob'),
-                            treeStableTimer=None,
+                            treeStableTimer=2*60,
                             builderNames=["makengmob"])
                             
 #### build docs
