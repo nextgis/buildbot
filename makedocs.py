@@ -1,6 +1,8 @@
 # -*- python -*-
 # ex: set syntax=python:
-    
+
+c = {}
+
 from buildbot.plugins import *
 from buildbot.steps.source.git import Git
 from buildbot.steps.python import Sphinx
@@ -19,13 +21,14 @@ git_poller = GitPoller(project = 'makedocs',
                        workdir = 'makedocs-workdir',
                        branch = 'master',
                        pollinterval = 3600,)
+c['change_source'] = []
 
 scheduler = schedulers.SingleBranchScheduler(
                             name="makedocs",
                             change_filter=util.ChangeFilter(project = 'makedocs'),
                             treeStableTimer=5*60,
                             builderNames=["makedocs"])
-                            
+c['schedulers'] = [scheduler]
 #### build docs
 
 factory = util.BuildFactory()
@@ -73,4 +76,4 @@ factory.addStep(MasterShellCommand(name="upload to ftp", description=["upload", 
                                  path="/usr/share/nginx/doc"))
 
 builder = BuilderConfig(name = 'makedocs', slavenames = ['build-nix'], factory = factory)
-                            
+c['builders'] = [builder]                         

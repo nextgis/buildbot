@@ -1,6 +1,8 @@
 # -*- python -*-
 # ex: set syntax=python:
-    
+
+c = {}
+
 from buildbot.plugins import *
 from buildbot.steps.source.git import Git
 from buildbot.steps.python import Sphinx
@@ -19,13 +21,15 @@ git_poller = GitPoller(project = 'makengmob',
                        workdir = 'makengmob-workdir',
                        branch = 'master',
                        pollinterval = 7200,) # each 2 hours
+c['change_source'] = []
 
 scheduler = schedulers.SingleBranchScheduler(
                             name="makengmob",
                             change_filter=util.ChangeFilter(project = 'makengmob'),
                             treeStableTimer=2*60,
                             builderNames=["makengmob"])
-                            
+c['schedulers'] = [scheduler]
+
 #### build docs
 
 factory = util.BuildFactory()
@@ -49,4 +53,4 @@ factory.addStep(steps.ShellCommand(command=["/bin/bash", "testfairy-upload-andro
 
                                             
 builder = BuilderConfig(name = 'makengmob', slavenames = ['build-nix'], factory = factory)
-                            
+c['builders'] = [builder]                            
