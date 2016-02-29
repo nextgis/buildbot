@@ -1,8 +1,6 @@
 # -*- python -*-
 # ex: set syntax=python:
 
-c = {}
-
 from buildbot.plugins import *
 from buildbot.steps.source.git import Git
 from buildbot.steps.python import Sphinx
@@ -14,6 +12,8 @@ from buildbot.steps.master import MasterShellCommand
 
 import bbconf
 
+c = {}
+
 repourl = 'git://github.com/nextgis/android_gisapp.git'
 
 git_poller = GitPoller(project = 'makengmob',
@@ -21,7 +21,7 @@ git_poller = GitPoller(project = 'makengmob',
                        workdir = 'makengmob-workdir',
                        branch = 'master',
                        pollinterval = 7200,) # each 2 hours
-c['change_source'] = []
+c['change_source'] = [git_poller]
 
 scheduler = schedulers.SingleBranchScheduler(
                             name="makengmob",

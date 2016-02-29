@@ -1,8 +1,6 @@
 # -*- python -*-
 # ex: set syntax=python:
 
-c = {}
-
 from buildbot.plugins import *
 from buildbot.steps.source.git import Git
 from buildbot.steps.python import Sphinx
@@ -14,6 +12,8 @@ from buildbot.steps.master import MasterShellCommand
 
 import bbconf
 
+c = {}
+
 repourl = 'git://github.com/nextgis/docs_ng.git'
 
 git_poller = GitPoller(project = 'makedocs',
@@ -21,7 +21,7 @@ git_poller = GitPoller(project = 'makedocs',
                        workdir = 'makedocs-workdir',
                        branch = 'master',
                        pollinterval = 3600,)
-c['change_source'] = []
+c['change_source'] = [git_poller]
 
 scheduler = schedulers.SingleBranchScheduler(
                             name="makedocs",
