@@ -4,8 +4,7 @@ from buildbot.steps.source.git import Git
 from buildbot.config import BuilderConfig
 import bbconf
 
-
-# from ngqwebuilder_scheduler import NGQWebBuilderForceScheduler
+from ngqwebuilder_scheduler import NGQWebBuilderForceScheduler
 
 c = {}
 
@@ -53,13 +52,13 @@ c['schedulers'].append(schedulers.ForceScheduler(
                             ]
 ))
 
-# c['schedulers'].append(
-#     NGQWebBuilderForceScheduler(
-#         "ngq_custom_scheduler",
-#         8011,
-#         ["makengq-custom"]
-#     )
-# )
+c['schedulers'].append(
+    NGQWebBuilderForceScheduler(
+        "ngq_custom_scheduler",
+        8011,
+        ["makengq-custom"]
+    )
+)
 
 c['builders'] = []
 # 0. download configuration
