@@ -30,7 +30,7 @@ scheduler = schedulers.SingleBranchScheduler(
                             builderNames=["makengmob"])
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
-                            name="force",
+                            name="makengmob_force",
                             builderNames=["makengmob"],
 ))
 #### build docs

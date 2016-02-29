@@ -30,7 +30,7 @@ scheduler = schedulers.SingleBranchScheduler(
                             builderNames=["makedocs"])
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
-                            name="force",
+                            name="makedocs_force",
                             builderNames=["makedocs"],
 ))
 
