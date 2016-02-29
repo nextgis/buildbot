@@ -29,7 +29,10 @@ scheduler = schedulers.SingleBranchScheduler(
                             treeStableTimer=2*60,
                             builderNames=["makengmob"])
 c['schedulers'] = [scheduler]
-
+c['schedulers'].append(schedulers.ForceScheduler(
+                            name="force",
+                            builderNames=["makengmob"],
+))
 #### build docs
 
 factory = util.BuildFactory()

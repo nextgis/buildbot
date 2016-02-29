@@ -16,13 +16,14 @@ c['schedulers'].append(
 )
 """
 
-class NGQWebBuilderForceScheduler(resource.Resource, base.BaseScheduler):  
+
+class NGQWebBuilderForceScheduler(resource.Resource, base.BaseScheduler):
     isLeaf = True
 
     def __init__(self, name, listeningPort, builderNames, **kwargs):
         resource.Resource.__init__(self)
         base.BaseScheduler.__init__(self, name, builderNames, {}, **kwargs)
-        
+
         self.site = server.Site(self)
         self.listeningPort = listeningPort
 
@@ -42,7 +43,7 @@ class NGQWebBuilderForceScheduler(resource.Resource, base.BaseScheduler):
         propertiesAsDict = json.loads(newdata)
         properties = Properties.fromDict(propertiesAsDict)
         d = self.startBuild(properties)
-        
+
         d.addCallback(self._delayedRender, request)
         return server.NOT_DONE_YET
 

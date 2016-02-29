@@ -29,6 +29,11 @@ scheduler = schedulers.SingleBranchScheduler(
                             treeStableTimer=5*60,
                             builderNames=["makedocs"])
 c['schedulers'] = [scheduler]
+c['schedulers'].append(schedulers.ForceScheduler(
+                            name="force",
+                            builderNames=["makedocs"],
+))
+
 #### build docs
 
 factory = util.BuildFactory()
