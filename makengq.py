@@ -52,6 +52,21 @@ c['schedulers'].append(schedulers.ForceScheduler(
                             ]
 ))
 
+c['schedulers'].append(schedulers.ForceScheduler(
+                            name="force ngq",
+                            builderNames=["makengq-custom"],
+                            properties=[
+                                util.StringParameter(
+                                    name="release_ngq_branch",
+                                    label="Release NGQ branch:<br>",
+                                    default=ngq_branch_for_everyday, size=80),
+                                util.StringParameter(
+                                    name="build_order_id",
+                                    label="Build order id from ngq build service:<br>",
+                                    size=80),
+                            ]
+))
+
 c['schedulers'].append(
     NGQWebBuilderForceScheduler(
         "ngq_custom_scheduler",
@@ -68,7 +83,7 @@ ngq_download_customization_conf = steps.ShellCommand(
     command=[
         'wget',
         util.Interpolate(
-            'http://192.168.250.160:6543/configuration/%(prop:guid)s'
+            'http://192.168.1.247:6543/build_order/%(prop:build_order_id)s/configuration'
         ),
         '-O',
         util.Interpolate('%(prop:workdir)s\\customization_config.zip')
