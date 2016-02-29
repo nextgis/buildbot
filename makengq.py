@@ -1,5 +1,9 @@
 from buildbot.plugins import *
 from buildbot.changes.gitpoller import GitPoller
+from buildbot.steps.source.git import Git
+from buildbot.config import BuilderConfig
+import bbconf
+
 
 # from ngqwebuilder_scheduler import NGQWebBuilderForceScheduler
 
