@@ -140,161 +140,172 @@ remove_build_dir_step = steps.RemoveDirectory(
 )
 
 ngq_release_conf_step = steps.ShellCommand(
-        name = 'cmake configuration ngq RELEASE',
-        haltOnFailure = True,
-        command = [
-            'call', 'ngq-configurate.bat', 
-            util.Interpolate('%(prop:workdir)s\\ngq-build'),
-            util.Interpolate('%(prop:workdir)s\\ngq-install'),
-            util.Interpolate('%(prop:workdir)s\\ngq_src'),
-            'RELEASE'
-        ],
-        env = {'BUILDNUMBER': util.Interpolate('%(prop:buildnumber)s')},
-        workdir=".\\installer"
-    )
+    name='cmake configuration ngq RELEASE',
+    haltOnFailure=True,
+    command=[
+        'call', 'ngq-configurate.bat',
+        util.Interpolate('%(prop:workdir)s\\ngq-build'),
+        util.Interpolate('%(prop:workdir)s\\ngq-install'),
+        util.Interpolate('%(prop:workdir)s\\ngq_src'),
+        'RELEASE'
+    ],
+    env={'BUILDNUMBER': util.Interpolate('%(prop:buildnumber)s')},
+    workdir=".\\installer"
+)
+
 ngq_build_conf_step = steps.ShellCommand(
-        name = 'cmake configuration ngq BUILD',
-        haltOnFailure = True,
-        command = [
-            'call', 'ngq-configurate.bat', 
-            util.Interpolate('%(prop:workdir)s\\ngq-build'),
-            util.Interpolate('%(prop:workdir)s\\ngq-install'),
-            util.Interpolate('%(prop:workdir)s\\ngq_src'),
-            'BUILD'
-        ],
-        env = {'BUILDNUMBER': util.Interpolate('%(prop:buildnumber)s')},
-        workdir=".\\installer"
-    )
+    name='cmake configuration ngq BUILD',
+    haltOnFailure=True,
+    command=[
+        'call', 'ngq-configurate.bat',
+        util.Interpolate('%(prop:workdir)s\\ngq-build'),
+        util.Interpolate('%(prop:workdir)s\\ngq-install'),
+        util.Interpolate('%(prop:workdir)s\\ngq_src'),
+        'BUILD'
+    ],
+    env={'BUILDNUMBER': util.Interpolate('%(prop:buildnumber)s')},
+    workdir=".\\installer"
+)
 # 4. build
 ngq_build_step = steps.ShellCommand(
-        name = 'build ngq',
-        haltOnFailure = True,
-        command=[
-            'call', 'ngq-build.bat', 
-            util.Interpolate('%(prop:workdir)s\\ngq-build'), 
-            "qgis2.8.3.sln"
-        ], 
-        workdir='.\\installer',
-        timeout = None
-    )
+    name='build ngq',
+    haltOnFailure=True,
+    command=[
+        'call', 'ngq-build.bat',
+        util.Interpolate('%(prop:workdir)s\\ngq-build'),
+        "qgis2.8.3.sln"
+    ],
+    workdir='.\\installer',
+    timeout=None
+)
 
 # 5. make installer
 ngq_make_installer_step = steps.ShellCommand(
-        name = 'make ngq installer',
-        haltOnFailure = True,
-        command=[
-            'call', 'ngq-make-installer.bat',
-            util.Interpolate("%(prop:workdir)s\\ngq-install"), 
-            util.Interpolate("%(prop:workdir)s")
-        ],
-        workdir=".\\installer",
-        timeout = None
-    )
-    
+    name='make ngq installer',
+    haltOnFailure=True,
+    command=[
+        'call', 'ngq-make-installer.bat',
+        util.Interpolate("%(prop:workdir)s\\ngq-install"),
+        util.Interpolate("%(prop:workdir)s")
+    ],
+    workdir=".\\installer",
+    timeout=None
+)
+
 ngq_customize_make_installer_step = steps.ShellCommand(
-        name = 'make ngq customization installer',
-        haltOnFailure = True,
-        command=[
-            'call', 'ngq-custom-make-installer.bat',
-            util.Interpolate('%(prop:workdir)s\\customization_config.zip'),
-            util.Interpolate("%(prop:workdir)s\\ngq-install"), 
-            util.Interpolate("%(prop:workdir)s")
-        ],
-        workdir=".\\installer",
-        timeout = None
-    )
+    name='make ngq customization installer',
+    haltOnFailure=True,
+    command=[
+        'call', 'ngq-custom-make-installer.bat',
+        util.Interpolate('%(prop:workdir)s\\customization_config.zip'),
+        util.Interpolate("%(prop:workdir)s\\ngq-install"),
+        util.Interpolate("%(prop:workdir)s")
+    ],
+    workdir=".\\installer",
+    timeout=None
+)
 
 # 6. upload to ftp
 ftp_server = 'nextgis.ru'
-ftp_conn_string = 'ftp://%s@%s'%(bbconf.ftp_upldsoft_user, ftp_server)
+ftp_conn_string = 'ftp://%s@%s' % (bbconf.ftp_upldsoft_user, ftp_server)
 ngq_ftp_upload_installer_step = steps.ShellCommand(
-        name = 'upload installer to ftp(%s)'%ftp_server,
-        haltOnFailure = True,
-        command=[
-            "call", "ftp_put_installer.bat", 
-            ftp_conn_string,
-            util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
-            'qgis/ngq-builds'
-        ],
-        workdir=".\\installer",
-        timeout = None
-    )
+    name='upload installer to ftp(%s)' % ftp_server,
+    haltOnFailure=True,
+    command=[
+        "call", "ftp_put_installer.bat",
+        ftp_conn_string,
+        util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
+        'qgis/ngq-builds'
+    ],
+    workdir=".\\installer",
+    timeout=None
+)
 ngq_custom_ftp_upload_installer_step = steps.ShellCommand(
-        name = 'upload installer to ftp(%s)'%ftp_server,
-        haltOnFailure = True,
-        command=[
-            "call", "ftp_put_installer.bat", 
-            ftp_conn_string,
-            util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
-            util.Interpolate('programs/qgis/ngq-custom-builds/%(prop:guid)s')
-        ],
-        workdir=".\\installer",
-        timeout = None
-    )
+    name='upload installer to ftp(%s)' % ftp_server,
+    haltOnFailure=True,
+    command=[
+        "call", "ftp_put_installer.bat",
+        ftp_conn_string,
+        util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
+        util.Interpolate('programs/qgis/ngq-custom-builds/%(prop:guid)s')
+    ],
+    workdir=".\\installer",
+    timeout=None
+)
 
 ngq_ftp_upload_meta_bld_step = steps.ShellCommand(
-        name = 'upload meta-file to ftp(%s)'%ftp_server,
-        haltOnFailure = True,
-        command=[
-            "call", "ftp_put_metafile.bat", 
-            ftp_conn_string, 
-            util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
-            'qgis/.meta-ngq-commercial'
-        ],
-        workdir=".\\installer",
-        timeout = None
-    )
+    name='upload meta-file to ftp(%s)' % ftp_server,
+    haltOnFailure=True,
+    command=[
+        "call", "ftp_put_metafile.bat",
+        ftp_conn_string,
+        util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
+        'qgis/.meta-ngq-commercial'
+    ],
+    workdir=".\\installer",
+    timeout=None
+)
 ngq_ftp_upload_meta_rel_step = steps.ShellCommand(
-        name = 'upload meta-file to ftp(%s)'%ftp_server,
-        haltOnFailure = True,
-        command=[
-            "call", "ftp_put_metafile.bat", 
-            ftp_conn_string, 
-            util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
-            'qgis/.meta-ngq'
-        ],
-        workdir=".\\installer",
-        timeout = None
-    )
+    name='upload meta-file to ftp(%s)' % ftp_server,
+    haltOnFailure=True,
+    command=[
+        "call", "ftp_put_metafile.bat",
+        ftp_conn_string,
+        util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
+        'qgis/.meta-ngq'
+    ],
+    workdir=".\\installer",
+    timeout=None
+)
 ngq_custom_ftp_upload_meta_rel_step = steps.ShellCommand(
-        name = 'upload meta-file to ftp(%s)'%ftp_server,
-        haltOnFailure = True,
-        command=[
-            "call", "ftp_put_metafile.bat", 
-            ftp_conn_string, 
-            util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
-            util.Interpolate('programs/qgis/ngq-custom-builds/%(prop:guid)s/.meta-ngq')
-        ],
-        workdir=".\\installer",
-        timeout = None
-    )
+    name='upload meta-file to ftp(%s)' % ftp_server,
+    haltOnFailure=True,
+    command=[
+        "call", "ftp_put_metafile.bat",
+        ftp_conn_string,
+        util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
+        util.Interpolate('programs/qgis/ngq-custom-builds/%(prop:guid)s/.meta-ngq')
+    ],
+    workdir=".\\installer",
+    timeout=None
+)
 
 ngq_release_steps = [
-    ngq_get_src_rel_step, 
-    installer_get_step, 
-    remove_build_dir_step, 
-    ngq_release_conf_step, 
-    ngq_build_step, 
-    ngq_make_installer_step, 
-    ngq_ftp_upload_installer_step, 
-    ngq_ftp_upload_meta_rel_step]
+    ngq_get_src_rel_step,
+    installer_get_step,
+    remove_build_dir_step,
+    ngq_release_conf_step,
+    ngq_build_step,
+    ngq_make_installer_step,
+    ngq_ftp_upload_installer_step,
+    ngq_ftp_upload_meta_rel_step
+]
 
 ngq_release_factory = util.BuildFactory(ngq_release_steps)
-ngq_release_builder = BuilderConfig(name = 'makengq-release', slavenames = ['build-ngq-win7'], factory = ngq_release_factory)
+ngq_release_builder = BuilderConfig(
+    name='makengq-release',
+    slavenames=['build-ngq-win7'],
+    factory=ngq_release_factory
+)
 c['builders'].append(ngq_release_builder)
 
 ngq_bld_steps = [
-    ngq_get_src_bld_step, 
-    installer_get_step, 
+    ngq_get_src_bld_step,
+    installer_get_step,
     remove_build_dir_step,
     ngq_build_conf_step,
     ngq_build_step,
     ngq_make_installer_step,
     ngq_ftp_upload_installer_step,
-    ngq_ftp_upload_meta_bld_step]
+    ngq_ftp_upload_meta_bld_step
+]
 
 ngq_comercial_factory = util.BuildFactory(ngq_bld_steps)
-ngq_comercial_builder = BuilderConfig(name = 'makengq', slavenames = ['build-ngq-win7'], factory = ngq_comercial_factory)
+ngq_comercial_builder = BuilderConfig(
+    name='makengq',
+    slavenames=['build-ngq-win7'],
+    factory=ngq_comercial_factory
+)
 c['builders'].append(ngq_comercial_builder)
 
 ngq_custom_bld_steps = [
@@ -302,18 +313,18 @@ ngq_custom_bld_steps = [
     ngq_get_src_rel_step,
     installer_get_step,
     remove_build_dir_step,
-    ngq_customization_src_step, 
-    ngq_release_conf_step, 
-    ngq_build_step, 
+    ngq_customization_src_step,
+    ngq_release_conf_step,
+    ngq_build_step,
     ngq_customize_make_installer_step,
     ngq_custom_ftp_upload_installer_step,
     ngq_custom_ftp_upload_meta_rel_step
 ]
 ngq_custom_factory = util.BuildFactory(ngq_custom_bld_steps)
 ngq_custom_builder = BuilderConfig(
-    name = 'makengq-custom',
-    slavenames = ['build-ngq-win7'],
-    factory = ngq_custom_factory,
+    name='makengq-custom',
+    slavenames=['build-ngq-win7'],
+    factory=ngq_custom_factory,
     mergeRequests=lambda builder, breq1, breq2: False
 )
 c['builders'].append(ngq_custom_builder)
