@@ -4,13 +4,16 @@ from buildbot.steps.source.git import Git
 from buildbot.config import BuilderConfig
 import bbconf
 
-from ngqwebuilder_scheduler import NGQWebBuilderForceScheduler
-from ngqwebuilder_status_push import NGQWebBuilderNotifier
+import ngqwebuilder_scheduler
+import ngqwebuilder_status_push
 
 dependent_local_modules = [
     'ngqwebuilder_scheduler.py',
     'ngqwebuilder_status_push.py'
 ]
+
+reload(ngqwebuilder_scheduler)
+reload(ngqwebuilder_status_push)
 
 c = {}
 
@@ -74,7 +77,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
 ))
 
 c['schedulers'].append(
-    NGQWebBuilderForceScheduler(
+    ngqwebuilder_scheduler.NGQWebBuilderForceScheduler(
         "makengq-custom ngq build service",
         8011,
         ["makengq-custom"]
@@ -336,7 +339,7 @@ ngq_custom_builder = BuilderConfig(
 c['builders'].append(ngq_custom_builder)
 
 c['status'] = [
-    NGQWebBuilderNotifier(
+    ngqwebuilder_status_push.NGQWebBuilderNotifier(
         "http://192.168.250.160:6543/buildbot_status",
         ["makengq-custom"]
     )
