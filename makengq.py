@@ -42,7 +42,7 @@ c['schedulers'].append(
 )
 
 c['schedulers'].append(schedulers.ForceScheduler(
-                            name="force ngq",
+                            name="makengq force",
                             builderNames=["makengq", "makengq-release"],
                             properties=[
                                 util.StringParameter(
@@ -53,7 +53,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
 ))
 
 c['schedulers'].append(schedulers.ForceScheduler(
-                            name="force ngq",
+                            name="makengq-custom force",
                             builderNames=["makengq-custom"],
                             properties=[
                                 util.StringParameter(
@@ -69,7 +69,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
 
 c['schedulers'].append(
     NGQWebBuilderForceScheduler(
-        "ngq_custom_scheduler",
+        "makengq-custom ngq build service",
         8011,
         ["makengq-custom"]
     )
