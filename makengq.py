@@ -83,7 +83,7 @@ ngq_download_customization_conf = steps.ShellCommand(
     command=[
         'wget',
         util.Interpolate(
-            'http://192.168.1.247:6543/build_order/%(prop:build_order_id)s/configuration'
+            'http://192.168.250.160:6543/build_order/%(prop:build_order_id)s/configuration'
         ),
         '-O',
         util.Interpolate('%(prop:workdir)s\\customization_config.zip')
