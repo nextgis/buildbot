@@ -7,6 +7,11 @@ import bbconf
 from ngqwebuilder_scheduler import NGQWebBuilderForceScheduler
 from ngqwebuilder_status_push import NGQWebBuilderNotifier
 
+dependent_local_modules = [
+    'ngqwebuilder_scheduler.py',
+    'ngqwebuilder_status_push.py'
+]
+
 c = {}
 
 ngq_repourl = 'git@github.com:nextgis/NextGIS-QGIS.git'
