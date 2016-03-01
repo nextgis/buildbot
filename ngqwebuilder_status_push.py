@@ -15,7 +15,7 @@ class NGQWebBuilderNotifier(StatusPush):
 
         self.serverUrl = serverUrl
         self.targetBuilders = targetBuilders
-
+        self.lastPushWasSuccessful = True
         path = ('events_' +
                     urlparse.urlparse(self.serverUrl)[1].split(':')[0])
         queue = PersistentQueue(
