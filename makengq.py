@@ -5,6 +5,7 @@ from buildbot.config import BuilderConfig
 import bbconf
 
 from ngqwebuilder_scheduler import NGQWebBuilderForceScheduler
+from ngqwebuilder_status_push import NGQWebBuilderNotifier
 
 c = {}
 
@@ -328,3 +329,10 @@ ngq_custom_builder = BuilderConfig(
     mergeRequests=lambda builder, breq1, breq2: False
 )
 c['builders'].append(ngq_custom_builder)
+
+c['status'] = [
+    NGQWebBuilderNotifier(
+        "http://192.168.250.160:6543/buildbot_status",
+        ["makengq-custom"]
+    )
+]

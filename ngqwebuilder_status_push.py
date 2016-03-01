@@ -8,6 +8,7 @@ from ngqwebuilder_status_push import NGQWebBuilderNotifier
 c['status'].append(NGQWebBuilderNotifier("http://0.0.0.0:8080", ["mytest"]))
 """
 
+
 class NGQWebBuilderNotifier(StatusPush):
     def __init__(self, serverUrl, targetBuilders=[]):
         base.StatusReceiverMultiService.__init__(self)
