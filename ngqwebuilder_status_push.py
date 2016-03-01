@@ -15,7 +15,7 @@ class NGQWebBuilderNotifier(StatusPush):
 
         self.serverUrl = serverUrl
         self.targetBuilders = targetBuilders
-        self.lastPushWasSuccessful = True
+        # self.lastPushWasSuccessful = True
         path = ('events_' +
                     urlparse.urlparse(self.serverUrl)[1].split(':')[0])
         queue = PersistentQueue(
@@ -56,36 +56,35 @@ class NGQWebBuilderNotifier(StatusPush):
             ]
         )
 
-
     def pushStatus(self):
         items = self.queue.popChunk()
 
         newitems = []
         for item in items:
             log.msg("?????? item: {}".format(item))
-                
+
             if item.get('event') in ['buildStarted','buildFinished']:
                 if item.get('payload', {}).get('build', {}).get('builderName') not in self.targetBuilders:
                     continue
 
             newitems.append(item)
-        
+
         if len(newitems) > 0:
             # packets = json.dumps(newitems, separators=(',', ':'))
             # params = {'packets': packets}
             data = json.dumps(newitems)
-            
+
             self.pushHTTP(data, newitems)
         else:
             return self.queueNextServerPush()
 
-    def wasLastPushSuccessful(self):
-        return self.lastPushWasSuccessful
-        
+    # def wasLastPushSuccessful(self):
+    #     return self.lastPushWasSuccessful
+
     def pushHTTP(self, data, items):
         def Success(result):
             log.msg('Sent %d events to %s' % (len(items), self.serverUrl))
-            self.lastPushWasSuccessful = True
+            # self.lastPushWasSuccessful = True
 
         def Failure(result):
             log.msg('Failed to push %d events to %s: %s' %
@@ -93,7 +92,7 @@ class NGQWebBuilderNotifier(StatusPush):
             self.queue.insertBackChunk(items)
             if self.stopped:
                 self.queue.save()
-            self.lastPushWasSuccessful = False
+            # self.lastPushWasSuccessful = False
 
         headers = {'Content-Type': 'application/json'}
         connection = client.getPage(self.serverUrl,
