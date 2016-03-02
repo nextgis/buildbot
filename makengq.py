@@ -229,18 +229,7 @@ ngq_ftp_upload_installer_step = steps.ShellCommand(
     workdir=".\\installer",
     timeout=None
 )
-ngq_custom_ftp_upload_installer_step = steps.ShellCommand(
-    name='upload installer to ftp(%s)' % ftp_server,
-    haltOnFailure=True,
-    command=[
-        "call", "ftp_put_installer.bat",
-        ftp_conn_string,
-        util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
-        util.Interpolate('programs/qgis/ngq-custom-builds/%(prop:guid)s')
-    ],
-    workdir=".\\installer",
-    timeout=None
-)
+
 
 ngq_ftp_upload_meta_bld_step = steps.ShellCommand(
     name='upload meta-file to ftp(%s)' % ftp_server,
@@ -266,16 +255,17 @@ ngq_ftp_upload_meta_rel_step = steps.ShellCommand(
     workdir=".\\installer",
     timeout=None
 )
-ngq_custom_ftp_upload_meta_rel_step = steps.ShellCommand(
-    name='upload meta-file to ftp(%s)' % ftp_server,
+
+ngq_custom_put_installer_to_build_service = steps.ShellCommand(
+    name='put installer to build service(%s)' % '192.168.250.160:6543',
     haltOnFailure=True,
     command=[
-        "call", "ftp_put_metafile.bat",
-        ftp_conn_string,
-        util.Interpolate("%(prop:workdir)s\\.meta-ngq"),
-        util.Interpolate('programs/qgis/ngq-custom-builds/%(prop:guid)s/.meta-ngq')
+        util.Interpolate("%(prop:workdir)s\\installer\\curl_put.bat"),
+        util.Interpolate(
+            'http://192.168.250.160:6543/build_order/%(prop:build_order_id)s/installer'
+        ),
     ],
-    workdir=".\\installer",
+    workdir=util.Interpolate("%(prop:workdir)s"),
     timeout=None
 )
 
@@ -326,8 +316,7 @@ ngq_custom_bld_steps = [
     ngq_release_conf_step,
     ngq_build_step,
     ngq_customize_make_installer_step,
-    ngq_custom_ftp_upload_installer_step,
-    ngq_custom_ftp_upload_meta_rel_step
+    ngq_custom_put_installer_to_build_service
 ]
 ngq_custom_factory = util.BuildFactory(ngq_custom_bld_steps)
 ngq_custom_builder = BuilderConfig(
