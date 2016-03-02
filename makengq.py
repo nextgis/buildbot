@@ -308,14 +308,14 @@ ngq_comercial_builder = BuilderConfig(
 c['builders'].append(ngq_comercial_builder)
 
 ngq_custom_bld_steps = [
-    ngq_download_customization_conf,
-    ngq_get_src_rel_step,
-    installer_get_step,
-    remove_build_dir_step,
-    ngq_customization_src_step,
-    ngq_release_conf_step,
-    ngq_build_step,
-    ngq_customize_make_installer_step,
+    # ngq_download_customization_conf,
+    # ngq_get_src_rel_step,
+    # installer_get_step,
+    # remove_build_dir_step,
+    # ngq_customization_src_step,
+    # ngq_release_conf_step,
+    # ngq_build_step,
+    # ngq_customize_make_installer_step,
     ngq_custom_put_installer_to_build_service
 ]
 ngq_custom_factory = util.BuildFactory(ngq_custom_bld_steps)
