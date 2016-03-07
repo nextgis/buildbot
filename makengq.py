@@ -29,7 +29,7 @@ ngq_git_poller = GitPoller(
     branch=ngq_branch_for_everyday,
     pollinterval=3600,
 )
-c['change_source'].append(ngq_git_poller)
+#c['change_source'].append(ngq_git_poller)
 
 installer_git_poller = GitPoller(
     project='installer',
@@ -41,14 +41,14 @@ installer_git_poller = GitPoller(
 c['change_source'].append(installer_git_poller)
 
 c['schedulers'] = []
-c['schedulers'].append(
-    schedulers.SingleBranchScheduler(
-        name="makengq",
-        change_filter=util.ChangeFilter(project=['ngq', 'installer']),
-        treeStableTimer=None,
-        builderNames=["makengq"]
-    )
-)
+#c['schedulers'].append(
+#    schedulers.SingleBranchScheduler(
+#        name="makengq",
+#        change_filter=util.ChangeFilter(project=['ngq', 'installer']),
+#        treeStableTimer=None,
+#        builderNames=["makengq"]
+#    )
+#)
 
 c['schedulers'].append(schedulers.ForceScheduler(
                             name="makengq force",
