@@ -19,7 +19,7 @@ c = {}
 
 ngq_repourl = 'git@github.com:nextgis/NextGIS-QGIS.git'
 installer_repourl = 'git@github.com:nextgis/installer.git'
-ngq_branch_for_everyday = 'ngq-15_0'
+ngq_branch_for_everyday = 'ngq-16'
 
 c['change_source'] = []
 ngq_git_poller = GitPoller(
