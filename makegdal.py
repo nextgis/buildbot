@@ -12,72 +12,97 @@ from buildbot.config import BuilderConfig
 from buildbot.steps.master import MasterShellCommand
 from buildbot.steps.shell import WithProperties
 
+import bbconf
+
+c = {}
+
 repourl = 'git://github.com/nextgis-extra/lib_gdal.git'
 
 git_poller = GitPoller(project = 'makegdal',
                        repourl = repourl,
                        workdir = 'makegdal-workdir',
-                       branch = 'master',
+                       branch = 'buildbot',
                        pollinterval = 7200,) 
+c['change_source'] = [git_poller]
                        
 scheduler = schedulers.SingleBranchScheduler(
                             name="makegdal",
                             change_filter=util.ChangeFilter(project = 'makegdal'),
-                            treeStableTimer=None,
-                            builderNames=["makegdal"])                       
-                            
+                            treeStableTimer=1*60,
+                            builderNames=["makegdal_win"])                       
+c['schedulers'] = [scheduler]
+c['schedulers'].append(schedulers.ForceScheduler(
+                            name="makegdal_force",
+                            builderNames=["makegdal_win"]))      
+
+#, "makegdal_lin"                      
 #### build gdal
 
-factory = util.BuildFactory()
+## common steps
+cmake_config = "-DBUIDL_SHARED_LIBS=ON -DWITH_EXPAT=ON -DWITH_EXPAT_EXTERNAL=ON -DWITH_GeoTIFF=ON -DWITH_GeoTIFF_EXTERNAL=ON -DWITH_ICONV=ON -DWITH_ICONV_EXTERNAL=ON -DWITH_JSONC=ON -DWITH_JSONC_EXTERNAL=ON -DWITH_LibXml2=ON -DWITH_LibXml2_EXTERNAL=ON -DWITH_PROJ4=ON -DWITH_PROJ4_EXTERNAL=ON -DWITH_TIFF=ON -DWITH_TIFF_EXTERNAL=ON -DWITH_ZLIB=ON -DWITH_ZLIB_EXTERNAL=ON"
+cmake_build = "--build . --config release"
+cmake_pack = "--build . --target package --config release"
+
+## build win
+
+factory_win = util.BuildFactory()
 # 1. check out the source
-factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True)) #mode='full', method='clobber'
+factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False)) #mode='full', method='clobber'
 
-# 2. build gdal
+# 2. build gdal 32
 # make build dir
-
+factory_win.addStep(steps.MakeDirectory(dir="build/build32"))
 # configure view cmake
-factory.addStep(steps.ShellCommand(command=["cmake", "-DBUIDL_SHARED_LIBS=ON"], 
-                                            description=["make", "javadoc for mobile (android)"],
-                                            descriptionDone=["made", "javadoc for mobile (android)"], 
-                                            workdir="build/source/ngmobile_dev"))
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, "-A win32", "../"], 
+                                            description=["cmake", "configure for win32"],
+                                            descriptionDone=["cmake", "configured for win32"], 
+                                            workdir="build/build32"))
 # make
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
+                                            description=["cmake", "make for win32"],
+                                            descriptionDone=["cmake", "made for win32"], 
+                                            workdir="build/build32"))
 # make tests
 # make package
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
+                                            description=["cmake", "pack for win32"],
+                                            descriptionDone=["cmake", "packed for win32"], 
+                                            workdir="build/build32"))
+                                            
+# 3. build gdal 64
+# make build dir
+factory_win.addStep(steps.MakeDirectory(dir="build/build64"))
+# configure view cmake
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, "-A x64", "../"], 
+                                            description=["cmake", "configure for win64"],
+                                            descriptionDone=["cmake", "configured for win64"], 
+                                            workdir="build/build64"))
+# make
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
+                                            description=["cmake", "make for win64"],
+                                            descriptionDone=["cmake", "made for win64"], 
+                                            workdir="build/build64"))
+# make tests
+# make package
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
+                                            description=["cmake", "pack for win64"],
+                                            descriptionDone=["cmake", "packed for win64"], 
+                                            workdir="build/build64"))                                            
 # upload package
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS Mobile"],
-                                            workdir="build/source/docs_ngmobile"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS Web"],
-                                            workdir="build/source/docs_ngweb"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS Manager"],
-                                            workdir="build/source/docs_ngmanager"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS FormBuilder"],
-                                            workdir="build/source/docs_formbuilder"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS Bio"],
-                                            workdir="build/source/docs_ngbio"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS QGIS"],
-                                            workdir="build/source/docs_ngqgis"))
+# TODO:
+#ftp_upload_command = "find . -type f -exec curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T {} ftp://nextgis.ru/{} \;"
 
+#factory_win.addStep(MasterShellCommand(name="upload to ftp", 
+#                                 description=["upload", "docs directory to ftp"],
+#                                 descriptionDone=["uploaded", "docs directory to ftp"], haltOnFailure=True,
+#                                 command = ftp_upload_command,
+#                                 path="/usr/share/nginx/doc"))
 
-# 3. build html
-factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
-factory.addStep(DirectoryUpload(slavesrc="_build/html", masterdest="/usr/share/nginx/doc"))
-factory.addStep(MasterShellCommand(name="chmod", description=["fixing", "permissions"],
-                                 descriptionDone=["fix", "permissions"], haltOnFailure=True,
-                                 command=["/bin/bash", "-c", "chmod -R 0755 /usr/share/nginx/doc/"]))
+builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 
-ftp_upload_command = "find . -type f -exec curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T {} ftp://nextgis.ru/{} \;"
+# 1. check out the source
+# pack
+# deb
+# upload to launchpad
 
-# 4. upload to ftp
-factory.addStep(MasterShellCommand(name="upload to ftp", description=["upload", "docs directory to ftp"],
-                                 descriptionDone=["upload", "docs directory to ftp"], haltOnFailure=True,
-                                 command = ftp_upload_command,
-                                 path="/usr/share/nginx/doc"))
-
-builder = BuilderConfig(name = 'makegdal', slavenames = ['build-nix', 'build-ngq-win7', ], factory = factory)
-                                                        
+c['builders'] = [builder_win]                                                        
