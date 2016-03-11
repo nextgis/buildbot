@@ -21,7 +21,7 @@ repourl = 'git://github.com/nextgis-extra/lib_gdal.git'
 git_poller = GitPoller(project = 'makegdal',
                        repourl = repourl,
                        workdir = 'makegdal-workdir',
-                       branch = 'buildbot',
+                       branch = 'master', #TODO: buildbot
                        pollinterval = 7200,) 
 c['change_source'] = [git_poller]
                        
