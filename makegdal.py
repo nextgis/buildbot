@@ -54,57 +54,66 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 factory_win.addStep(steps.MakeDirectory(dir="build/build32"))
 # configure view cmake
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '../'], 
-                                            description=["cmake", "configure for win32"],
-                                            descriptionDone=["cmake", "configured for win32"], haltOnFailure=False, 
-                                            workdir="build/build32"))
+                                       name="configure step 1",
+                                       description=["cmake", "configure for win32"],
+                                       descriptionDone=["cmake", "configured for win32"], haltOnFailure=False, warnOnWarnings=True,
+                                       workdir="build/build32"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '../'], 
-                                            description=["cmake", "configure for win32"],
-                                            descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
-                                            workdir="build/build32"))
+                                       name="configure step 2",
+                                       description=["cmake", "configure for win32"],
+                                       descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
+                                       workdir="build/build32"))
 # make
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
-                                            description=["cmake", "make for win32"],
-                                            descriptionDone=["cmake", "made for win32"], haltOnFailure=True, 
-                                            workdir="build/build32"))
+                                       name="make",
+                                       description=["cmake", "make for win32"],
+                                       descriptionDone=["cmake", "made for win32"], haltOnFailure=True, 
+                                       workdir="build/build32"))
 # make tests
 # make package
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
-                                            description=["cmake", "pack for win32"],
-                                            descriptionDone=["cmake", "packed for win32"], haltOnFailure=True, 
-                                            workdir="build/build32"))
+                                       name="make package",
+                                       description=["cmake", "pack for win32"],
+                                       descriptionDone=["cmake", "packed for win32"], haltOnFailure=True, 
+                                       workdir="build/build32"))
                                             
 # 3. build gdal 64
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir="build/build64"))
 # configure view cmake
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '../'], 
-                                            description=["cmake", "configure for win64"],
-                                            descriptionDone=["cmake", "configured for win64"], haltOnFailure=False, 
-                                            workdir="build/build64"))
+                                       name="configure step 1",
+                                       description=["cmake", "configure for win64"],
+                                       descriptionDone=["cmake", "configured for win64"], haltOnFailure=False, warnOnWarnings=True, 
+                                       workdir="build/build64"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '../'], 
-                                            description=["cmake", "configure for win64"],
-                                            descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
-                                            workdir="build/build64"))                                            
+                                       name="configure step 2",
+                                       description=["cmake", "configure for win64"],
+                                       descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
+                                       workdir="build/build64"))                                            
 # make
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
-                                            description=["cmake", "make for win64"],
-                                            descriptionDone=["cmake", "made for win64"], haltOnFailure=True, 
-                                            workdir="build/build64"))
+                                       name="make",
+                                       description=["cmake", "make for win64"],
+                                       descriptionDone=["cmake", "made for win64"], haltOnFailure=True, 
+                                       workdir="build/build64"))
 # make tests
 # make package
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
-                                            description=["cmake", "pack for win64"],
-                                            descriptionDone=["cmake", "packed for win64"], haltOnFailure=True, 
-                                            workdir="build/build64"))                                            
+                                       name="make package",
+                                       description=["cmake", "pack for win64"],
+                                       descriptionDone=["cmake", "packed for win64"], haltOnFailure=True, 
+                                       workdir="build/build64"))                                            
 # upload package
-# TODO:
-#ftp_upload_command = "find . -type f -exec curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T {} ftp://nextgis.ru/{} \;"
-
-#factory_win.addStep(MasterShellCommand(name="upload to ftp", 
-#                                 description=["upload", "docs directory to ftp"],
-#                                 descriptionDone=["uploaded", "docs directory to ftp"], haltOnFailure=True,
-#                                 command = ftp_upload_command,
-#                                 path="/usr/share/nginx/doc"))
+#ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
+upld_file_lst = ['build32/GDAL-2.1.0-win32.exe', 'build32/GDAL-2.1.0-win32.zip', 'build64/GDAL-2.1.0-win64.exe', 'build64/GDAL-2.1.0-win64.zip']
+for upld_file in upld_file_lst:
+    factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
+                                           '-T', upld_file, '--ftp-create-dirs', 'ftp://nextgis.ru/programs/gdal/'],
+                                           name="upload to ftp " + upld_file, 
+                                           description=["upload", "gdal files to ftp"],
+                                           descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False, 
+                                          ))
 
 builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 
