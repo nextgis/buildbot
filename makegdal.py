@@ -39,9 +39,9 @@ c['schedulers'].append(schedulers.ForceScheduler(
 #### build gdal
 
 ## common steps
-cmake_config = "-DBUIDL_SHARED_LIBS=ON -DWITH_EXPAT=ON -DWITH_EXPAT_EXTERNAL=ON -DWITH_GeoTIFF=ON -DWITH_GeoTIFF_EXTERNAL=ON -DWITH_ICONV=ON -DWITH_ICONV_EXTERNAL=ON -DWITH_JSONC=ON -DWITH_JSONC_EXTERNAL=ON -DWITH_LibXml2=ON -DWITH_LibXml2_EXTERNAL=ON -DWITH_PROJ4=ON -DWITH_PROJ4_EXTERNAL=ON -DWITH_TIFF=ON -DWITH_TIFF_EXTERNAL=ON -DWITH_ZLIB=ON -DWITH_ZLIB_EXTERNAL=ON"
-cmake_build = "--build . --config release"
-cmake_pack = "--build . --target package --config release"
+cmake_config = ['-DBUIDL_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON']
+cmake_build = ['--build', '.', '--config release']
+cmake_pack = ['--build', '.', '--target package', '--config release']
 
 ## build win
 
