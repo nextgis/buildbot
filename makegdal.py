@@ -39,7 +39,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
 #### build gdal
 
 ## common steps
-cmake_config = ['-DBUILD_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON']
+cmake_config = ['-DBUILD_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', ]
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 
@@ -53,6 +53,10 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir="build/build32"))
 # configure view cmake
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '../'], 
+                                            description=["cmake", "configure for win32"],
+                                            descriptionDone=["cmake", "configured for win32"], haltOnFailure=False, 
+                                            workdir="build/build32"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '../'], 
                                             description=["cmake", "configure for win32"],
                                             descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
@@ -75,8 +79,12 @@ factory_win.addStep(steps.MakeDirectory(dir="build/build64"))
 # configure view cmake
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '../'], 
                                             description=["cmake", "configure for win64"],
-                                            descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
+                                            descriptionDone=["cmake", "configured for win64"], haltOnFailure=False, 
                                             workdir="build/build64"))
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '../'], 
+                                            description=["cmake", "configure for win64"],
+                                            descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
+                                            workdir="build/build64"))                                            
 # make
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
                                             description=["cmake", "make for win64"],
