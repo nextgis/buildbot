@@ -53,7 +53,7 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir="build/build32"))
 # configure view cmake
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, "-A win32", "../"], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G"Visual Studio 10 2010"', '../'], 
                                             description=["cmake", "configure for win32"],
                                             descriptionDone=["cmake", "configured for win32"], 
                                             workdir="build/build32"))
@@ -73,7 +73,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir="build/build64"))
 # configure view cmake
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, "-A x64", "../"], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G"Visual Studio 10 2010 Win64"', '../'], 
                                             description=["cmake", "configure for win64"],
                                             descriptionDone=["cmake", "configured for win64"], 
                                             workdir="build/build64"))
