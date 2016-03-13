@@ -127,12 +127,12 @@ deb_dir = 'build/gdal_deb'
 factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir))
 factory_deb.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir))
 # tar orginal sources
-factory_deb.addStep(steps.ShellCommand(command=["tar", '-caf', 'gdal_' + gdal_ver + '.orig.tar.gz',  code_dir], 
+factory_deb.addStep(steps.ShellCommand(command=["tar", '-caf', 'gdal_' + gdal_ver + '.orig.tar.gz', 'gdal_code'], 
                                        name="tar",
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
 # copy lib_gdal -> debian
-factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "gdal/debian", dest=code_dir + "debian", 
+factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_dir + "debian", 
                                         name="add debian folder"))
 # update changelog
 # deb ?
