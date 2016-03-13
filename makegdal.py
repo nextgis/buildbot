@@ -136,7 +136,7 @@ factory_deb.addStep(steps.ShellCommand(command=["tar", '-caf', 'gdal_' + gdal_ve
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
 # copy lib_gdal -> debian
-factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_dir + "debian", 
+factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_dir + "/debian", 
                                         name="add debian folder"))
 # update changelog
 # deb ?
