@@ -39,7 +39,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
 #### build gdal
 
 ## common steps
-cmake_config = ['-DBUILD_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', ]
+cmake_config = ['-DBUILD_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DPACKAGE_VENDOR=NextGIS', '-DPACKAGE_INSTALL_DIRECTORY=nextgis']
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 
@@ -50,60 +50,61 @@ factory_win = util.BuildFactory()
 factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False)) #mode='full', method='clobber'
 
 # 2. build gdal 32
+code_dir = "build/gdal_code"
 # make build dir
-factory_win.addStep(steps.MakeDirectory(dir="build/build32"))
+factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
 # configure view cmake
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '../'], 
                                        name="configure step 1",
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"], haltOnFailure=False, warnOnWarnings=True,
-                                       workdir="build/build32"))
+                                       workdir=code_dir + "/build32"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '../'], 
                                        name="configure step 2",
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
-                                       workdir="build/build32"))
+                                       workdir=code_dir + "/build32"))
 # make
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
                                        name="make",
                                        description=["cmake", "make for win32"],
                                        descriptionDone=["cmake", "made for win32"], haltOnFailure=True, 
-                                       workdir="build/build32"))
+                                       workdir=code_dir + "/build32"))
 # make tests
 # make package
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
                                        name="make package",
                                        description=["cmake", "pack for win32"],
                                        descriptionDone=["cmake", "packed for win32"], haltOnFailure=True, 
-                                       workdir="build/build32"))
+                                       workdir=code_dir + "/build32"))
                                             
 # 3. build gdal 64
 # make build dir
-factory_win.addStep(steps.MakeDirectory(dir="build/build64"))
+factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build64"))
 # configure view cmake
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '../'], 
                                        name="configure step 1",
                                        description=["cmake", "configure for win64"],
                                        descriptionDone=["cmake", "configured for win64"], haltOnFailure=False, warnOnWarnings=True, 
-                                       workdir="build/build64"))
+                                       workdir=code_dir + "/build64"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '../'], 
                                        name="configure step 2",
                                        description=["cmake", "configure for win64"],
                                        descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
-                                       workdir="build/build64"))                                            
+                                       workdir=code_dir + "/build64"))                                            
 # make
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
                                        name="make",
                                        description=["cmake", "make for win64"],
                                        descriptionDone=["cmake", "made for win64"], haltOnFailure=True, 
-                                       workdir="build/build64"))
+                                       workdir=code_dir + "/build64"))
 # make tests
 # make package
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
                                        name="make package",
                                        description=["cmake", "pack for win64"],
                                        descriptionDone=["cmake", "packed for win64"], haltOnFailure=True, 
-                                       workdir="build/build64"))                                            
+                                       workdir=code_dir + "/build64"))                                            
 # upload package
 #ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
 upld_file_lst = ['build32/GDAL-2.1.0-win32.exe', 'build32/GDAL-2.1.0-win32.zip', 'build64/GDAL-2.1.0-win64.exe', 'build64/GDAL-2.1.0-win64.zip']
@@ -113,11 +114,12 @@ for upld_file in upld_file_lst:
                                            name="upload to ftp " + upld_file, 
                                            description=["upload", "gdal files to ftp"],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False, 
-                                          ))
+                                           workdir= code_dir ))
 
 builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 
 # 1. check out the source
+deb_dir = "build/gdal_deb"
 # pack
 # deb
 # upload to launchpad
