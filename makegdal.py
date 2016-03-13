@@ -47,10 +47,10 @@ cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 
 factory_win = util.BuildFactory()
 # 1. check out the source
-factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False)) #mode='full', method='clobber'
+code_dir = "build/gdal_code"
+factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir)) #mode='full', method='clobber'
 
 # 2. build gdal 32
-code_dir = "build/gdal_code"
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
 # configure view cmake
@@ -120,8 +120,16 @@ builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7
 
 # 1. check out the source
 deb_dir = "build/gdal_deb"
+deb_repourl = 'git://github.com/nextgis/ppa.git'
+factory_deb = util.BuildFactory()
+# 1. check out the source
+factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir))
+factory_deb.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir))
+# tar
 # pack
 # deb
 # upload to launchpad
 
-c['builders'] = [builder_win]                                                        
+builder_deb = BuilderConfig(name = 'makegdal_deb', slavenames = ['build-nix'], factory = factory_deb)
+
+c['builders'] = [builder_win, builder_deb]                                                        
