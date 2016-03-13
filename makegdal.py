@@ -17,6 +17,9 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis-extra/lib_gdal.git'
+gdal_ver = 2.1.0
+deb_dir = "build/gdal_deb"
+deb_repourl = 'git://github.com/nextgis/ppa.git'
 
 git_poller = GitPoller(project = 'makegdal',
                        repourl = repourl,
@@ -107,7 +110,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        workdir=code_dir + "/build64"))                                            
 # upload package
 #ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
-upld_file_lst = ['build32/GDAL-2.1.0-win32.exe', 'build32/GDAL-2.1.0-win32.zip', 'build64/GDAL-2.1.0-win64.exe', 'build64/GDAL-2.1.0-win64.zip']
+upld_file_lst = ['build32/GDAL-' + gdal_ver + '-win32.exe', 'build32/GDAL-' + gdal_ver + '-win32.zip', 'build64/GDAL-' + gdal_ver + '-win64.exe', 'build64/GDAL-' + gdal_ver + '-win64.zip']
 for upld_file in upld_file_lst:
     factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
                                            '-T', upld_file, '--ftp-create-dirs', 'ftp://nextgis.ru/programs/gdal/'],
@@ -119,14 +122,18 @@ for upld_file in upld_file_lst:
 builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 
 # 1. check out the source
-deb_dir = "build/gdal_deb"
-deb_repourl = 'git://github.com/nextgis/ppa.git'
 factory_deb = util.BuildFactory()
 # 1. check out the source
 factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir))
 factory_deb.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir))
 # tar orginal sources
+factory_deb.addStep(steps.ShellCommand(command=["tar", '-caf', 'gdal_' + gdal_ver + '.orig.tar.gz',  code_dir], 
+                                       name="tar",
+                                       description=["tar", "compress"],
+                                       descriptionDone=["tar", "compressed"], haltOnFailure=True))
 # copy lib_gdal -> debian
+factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "gdal/debian", dest=code_dir + "debian", 
+                                        name="add debian folder"))
 # update changelog
 # deb ?
 # upload to launchpad
