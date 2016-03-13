@@ -59,7 +59,9 @@ factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '../'], 
                                        name="configure step 1",
                                        description=["cmake", "configure for win32"],
-                                       descriptionDone=["cmake", "configured for win32"], haltOnFailure=False, warnOnWarnings=True,
+                                       descriptionDone=["cmake", "configured for win32"], 
+                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       flunkOnFailure=False, warnOnFailure=True,
                                        workdir=code_dir + "/build32"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '../'], 
                                        name="configure step 2",
@@ -87,7 +89,9 @@ factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build64"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '../'], 
                                        name="configure step 1",
                                        description=["cmake", "configure for win64"],
-                                       descriptionDone=["cmake", "configured for win64"], haltOnFailure=False, warnOnWarnings=True, 
+                                       descriptionDone=["cmake", "configured for win64"], 
+                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       flunkOnFailure=False, warnOnFailure=True, 
                                        workdir=code_dir + "/build64"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '../'], 
                                        name="configure step 2",
