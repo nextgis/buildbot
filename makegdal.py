@@ -29,11 +29,11 @@ scheduler = schedulers.SingleBranchScheduler(
                             name="makegdal",
                             change_filter=util.ChangeFilter(project = 'makegdal'),
                             treeStableTimer=1*60,
-                            builderNames=["makegdal_win"])                       
+                            builderNames=["makegdal_win", "makegdal_deb"])                       
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
                             name="makegdal_force",
-                            builderNames=["makegdal_win"]))      
+                            builderNames=["makegdal_win", "makegdal_deb"]))      
 
 #, "makegdal_lin"                      
 #### build gdal
@@ -125,9 +125,10 @@ factory_deb = util.BuildFactory()
 # 1. check out the source
 factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir))
 factory_deb.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir))
-# tar
-# pack
-# deb
+# tar orginal sources
+# copy lib_gdal -> debian
+# update changelog
+# deb ?
 # upload to launchpad
 
 builder_deb = BuilderConfig(name = 'makegdal_deb', slavenames = ['build-nix'], factory = factory_deb)
