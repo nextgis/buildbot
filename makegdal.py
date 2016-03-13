@@ -17,8 +17,7 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis-extra/lib_gdal.git'
-gdal_ver = 2.1.0
-deb_dir = "build/gdal_deb"
+gdal_ver = '2.1.0'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 
 git_poller = GitPoller(project = 'makegdal',
@@ -50,7 +49,7 @@ cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 
 factory_win = util.BuildFactory()
 # 1. check out the source
-code_dir = "build/gdal_code"
+code_dir = 'build/gdal_code'
 factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir)) #mode='full', method='clobber'
 
 # 2. build gdal 32
@@ -124,6 +123,7 @@ builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7
 # 1. check out the source
 factory_deb = util.BuildFactory()
 # 1. check out the source
+deb_dir = 'build/gdal_deb'
 factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir))
 factory_deb.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir))
 # tar orginal sources
