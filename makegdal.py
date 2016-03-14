@@ -49,7 +49,9 @@ cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 
 factory_win = util.BuildFactory()
 # 1. check out the source
-code_dir = 'build/gdal_code'
+
+code_dir_last = 'gdal_code'
+code_dir = 'build/' + code_dir_last
 factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir)) #mode='full', method='clobber'
 
 # 2. build gdal 32
@@ -142,7 +144,7 @@ factory_deb.addStep(steps.ShellCommand(command=["rm", '-rf', 'gdal_' + gdal_ver 
                                        descriptionDone=["rm", "deleted"], 
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True))
-factory_deb.addStep(steps.ShellCommand(command=["tar", '-caf', 'gdal_' + gdal_ver + '.orig.tar.gz', 'gdal_code', '--exclude-vcs'], 
+factory_deb.addStep(steps.ShellCommand(command=["tar", '-caf', 'gdal_' + gdal_ver + '.orig.tar.gz', code_dir_last, '--exclude-vcs'], 
                                        name="tar",
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
@@ -152,22 +154,25 @@ factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_
 # update changelog
 for ubuntu_distribution in ubuntu_distributions:
     # git-dch -a -R -D trusty --spawn-editor=snapshot
-    factory_deb.addStep(steps.ShellCommand(command=["cp", 'changelog', code_dir + "/debian"], 
+    factory_deb.addStep(steps.ShellCommand(command=["cp", 'changelog', code_dir_last + "/debian"], 
                                        name="cp changelog",
                                        description=["cp", "copy"],
                                        descriptionDone=["cp", "copied"], 
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True))
+    # TODO: '-N', gdal_ver + '-0ubuntu1', 
+    # TODO: need script to 1. check version change, 2. check last commit in log to get messages from git log                                  
     factory_deb.addStep(steps.ShellCommand(command=["git-dch", '-a', '-R', '-D', ubuntu_distribution, '--spawn-editor=snapshot'], 
                                        name="fill chagnelog",
                                        description=["chagnelog", "fill"],
                                        descriptionDone=["chagnelog", "filled"], haltOnFailure=True,
+                                       workdir= code_dir,
                                        env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'}))
 # deb ?
 # upload to launchpad
 
 # store changelog
-factory_deb.addStep(steps.ShellCommand(command=["cp", code_dir + "/debian/changelog", "."], 
+factory_deb.addStep(steps.ShellCommand(command=["cp", code_dir_last + "/debian/changelog", "."], 
                                        name="save changelog",
                                        description=["cp", "copy"],
                                        descriptionDone=["cp", "copied"], 
