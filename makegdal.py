@@ -73,14 +73,16 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build],
                                        name="make",
                                        description=["cmake", "make for win32"],
                                        descriptionDone=["cmake", "made for win32"], haltOnFailure=True, 
-                                       workdir=code_dir + "/build32"))
+                                       workdir=code_dir + "/build32",
+                                       env={'LANG': 'en_US'}))
 # make tests
 # make package
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
                                        name="make package",
                                        description=["cmake", "pack for win32"],
                                        descriptionDone=["cmake", "packed for win32"], haltOnFailure=True, 
-                                       workdir=code_dir + "/build32"))
+                                       workdir=code_dir + "/build32",
+                                       env={'LANG': 'en_US'}))
                                             
 # 3. build gdal 64
 # make build dir
@@ -103,14 +105,16 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build],
                                        name="make",
                                        description=["cmake", "make for win64"],
                                        descriptionDone=["cmake", "made for win64"], haltOnFailure=True, 
-                                       workdir=code_dir + "/build64"))
+                                       workdir=code_dir + "/build64",
+                                       env={'LANG': 'en_US'}))
 # make tests
 # make package
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
                                        name="make package",
                                        description=["cmake", "pack for win64"],
                                        descriptionDone=["cmake", "packed for win64"], haltOnFailure=True, 
-                                       workdir=code_dir + "/build64"))                                            
+                                       workdir=code_dir + "/build64",
+                                       env={'LANG': 'en_US'}))                                            
 # upload package
 #ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
 upld_file_lst = ['build32/GDAL-' + gdal_ver + '-win32.exe', 'build32/GDAL-' + gdal_ver + '-win32.zip', 'build64/GDAL-' + gdal_ver + '-win64.exe', 'build64/GDAL-' + gdal_ver + '-win64.zip']
@@ -126,6 +130,7 @@ builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
+ubuntu_distributions = ['trusty', 'wily']
 # 1. check out the source
 deb_dir = 'build/gdal_deb'
 factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir))
@@ -134,7 +139,9 @@ factory_deb.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, wo
 factory_deb.addStep(steps.ShellCommand(command=["rm", '-rf', 'gdal_' + gdal_ver + '.orig.tar.gz'], 
                                        name="rm",
                                        description=["rm", "delete"],
-                                       descriptionDone=["rm", "deleted"], haltOnFailure=False))
+                                       descriptionDone=["rm", "deleted"], 
+                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       flunkOnFailure=False, warnOnFailure=True))
 factory_deb.addStep(steps.ShellCommand(command=["tar", '-caf', 'gdal_' + gdal_ver + '.orig.tar.gz', 'gdal_code', '--exclude-vcs'], 
                                        name="tar",
                                        description=["tar", "compress"],
@@ -143,9 +150,30 @@ factory_deb.addStep(steps.ShellCommand(command=["tar", '-caf', 'gdal_' + gdal_ve
 factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_dir + "/debian", 
                                         name="add debian folder", haltOnFailure=True))
 # update changelog
+for ubuntu_distribution in ubuntu_distributions:
+    # git-dch -a -R -D trusty --spawn-editor=snapshot
+    factory_deb.addStep(steps.ShellCommand(command=["cp", 'changelog', code_dir + "/debian"], 
+                                       name="cp changelog",
+                                       description=["cp", "copy"],
+                                       descriptionDone=["cp", "copied"], 
+                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       flunkOnFailure=False, warnOnFailure=True))
+    factory_deb.addStep(steps.ShellCommand(command=["git-dch", '-a', '-R', '-D', ubuntu_distribution, '--spawn-editor=snapshot'], 
+                                       name="fill chagnelog",
+                                       description=["chagnelog", "fill"],
+                                       descriptionDone=["chagnelog", "filled"], haltOnFailure=True,
+                                       env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'}))
 # deb ?
 # upload to launchpad
 
+# store changelog
+factory_deb.addStep(steps.ShellCommand(command=["cp", code_dir + "/debian/changelog", "."], 
+                                       name="save changelog",
+                                       description=["cp", "copy"],
+                                       descriptionDone=["cp", "copied"], 
+                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       flunkOnFailure=False, warnOnFailure=True))
+                                       
 builder_deb = BuilderConfig(name = 'makegdal_deb', slavenames = ['build-nix'], factory = factory_deb)
 
 c['builders'] = [builder_win, builder_deb]                                                        
