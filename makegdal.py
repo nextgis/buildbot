@@ -167,7 +167,7 @@ for ubuntu_distribution in ubuntu_distributions:
     # upload to launchpad
 
 # store changelog
-factory_deb.addStep(steps.ShellCommand(command=['dch.py' '-n', gdal_ver, '-a', 'gdal', '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
+factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 'gdal', '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           
