@@ -49,14 +49,14 @@ factory.addStep(steps.ShellCommand(command=["/bin/bash", "gradlew", "assembleRel
                                             description=["prepare", "environment for build"],
                                             descriptionDone=["prepared", "environment for build"],
                                             env={'ANDROID_HOME': '/opt/android-sdk-linux'}))
-factory.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'simple', '-f', '.', '-o', 'app/build/outputs/apk/git.log'], 
+factory.addStep(steps.ShellCommand(command=['/bin/bash', 'dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'simple', '-f', '.', '-o', 'app/build/outputs/apk/git.log'], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"], haltOnFailure=True))  
 factory.addStep(steps.ShellCommand(command=['/bin/bash', 'testfairy-upload-android.sh', 'app/build/outputs/apk'], 
                                  description=["upload", "testfairy"],
                                  descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))  
-factory.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'store', '-o', 'app/build/outputs/apk/git.log'], 
+factory.addStep(steps.ShellCommand(command=['/bin/bash', 'dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'store', '-o', 'app/build/outputs/apk/git.log'], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           
