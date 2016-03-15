@@ -45,7 +45,7 @@ factory.addStep(steps.ShellCommand(command=['chmod', '+x', 'gradlew'],
                                  descriptionDone=["fixed", "permissions"], haltOnFailure=True))                                 
 factory.addStep(steps.RemoveDirectory(dir="build/app/build/outputs/apk"))                                 
 factory.addStep(steps.ShellCommand(command=["gradlew", "assembleRelease"],
-                                            name='create apk' 
+                                            name='create apk' ,
                                             description=["prepare", "environment for build"],
                                             descriptionDone=["prepared", "environment for build"],
                                             env={'ANDROID_HOME': '/opt/android-sdk-linux'}))
