@@ -44,7 +44,7 @@ factory.addStep(steps.ShellCommand(command=['chmod', '+x', 'gradlew'],
                                  description=["fix", "permissions"],
                                  descriptionDone=["fixed", "permissions"], haltOnFailure=True))                                 
 factory.addStep(steps.RemoveDirectory(dir="build/app/build/outputs/apk"))                                 
-factory.addStep(steps.ShellCommand(command=["gradlew", "assembleRelease"],
+factory.addStep(steps.ShellCommand(command=["/bin/bash", "gradlew", "assembleRelease"],
                                             name='create apk' ,
                                             description=["prepare", "environment for build"],
                                             descriptionDone=["prepared", "environment for build"],
@@ -53,7 +53,7 @@ factory.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', 'test', '-
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"], haltOnFailure=True))  
-factory.addStep(steps.ShellCommand(command=['testfairy-upload-android.sh', 'app/build/outputs/apk'], 
+factory.addStep(steps.ShellCommand(command=['/bin/bash', 'testfairy-upload-android.sh', 'app/build/outputs/apk'], 
                                  description=["upload", "testfairy"],
                                  descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))  
 factory.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'store', '-o', 'app/build/outputs/apk/git.log'], 
