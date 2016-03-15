@@ -154,7 +154,7 @@ factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_
                                         name="add debian folder", haltOnFailure=True))
 # update changelog
 for ubuntu_distribution in ubuntu_distributions:
-    factory.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', gdal_ver, '-a', 
+    factory_deb.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', gdal_ver, '-a', 
                                                 'gdal', '-p', 'fill', '-f', 
                                                 code_dir,'-o', 'changelog', '-d', 
                                                 ubuntu_distribution], 
@@ -167,7 +167,7 @@ for ubuntu_distribution in ubuntu_distributions:
     # upload to launchpad
 
 # store changelog
-factory.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', gdal_ver, '-a', 'gdal', '-p', 'store', '-f', code_dir,'-o', 'changelog'], 
+factory_deb.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', gdal_ver, '-a', 'gdal', '-p', 'store', '-f', code_dir,'-o', 'changelog'], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           
