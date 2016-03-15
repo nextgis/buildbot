@@ -158,7 +158,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                                 'gdal', '-p', 'fill', '-f', 
                                                 code_dir_last,'-o', 'changelog', '-d', 
                                                 ubuntu_distribution], 
-                                        name='create changelog',
+                                        name='create changelog for ' + ubuntu_distribution,
                                         description=["create", "changelog"],
                                         descriptionDone=["created", "changelog"],
                                         env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
