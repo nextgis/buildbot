@@ -171,6 +171,7 @@ factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           
+                                 env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
                                  haltOnFailure=True))  
                                        
 builder_deb = BuilderConfig(name = 'makegdal_deb', slavenames = ['build-nix'], factory = factory_deb)
