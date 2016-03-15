@@ -30,7 +30,8 @@
 # rewrite original changelog by changed one 
 # python dch.py -o path_to_source_changelog -d path_to_src_dir -p store
 
-import sys, os
+import sys
+import os
 import argparse
 import ConfigParser
 import subprocess
