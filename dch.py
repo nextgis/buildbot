@@ -21,6 +21,9 @@
 #
 ################################################################################
 
+# help message
+# python dch.py -h
+
 # add commit messages to changelog and save it to path_to_src_dir/debian/changelog
 # python dch.py -n 2.2.0 -o path_to_source_changelog -d path_to_src_dir -p fill
 

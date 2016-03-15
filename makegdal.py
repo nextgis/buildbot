@@ -135,7 +135,8 @@ factory_deb = util.BuildFactory()
 ubuntu_distributions = ['trusty', 'wily']
 # 1. check out the source
 deb_dir = 'build/gdal_deb'
-factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir))
+
+factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir, alwaysUseLatest=True))
 factory_deb.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
 # tar orginal sources
 factory_deb.addStep(steps.ShellCommand(command=["rm", '-rf', 'gdal_' + gdal_ver + '.orig.tar.gz'], 
@@ -153,7 +154,7 @@ factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_
                                         name="add debian folder", haltOnFailure=True))
 # update changelog
 for ubuntu_distribution in ubuntu_distributions:
-    factory.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 
+    factory.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', gdal_ver, '-a', 
                                                 'gdal', '-p', 'fill', '-f', 
                                                 code_dir,'-o', 'changelog', '-d', 
                                                 ubuntu_distribution], 
@@ -166,7 +167,7 @@ for ubuntu_distribution in ubuntu_distributions:
     # upload to launchpad
 
 # store changelog
-factory.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 'gdal', '-p', 'store', '-f', code_dir,'-o', 'changelog'], 
+factory.addStep(steps.ShellCommand(command=['python', 'dch.py', '-n', gdal_ver, '-a', 'gdal', '-p', 'store', '-f', code_dir,'-o', 'changelog'], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           
