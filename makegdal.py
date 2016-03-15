@@ -153,31 +153,24 @@ factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_
                                         name="add debian folder", haltOnFailure=True))
 # update changelog
 for ubuntu_distribution in ubuntu_distributions:
-    # git-dch -a -R -D trusty --spawn-editor=snapshot
-    factory_deb.addStep(steps.ShellCommand(command=["cp", 'changelog', code_dir_last + "/debian"], 
-                                       name="cp changelog",
-                                       description=["cp", "copy"],
-                                       descriptionDone=["cp", "copied"], 
-                                       haltOnFailure=False, warnOnWarnings=True, 
-                                       flunkOnFailure=False, warnOnFailure=True))
-    # TODO: '-N', gdal_ver + '-0ubuntu1', 
-    # TODO: need script to 1. check version change, 2. check last commit in log to get messages from git log                                  
-    factory_deb.addStep(steps.ShellCommand(command=["git-dch", '-a', '-R', '-D', ubuntu_distribution, '--spawn-editor=snapshot'], 
-                                       name="fill chagnelog",
-                                       description=["chagnelog", "fill"],
-                                       descriptionDone=["chagnelog", "filled"], haltOnFailure=True,
-                                       workdir= code_dir,
-                                       env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'}))
-# deb ?
-# upload to launchpad
+    factory.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 
+                                                'gdal', '-p', 'fill', '-f', 
+                                                code_dir,'-o', 'changelog', '-d', 
+                                                ubuntu_distribution], 
+                                        name='create changelog',
+                                        description=["create", "changelog"],
+                                        descriptionDone=["created", "changelog"],
+                                        env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
+                                        haltOnFailure=True)) 
+    # deb ?
+    # upload to launchpad
 
 # store changelog
-factory_deb.addStep(steps.ShellCommand(command=["cp", code_dir_last + "/debian/changelog", "."], 
-                                       name="save changelog",
-                                       description=["cp", "copy"],
-                                       descriptionDone=["cp", "copied"], 
-                                       haltOnFailure=False, warnOnWarnings=True, 
-                                       flunkOnFailure=False, warnOnFailure=True))
+factory.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 'gdal', '-p', 'store', '-f', code_dir,'-o', 'changelog'], 
+                                 name='log last comments',
+                                 description=["log", "last comments"],
+                                 descriptionDone=["logged", "last comments"],           
+                                 haltOnFailure=True))  
                                        
 builder_deb = BuilderConfig(name = 'makegdal_deb', slavenames = ['build-nix'], factory = factory_deb)
 
