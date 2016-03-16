@@ -135,6 +135,7 @@ factory_deb = util.BuildFactory()
 ubuntu_distributions = ['trusty', 'wily']
 # 1. check out the source
 deb_dir = 'build/gdal_deb'
+sign_key = '4A641E7B'
 
 factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir, alwaysUseLatest=True))
 factory_deb.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
@@ -163,8 +164,24 @@ for ubuntu_distribution in ubuntu_distributions:
                                         descriptionDone=["created", "changelog"],
                                         env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
                                         haltOnFailure=True)) 
-    # deb ?
+                                        
+    # debuild -S -sa
+    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-S', '-sa', '-k'+sign_key, '-p', 
+                                        'gpg --passphrase-file /home/ngw_admin/ngw/slave/lp_passphrase --batch --no-use-agent'], 
+                                        name='debuild for ' + ubuntu_distribution,
+                                        description=["debuild", "package"],
+                                        descriptionDone=["debuilded", "package"],
+                                        env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
+                                        haltOnFailure=True,
+                                        workdir=code_dir)) 
     # upload to launchpad
+    factory_deb.addStep(steps.ShellCommand(command=['dput', 'ppa:nextgis/ppa', 'gdal_'+gdal_ver+'*_source.changes'], 
+                                        name='dput for ' + ubuntu_distribution,
+                                        description=["debuild", "package"],
+                                        descriptionDone=["debuilded", "package"],
+                                        env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
+                                        haltOnFailure=True,
+                                        workdir=code_dir)) 
 
 # store changelog
 factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 'gdal', '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
