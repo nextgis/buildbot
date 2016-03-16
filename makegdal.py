@@ -136,6 +136,8 @@ ubuntu_distributions = ['trusty', 'wily']
 # 1. check out the source
 deb_dir = 'build/gdal_deb'
 sign_key = '4A641E7B'
+deb_email = 'dmitry.baryshnikov@nextgis.com'
+deb_fullname = 'Dmitry Baryshnikov'
 
 factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir, alwaysUseLatest=True))
 factory_deb.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
@@ -162,7 +164,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         name='create changelog for ' + ubuntu_distribution,
                                         description=["create", "changelog"],
                                         descriptionDone=["created", "changelog"],
-                                        env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True)) 
                                         
     # debuild -S -sa
@@ -171,7 +173,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
-                                        env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True,
                                         workdir=code_dir)) 
     # upload to launchpad
@@ -179,7 +181,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         name='dput for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
-                                        env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True,
                                         workdir=code_dir)) 
 
@@ -188,7 +190,7 @@ factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           
-                                 env={'DEBEMAIL': 'dmitry.baryshnikov@nextgis.com', 'DEBFULLNAME':'Dmitry Baryshnikov'},           
+                                 env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                  haltOnFailure=True))  
                                        
 builder_deb = BuilderConfig(name = 'makegdal_deb', slavenames = ['build-nix'], factory = factory_deb)
