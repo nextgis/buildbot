@@ -168,8 +168,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         haltOnFailure=True)) 
                                         
     # debuild -S -sa
-    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-S', '-sa', '-k'+sign_key, '-p', 
-                                        'gpg --passphrase-file /home/ngw_admin/ngw/slave/lp_passphrase --batch --no-use-agent'], 
+    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-S', '-sa', '-k'+sign_key, '-p\"gpg --passphrase-file /home/ngw_admin/ngw/slave/lp_passphrase --batch --no-use-agent\"'], 
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
