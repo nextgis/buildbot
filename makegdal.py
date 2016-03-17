@@ -58,14 +58,14 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
 # configure view cmake
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '-D_WIN32_WINNT=0x0501', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
                                        name="configure step 1",
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"], 
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True,
                                        workdir=code_dir + "/build32"))
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '-D_WIN32_WINNT=0x0501', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
                                        name="configure step 2",
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
@@ -90,14 +90,14 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build64"))
 # configure view cmake
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '-D_WIN32_WINNT=0x0501', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
                                        name="configure step 1",
                                        description=["cmake", "configure for win64"],
                                        descriptionDone=["cmake", "configured for win64"], 
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True, 
                                        workdir=code_dir + "/build64"))
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '-D_WIN32_WINNT=0x0501', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
                                        name="configure step 2",
                                        description=["cmake", "configure for win64"],
                                        descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
