@@ -171,13 +171,19 @@ for ubuntu_distribution in ubuntu_distributions:
                                         haltOnFailure=True)) 
                                         
     # debuild -S -sa
-    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-S', '-sa', '-k'+sign_key, '-p\'gpg --passphrase-file /home/ngw_admin/ngw/slave/lp_passphrase --batch --no-use-agent\''], 
+    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-S', '-sa'], 
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True,
                                         workdir=code_dir)) 
+    factory_deb.addStep(steps.ShellCommand(command=['debsign.sh'], 
+                                        name='debsign for ' + ubuntu_distribution,
+                                        description=["debsign", "package"],
+                                        descriptionDone=["debsigned", "package"],
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
+                                        haltOnFailure=True)) 
     # upload to launchpad
     factory_deb.addStep(steps.ShellCommand(command=['dput', 'ppa:nextgis/ppa', deb_name + '_'+gdal_ver+'*_source.changes'], 
                                         name='dput for ' + ubuntu_distribution,
