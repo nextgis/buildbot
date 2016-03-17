@@ -38,7 +38,7 @@ import subprocess
 from shutil import copy
 from datetime import datetime
  
-number_add = '-0ubuntu0ppa'
+number_add = '-0ubuntu0ppa1'
 format_simple = '--pretty=format:%h - %an : %s'
 fromat_debian = '--pretty=format:  * %h - %an : %s'
 config_name = 'dch.cfg'
@@ -46,7 +46,7 @@ config_name = 'dch.cfg'
 def writeChangeLog(app, version, counter, distro, last_commit, current_commit, folder, infile, outfile):
     ver_str = str(version)
     count_str = str(int(counter) + 1)
-    full_message = app + ' (' + ver_str + number_add + count_str + ') ' + distro + '; urgency=medium\n\n'
+    full_message = app + ' (' + ver_str + '+' + count_str + number_add + ') ' + distro + '; urgency=medium\n\n'
     if last_commit == '':
         # get last 20 messages
         log_messages = subprocess.check_output(['git', 'log', fromat_debian, '-20', '--no-merges'], cwd=folder)
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--origin', help='inited changelog file or file to save changes')
     parser.add_argument('-f', '--folder', help='destination git folder')
     parser.add_argument('-d', '--distro', help='ubuntu distributiv', choices=['trusty', 'wily'])
-    parser.add_argument('-p', '--process', help='operation fill or store', choices=['fill', 'store', 'simple'], required=True)
+    parser.add_argument('-p', '--process', help='operation fill or store', choices=['fill', 'store', 'simple', 'tar'], required=True)
     parser.add_argument('-a', '--app', help='application name')
     
     args = parser.parse_args()
@@ -95,6 +95,12 @@ if __name__ == "__main__":
     if version != args.number:
         counter = 0
         version = args.number   
+    
+    if args.process == 'tar':
+        ver_str = str(version)
+        count_str = str(int(counter) + 1)
+        subprocess.call(["tar", '-caf', args.app + '_' + ver_str + '+' + count_str + '.orig.tar.gz', args.folder, '--exclude-vcs'])
+        sys.exit(0)
     
     try: 
         last_commit = config.get('main', 'commit')
