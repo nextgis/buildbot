@@ -136,7 +136,6 @@ ubuntu_distributions = ['trusty', 'wily']
 # 1. check out the source
 deb_name = 'gdal'
 deb_dir = 'build/gdal_deb'
-sign_key = '4A641E7B'
 deb_email = 'dmitry.baryshnikov@nextgis.com'
 deb_fullname = 'Dmitry Baryshnikov'
 
