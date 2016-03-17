@@ -170,7 +170,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         haltOnFailure=True)) 
                                         
     # debuild -S -sa
-    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-S', '-sa'], 
+    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-i', '-us', '-uc', '-S'], 
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
