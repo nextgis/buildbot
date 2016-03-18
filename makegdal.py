@@ -133,15 +133,13 @@ for upld_file in upld_file_lst:
                                            name="upload to ftp " + upld_file, 
                                            description=["upload", "gdal files to ftp"],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False, 
-                                           workdir= code_dir,
-                                           want_stdout = False ))
+                                           workdir= code_dir ))
 #generate and load gdal_latest.log
 factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
                                            '-T', gdal_latest_file, '--ftp-create-dirs', 'ftp://nextgis.ru/programs/qgis/'],
                                            name="upload to ftp gdal_latest.log", 
                                            description=["upload", "gdal files to ftp"],
-                                           descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False,
-                                           want_stdout = False))
+                                           descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False))
          
 factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', '-n', gdal_ver, '-a', 'GDAL', '-p', 'store', '-o', gdal_latest_file], 
                                  name='log last comments',
