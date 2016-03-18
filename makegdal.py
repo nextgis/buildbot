@@ -172,8 +172,8 @@ for ubuntu_distribution in ubuntu_distributions:
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True)) 
                                         
-    # debuild -S -sa
-    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-i', '-us', '-uc', '-S'], 
+    # debuild -us -uc -d -nc -S
+    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-us', '-uc', '-d', '-S', '-nc'], 
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
