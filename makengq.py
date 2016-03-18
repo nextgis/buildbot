@@ -227,7 +227,8 @@ ngq_ftp_upload_installer_step = steps.ShellCommand(
         'qgis/ngq-builds'
     ],
     workdir=".\\installer",
-    timeout=None
+    timeout=None,
+    want_stdout = False
 )
 
 
@@ -241,7 +242,8 @@ ngq_ftp_upload_meta_bld_step = steps.ShellCommand(
         'qgis/.meta-ngq-commercial'
     ],
     workdir=".\\installer",
-    timeout=None
+    timeout=None,
+    want_stdout = False
 )
 ngq_ftp_upload_meta_rel_step = steps.ShellCommand(
     name='upload meta-file to ftp(%s)' % ftp_server,
@@ -253,7 +255,8 @@ ngq_ftp_upload_meta_rel_step = steps.ShellCommand(
         'qgis/.meta-ngq'
     ],
     workdir=".\\installer",
-    timeout=None
+    timeout=None,
+    want_stdout = False
 )
 
 ngq_custom_put_installer_to_build_service = steps.ShellCommand(

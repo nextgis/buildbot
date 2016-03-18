@@ -78,7 +78,8 @@ ftp_upload_command = "find . -type f -exec curl -u " + bbconf.ftp_user + " --ftp
 factory.addStep(MasterShellCommand(name="upload to ftp", description=["upload", "docs directory to ftp"],
                                  descriptionDone=["upload", "docs directory to ftp"], haltOnFailure=True,
                                  command = ftp_upload_command,
-                                 path="/usr/share/nginx/doc"))
+                                 path="/usr/share/nginx/doc",
+                                 want_stdout = False))
 
 builder = BuilderConfig(name = 'makedocs', slavenames = ['build-nix'], factory = factory)
 c['builders'] = [builder]                         
