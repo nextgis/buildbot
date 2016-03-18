@@ -144,7 +144,7 @@ factory_deb.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, wo
 #cleanup
 clean_exts = ['.tar.gz', '.changes', '.dsc', '.build', '.upload']
 for clean_ext in clean_exts:
-    factory_deb.addStep(steps.ShellCommand(command=["rm", '-rf', '*' + clean_ext], 
+    factory_deb.addStep(steps.ShellCommand(command=['bin/bash', '-c', 'rm *' + clean_ext], 
                                        name="rm of " + clean_ext,
                                        description=["rm", "delete"],
                                        descriptionDone=["rm", "deleted"], 
