@@ -54,6 +54,13 @@ code_dir_last = 'gdal_code'
 code_dir = 'build/' + code_dir_last
 factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir)) #mode='full', method='clobber'
 
+# fill log file
+gdal_latest_file = 'gdal_latest.log'
+factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', '-n', gdal_ver, '-a', 'GDAL', '-p', 'simple', '-f', code_dir, '-o', gdal_latest_file], 
+                                 name='log last comments',
+                                 description=["log", "last comments"],
+                                 descriptionDone=["logged", "last comments"], haltOnFailure=True))  
+
 # 2. build gdal 32
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
@@ -127,7 +134,13 @@ for upld_file in upld_file_lst:
                                            description=["upload", "gdal files to ftp"],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False, 
                                            workdir= code_dir ))
-
+#generate and load gdal_latest.log
+factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
+                                           '-T', gdal_latest_file, '--ftp-create-dirs', 'ftp://nextgis.ru/programs/qgis/'],
+                                           name="upload to ftp gdal_latest.log", 
+                                           description=["upload", "gdal files to ftp"],
+                                           descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False))
+                                                                            
 builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 
 # 1. check out the source
@@ -172,8 +185,8 @@ for ubuntu_distribution in ubuntu_distributions:
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True)) 
                                         
-    # debuild -us -uc -d -nc -S
-    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-us', '-uc', '-d', '-S', '-nc'], 
+    # debuild -us -uc -d -S
+    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-us', '-uc', '-S'], 
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
