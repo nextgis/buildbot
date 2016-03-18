@@ -56,7 +56,7 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 
 # fill log file
 gdal_latest_file = 'gdal_latest.log'
-factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', '-n', gdal_ver, '-a', 'GDAL', '-p', 'simple', '-f', code_dir, '-o', gdal_latest_file], 
+factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', '-n', gdal_ver, '-a', 'GDAL', '-p', 'simple', '-f', code_dir_last, '-o', gdal_latest_file], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"], haltOnFailure=True))  
