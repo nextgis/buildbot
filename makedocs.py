@@ -72,14 +72,13 @@ factory.addStep(MasterShellCommand(name="chmod", description=["fixing", "permiss
                                  descriptionDone=["fix", "permissions"], haltOnFailure=True,
                                  command=["/bin/bash", "-c", "chmod -R 0755 /usr/share/nginx/doc/*"]))
 
-ftp_upload_command = "find . -type f -exec curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T {} ftp://nextgis.ru/{} \;"
+ftp_upload_command = "find . -type f -exec curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T {} ftp://nextgis.ru/{} \; >/dev/null"
 
 # 4. upload to ftp
 factory.addStep(MasterShellCommand(name="upload to ftp", description=["upload", "docs directory to ftp"],
                                  descriptionDone=["upload", "docs directory to ftp"], haltOnFailure=True,
                                  command = ftp_upload_command,
-                                 path="/usr/share/nginx/doc",
-                                 want_stdout = False))
+                                 path="/usr/share/nginx/doc"))
 
 builder = BuilderConfig(name = 'makedocs', slavenames = ['build-nix'], factory = factory)
 c['builders'] = [builder]                         
