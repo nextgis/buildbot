@@ -140,6 +140,11 @@ factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsof
                                            name="upload to ftp gdal_latest.log", 
                                            description=["upload", "gdal files to ftp"],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False))
+         
+factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', '-n', gdal_ver, '-a', 'GDAL', '-p', 'store', '-o', gdal_latest_file], 
+                                 name='log last comments',
+                                 description=["log", "last comments"],
+                                 descriptionDone=["logged", "last comments"], haltOnFailure=True))  
                                                                             
 builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 
