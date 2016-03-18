@@ -189,8 +189,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                        haltOnFailure=True,
-                                        workdir=code_dir_last)) 
+                                        haltOnFailure=True)) 
 
 # store changelog
 factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
