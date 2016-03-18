@@ -184,7 +184,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True)) 
     # upload to launchpad
-    factory_deb.addStep(steps.ShellCommand(command=['dput', 'ppa:nextgis/ppa', deb_name + '_'+gdal_ver+'*_source.changes'], 
+    factory_deb.addStep(steps.ShellCommand(command=['dput ppa:nextgis/ppa ' +  deb_name + '*_source.changes'], 
                                         name='dput for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
