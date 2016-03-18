@@ -141,13 +141,16 @@ deb_fullname = 'Dmitry Baryshnikov'
 
 factory_deb.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir, alwaysUseLatest=True))
 factory_deb.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
-# tar orginal sources
-factory_deb.addStep(steps.ShellCommand(command=["rm", '-rf', '*.orig.tar.gz'], 
-                                       name="rm",
+#cleanup
+clean_exts = ['.tar.gz', '.changes', '.dsc', '.build', '.upload']
+for clean_ext in clean_exts:
+    factory_deb.addStep(steps.ShellCommand(command=["rm", '-rf', '*' + clean_ext], 
+                                       name="rm of " + clean_ext,
                                        description=["rm", "delete"],
                                        descriptionDone=["rm", "deleted"], 
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True))
+# tar orginal sources
 factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', gdal_ver, '-a', 
                                                 deb_name, '-p', 'tar', '-f', 
                                                 code_dir_last], 
@@ -184,7 +187,8 @@ for ubuntu_distribution in ubuntu_distributions:
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True)) 
     # upload to launchpad
-    factory_deb.addStep(steps.ShellCommand(command=['/bin/bash','-c','dput ppa:nextgis/ppa ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'], 
+    factory_deb.addStep(steps.ShellCommand(command=['/bin/bash','-c',
+                                        'dput ppa:nextgis/ppa ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'], 
                                         name='dput for ' + ubuntu_distribution,
                                         description=["dput", "package"],
                                         descriptionDone=["dputed", "package"],

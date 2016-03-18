@@ -4,7 +4,7 @@
 # Purpose:  prepare changelog by input values
 # Author:   Dmitry Barishnikov, dmitry.baryshnikov@nextgis.ru
 ################################################################################
-# Copyright (C) NextGIS
+# Copyright (C) 2016, NextGIS <info@nextgis.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -38,7 +38,6 @@ import subprocess
 from shutil import copy
 from datetime import datetime
  
-number_add = '-0ubuntu0ppa1'
 format_simple = '--pretty=format:%h - %an : %s'
 fromat_debian = '--pretty=format:  * %h - %an : %s'
 config_name = 'dch.cfg'
@@ -46,7 +45,7 @@ config_name = 'dch.cfg'
 def writeChangeLog(app, version, counter, distro, last_commit, current_commit, folder, infile, outfile):
     ver_str = str(version)
     count_str = str(int(counter) + 1)
-    full_message = app + ' (' + ver_str + '+' + count_str + number_add + ') ' + distro + '; urgency=medium\n\n'
+    full_message = app + ' (' + ver_str + '+' + count_str + '-0' + distro + '1) ' + distro + '; urgency=medium\n\n'
     if last_commit == '':
         # get last 20 messages
         log_messages = subprocess.check_output(['git', 'log', fromat_debian, '-20', '--no-merges'], cwd=folder)
