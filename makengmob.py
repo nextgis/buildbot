@@ -56,7 +56,7 @@ factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextG
 factory.addStep(steps.ShellCommand(command=['/bin/bash', 'testfairy-upload-android.sh', 'app/build/outputs/apk'], 
                                  description=["upload", "testfairy"],
                                  descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))  
-factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'store', '-o', 'app/build/outputs/apk/git.log'], 
+factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'store', '-f', '.'], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           

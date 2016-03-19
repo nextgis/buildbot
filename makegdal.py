@@ -56,10 +56,13 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 
 # fill log file
 gdal_latest_file = 'gdal_latest.log'
-factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', '-n', gdal_ver, '-a', 'GDAL', '-p', 'simple', '-f', code_dir_last, '-o', gdal_latest_file], 
-                                 name='log last comments',
-                                 description=["log", "last comments"],
-                                 descriptionDone=["logged", "last comments"], haltOnFailure=True))  
+factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
+                                                '-n', gdal_ver, '-a', 'GDAL', '-p', 
+                                                'simple', '-f', code_dir_last, '-o', 
+                                                gdal_latest_file], 
+                                        name='log last comments',
+                                        description=["log", "last comments"],
+                                        descriptionDone=["logged", "last comments"], haltOnFailure=True))  
 
 # 2. build gdal 32
 # make build dir
@@ -141,10 +144,12 @@ factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsof
                                            description=["upload", "gdal files to ftp"],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False))
          
-factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', '-n', gdal_ver, '-a', 'GDAL', '-p', 'store', '-o', gdal_latest_file], 
-                                 name='log last comments',
-                                 description=["log", "last comments"],
-                                 descriptionDone=["logged", "last comments"], haltOnFailure=True))  
+factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
+                                                '-n', gdal_ver, '-a', 'GDAL', '-p', 
+                                                'store', '-f', code_dir_last], 
+                                       name='log last comments',
+                                       description=["log", "last comments"],
+                                       descriptionDone=["logged", "last comments"], haltOnFailure=True))  
                                                                             
 builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 

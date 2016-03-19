@@ -113,7 +113,7 @@ if __name__ == "__main__":
         sys.exit(1)
         
     if args.process == 'store':
-        if args.folder is not None:
+        if args.origin is not None:
             writeChangeLog(args.app, version, counter, 'unstable', last_commit, current_commit, args.folder, 'changelog', 'changelog')         
         config_stor = ConfigParser.RawConfigParser()
         config_stor.add_section('main')
