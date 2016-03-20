@@ -17,27 +17,27 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis-extra/lib_gdal.git'
-gdal_ver = '2.1.0'
+project_ver = '2.1.0'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
+project_name = 'makegdal'
 
-git_poller = GitPoller(project = 'makegdal',
+git_poller = GitPoller(project = project_name,
                        repourl = repourl,
-                       workdir = 'makegdal-workdir',
+                       workdir = project_name + '-workdir',
                        branch = 'master', #TODO: buildbot
                        pollinterval = 7200,) 
 c['change_source'] = [git_poller]
                        
 scheduler = schedulers.SingleBranchScheduler(
-                            name="makegdal",
-                            change_filter=util.ChangeFilter(project = 'makegdal'),
+                            name=project_name,
+                            change_filter=util.ChangeFilter(project = project_name),
                             treeStableTimer=1*60,
-                            builderNames=["makegdal_win", "makegdal_deb"])                       
+                            builderNames=[project_name + "_win", project_name + "_deb"])                       
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
-                            name="makegdal_force",
-                            builderNames=["makegdal_win", "makegdal_deb"]))      
+                            name=project_name + "_force",
+                            builderNames=[project_name + "_win", project_name + "_deb"]))      
 
-#, "makegdal_lin"                      
 #### build gdal
 
 ## common steps
@@ -57,7 +57,7 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 # fill log file
 gdal_latest_file = 'gdal_latest.log'
 factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
-                                                '-n', gdal_ver, '-a', 'GDAL', '-p', 
+                                                '-n', project_ver, '-a', 'GDAL', '-p', 
                                                 'simple', '-f', code_dir_last, '-o', 
                                                 gdal_latest_file], 
                                         name='log last comments',
@@ -129,7 +129,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        env={'LANG': 'en_US'}))                                            
 # upload package
 #ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
-upld_file_lst = ['build32/GDAL-' + gdal_ver + '-win32.exe', 'build32/GDAL-' + gdal_ver + '-win32.zip', 'build64/GDAL-' + gdal_ver + '-win64.exe', 'build64/GDAL-' + gdal_ver + '-win64.zip']
+upld_file_lst = ['build32/GDAL-' + project_ver + '-win32.exe', 'build32/GDAL-' + project_ver + '-win32.zip', 'build64/GDAL-' + project_ver + '-win64.exe', 'build64/GDAL-' + project_ver + '-win64.zip']
 for upld_file in upld_file_lst:
     factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
                                            '-T', upld_file, '--ftp-create-dirs', 'ftp://nextgis.ru/programs/gdal/'],
@@ -145,13 +145,13 @@ factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsof
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False))
          
 factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
-                                                '-n', gdal_ver, '-a', 'GDAL', '-p', 
+                                                '-n', project_ver, '-a', 'GDAL', '-p', 
                                                 'store', '-f', code_dir_last], 
                                        name='log last comments',
                                        description=["log", "last comments"],
                                        descriptionDone=["logged", "last comments"], haltOnFailure=True))  
                                                                             
-builder_win = BuilderConfig(name = 'makegdal_win', slavenames = ['build-ngq-win7'], factory = factory_win)
+builder_win = BuilderConfig(name = project_name + '_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
@@ -174,18 +174,18 @@ for clean_ext in clean_exts:
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True))
 # tar orginal sources
-factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', gdal_ver, '-a', 
+factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, '-a', 
                                                 deb_name, '-p', 'tar', '-f', 
                                                 code_dir_last], 
                                        name="tar",
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
 # copy lib_gdal2 -> debian
-factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/gdal/debian", dest=code_dir + "/debian", 
+factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/debian", dest=code_dir + "/debian", 
                                         name="add debian folder", haltOnFailure=True))
 # update changelog
 for ubuntu_distribution in ubuntu_distributions:
-    factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', 
+    factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', 
                                                 deb_name, '-p', 'fill', '-f', 
                                                 code_dir_last,'-o', 'changelog', '-d', 
                                                 ubuntu_distribution], 
@@ -219,13 +219,13 @@ for ubuntu_distribution in ubuntu_distributions:
                                         haltOnFailure=True)) 
 
 # store changelog
-factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', gdal_ver, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
+factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                  haltOnFailure=True))  
                                        
-builder_deb = BuilderConfig(name = 'makegdal_deb', slavenames = ['build-nix'], factory = factory_deb)
+builder_deb = BuilderConfig(name = project_name + '_deb', slavenames = ['build-nix'], factory = factory_deb)
 
 c['builders'] = [builder_win, builder_deb]                                                        
