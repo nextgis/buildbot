@@ -13,22 +13,22 @@ c = {}
 
 repourl = 'https://github.com/nextgis/nextgisid.git'
 
-git_poller = GitPoller(project='makedocs',
+git_poller = GitPoller(project='make_ngid_tests',
                        repourl=repourl,
-                       workdir='makedocs-workdir',
+                       workdir='ngid_tests',
                        branch='master',
                        pollinterval=3600, )
 c['change_source'] = [git_poller]
 
 scheduler = schedulers.SingleBranchScheduler(
     name="makedocs",
-    change_filter=util.ChangeFilter(project='makedocs'),
+    change_filter=util.ChangeFilter(project='make_ngid_tests'),
     treeStableTimer=5 * 60,
-    builderNames=["makedocs"])
+    builderNames=["make_ngid_tests"])
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
-    name="makedocs_force",
-    builderNames=["makedocs"],
+    name="make_ngid_tests_force",
+    builderNames=["make_ngid_tests"],
 ))
 
 
