@@ -25,7 +25,7 @@ if TEST_ENV:
     INSTALLED_APPS += ('behave_django',)
     """
 
-    def __init__(self,  out_file_path='subconfig.conf', *args, **kwargs):
+    def __init__(self,  out_file_path, *args, **kwargs):
 
         self.out_file_path = out_file_path
         # call parent
@@ -93,8 +93,8 @@ factory.addStep(steps.ShellCommand(name='Install tests requirements',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements-tests.txt'])
                 )
 
-factory.addStep(CreateSubConfig(name='Create test subconfig',
-                                out_file_path='src/nextgisid_site/nextgisid_site/settings_local.py',
+factory.addStep(CreateSubConfig('src/nextgisid_site/nextgisid_site/settings_local.py',
+                                name='Create test subconfig',
                                 workdir='build')
                 )
 
