@@ -6,7 +6,7 @@ from buildbot.plugins import *
 
 c = {}
 
-repourl = 'https://github.com/nextgis/nextgisid.git'
+repourl = 'git://github.com/nextgis/nextgisid.git'
 
 git_poller = GitPoller(project='make_ngid_tests',
                        repourl=repourl,
