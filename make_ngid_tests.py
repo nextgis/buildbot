@@ -95,7 +95,8 @@ factory.addStep(steps.ShellCommand(name='Install tests requirements',
 
 factory.addStep(CreateSubConfig('src/nextgisid_site/nextgisid_site/settings_local.py',
                                 name='Create test subconfig',
-                                workdir='build')
+                                #workdir='build'
+                                )
                 )
 
 factory.addStep(steps.ShellCommand(name='Run behave tests',
