@@ -51,14 +51,14 @@ factory.addStep(steps.ShellCommand(name='Install common requirements',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements.txt'])
                 )
 
-factory.addStep(steps.ShellCommand(name='Install common requirements',
-                                   workdir='build',
-                                   command=['env/bin/pip', 'install', '-r', 'src/requirements.txt'])
-                )
-
 factory.addStep(steps.ShellCommand(name='Install tests requirements',
                                    workdir='build',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements-tests.txt'])
+                )
+
+factory.addStep(steps.ShellCommand(name='Run behave tests',
+                                   workdir='build',
+                                   command=['env/bin/python', 'src/nextgisid_site/manage.py', 'behave'])
                 )
 
 # BUILDER
