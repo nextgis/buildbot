@@ -34,12 +34,24 @@ c['schedulers'] = [scheduler, force_scheduler]
 # BUILD FACTORY
 factory = util.BuildFactory()
 # 1. check out the source
-factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True, workdir='src'))  # mode='full', method='clobber'
+factory.addStep(steps.Git(name='Get source code',
+                          workdir='src',
+                          repourl=repourl,
+                          mode='incremental',
+                          submodules=True)
+                )
 
 # 2. Create virt env
-factory.addStep(steps.ShellCommand(command=['virtualenv', 'env']))
-factory.addStep(steps.ShellCommand(command=['env/bin/pip', 'install', 'splinter']))
+factory.addStep(steps.ShellCommand(name='Create virtual environment',
+                                   workdir='',
+                                   command=['virtualenv', 'env'])
+                )
 
+#3. Install requrements
+factory.addStep(steps.ShellCommand(name='Install common requirements',
+                                   workdir='',
+                                   command=['env/bin/pip', 'install', '-r', 'src/requirements.txt'])
+                )
 
 # BUILDER
 builder = BuilderConfig(name='make_ngid_tests_builder', slavenames=['build-nix'], factory=factory)
