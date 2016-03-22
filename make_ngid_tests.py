@@ -36,7 +36,7 @@ if TEST_ENV:
         #
         # except Exception as ex:
         #     self.finished()
-        with open(self.out_file_path, mode='w', encoding='utf8') as out_file:
+        with open(self.out_file_path, mode='w') as out_file:
             out_file.write(self.config_text)
         self.finished(SUCCESS)
 
