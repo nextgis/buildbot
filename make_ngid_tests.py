@@ -93,7 +93,7 @@ factory.addStep(steps.ShellCommand(name='Install tests requirements',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements-tests.txt'])
                 )
 
-factory.addStep(CreateSubConfig('src/nextgisid_site/nextgisid_site/settings_local.py',
+factory.addStep(CreateSubConfig('./src/nextgisid_site/nextgisid_site/settings_local.py',
                                 name='Create test subconfig',
                                 #workdir='build'
                                 )
