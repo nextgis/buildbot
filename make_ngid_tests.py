@@ -35,7 +35,7 @@ c['schedulers'] = [scheduler, force_scheduler]
 factory = util.BuildFactory()
 # 1. check out the source
 factory.addStep(steps.Git(name='Get source code',
-                          workdir='src',
+                          workdir='build/src',
                           repourl=repourl,
                           mode='incremental',
                           submodules=True)
@@ -43,13 +43,13 @@ factory.addStep(steps.Git(name='Get source code',
 
 # 2. Create virt env
 factory.addStep(steps.ShellCommand(name='Create virtual environment',
-                                   workdir='',
+                                   workdir='build',
                                    command=['virtualenv', 'env'])
                 )
 
 #3. Install requrements
 factory.addStep(steps.ShellCommand(name='Install common requirements',
-                                   workdir='',
+                                   workdir='build',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements.txt'])
                 )
 
