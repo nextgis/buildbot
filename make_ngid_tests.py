@@ -1,6 +1,7 @@
 # -*- python -*-
 # ex: set syntax=python:
 from buildbot.changes.gitpoller import GitPoller
+from buildbot.config import BuilderConfig
 from buildbot.plugins import *
 
 c = {}
@@ -18,11 +19,12 @@ scheduler = schedulers.SingleBranchScheduler(
     name="make_ngid_tests",
     change_filter=util.ChangeFilter(project='make_ngid_tests'),
     treeStableTimer=5 * 60,
-    builderNames=["make_ngid_tests"])
+    builderNames=["make_ngid_tests_builder"])
+
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
     name="make_ngid_tests_force",
-    builderNames=["make_ngid_tests"],
+    builderNames=["make_ngid_tests_builder"],
 ))
 
 
@@ -55,3 +57,6 @@ factory.addStep(steps.ShellCommand(command=['env/bin/pip', 'install', 'splinter'
 #
 # builder = BuilderConfig(name='makedocs', slavenames=['build-nix'], factory=factory)
 # c['builders'] = [builder]
+
+builder = BuilderConfig(name='make_ngid_tests_builder', slavenames=['build-nix'], factory=factory)
+c['builders'] = [builder]
