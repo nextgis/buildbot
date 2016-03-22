@@ -37,6 +37,11 @@ factory = util.BuildFactory()
 # 1. check out the source
 factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True))  # mode='full', method='clobber'
 
+# 2. Create virt env
+#factory.addStep(steps.MakeDirectory(dir=''))
+factory.addStep(steps.ShellCommand(command=['virtualenv', 'env']))
+factory.addStep(steps.ShellCommand(command=['env/bin/pip', 'install', 'splinter']))
+
 # 2. build pdf for each doc except dev
 # factory.addStep(steps.  ShellCommand(command=["sh", "make_javadoc.sh"],
 #                                    description=["make", "javadoc for mobile (android)"],
