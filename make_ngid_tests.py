@@ -25,11 +25,11 @@ if TEST_ENV:
     INSTALLED_APPS += ('behave_django',)
     """
 
-    def __init__(self,  out_file_path='subconfig.conf', **kwargs):
+    def __init__(self,  out_file_path='subconfig.conf', *args, **kwargs):
 
         self.out_file_path = out_file_path
         # call parent
-        LoggingBuildStep.__init__(self, **kwargs)
+        LoggingBuildStep.__init__(self, *args, **kwargs)
 
     def start(self):
         # try:
