@@ -1,13 +1,7 @@
 # -*- python -*-
 # ex: set syntax=python:
 from buildbot.changes.gitpoller import GitPoller
-from buildbot.config import BuilderConfig
 from buildbot.plugins import *
-from buildbot.steps.master import MasterShellCommand
-from buildbot.steps.python import Sphinx
-from buildbot.steps.transfer import DirectoryUpload
-
-import bbconf
 
 c = {}
 
@@ -21,7 +15,7 @@ git_poller = GitPoller(project='make_ngid_tests',
 c['change_source'] = [git_poller]
 
 scheduler = schedulers.SingleBranchScheduler(
-    name="makedocs",
+    name="make_ngid_tests",
     change_filter=util.ChangeFilter(project='make_ngid_tests'),
     treeStableTimer=5 * 60,
     builderNames=["make_ngid_tests"])
