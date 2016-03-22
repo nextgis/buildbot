@@ -36,7 +36,7 @@ if TEST_ENV:
         #
         # except Exception as ex:
         #     self.finished()
-        with open(self.out_file_path, mode='w') as out_file:
+        with open(self.dirname + self.out_file_path, mode='w') as out_file:
             out_file.write(self.config_text)
         self.finished(SUCCESS)
 
@@ -93,7 +93,7 @@ factory.addStep(steps.ShellCommand(name='Install tests requirements',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements-tests.txt'])
                 )
 
-factory.addStep(CreateSubConfig('./src/nextgisid_site/nextgisid_site/settings_local.py',
+factory.addStep(CreateSubConfig('/src/nextgisid_site/nextgisid_site/settings_local.py',
                                 name='Create test subconfig',
                                 #workdir='build'
                                 )
