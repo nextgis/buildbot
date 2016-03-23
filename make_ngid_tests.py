@@ -23,14 +23,14 @@ class CreateSubConfigCommand(buildstep.ShellMixin, buildstep.BuildStep):
         INSTALLED_APPS += ('behave_django',)
     """
 
-    def __init__(self, out_file_path='./cleanup.sh', **kwargs):
+    def __init__(self, out_file_path='subconfig.cfg', **kwargs):
         self.out_file_path = out_file_path
         kwargs = self.setupShellMixin(kwargs, prohibitArgs=['command'])
         buildstep.BuildStep.__init__(self, **kwargs)
 
     @defer.inlineCallbacks
     def run(self):
-        cmd = yield self.makeRemoteShellCommand(command=['echo', self.config_text, '>', self.out_file_path])
+        cmd = yield self.makeRemoteShellCommand(command=['echo "%s" > %s' % (self.config_text, self.out_file_path)])
         yield self.runCommand(cmd)
         defer.returnValue(cmd.results())
 
