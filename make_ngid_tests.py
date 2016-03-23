@@ -64,7 +64,8 @@ factory.addStep(steps.ShellCommand(name='Create tests subconfig',
 
 factory.addStep(steps.ShellCommand(name='Run behave tests',
                                    workdir='build/src/nextgisid_site/',
-                                   command=['../../env/bin/python', 'manage.py', 'behave'])
+                                   command=['../../env/bin/python', 'manage.py', 'behave'],
+                                   timeout=3600)
                 )
 
 # BUILDER
