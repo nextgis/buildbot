@@ -43,6 +43,8 @@ factory.addStep(steps.Git(name='Get source code',
                 )
 
 factory.addStep(steps.ShellCommand(name='Create virtual environment',
+                                   description=["Create virtual environment"],
+                                   descriptionDone=["Create virtual environment"],
                                    workdir='build',
                                    command=['virtualenv', 'env'])
                 )
