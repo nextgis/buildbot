@@ -3,7 +3,7 @@
 from buildbot.changes.gitpoller import GitPoller
 from buildbot.config import BuilderConfig
 from buildbot.plugins import *
-
+from buildbot.status.mail import MailNotifier
 
 c = {}
 
@@ -77,10 +77,26 @@ factory.addStep(steps.ShellCommand(name='Run behave tests',
                                    descriptionDone=['Run behave tests'],
                                    workdir='build/src/nextgisid_site/',
                                    command=['../../env/bin/python', 'manage.py', 'behave'],
-                                   timeout=3600,
+                                   timeout=1200,
                                    env={'LANG': 'en_US.UTF-8'})
                 )
 
 # BUILDER
-builder = BuilderConfig(name='make_ngid_tests_builder', slavenames=['build-nix'], factory=factory)
-c['builders'] = [builder]
+ngid_builder = BuilderConfig(name='make_ngid_tests_builder', slavenames=['build-nix'], factory=factory)
+c['builders'] = [ngid_builder]
+
+# NOTIFIER
+import bbconf
+
+ngid_mn = MailNotifier(fromaddr='buildbot@nextgis.ru',
+                       sendToInterestedUsers=True,
+                       builders=[ngid_builder.name],
+                       mode=('all'),
+                       extraRecipients=bbconf.ngid_email_recipients,
+                       relayhost='mail.gis-lab.info',
+                       useTls=False,
+                       smtpPort=2525,
+                       smtpUser=bbconf.email_user,
+                       smtpPassword=bbconf.email_passwd)
+
+c['status'].append(ngid_mn)
