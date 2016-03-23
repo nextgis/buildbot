@@ -36,6 +36,8 @@ c['schedulers'] = [scheduler, force_scheduler]
 factory = util.BuildFactory()
 
 factory.addStep(steps.Git(name='Get source code',
+                          description=['Get source code'],
+                          descriptionDone=['Get source code'],
                           workdir='build/src',
                           repourl=repourl,
                           mode='incremental',
@@ -43,28 +45,36 @@ factory.addStep(steps.Git(name='Get source code',
                 )
 
 factory.addStep(steps.ShellCommand(name='Create virtual environment',
-                                   description=["Create virtual environment"],
-                                   descriptionDone=["Create virtual environment"],
+                                   description=['Create virtual environment'],
+                                   descriptionDone=['Create virtual environment'],
                                    workdir='build',
                                    command=['virtualenv', 'env'])
                 )
 
 factory.addStep(steps.ShellCommand(name='Install common requirements',
+                                   description=['Install common requirements'],
+                                   descriptionDone=['Install common requirements'],
                                    workdir='build',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements.txt'])
                 )
 
 factory.addStep(steps.ShellCommand(name='Install tests requirements',
+                                   description=['Install tests requirements'],
+                                   descriptionDone=['Install tests requirements'],
                                    workdir='build',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements-tests.txt'])
                 )
 
 factory.addStep(steps.ShellCommand(name='Create tests subconfig',
+                                   description=['Create tests subconfig'],
+                                   descriptionDone=['Create tests subconfig'],
                                    workdir='build',
                                    command=['cp', 'src/nextgisid_site/nextgisid_site/settings_local.py_server_tests_template', 'src/nextgisid_site/nextgisid_site/settings_local.py'])
                 )
 
 factory.addStep(steps.ShellCommand(name='Run behave tests',
+                                   description=['Run behave tests'],
+                                   descriptionDone=['Run behave tests'],
                                    workdir='build/src/nextgisid_site/',
                                    command=['../../env/bin/python', 'manage.py', 'behave'],
                                    timeout=3600,
