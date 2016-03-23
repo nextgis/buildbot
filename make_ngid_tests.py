@@ -99,4 +99,4 @@ ngid_mn = MailNotifier(fromaddr='buildbot@nextgis.ru',
                        smtpUser=bbconf.email_user,
                        smtpPassword=bbconf.email_passwd)
 
-c['status'].append(ngid_mn)
+c['status'] = [ngid_mn]
