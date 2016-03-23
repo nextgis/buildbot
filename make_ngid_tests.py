@@ -1,5 +1,6 @@
 # -*- python -*-
 # ex: set syntax=python:
+import os
 from buildbot.changes.gitpoller import GitPoller
 from buildbot.config import BuilderConfig
 from buildbot.plugins import *
@@ -10,7 +11,7 @@ from buildbot.status.results import SUCCESS
 # CUSTOM BuildSteps (BAD - need tto move to separate file)
 
 
-class CreateSubConfig(LoggingBuildStep):
+class CreateSubConfigCommand(LoggingBuildStep):
     name = "create_sub_config"
 
     config_text = """
@@ -36,7 +37,8 @@ if TEST_ENV:
         #
         # except Exception as ex:
         #     self.finished()
-        with open(self.dirname + self.out_file_path, mode='w') as out_file:
+        base_path = os.environ['PWD']
+        with open(base_path + '/' + self.out_file_path, mode='w') as out_file:
             out_file.write(self.config_text)
         self.finished(SUCCESS)
 
@@ -93,7 +95,7 @@ factory.addStep(steps.ShellCommand(name='Install tests requirements',
                                    command=['env/bin/pip', 'install', '-r', 'src/requirements-tests.txt'])
                 )
 
-factory.addStep(CreateSubConfig('/src/nextgisid_site/nextgisid_site/settings_local.py',
+factory.addStep(CreateSubConfigCommand('/src/nextgisid_site/nextgisid_site/settings_local.py',
                                 name='Create test subconfig',
                                 #workdir='build'
                                 )
