@@ -1,46 +1,38 @@
 # -*- python -*-
 # ex: set syntax=python:
-import os
 from buildbot.changes.gitpoller import GitPoller
 from buildbot.config import BuilderConfig
 from buildbot.plugins import *
-
-from buildbot.process.buildstep import LoggingBuildStep
-from buildbot.status.results import SUCCESS
-
-# CUSTOM BuildSteps (BAD - need tto move to separate file)
+from buildbot.process import buildstep
+from twisted.internet import defer
 
 
-class CreateSubConfigCommand(LoggingBuildStep):
+# CUSTOM BuildSteps (BAD - need to move to separate file)
+class CreateSubConfigCommand(buildstep.ShellMixin, buildstep.BuildStep):
     name = "create_sub_config"
 
     config_text = """
-TEST_ENV = True
+    TEST_ENV = True
 
-if TEST_ENV:
-    from settings import INSTALLED_APPS
-    import os
-    DJANGO_LIVE_TEST_SERVER_ADDRESS = 'localhost:9200-9300'
-    os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = DJANGO_LIVE_TEST_SERVER_ADDRESS
-    TESTS_BROWSER_DRIVER_NAME = 'phantomjs'  # use acceptable drivers for Splinter
-    INSTALLED_APPS += ('behave_django',)
+    if TEST_ENV:
+        from settings import INSTALLED_APPS
+        import os
+        DJANGO_LIVE_TEST_SERVER_ADDRESS = 'localhost:9200-9300'
+        os.environ['DJANGO_LIVE_TEST_SERVER_ADDRESS'] = DJANGO_LIVE_TEST_SERVER_ADDRESS
+        TESTS_BROWSER_DRIVER_NAME = 'phantomjs'  # use acceptable drivers for Splinter
+        INSTALLED_APPS += ('behave_django',)
     """
 
-    def __init__(self,  out_file_path, **kwargs):
-
+    def __init__(self, out_file_path='./cleanup.sh', **kwargs):
         self.out_file_path = out_file_path
-        # call parent
-        LoggingBuildStep.__init__(self, **kwargs)
+        kwargs = self.setupShellMixin(kwargs, prohibitArgs=['command'])
+        buildstep.BuildStep.__init__(self, **kwargs)
 
-    def start(self):
-        # try:
-        #
-        # except Exception as ex:
-        #     self.finished()
-        base_path = os.environ['PWD']
-        with open(base_path + '/' + self.out_file_path, mode='w') as out_file:
-            out_file.write(self.config_text)
-        self.finished(SUCCESS)
+    @defer.inlineCallbacks
+    def run(self):
+        cmd = yield self.makeRemoteShellCommand(command=['echo', self.config_text, '>', self.out_file_path])
+        yield self.runCommand(cmd)
+        defer.returnValue(cmd.results())
 
 
 c = {}
