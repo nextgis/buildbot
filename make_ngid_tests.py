@@ -66,7 +66,7 @@ factory.addStep(steps.ShellCommand(name='Run behave tests',
                                    workdir='build/src/nextgisid_site/',
                                    command=['../../env/bin/python', 'manage.py', 'behave'],
                                    timeout=3600,
-                                   env={'LANG_ALL': 'en_US.UTF-8'})
+                                   env={'LANG': 'en_US.UTF-8'})
                 )
 
 # BUILDER
