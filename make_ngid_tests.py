@@ -88,7 +88,7 @@ c['builders'] = [ngid_builder]
 # NOTIFIER
 import bbconf
 
-ngid_mn = MailNotifier(fromaddr='buildbot@nextgis.ru',
+ngid_mn = MailNotifier(fromaddr='id@nextgis.ru',
                        sendToInterestedUsers=True,
                        builders=[ngid_builder.name],
                        mode=('all'),
