@@ -88,15 +88,14 @@ c['builders'] = [ngid_builder]
 # NOTIFIER
 import bbconf
 
-ngid_mn = MailNotifier(fromaddr='id@nextgis.ru',
+ngid_mn = MailNotifier(fromaddr='buildbot@nextgis.com',
                        sendToInterestedUsers=True,
                        builders=[ngid_builder.name],
                        mode=('all'),
                        extraRecipients=bbconf.ngid_email_recipients,
-                       relayhost='mail.gis-lab.info',
-                       useTls=False,
-                       smtpPort=2525,
-                       smtpUser=bbconf.email_user,
-                       smtpPassword=bbconf.email_passwd)
+                       relayhost='mail.nextgis.com',
+                       useTls=True,
+                       #smtpUser='buildbot@nextgis.com'
+                      )
 
 c['status'] = [ngid_mn]
