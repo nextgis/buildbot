@@ -93,7 +93,7 @@ ngid_mn = MailNotifier(fromaddr='buildbot@nextgis.com',
                        builders=[ngid_builder.name],
                        mode=('all'),
                        extraRecipients=bbconf.ngid_email_recipients,
-                       relayhost='mail.nextgis.com',
+                       relayhost='192.168.255.1',
                        useTls=True,
                        #smtpUser='buildbot@nextgis.com'
                       )
