@@ -203,7 +203,8 @@ for ubuntu_distribution in ubuntu_distributions:
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True,
                                         workdir=code_dir)) 
-    factory_deb.addStep(steps.ShellCommand(command=['debsign.sh'], 
+                                                                       
+    factory_deb.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_deb"], 
                                         name='debsign for ' + ubuntu_distribution,
                                         description=["debsign", "package"],
                                         descriptionDone=["debsigned", "package"],
