@@ -94,8 +94,7 @@ ngid_mn = MailNotifier(fromaddr='buildbot@nextgis.com',
                        mode=('all'),
                        extraRecipients=bbconf.ngid_email_recipients,
                        relayhost='192.168.255.1',
-                       useTls=True,
-                       #smtpUser='buildbot@nextgis.com'
+                       useTls=True
                       )
 
 c['status'] = [ngid_mn]
