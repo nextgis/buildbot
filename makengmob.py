@@ -15,23 +15,24 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis/android_gisapp.git'
+project_name = 'ngmob'
 
-git_poller = GitPoller(project = 'makengmob',
+git_poller = GitPoller(project = project_name,
                        repourl = repourl,
-                       workdir = 'makengmob-workdir',
+                       workdir = project_name + '-workdir',
                        branch = 'master',
                        pollinterval = 7200,) # each 2 hours
 c['change_source'] = [git_poller]
 
 scheduler = schedulers.SingleBranchScheduler(
-                            name="makengmob",
-                            change_filter=util.ChangeFilter(project = 'makengmob'),
+                            name=project_name,
+                            change_filter=util.ChangeFilter(project = project_name),
                             treeStableTimer=2*60,
-                            builderNames=["makengmob"])
+                            builderNames=[project_name])
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
-                            name="makengmob_force",
-                            builderNames=["makengmob"],
+                            name=project_name + "_force",
+                            builderNames=[project_name],
 ))
 #### build docs
 
@@ -63,5 +64,5 @@ factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextG
                                  haltOnFailure=True))                                                                  
 
                                             
-builder = BuilderConfig(name = 'makengmob', slavenames = ['build-nix'], factory = factory)
+builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
 c['builders'] = [builder]                            

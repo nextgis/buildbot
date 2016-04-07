@@ -19,7 +19,7 @@ c = {}
 repourl = 'git://github.com/nextgis-extra/postgis.git'
 project_ver = '2.2.2'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
-project_name = 'makepostgis'
+project_name = 'postgis'
 
 git_poller = GitPoller(project = project_name,
                        repourl = repourl,
@@ -45,7 +45,8 @@ code_dir = 'build/' + code_dir_last
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'wily']
+ubuntu_distributions = ['trusty'] #TODO:, 'wily', 'xenial']
+postgis_versions = ['9.3'] #TODO: , '9.4', '9.5']
 # 1. check out the source
 deb_dir = 'build/' + deb_name + '_deb'
 deb_email = 'dmitry.baryshnikov@nextgis.com'
@@ -69,11 +70,13 @@ factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, '-a
                                        name="tar",
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
-# copy lib_gdal2 -> debian
-factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/debian", dest=code_dir + "/debian", 
-                                        name="add debian folder", haltOnFailure=True))
-# update changelog
-for ubuntu_distribution in ubuntu_distributions:
+
+for ubuntu_distribution, postgis_version in (zip(ubuntu_distributions, postgis_versions)):	 
+                                          
+    # copy lib_gdal2 -> debian
+    factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/pg" + postgis_version + "/debian", dest=code_dir + "/debian", 
+                                            name="add debian folder for " + postgis_version, haltOnFailure=True))
+
     factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', 
                                                 deb_name, '-p', 'fill', '-f', 
                                                 code_dir_last,'-o', 'changelog', '-d', 
@@ -106,7 +109,11 @@ for ubuntu_distribution in ubuntu_distributions:
                                         descriptionDone=["dputed", "package"],
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
                                         haltOnFailure=True)) 
-
+    # delete code_dir + "/debian"
+    factory_deb.addStep(steps.RemoveDirectory(dir=code_dir + "/debian", 
+                                              name="remove debian folder for " + postgis_version, 
+                                              haltOnFailure=True))
+    
 # store changelog
 factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
                                  name='log last comments',

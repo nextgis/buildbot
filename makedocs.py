@@ -15,23 +15,23 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis/docs_ng.git'
-
-git_poller = GitPoller(project = 'makedocs',
+project_name = 'docs'
+git_poller = GitPoller(project = project_name,
                        repourl = repourl,
-                       workdir = 'makedocs-workdir',
+                       workdir = project_name + '-workdir',
                        branch = 'master',
-                       pollinterval = 3600,)
+                       pollinterval = 1800,)
 c['change_source'] = [git_poller]
 
 scheduler = schedulers.SingleBranchScheduler(
-                            name="makedocs",
-                            change_filter=util.ChangeFilter(project = 'makedocs'),
+                            name=project_name,
+                            change_filter=util.ChangeFilter(project = project_name),
                             treeStableTimer=5*60,
-                            builderNames=["makedocs"])
+                            builderNames=[project_name])
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
-                            name="makedocs_force",
-                            builderNames=["makedocs"],
+                            name=project_name + "_force",
+                            builderNames=[project_name],
 ))
 
 #### build docs
@@ -80,5 +80,5 @@ factory.addStep(MasterShellCommand(name="upload to ftp", description=["upload", 
                                  command = ftp_upload_command,
                                  path="/usr/share/nginx/doc"))
 
-builder = BuilderConfig(name = 'makedocs', slavenames = ['build-nix'], factory = factory)
+builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
 c['builders'] = [builder]                         

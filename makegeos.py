@@ -19,7 +19,7 @@ c = {}
 repourl = 'git://github.com/nextgis-extra/lib_geos.git'
 project_ver = '3.5.0'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
-project_name = 'makegeos'
+project_name = 'geos'
 
 git_poller = GitPoller(project = project_name,
                        repourl = repourl,

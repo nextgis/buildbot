@@ -19,7 +19,7 @@ c = {}
 repourl = 'git://github.com/nextgis-extra/lib_gdal.git'
 project_ver = '2.1.0'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
-project_name = 'makegdal'
+project_name = 'gdal'
 
 git_poller = GitPoller(project = project_name,
                        repourl = repourl,
