@@ -155,7 +155,7 @@ builder_win = BuilderConfig(name = project_name + '_win', slavenames = ['build-n
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'wily']
+ubuntu_distributions = ['trusty', 'wily', 'xenial']
 # 1. check out the source
 deb_name = 'gdal'
 deb_dir = 'build/gdal_deb'
