@@ -45,8 +45,8 @@ code_dir = 'build/' + code_dir_last
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty'] #TODO:, 'wily', 'xenial']
-postgis_versions = ['9.3'] #TODO: , '9.4', '9.5']
+ubuntu_distributions = ['trusty', 'wily', 'xenial']
+postgis_versions = ['9.3', '9.4', '9.5']
 # 1. check out the source
 deb_dir = 'build/' + deb_name + '_deb'
 deb_email = 'dmitry.baryshnikov@nextgis.com'
