@@ -13,72 +13,72 @@ from buildbot.steps.master import MasterShellCommand
 import bbconf
 
 c = {}
+c['change_source'] = []
+c['schedulers'] = []
+c['builders'] = []
 
 repourl = 'git://github.com/nextgis/docs_ng.git'
-project_name = 'docs'
-git_poller = GitPoller(project = project_name,
+langs = ['ru', 'en']
+
+for lang in langs:
+    project_name = 'docs_' + lang
+    git_poller = GitPoller(project = project_name,
                        repourl = repourl,
                        workdir = project_name + '-workdir',
-                       branch = 'master',
+                       branch = lang,
                        pollinterval = 1800,)
-c['change_source'] = [git_poller]
+    c['change_source'].append(git_poller)
 
-scheduler = schedulers.SingleBranchScheduler(
-                            name=project_name,
-                            change_filter=util.ChangeFilter(project = project_name),
-                            treeStableTimer=5*60,
-                            builderNames=[project_name])
-c['schedulers'] = [scheduler]
-c['schedulers'].append(schedulers.ForceScheduler(
-                            name=project_name + "_force",
-                            builderNames=[project_name],
-))
+    scheduler = schedulers.SingleBranchScheduler(
+                                name=project_name,
+                                change_filter=util.ChangeFilter(project = project_name),
+                                treeStableTimer=5*60,
+                                builderNames=[project_name])
+    c['schedulers'].append(scheduler)
+    c['schedulers'].append(schedulers.ForceScheduler(
+                                name=project_name + "_force",
+                                builderNames=[project_name],
+    ))
 
-#### build docs
+    #### build docs
 
-factory = util.BuildFactory()
-# 1. check out the source
-factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True)) #mode='full', method='clobber'
+    factory = util.BuildFactory()
+    # 1. check out the source
+    factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True)) #mode='full', method='clobber'
 
-# 2. build pdf for each doc except dev
-factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"], 
-                                            description=["make", "javadoc for mobile (android)"],
-                                            descriptionDone=["made", "javadoc for mobile (android)"], 
-                                            workdir="build/source/ngmobile_dev"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS Mobile"],
-                                            workdir="build/source/docs_ngmobile"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS Web"],
-                                            workdir="build/source/docs_ngweb"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS Manager"],
-                                            workdir="build/source/docs_ngmanager"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS FormBuilder"],
-                                            workdir="build/source/docs_formbuilder"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS Bio"],
-                                            workdir="build/source/docs_ngbio"))
-factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                            description=["make", "pdf for NextGIS QGIS"],
-                                            workdir="build/source/docs_ngqgis"))
+    #TODO: do we need pdf in other languages?
+    if lang == 'ru':
+        # 2. build pdf for each doc except dev
+        factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"], 
+                                                    description=["make", "javadoc for mobile (android)"],
+                                                    descriptionDone=["made", "javadoc for mobile (android)"], 
+                                                    workdir="build/source/ngmobile_dev"))
+        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                                    description=["make", "pdf for NextGIS Mobile"],
+                                                    workdir="build/source/docs_ngmobile"))
+        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                                    description=["make", "pdf for NextGIS Web"],
+                                                    workdir="build/source/docs_ngweb"))
+        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                                    description=["make", "pdf for NextGIS Manager"],
+                                                    workdir="build/source/docs_ngmanager"))
+        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                                    description=["make", "pdf for NextGIS FormBuilder"],
+                                                    workdir="build/source/docs_formbuilder"))
+        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                                    description=["make", "pdf for NextGIS Bio"],
+                                                    workdir="build/source/docs_ngbio"))
+        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                                    description=["make", "pdf for NextGIS QGIS"],
+                                                    workdir="build/source/docs_ngqgis"))
 
 
-# 3. build html
-factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
-factory.addStep(DirectoryUpload(slavesrc="_build/html", masterdest="/usr/share/nginx/doc"))
-factory.addStep(MasterShellCommand(name="chmod", description=["fixing", "permissions"],
-                                 descriptionDone=["fix", "permissions"], haltOnFailure=True,
-                                 command=["/bin/bash", "-c", "chmod -R 0755 /usr/share/nginx/doc/*"]))
+    # 3. build html
+    factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
+    # 4. upload to ftp
+    factory.addStep(steps.ShellCommand(command=["sync.sh", lang], 
+                                                description=["sync", "to web server"])
 
-ftp_upload_command = "find . -type f -exec curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T {} ftp://nextgis.ru/{} \;"
-
-# 4. upload to ftp
-factory.addStep(MasterShellCommand(name="upload to ftp", description=["upload", "docs directory to ftp"],
-                                 descriptionDone=["upload", "docs directory to ftp"], haltOnFailure=True,
-                                 command = ftp_upload_command,
-                                 path="/usr/share/nginx/doc"))
-
-builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
-c['builders'] = [builder]                         
+    builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+    c['builders'].append(builder)
+                             
