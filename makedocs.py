@@ -20,20 +20,23 @@ c['builders'] = []
 repourl = 'git://github.com/nextgis/docs_ng.git'
 langs = ['ru', 'en']
 
+poller_name = 'docs'
+git_poller = GitPoller(project = poller_name,
+                   repourl = repourl,
+                   workdir = poller_name + '-workdir',
+                   branches = langs,
+                   pollinterval = 1800,)
+c['change_source'].append(git_poller)
+
 for lang in langs:
     project_name = 'docs_' + lang
-    git_poller = GitPoller(project = project_name,
-                       repourl = repourl,
-                       workdir = project_name + '-workdir',
-                       branch = lang,
-                       pollinterval = 1800,)
-    c['change_source'].append(git_poller)
-
+    
     scheduler = schedulers.SingleBranchScheduler(
-                                name=project_name,
-                                change_filter=util.ChangeFilter(project = project_name),
-                                treeStableTimer=5*60,
-                                builderNames=[project_name])
+                            name=project_name,
+                            change_filter=util.ChangeFilter(project = poller_name,
+                                                            branch=lang),
+                            treeStableTimer=5*60,
+                            builderNames=[project_name])
     c['schedulers'].append(scheduler)
     c['schedulers'].append(schedulers.ForceScheduler(
                                 name=project_name + "_force",
