@@ -77,7 +77,7 @@ for lang in langs:
     factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
     # 4. upload to ftp
     factory.addStep(steps.ShellCommand(command=["sync.sh", lang], 
-                                                description=["sync", "to web server"])
+                                       description=["sync", "to web server"]))
 
     builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
     c['builders'].append(builder)
