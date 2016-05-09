@@ -16,7 +16,7 @@ import bbconf
 
 c = {}
 
-repourl = 'git://github.com/nextgis-extra/lib_geos.git'
+repourl = 'git://github.com/nextgis-borsch/lib_geos.git'
 project_ver = '3.5.0'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'geos'
