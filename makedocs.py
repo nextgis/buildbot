@@ -48,14 +48,14 @@ for lang in langs:
     factory = util.BuildFactory()
     # 1. check out the source
     factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True)) #mode='full', method='clobber'
-
+    factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"], 
+                                      description=["make", "javadoc for mobile (android)"],
+                                      descriptionDone=["made", "javadoc for mobile (android)"], 
+                                      workdir="build/source/ngmobile_dev"))
+    
     #TODO: do we need pdf in other languages?
     if lang == 'ru':
         # 2. build pdf for each doc except dev
-        factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"], 
-                                                    description=["make", "javadoc for mobile (android)"],
-                                                    descriptionDone=["made", "javadoc for mobile (android)"], 
-                                                    workdir="build/source/ngmobile_dev"))
         factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
                                                     description=["make", "pdf for NextGIS Mobile"],
                                                     workdir="build/source/docs_ngmobile"))
@@ -74,7 +74,6 @@ for lang in langs:
         factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
                                                     description=["make", "pdf for NextGIS QGIS"],
                                                     workdir="build/source/docs_ngqgis"))
-
 
     # 3. build html
     factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
