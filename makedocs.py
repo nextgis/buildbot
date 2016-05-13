@@ -53,27 +53,28 @@ for lang in langs:
                                       descriptionDone=["made", "javadoc for mobile (android)"], 
                                       workdir="build/source/ngmobile_dev"))
     
-    #TODO: do we need pdf in other languages?
-    if lang == 'ru':
-        # 2. build pdf for each doc except dev
-        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                                    description=["make", "pdf for NextGIS Mobile"],
-                                                    workdir="build/source/docs_ngmobile"))
-        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                                    description=["make", "pdf for NextGIS Web"],
-                                                    workdir="build/source/docs_ngweb"))
-        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                                    description=["make", "pdf for NextGIS Manager"],
-                                                    workdir="build/source/docs_ngmanager"))
-        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                                    description=["make", "pdf for NextGIS FormBuilder"],
-                                                    workdir="build/source/docs_formbuilder"))
-        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                                    description=["make", "pdf for NextGIS Bio"],
-                                                    workdir="build/source/docs_ngbio"))
-        factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
-                                                    description=["make", "pdf for NextGIS QGIS"],
-                                                    workdir="build/source/docs_ngqgis"))
+    # 2. build pdf for each doc except dev
+    factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                      description=["make", "pdf for NextGIS Mobile"],
+                                      workdir="build/source/docs_ngmobile"))
+    factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                      description=["make", "pdf for NextGIS Web"],
+                                      workdir="build/source/docs_ngweb"))
+    factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                      description=["make", "pdf for NextGIS Manager"],
+                                      workdir="build/source/docs_ngmanager"))
+    factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                      description=["make", "pdf for NextGIS FormBuilder"],
+                                      workdir="build/source/docs_formbuilder"))
+    factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                      description=["make", "pdf for NextGIS Bio"],
+                                      workdir="build/source/docs_ngbio"))
+    factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                      description=["make", "pdf for NextGIS QGIS"],
+                                      workdir="build/source/docs_ngqgis"))
+    factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                      description=["make", "pdf for NextGIS open geodata portal"],
+                                      workdir="build/source/docs_ogportal"))
 
     # 3. build html
     factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
@@ -83,4 +84,4 @@ for lang in langs:
 
     builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
     c['builders'].append(builder)
-                             
+    
