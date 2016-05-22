@@ -43,7 +43,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
 ## common steps
 
 ## maximum formats even disabled in oficial build should be present here
-cmake_config = ['-DBUILD_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DPACKAGE_VENDOR=NextGIS', '-DPACKAGE_INSTALL_DIRECTORY=nextgis', '-DWITH_PYTHON=ON', '-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_CURL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DENABLE_OZI=ON', '-DWITH_PostgreSQL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON']
+cmake_config = ['-DBUILD_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DPACKAGE_VENDOR=NextGIS', '-DPACKAGE_INSTALL_DIRECTORY=nextgis', '-DWITH_PYTHON=ON', '-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_CURL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DENABLE_OZI=ON', '-DWITH_PostgreSQL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DENABLE_NITF_RPFTOC_ECRGTOC=ON']
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 
@@ -70,15 +70,15 @@ factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
 # configure view cmake
+#factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
+#                                       name="configure step 1",
+#                                       description=["cmake", "configure for win32"],
+#                                       descriptionDone=["cmake", "configured for win32"], 
+#                                       haltOnFailure=False, warnOnWarnings=True, 
+#                                       flunkOnFailure=False, warnOnFailure=True,
+#                                       workdir=code_dir + "/build32"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
                                        name="configure step 1",
-                                       description=["cmake", "configure for win32"],
-                                       descriptionDone=["cmake", "configured for win32"], 
-                                       haltOnFailure=False, warnOnWarnings=True, 
-                                       flunkOnFailure=False, warnOnFailure=True,
-                                       workdir=code_dir + "/build32"))
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
-                                       name="configure step 2",
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
                                        workdir=code_dir + "/build32"))
@@ -102,15 +102,15 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build64"))
 # configure view cmake
+#factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
+#                                       name="configure step 1",
+#                                       description=["cmake", "configure for win64"],
+#                                       descriptionDone=["cmake", "configured for win64"], 
+#                                       haltOnFailure=False, warnOnWarnings=True, 
+#                                       flunkOnFailure=False, warnOnFailure=True, 
+#                                       workdir=code_dir + "/build64"))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
                                        name="configure step 1",
-                                       description=["cmake", "configure for win64"],
-                                       descriptionDone=["cmake", "configured for win64"], 
-                                       haltOnFailure=False, warnOnWarnings=True, 
-                                       flunkOnFailure=False, warnOnFailure=True, 
-                                       workdir=code_dir + "/build64"))
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
-                                       name="configure step 2",
                                        description=["cmake", "configure for win64"],
                                        descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
                                        workdir=code_dir + "/build64"))                                            
