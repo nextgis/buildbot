@@ -46,6 +46,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
 cmake_config = ['-DBUILD_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DPACKAGE_VENDOR=NextGIS', '-DPACKAGE_INSTALL_DIRECTORY=nextgis', '-DWITH_PYTHON=ON', '-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_CURL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DENABLE_OZI=ON', '-DWITH_PostgreSQL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DENABLE_NITF_RPFTOC_ECRGTOC=ON']
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
+ftp = 'ftp://192.168.255.1/'
 
 ## build win
 
@@ -134,14 +135,14 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
 upld_file_lst = ['build32/GDAL-' + project_ver + '-win32.exe', 'build32/GDAL-' + project_ver + '-win32.zip', 'build64/GDAL-' + project_ver + '-win64.exe', 'build64/GDAL-' + project_ver + '-win64.zip']
 for upld_file in upld_file_lst:
     factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
-                                           '-T', upld_file, '--ftp-create-dirs', 'ftp://nextgis.ru/programs/gdal/'],
+                                           '-T', upld_file, '--ftp-create-dirs', ftp + 'gdal/'],
                                            name="upload to ftp " + upld_file, 
                                            description=["upload", "gdal files to ftp"],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False, 
                                            workdir= code_dir ))
 #generate and load gdal_latest.log
 factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
-                                           '-T', gdal_latest_file, '--ftp-create-dirs', 'ftp://nextgis.ru/programs/qgis/'],
+                                           '-T', gdal_latest_file, '--ftp-create-dirs', ftp + 'qgis/'],
                                            name="upload to ftp gdal_latest.log", 
                                            description=["upload", "gdal files to ftp"],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False))
