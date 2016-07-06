@@ -1,0 +1,168 @@
+# -*- python -*-
+# ex: set syntax=python:
+    
+from buildbot.plugins import *
+from buildbot.steps.source.git import Git
+from buildbot.steps.python import Sphinx
+from buildbot.steps.transfer import FileUpload
+from buildbot.steps.transfer import DirectoryUpload
+from buildbot.changes.gitpoller import GitPoller
+from buildbot.schedulers.basic  import SingleBranchScheduler
+from buildbot.config import BuilderConfig
+from buildbot.steps.master import MasterShellCommand
+from buildbot.steps.shell import WithProperties
+
+import bbconf
+
+c = {}
+
+repourl = 'git://github.com/nextgis/formbuilder.git'
+project_ver = '2.1.0'
+deb_repourl = 'git://github.com/nextgis/ppa.git'
+project_name = 'formbuilder'
+
+git_poller = GitPoller(project = project_name,
+                       repourl = repourl,
+                       workdir = project_name + '-workdir',
+                       branch = 'master', #TODO: buildbot
+                       pollinterval = 7200,) 
+c['change_source'] = [git_poller]
+                       
+scheduler = schedulers.SingleBranchScheduler(
+                            name=project_name,
+                            change_filter=util.ChangeFilter(project = project_name),
+                            treeStableTimer=1*60,
+                            builderNames=[project_name + "_win", project_name + "_deb"])                       
+c['schedulers'] = [scheduler]
+c['schedulers'].append(schedulers.ForceScheduler(
+                            name=project_name + "_force",
+                            builderNames=[project_name + "_win", project_name + "_deb"]))      
+
+#### build gdal
+
+## common steps
+
+## maximum formats even disabled in oficial build should be present here
+cmake_config = ['-DWITH_GDAL_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON',  '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON']
+cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
+cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
+ftp = 'ftp://192.168.255.1/'
+
+## build win
+
+factory_win = util.BuildFactory()
+# 1. check out the source
+
+code_dir_last = 'formbuilder_code'
+code_dir = 'build/' + code_dir_last
+factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir)) #mode='full', method='clobber'
+
+# fill log file
+gdal_latest_file = 'formbuilder_latest.log'
+factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
+                                                '-n', project_ver, '-a', 'formbuilder', '-p', 
+                                                'simple', '-f', code_dir_last, '-o', 
+                                                gdal_latest_file], 
+                                        name='log last comments',
+                                        description=["log", "last comments"],
+                                        descriptionDone=["logged", "last comments"], haltOnFailure=True))  
+
+# 2. build gdal 32
+
+# make build dir
+
+factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
+# configure view cmake
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
+                                       name="configure step 1",
+                                       description=["cmake", "configure for win32"],
+                                       descriptionDone=["cmake", "configured for win32"], 
+                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       flunkOnFailure=False, warnOnFailure=True,
+                                       workdir=code_dir + "/build32"))
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
+                                       name="configure step 2",
+                                       description=["cmake", "configure for win32"],
+                                       descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
+                                       workdir=code_dir + "/build32"))
+# make
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
+                                       name="make",
+                                       description=["cmake", "make for win32"],
+                                       descriptionDone=["cmake", "made for win32"], haltOnFailure=True, 
+                                       workdir=code_dir + "/build32",
+                                       env={'LANG': 'en_US'}))
+# make tests
+# ...
+
+# make package
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
+                                       name="make package",
+                                       description=["cmake", "pack for win32"],
+                                       descriptionDone=["cmake", "packed for win32"], haltOnFailure=True, 
+                                       workdir=code_dir + "/build32",
+                                       env={'LANG': 'en_US'}))
+                                            
+# 3. build gdal 64
+
+# make build dir
+factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build64"))
+
+# configure view cmake
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
+                                       name="configure step 1",
+                                       description=["cmake", "configure for win64"],
+                                       descriptionDone=["cmake", "configured for win64"], 
+                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       flunkOnFailure=False, warnOnFailure=True, 
+                                       workdir=code_dir + "/build64"))
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
+                                       name="configure step 2",
+                                       description=["cmake", "configure for win64"],
+                                       descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
+                                       workdir=code_dir + "/build64"))                                            
+# make
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
+                                       name="make",
+                                       description=["cmake", "make for win64"],
+                                       descriptionDone=["cmake", "made for win64"], haltOnFailure=True, 
+                                       workdir=code_dir + "/build64",
+                                       env={'LANG': 'en_US'}))
+# make tests
+# ...
+
+# make package
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
+                                       name="make package",
+                                       description=["cmake", "pack for win64"],
+                                       descriptionDone=["cmake", "packed for win64"], haltOnFailure=True, 
+                                       workdir=code_dir + "/build64",
+                                       env={'LANG': 'en_US'})) 
+                                       
+# upload packages
+#ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
+upld_file_lst = ['build32/formbuilder-' + project_ver + '-win32.exe', 'build64/formbuilder-' + project_ver + '-win64.exe']
+for upld_file in upld_file_lst:
+    factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
+                                           '-T', upld_file, '--ftp-create-dirs', ftp + 'formbuilder/'],
+                                           name="upload to ftp " + upld_file, 
+                                           description=["upload", "formbuilder files to ftp"],
+                                           descriptionDone=["uploaded", "formbuilder files to ftp"], haltOnFailure=False, 
+                                           workdir= code_dir ))
+#generate and load gdal_latest.log
+factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
+                                           '-T', gdal_latest_file, '--ftp-create-dirs', ftp + 'qgis/'],
+                                           name="upload to ftp formbuilder_latest.log", 
+                                           description=["upload", "formbuilder files to ftp"],
+                                           descriptionDone=["uploaded", "formbuilder files to ftp"], haltOnFailure=False))
+         
+factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
+                                                '-n', project_ver, '-a', 'formbuilder', '-p', 
+                                                'store', '-f', code_dir_last], 
+                                       name='log last comments',
+                                       description=["log", "last comments"],
+                                       descriptionDone=["logged", "last comments"], haltOnFailure=True))  
+                                                                            
+builder_win = BuilderConfig(name = project_name + '_win', slavenames = ['build-ngq-win7'], factory = factory_win)
+
+c['builders'] = [builder_win]                                                        
