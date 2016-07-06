@@ -18,7 +18,7 @@ c = {}
 
 repourl = 'git://github.com/nextgis/formbuilder.git'
 project_ver = '2.1.0'
-deb_repourl = 'git://github.com/nextgis/ppa.git'
+deb_repourl = ''#'git://github.com/nextgis/ppa.git'
 project_name = 'formbuilder'
 
 git_poller = GitPoller(project = project_name,
@@ -32,11 +32,11 @@ scheduler = schedulers.SingleBranchScheduler(
                             name=project_name,
                             change_filter=util.ChangeFilter(project = project_name),
                             treeStableTimer=1*60,
-                            builderNames=[project_name + "_win", project_name + "_deb"])                       
+                            builderNames=[project_name + "_win"])#, project_name + "_deb"])                       
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
                             name=project_name + "_force",
-                            builderNames=[project_name + "_win", project_name + "_deb"]))      
+                            builderNames=[project_name + "_win"])#, project_name + "_deb"]))      
 
 #### build fb
 
