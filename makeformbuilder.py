@@ -38,7 +38,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
                             name=project_name + "_force",
                             builderNames=[project_name + "_win", project_name + "_deb"]))      
 
-#### build gdal
+#### build fb
 
 ## common steps
 
@@ -58,16 +58,16 @@ code_dir = 'build/' + code_dir_last
 factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=False, workdir=code_dir)) #mode='full', method='clobber'
 
 # fill log file
-gdal_latest_file = 'formbuilder_latest.log'
+formbuilder_latest_file = 'formbuilder_latest.log'
 factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
                                                 '-n', project_ver, '-a', 'formbuilder', '-p', 
                                                 'simple', '-f', code_dir_last, '-o', 
-                                                gdal_latest_file], 
+                                                formbuilder_latest_file], 
                                         name='log last comments',
                                         description=["log", "last comments"],
                                         descriptionDone=["logged", "last comments"], haltOnFailure=True))  
 
-# 2. build gdal 32
+# 2. build fb 32
 
 # make build dir
 
@@ -103,7 +103,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        workdir=code_dir + "/build32",
                                        env={'LANG': 'en_US'}))
                                             
-# 3. build gdal 64
+# 3. build fb 64
 
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build64"))
@@ -149,9 +149,9 @@ for upld_file in upld_file_lst:
                                            description=["upload", "formbuilder files to ftp"],
                                            descriptionDone=["uploaded", "formbuilder files to ftp"], haltOnFailure=False, 
                                            workdir= code_dir ))
-#generate and load gdal_latest.log
+#generate and load formbuilder_latest.log
 factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
-                                           '-T', gdal_latest_file, '--ftp-create-dirs', ftp + 'qgis/'],
+                                           '-T', formbuilder_latest_file, '--ftp-create-dirs', ftp + 'qgis/'],
                                            name="upload to ftp formbuilder_latest.log", 
                                            description=["upload", "formbuilder files to ftp"],
                                            descriptionDone=["uploaded", "formbuilder files to ftp"], haltOnFailure=False))
