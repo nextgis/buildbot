@@ -36,7 +36,7 @@ scheduler = schedulers.SingleBranchScheduler(
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
                             name=project_name + "_force",
-                            builderNames=[project_name + "_win"])#, project_name + "_deb"]))      
+                            builderNames=[project_name + "_win"]))#, project_name + "_deb"]))      
 
 #### build fb
 
