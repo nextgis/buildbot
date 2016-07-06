@@ -43,7 +43,7 @@ c['schedulers'].append(schedulers.ForceScheduler(
 ## common steps
 
 ## maximum formats even disabled in oficial build should be present here
-cmake_config = ['-DWITH_GDAL_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON',  '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON']
+cmake_config = ['-DQT_DIR_PREFIX_PATH=C:/Qt/5.7/msvc2013', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON',  '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON']
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1/'
