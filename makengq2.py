@@ -60,8 +60,6 @@ cmake_config = [
     "-DWITH_FREEXL_EXTERNAL=TRUE",
     "-DENABLE_TESTS=FALSE",
     "-DWITH_INTERNAL_QWTPOLAR=FALSE",
-    "-DPYTHON_EXECUTABLE=%PYTHONHOME%\python.exe",
-    "-DCMAKE_INSTALL_PREFIX=%~dp0/qgis2.14.0-rel",
     "-DCMAKE_BUILD_TYPE=Release",
     "-DWITH_PYTHON=TRUE",
 ]
