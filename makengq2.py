@@ -94,7 +94,7 @@ ngq_configrate = steps.ShellCommand(
         cmake_config,
         '-G', 'Visual Studio 12 2013',
         '-T', 'v120_xp',
-        util.Interpolate('%(prop:workdir)s\\ngq-src')
+        util.Interpolate('%(prop:workdir)s\\ngq_src')
     ],
     name="configure step 1",
     description=["cmake", "configure for win32"],
