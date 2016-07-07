@@ -43,7 +43,8 @@ c['schedulers'].append(schedulers.ForceScheduler(
 ## common steps
 
 ## maximum formats even disabled in oficial build should be present here
-cmake_config = ['-DQT_DIR_PREFIX_PATH=C:/Qt/5.7/msvc2013', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON',  '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON']
+cmake_config_x86 = ['-DQT_DIR_PREFIX_PATH=C:/Qt/5.7/msvc2013', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON',  '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON']
+cmake_config_x64 = ['-DQT_DIR_PREFIX_PATH=C:/Qt/5.7/msvc2013_64', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GeoTIFF_EXTERNAL=ON', '-DWITH_ICONV_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON',  '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON']
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1/'
@@ -73,14 +74,14 @@ factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch
 
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
 # configure view cmake
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config_x86, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
                                        name="configure step 1",
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"], 
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True,
                                        workdir=code_dir + "/build32"))
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config_x86, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
                                        name="configure step 2",
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
@@ -109,14 +110,14 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build64"))
 
 # configure view cmake
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config_x64, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
                                        name="configure step 1",
                                        description=["cmake", "configure for win64"],
                                        descriptionDone=["cmake", "configured for win64"], 
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True, 
                                        workdir=code_dir + "/build64"))
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config_x64, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
                                        name="configure step 2",
                                        description=["cmake", "configure for win64"],
                                        descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
