@@ -68,8 +68,8 @@ cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1/'
 
 build_env = {
-    "INCLUDE": "c:\Qwt-6.1.2\include;c:\QwtPolar-1.1.1\include;%PROGRAMFILES(x86)%\Microsoft SDKs\Windows\v7.1A\include",
-    "LIB": "c:\Qwt-6.1.2\lib;c:\QwtPolar-1.1.1\lib;%PROGRAMFILES(x86)%\Microsoft SDKs\Windows\v7.1A\lib",
+    "INCLUDE": "c:\Qwt-6.1.2\include;c:\QwtPolar-1.1.1\include;c:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\include",
+    "LIB": "c:\Qwt-6.1.2\lib;c:\QwtPolar-1.1.1\lib;c:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\lib",
     'LANG': 'en_US',
 }
 
