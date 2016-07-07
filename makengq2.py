@@ -80,8 +80,7 @@ ngq_get_src_bld_step = Git(
     name='checkout ngq',
     repourl=ngq_repourl,
     branch=ngq_branch,
-    mode='full',
-    method='clobber',
+    mode='incremental',
     submodules=True,
     workdir='ngq_src',
     timeout=1800
@@ -96,7 +95,7 @@ ngq_configrate = steps.ShellCommand(
         '-T', 'v120_xp',
         util.Interpolate('%(prop:workdir)s\\ngq_src')
     ],
-    name="configure step 1",
+    name="configure",
     description=["cmake", "configure for win32"],
     descriptionDone=["cmake", "configured for win32"],
     haltOnFailure=False, warnOnWarnings=True,
