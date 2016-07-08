@@ -32,11 +32,11 @@ scheduler = schedulers.SingleBranchScheduler(
                             name=project_name,
                             change_filter=util.ChangeFilter(project = project_name),
                             treeStableTimer=1*60,
-                            builderNames=[project_name + "_win"], project_name + "_deb"])                       
+                            builderNames=[project_name + "_win", project_name + "_deb"])                       
 c['schedulers'] = [scheduler]
 c['schedulers'].append(schedulers.ForceScheduler(
                             name=project_name + "_force",
-                            builderNames=[project_name + "_win"], project_name + "_deb"]))      
+                            builderNames=[project_name + "_win", project_name + "_deb"]))      
 
 #### build fb
 
