@@ -136,8 +136,8 @@ upld_file_lst = ['build32/GDAL-' + project_ver + '-win32.exe', 'build32/GDAL-' +
 for upld_file in upld_file_lst:
     factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
                                            '-T', upld_file, '--ftp-create-dirs', ftp + 'gdal/'],
-                                           name="upload to ftp " + upld_file, 
-                                           description=["upload", "gdal files to ftp"],
+                                           name="upload to ftp", 
+                                           description=["upload", "to ftp " + upld_file],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False, 
                                            workdir= code_dir ))
 #generate and load gdal_latest.log

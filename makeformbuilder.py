@@ -142,12 +142,12 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        
 # upload packages
 #ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
-upld_file_lst = ['build32/formbuilder-' + project_ver + '-win32.exe', 'build64/formbuilder-' + project_ver + '-win64.exe']
+upld_file_lst = ['build32/Formbuilder-' + project_ver + '-win32.exe', 'build64/Formbuilder-' + project_ver + '-win64.exe']
 for upld_file in upld_file_lst:
     factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
                                            '-T', upld_file, '--ftp-create-dirs', ftp + 'formbuilder/'],
-                                           name="upload to ftp " + upld_file, 
-                                           description=["upload", "formbuilder files to ftp"],
+                                           name="upload to ftp", 
+                                           description=["upload", "to ftp " + upld_file],
                                            descriptionDone=["uploaded", "formbuilder files to ftp"], haltOnFailure=False, 
                                            workdir= code_dir ))
 #generate and load formbuilder_latest.log
