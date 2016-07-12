@@ -129,9 +129,9 @@ ngq_make_package = steps.ShellCommand(
 # 5. upload package
 ngq_upload_package = steps.ShellCommand(
     command=[
-        'for /F "tokens=*" %A in (packages.txt) do',
+        'for', '/F', '"tokens=*"', '%A',  'in', '(packages.txt)', 'do',
         'curl', '-u', bbconf.ftp_upldsoft_user, 
-        '-T', '%A', '--ftp-create-dirs', ftp + 'qgis/ngq-builds/'],
+        '-T', '%A.exe', '--ftp-create-dirs', ftp + 'qgis/ngq-builds/'],
     name="upload to ftp ", 
     description=["upload", "ngq files to ftp"],
     descriptionDone=["uploaded", "ngq files to ftp"], haltOnFailure=False, 
@@ -139,11 +139,11 @@ ngq_upload_package = steps.ShellCommand(
 )
                                            
 ngq_steps = [
-    ngq_get_src_bld_step,
-    ngq_configrate,
-    ngq_configrate, # hak for borsch
-    ngq_make,
-    ngq_make_package,
+    #ngq_get_src_bld_step,
+    #ngq_configrate,
+    #ngq_configrate, # hak for borsch
+    #ngq_make,
+    #ngq_make_package,
     ngq_upload_package,
 ]
 
