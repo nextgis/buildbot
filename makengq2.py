@@ -127,7 +127,7 @@ ngq_make_package = steps.ShellCommand(
 )
 
 # 5. upload package
-cmd = 'for /F "tokens=*" %A in (packages.txt) do curl -u ' + bbconf.ftp_upldsoft_user + ' -T %A --ftp-create-dirs '+ ftp + '/qgis/ngq-builds'
+cmd = 'for /F "tokens=*" %A in (packages.txt) do curl -u ' + bbconf.ftp_upldsoft_user + ' -T %A --ftp-create-dirs '+ ftp + '/qgis/ngq-builds/'
 ngq_upload_package = steps.ShellCommand(
     command=cmd,
     name="upload to ftp ", 
