@@ -71,6 +71,7 @@ build_env = {
     "INCLUDE": "c:\\Qwt-6.1.2\\include;c:\\QwtPolar-1.1.1\\include;c:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\Include",
     "LIB": "c:\\Qwt-6.1.2\\lib;c:\\QwtPolar-1.1.1\\lib;c:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\lib",
     'LANG': 'en_US',
+    'BUILDNUMBER': util.Interpolate('%(prop:buildnumber)s'),
 }
 
 # 1. check out the source
@@ -125,12 +126,25 @@ ngq_make_package = steps.ShellCommand(
     env = build_env,
 )
 
+# 5. upload package
+ngq_upload_package = steps.ShellCommand(
+    command=[
+        'for /F "tokens=*" %A in (packages.txt) do',
+        'curl', '-u', bbconf.ftp_upldsoft_user, 
+        '-T', '%A', '--ftp-create-dirs', ftp + 'qgis/ngq-builds/'],
+    name="upload to ftp ", 
+    description=["upload", "ngq files to ftp"],
+    descriptionDone=["uploaded", "ngq files to ftp"], haltOnFailure=False, 
+    workdir= "ngq_build32" 
+)
+                                           
 ngq_steps = [
     ngq_get_src_bld_step,
     ngq_configrate,
     ngq_configrate, # hak for borsch
     ngq_make,
-    ngq_make_package
+    ngq_make_package,
+    ngq_upload_package,
 ]
 
 ngq_factory = util.BuildFactory(ngq_steps)
