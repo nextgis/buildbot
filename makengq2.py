@@ -128,7 +128,7 @@ ngq_make_package = steps.ShellCommand(
 
 # 5. upload package
 ngq_upload_package = steps.ShellCommand(
-    command=["call", "ftp_upload.bat", "bbconf.ftp_upldsoft_user", ftp + '/qgis/ngq-builds/'],
+    command=["call", "ftp_upload.bat", bbconf.ftp_upldsoft_user, ftp + '/qgis/ngq-builds/'],
     name="upload to ftp ", 
     description=["upload", "ngq files to ftp"],
     descriptionDone=["uploaded", "ngq files to ftp"], haltOnFailure=False, 
