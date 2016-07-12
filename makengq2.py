@@ -137,7 +137,7 @@ ngq_upload_package = steps.ShellCommand(
 )
                                            
 ngq_steps = [
-    #ngq_get_src_bld_step,
+    ngq_get_src_bld_step,
     ngq_configrate,
     #ngq_configrate, # hak for borsch
     #ngq_make,
