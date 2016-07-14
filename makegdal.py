@@ -284,7 +284,7 @@ for ubuntu_distribution in ubuntu_distributions_dev:
                                         haltOnFailure=True,
                                         workdir=code_dir)) 
                                                                        
-    factory_debdev.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_deb"], 
+    factory_debdev.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_debdev"], 
                                         name='debsign for ' + ubuntu_distribution,
                                         description=["debsign", "package"],
                                         descriptionDone=["debsigned", "package"],
