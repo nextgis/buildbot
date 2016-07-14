@@ -75,7 +75,9 @@ for lang in langs:
     factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
                                       description=["make", "pdf for NextGIS open geodata portal"],
                                       workdir="build/source/docs_ogportal"))
-
+    factory.addStep(steps.ShellCommand(command=["make", "latexpdf"], 
+                                      description=["make", "pdf for NextGIS forest inspector"],
+                                      workdir="build/source/docs_forestinspector"))
     # 3. build html
     factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
     # 4. upload to ftp
