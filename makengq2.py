@@ -63,15 +63,13 @@ cmake_config = [
     "-DENABLE_TESTS=FALSE",
     "-DWITH_INTERNAL_QWTPOLAR=FALSE",
     "-DCMAKE_BUILD_TYPE=Release",
-    "-DWITH_PYTHON=TRUE",
+    "-DWITH_PYTHON=TRUE", # for gdal python bindings
 ]
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1'
 
 build_env = {
-    "INCLUDE": "c:\\Qwt-6.1.2\\include;c:\\QwtPolar-1.1.1\\include;c:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\Include",
-    "LIB": "c:\\Qwt-6.1.2\\lib;c:\\QwtPolar-1.1.1\\lib;c:\\Program Files (x86)\\Microsoft SDKs\\Windows\\v7.1A\\lib",
     'LANG': 'en_US',
     'BUILDNUMBER': util.Interpolate('%(prop:buildnumber)s'),
 }
@@ -149,7 +147,7 @@ ngq_steps = [
 ngq_factory = util.BuildFactory(ngq_steps)
 ngq_release_builder = BuilderConfig(
     name='makengq2',
-    slavenames=['build-ngq-win7'],
+    slavenames=['build-ngq2-win7'],
     factory=ngq_factory
 )
 c['builders'].append(ngq_release_builder)
