@@ -60,7 +60,7 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 
 # fill log file
 formbuilder_latest_file = 'formbuilder_latest.log'
-factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
+factory_win.addStep(steps.ShellCommand(command=['c:\Python2712\python', '../../dch.py', 
                                                 '-n', project_ver, '-a', 'formbuilder', '-p', 
                                                 'simple', '-f', code_dir_last, '-o', 
                                                 formbuilder_latest_file], 
@@ -157,7 +157,7 @@ factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsof
                                            description=["upload", "formbuilder files to ftp"],
                                            descriptionDone=["uploaded", "formbuilder files to ftp"], haltOnFailure=False))
          
-factory_win.addStep(steps.ShellCommand(command=['c:\python27\python', '../../dch.py', 
+factory_win.addStep(steps.ShellCommand(command=['c:\Python2712\python', '../../dch.py', 
                                                 '-n', project_ver, '-a', 'formbuilder', '-p', 
                                                 'store', '-f', code_dir_last], 
                                        name='log last comments',
