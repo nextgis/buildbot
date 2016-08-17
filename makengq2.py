@@ -68,6 +68,7 @@ cmake_config = [
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1'
+ftp_myng_server = '192.168.255.55'
 
 build_env = {
     'LANG': 'en_US',
@@ -127,8 +128,9 @@ ngq_make_package = steps.ShellCommand(
 )
 
 # 5. upload package
+
 ngq_upload_package = steps.ShellCommand(
-    command=["call", "ftp_upload.bat", bbconf.ftp_upldsoft_user, ftp + '/qgis/ngq-builds/'],
+    command=["call", "ftp_upload.bat", bbconf.ftp_mynextgis_user, ftp_myng_server + '/qgis/'],
     name="upload to ftp ", 
     description=["upload", "ngq files to ftp"],
     descriptionDone=["uploaded", "ngq files to ftp"], haltOnFailure=False, 
