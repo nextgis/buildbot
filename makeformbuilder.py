@@ -48,6 +48,7 @@ cmake_config_x64 = ['-DQT_DIR_PREFIX_PATH=C:/Qt/5.7/msvc2013_64', '-DWITH_GDAL_E
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1/'
+myftp = 'ftp://192.168.255.51/'
 
 ## build win
 
@@ -141,11 +142,11 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        env={'LANG': 'en_US'})) 
                                        
 # upload packages
-#ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
+#ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/formbuilder/"
 upld_file_lst = ['build32/Formbuilder-' + project_ver + '-win32.exe', 'build64/Formbuilder-' + project_ver + '-win64.exe']
 for upld_file in upld_file_lst:
-    factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
-                                           '-T', upld_file, '--ftp-create-dirs', ftp + 'formbuilder/'],
+    factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_mynextgis_user, 
+                                           '-T', upld_file, '--ftp-create-dirs', myftp + 'formbuilder/'],
                                            name="upload to ftp", 
                                            description=["upload", "to ftp " + upld_file],
                                            descriptionDone=["uploaded", "formbuilder files to ftp"], haltOnFailure=False, 
