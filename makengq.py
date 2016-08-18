@@ -221,7 +221,7 @@ ftp_conn_string = 'ftp://%s@%s' % (bbconf.ftp_upldsoft_user, ftp_server)
 ftp_myng_conn_string = 'ftp://%s@%s' % (bbconf.ftp_mynextgis_user, ftp_myng_server)
 
 ngq_ftp_upload_installer_step = steps.ShellCommand(
-    name='upload installer to ftp(%s)' % ftp_server,
+    name='upload installer to ftp(%s)' % ftp_myng_server,
     haltOnFailure=True,
     command=[
         "call", "ftp_put_installer.bat",
