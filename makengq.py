@@ -218,7 +218,7 @@ ngq_customize_make_installer_step = steps.ShellCommand(
 ftp_server = '192.168.255.1'
 ftp_myng_server = '192.168.255.55'
 ftp_conn_string = 'ftp://%s@%s' % (bbconf.ftp_upldsoft_user, ftp_server)
-ftp_myng_conn_string = 'ftp://%s@%s' % (bbconf.ftp_mynextgis_user, ftp_server)
+ftp_myng_conn_string = 'ftp://%s@%s' % (bbconf.ftp_mynextgis_user, ftp_myng_server)
 
 ngq_ftp_upload_installer_step = steps.ShellCommand(
     name='upload installer to ftp(%s)' % ftp_server,
