@@ -52,7 +52,7 @@ debdev_dir = 'build/' + deb_name + '_debdev'
 deb_email = 'dmitry.baryshnikov@nextgis.com'
 deb_fullname = 'Dmitry Baryshnikov'
 
-factory_debdev.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=deb_dir, alwaysUseLatest=True))
+factory_debdev.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submodules=False, workdir=debdev_dir, alwaysUseLatest=True))
 factory_debdev.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
 #cleanup
 clean_exts = ['.tar.gz', '.changes', '.dsc', '.build', '.upload']
@@ -74,7 +74,7 @@ factory_debdev.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, 
 for ubuntu_distribution in ubuntu_distributions:
                                           
     # copy lib_opencad -> debian
-    factory_debdev.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/debian", dest=code_dir + "/debian", 
+    factory_debdev.addStep(steps.CopyDirectory(src=debdev_dir + "/" + deb_name + "/debian", dest=code_dir + "/debian", 
                                             name="add debian folder for " + deb_name, haltOnFailure=True))
 
     factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', 
