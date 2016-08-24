@@ -111,7 +111,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         haltOnFailure=True)) 
     # delete code_dir + "/debian"
     factory_debdev.addStep(steps.RemoveDirectory(dir=code_dir + "/debian", 
-                                              name="remove debian folder for " + postgis_version, 
+                                              name="remove debian folder for " + deb_name, 
                                               haltOnFailure=True))
     
 # store changelog
