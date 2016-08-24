@@ -1,5 +1,6 @@
 # -*- python -*-
 # ex: set syntax=python:
+# opencad developer build into nextgis dev ppa    
     
 from buildbot.plugins import *
 from buildbot.steps.source.git import Git
@@ -123,4 +124,5 @@ factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, 
                                        
 builder_debdev = BuilderConfig(name = project_name + '_debdev', slavenames = ['build-nix'], factory = factory_debdev)
 
-c['builders'] = [builder_debdev]     
+c['builders'] = [builder_debdev]
+
