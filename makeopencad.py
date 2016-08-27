@@ -46,7 +46,7 @@ code_dir = 'build/' + code_dir_last
 
 # 1. check out the source
 factory_debdev = util.BuildFactory()
-ubuntu_distributions = ['precise', 'trusty', 'xenial']
+ubuntu_distributions = ['trusty', 'xenial']
 # 1. check out the source
 debdev_dir = 'build/' + deb_name + '_debdev'
 deb_email = 'dmitry.baryshnikov@nextgis.com'

@@ -240,7 +240,7 @@ builder_deb = BuilderConfig(name = project_name + '_deb', slavenames = ['build-n
 
 ## development build ###########################################################
 factory_debdev = util.BuildFactory()
-ubuntu_distributions_dev = ['precise', 'trusty', 'xenial']
+ubuntu_distributions_dev = ['trusty', 'xenial']
 # check out the source
 debdev_dir = 'build/gdal_debdev'
 
