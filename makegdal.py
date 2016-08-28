@@ -41,7 +41,7 @@ scheduler2 = schedulers.SingleBranchScheduler(
 c['schedulers'] = [scheduler1, scheduler2]
 c['schedulers'].append(schedulers.ForceScheduler(
                             name=project_name + "_force",
-                            builderNames=[project_name + "_win", project_name + "_deb"]))      
+                            builderNames=[project_name + "_win", project_name + "_deb", project_name + "_debdev"]))      
 
 #### build gdal
 
@@ -239,6 +239,7 @@ factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a
 builder_deb = BuilderConfig(name = project_name + '_deb', slavenames = ['build-nix'], factory = factory_deb)
 
 ## development build ###########################################################
+project_devver = '2.1.2'
 factory_debdev = util.BuildFactory()
 ubuntu_distributions_dev = ['trusty', 'xenial']
 # check out the source
@@ -255,7 +256,7 @@ for clean_ext in clean_exts:
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True))
 # tar orginal sources
-factory_debdev.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, '-a', 
+factory_debdev.addStep(steps.ShellCommand(command=["dch.py", '-n', project_devver, '-a', 
                                                 deb_name, '-p', 'tar', '-f', 
                                                 code_dir_last], 
                                        name="tar",
@@ -266,7 +267,7 @@ factory_debdev.addStep(steps.CopyDirectory(src=debdev_dir + "/" + deb_name + "/d
                                         name="add debian folder", haltOnFailure=True))
 # update changelog
 for ubuntu_distribution in ubuntu_distributions_dev:
-    factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', 
+    factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_devver, '-a', 
                                                 deb_name, '-p', 'fill', '-f', 
                                                 code_dir_last,'-o', 'changelog', '-d', 
                                                 ubuntu_distribution], 
@@ -301,7 +302,7 @@ for ubuntu_distribution in ubuntu_distributions_dev:
                                         haltOnFailure=True)) 
 
 # store changelog
-factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
+factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_devver, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],           
