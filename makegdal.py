@@ -164,7 +164,7 @@ builder_win = BuilderConfig(name = project_name + '_win', slavenames = ['build-n
 
 ## release build ###############################################################
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial']
+ubuntu_distributions = ['trusty', 'wily', 'xenial']
 # check out the source
 deb_name = 'gdal'
 deb_dir = 'build/gdal_deb'
@@ -241,7 +241,7 @@ builder_deb = BuilderConfig(name = project_name + '_deb', slavenames = ['build-n
 ## development build ###########################################################
 project_verdev = '2.1.2'
 factory_debdev = util.BuildFactory()
-ubuntu_distributions_dev = ['trusty', 'xenial']
+ubuntu_distributions_dev = ['trusty', 'wily', 'xenial']
 # check out the source
 debdev_dir = 'build/gdal_debdev'
 
