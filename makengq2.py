@@ -161,7 +161,7 @@ deb_repourl = 'git://github.com/nextgis/ppa.git'
 factory_deb = util.BuildFactory()
 ubuntu_distributions = ['trusty']
 
-deb_name = 'ngqis'
+deb_name = 'ngqgis'
 deb_dir = 'build/ngq_deb'
 code_dir_last = deb_name
 code_dir = 'build/%s' % code_dir_last
