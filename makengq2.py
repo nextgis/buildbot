@@ -262,7 +262,7 @@ for ubuntu_distribution in ubuntu_distributions:
 
     factory_deb.addStep(
         steps.ShellCommand(
-            command=['debsign.sh', project_name + "_deb"],
+            command=['debsign.sh', deb_name + "_deb"],
             name='debsign for ' + ubuntu_distribution,
             description=["debsign", "package"],
             descriptionDone=["debsigned", "package"],
