@@ -63,7 +63,7 @@ cmake_config = [
     "-DENABLE_TESTS=FALSE",
     "-DWITH_INTERNAL_QWTPOLAR=FALSE",
     "-DCMAKE_BUILD_TYPE=Release",
-    "-DWITH_PYTHON=TRUE", # for gdal python bindings
+    "-DWITH_PYTHON=TRUE",  # for gdal python bindings
 ]
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
@@ -101,7 +101,7 @@ ngq_configrate = steps.ShellCommand(
     haltOnFailure=False, warnOnWarnings=True,
     flunkOnFailure=False, warnOnFailure=True,
     workdir="ngq_build32",
-    env = build_env,
+    env=build_env,
 )
 
 
@@ -113,7 +113,7 @@ ngq_make = steps.ShellCommand(
     descriptionDone=["cmake", "made for win32"],
     haltOnFailure=True,
     workdir="ngq_build32",
-    env= build_env,
+    env=build_env,
 )
 
 # 4. make installer
@@ -124,23 +124,23 @@ ngq_make_package = steps.ShellCommand(
     descriptionDone=["cmake", "packed for win32"],
     haltOnFailure=True,
     workdir="ngq_build32",
-    env = build_env,
+    env=build_env,
 )
 
 # 5. upload package
 
 ngq_upload_package = steps.ShellCommand(
     command=["call", "ftp_upload.bat", bbconf.ftp_mynextgis_user, ftp_myng_server + '/qgis/'],
-    name="upload to ftp ", 
+    name="upload to ftp ",
     description=["upload", "ngq files to ftp"],
-    descriptionDone=["uploaded", "ngq files to ftp"], haltOnFailure=False, 
-    workdir= "ngq_build32" 
+    descriptionDone=["uploaded", "ngq files to ftp"], haltOnFailure=False,
+    workdir="ngq_build32"
 )
-                                           
+
 ngq_steps = [
     ngq_get_src_bld_step,
     ngq_configrate,
-    ngq_configrate, # hak for borsch
+    ngq_configrate,  # hak for borsch
     ngq_make,
     ngq_make_package,
     ngq_upload_package,
@@ -153,3 +153,154 @@ ngq_release_builder = BuilderConfig(
     factory=ngq_factory
 )
 c['builders'].append(ngq_release_builder)
+
+
+# deb package --------------------------------------------------
+deb_repourl = 'git://github.com/nextgis/ppa.git'
+
+factory_deb = util.BuildFactory()
+ubuntu_distributions = ['trusty']
+
+deb_name = 'ngqis'
+deb_dir = 'build/ngq_deb'
+code_dir_last = deb_name
+code_dir = 'build/%s' % code_dir_last
+
+deb_email = 'alexander.lisovenko@nextgis.com'
+deb_fullname = 'Alexander Lisovenko'
+
+env_vars = {'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname}
+
+project_ver = util.Interpolate('16.1.%(prop:buildnumber)s')
+
+factory_deb.addStep(
+    steps.Git(
+        repourl=deb_repourl,
+        mode='incremental',
+        submodules=False,
+        workdir=deb_dir,
+        alwaysUseLatest=True
+    )
+)
+factory_deb.addStep(
+    steps.Git(
+        repourl=ngq_repourl,
+        branch=ngq_branch,
+        mode='full',
+        submodules=True,
+        workdir=code_dir
+    )
+)
+
+# cleanup
+clean_exts = ['.tar.gz', '.changes', '.dsc', '.build', '.upload']
+for clean_ext in clean_exts:
+    factory_deb.addStep(
+        steps.ShellCommand(
+            command=['/bin/bash', '-c', 'rm *' + clean_ext],
+            name="rm of " + clean_ext,
+            description=["rm", "delete"],
+            descriptionDone=["rm", "deleted"],
+            haltOnFailure=False, warnOnWarnings=True,
+            flunkOnFailure=False, warnOnFailure=True
+        )
+    )
+
+# tar orginal sources
+factory_deb.addStep(
+    steps.ShellCommand(
+        command=[
+            "dch.py", '-n', project_ver, '-a',
+            deb_name, '-p', 'tar', '-f',
+            code_dir_last],
+        name="tar",
+        description=["tar", "compress"],
+        descriptionDone=["tar", "compressed"], haltOnFailure=True
+    )
+)
+
+# copy ... -> debian
+factory_deb.addStep(
+    steps.CopyDirectory(
+        src=deb_dir + "/ngq/trusty/debian",
+        dest=code_dir + "/debian",
+        name="add debian folder",
+        haltOnFailure=True
+    )
+)
+
+# update changelog
+for ubuntu_distribution in ubuntu_distributions:
+    factory_deb.addStep(
+        steps.ShellCommand(
+            command=[
+                'dch.py', '-n', project_ver, '-a',
+                deb_name, '-p', 'fill', '-f',
+                code_dir_last, '-o', 'changelog', '-d',
+                ubuntu_distribution
+            ],
+            name='create changelog for ' + ubuntu_distribution,
+            description=["create", "changelog"],
+            descriptionDone=["created", "changelog"],
+            env=env_vars,
+            haltOnFailure=True
+        )
+    )
+
+    # debuild -us -uc -d -S
+    factory_deb.addStep(
+        steps.ShellCommand(
+            command=['debuild', '-us', '-uc', '-S'],
+            name='debuild for ' + ubuntu_distribution,
+            description=["debuild", "package"],
+            descriptionDone=["debuilded", "package"],
+            env=env_vars,
+            haltOnFailure=True,
+            workdir=code_dir
+        )
+    )
+
+    factory_deb.addStep(
+        steps.ShellCommand(
+            command=['debsign.sh', project_name + "_deb"],
+            name='debsign for ' + ubuntu_distribution,
+            description=["debsign", "package"],
+            descriptionDone=["debsigned", "package"],
+            env=env_vars,
+            haltOnFailure=True
+        )
+    )
+
+    # upload to launchpad
+    factory_deb.addStep(
+        steps.ShellCommand(
+            command=[
+                '/bin/bash', '-c',
+                'dput ppa:nextgis/ppa ' + deb_name + '*' + ubuntu_distribution + '1_source.changes'
+            ],
+            name='dput for ' + ubuntu_distribution,
+            description=["dput", "package"],
+            descriptionDone=["dputed", "package"],
+            env=env_vars,
+            haltOnFailure=True
+        )
+    )
+
+# store changelog
+factory_deb.addStep(
+    steps.ShellCommand(
+        command=['dch.py', '-n', project_ver, '-a', deb_name, '-p', 'store', '-f', code_dir_last, '-o', 'changelog'],
+        name='log last comments',
+        description=["log", "last comments"],
+        descriptionDone=["logged", "last comments"],
+        env=env_vars,
+        haltOnFailure=True
+    )
+)
+
+ngq_deb_release_builder = BuilderConfig(
+    name=project_name + '_deb',
+    slavenames=['build-nix'],
+    factory=factory_deb
+)
+c['builders'].append(ngq_deb_release_builder)
