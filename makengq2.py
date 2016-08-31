@@ -24,7 +24,7 @@ c['schedulers'] = []
 c['schedulers'].append(
     schedulers.ForceScheduler(
         name="%s force" % project_name,
-        builderNames=["makengq2"]
+        builderNames=["makengq2", "makengq2_deb"]
     )
 )
 
@@ -299,7 +299,7 @@ factory_deb.addStep(
 )
 
 ngq_deb_release_builder = BuilderConfig(
-    name=project_name + '_deb',
+    name='makengq2_deb',
     slavenames=['build-nix'],
     factory=factory_deb
 )
