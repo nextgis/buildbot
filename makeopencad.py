@@ -18,7 +18,7 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis-borsch/lib_opencad.git'
-project_ver = '0.1.0'
+project_ver = '0.2.0'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'opencad'
 
