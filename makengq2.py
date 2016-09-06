@@ -159,7 +159,7 @@ c['builders'].append(ngq_release_builder)
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty']
+ubuntu_distributions = ['trusty', 'xenial']
 
 deb_name = 'ngqgis'
 deb_dir = 'build/ngq_deb'
@@ -219,18 +219,18 @@ factory_deb.addStep(
     )
 )
 
-# copy ... -> debian
-factory_deb.addStep(
-    steps.CopyDirectory(
-        src=deb_dir + "/ngq/trusty/debian",
-        dest=code_dir + "/debian",
-        name="add debian folder",
-        haltOnFailure=True
-    )
-)
-
 # update changelog
 for ubuntu_distribution in ubuntu_distributions:
+    # copy ... -> debian
+    factory_deb.addStep(
+        steps.CopyDirectory(
+            src=deb_dir + "/ngq/%s/debian" % ubuntu_distribution,
+            dest=code_dir + "/debian",
+            name="add debian folder",
+            haltOnFailure=True
+        )
+    )
+
     factory_deb.addStep(
         steps.ShellCommand(
             command=[
