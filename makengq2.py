@@ -68,7 +68,7 @@ cmake_config = [
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1'
-ftp_myng_server = '192.168.255.51'
+ftp_myng_server = 'ftp://192.168.255.51'
 
 build_env = {
     'LANG': 'en_US',
