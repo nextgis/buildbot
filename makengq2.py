@@ -68,7 +68,7 @@ cmake_config = [
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1'
-ftp_myng_server = '192.168.255.55'
+ftp_myng_server = '192.168.255.51'
 
 build_env = {
     'LANG': 'en_US',
@@ -282,6 +282,15 @@ for ubuntu_distribution in ubuntu_distributions:
             description=["dput", "package"],
             descriptionDone=["dputed", "package"],
             env=env_vars,
+            haltOnFailure=True
+        )
+    )
+    
+    # delete code_dir + "/debian"
+    factory_deb.addStep(
+        steps.RemoveDirectory(
+            dir=code_dir + "/debian", 
+            name="remove debian folder for " + ubuntu_distribution, 
             haltOnFailure=True
         )
     )
