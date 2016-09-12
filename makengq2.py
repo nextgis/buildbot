@@ -264,7 +264,7 @@ for ubuntu_distribution in ubuntu_distributions:
     factory_deb_dev.addStep(step_debuild)
 
     factory_deb.addStep(
-        step_debsign = steps.ShellCommand(
+        steps.ShellCommand(
             command=['debsign.sh', "makengq2_deb"],
             name='debsign for ' + ubuntu_distribution,
             description=["debsign", "package"],
@@ -274,7 +274,7 @@ for ubuntu_distribution in ubuntu_distributions:
         )
     )
     factory_deb_dev.addStep(
-        step_debsign = steps.ShellCommand(
+        steps.ShellCommand(
             command=['debsign.sh', "makengq2_deb_dev"],
             name='debsign for ' + ubuntu_distribution,
             description=["debsign", "package"],
