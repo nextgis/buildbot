@@ -263,16 +263,26 @@ for ubuntu_distribution in ubuntu_distributions:
     factory_deb.addStep(step_debuild)
     factory_deb_dev.addStep(step_debuild)
 
-    step_debsign = steps.ShellCommand(
-        command=['debsign.sh', "makengq2_deb"],
-        name='debsign for ' + ubuntu_distribution,
-        description=["debsign", "package"],
-        descriptionDone=["debsigned", "package"],
-        env=env_vars,
-        haltOnFailure=True
+    factory_deb.addStep(
+        step_debsign = steps.ShellCommand(
+            command=['debsign.sh', "makengq2_deb"],
+            name='debsign for ' + ubuntu_distribution,
+            description=["debsign", "package"],
+            descriptionDone=["debsigned", "package"],
+            env=env_vars,
+            haltOnFailure=True
+        )
     )
-    factory_deb.addStep(step_debsign)
-    factory_deb_dev.addStep(step_debsign)
+    factory_deb_dev.addStep(
+        step_debsign = steps.ShellCommand(
+            command=['debsign.sh', "makengq2_deb_dev"],
+            name='debsign for ' + ubuntu_distribution,
+            description=["debsign", "package"],
+            descriptionDone=["debsigned", "package"],
+            env=env_vars,
+            haltOnFailure=True
+        )
+    )
 
     # upload to launchpad
     factory_deb.addStep(
