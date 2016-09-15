@@ -64,6 +64,7 @@ cmake_config = [
     "-DWITH_INTERNAL_QWTPOLAR=FALSE",
     "-DCMAKE_BUILD_TYPE=Release",
     "-DWITH_PYTHON=TRUE",  # for gdal python bindings
+    "-DNGQ_VERSION_PATCH=%s" % util.Interpolate('%(prop:buildnumber)s'),
 ]
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
@@ -72,7 +73,6 @@ ftp_myng_server = 'ftp://192.168.255.51'
 
 build_env = {
     'LANG': 'en_US',
-    'BUILDNUMBER': util.Interpolate('%(prop:buildnumber)s'),
 }
 
 # 1. check out the source
