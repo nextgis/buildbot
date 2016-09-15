@@ -289,7 +289,7 @@ for ubuntu_distribution in ubuntu_distributions:
         steps.ShellCommand(
             command=[
                 '/bin/bash', '-c',
-                'dput ppa:nextgis/ppa ' + deb_name + '*' + ubuntu_distribution + '1_source.changes'
+                'dput ppa:nextgis/dev ' + deb_name + '*' + ubuntu_distribution + '1_source.changes'
             ],
             name='dput for ' + ubuntu_distribution,
             description=["dput", "package"],
@@ -311,7 +311,7 @@ for ubuntu_distribution in ubuntu_distributions:
             haltOnFailure=True
         )
     )
-    
+
     # delete code_dir + "/debian"
     step_clean_debian = steps.RemoveDirectory(
         dir=code_dir + "/debian", 
@@ -345,4 +345,4 @@ ngq_deb_dev_builder = BuilderConfig(
 )
 
 c['builders'].append(ngq_deb_release_builder)
-c['builders'].append(ngq_deb_dev_builder)
+# c['builders'].append(ngq_deb_dev_builder)
