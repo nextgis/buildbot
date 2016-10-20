@@ -64,8 +64,8 @@ cmake_config = [
     "-DENABLE_TESTS=FALSE",
     "-DWITH_INTERNAL_QWTPOLAR=FALSE",
     "-DCMAKE_BUILD_TYPE=Release",
-    "-DWITH_PYTHON=TRUE",  # for gdal python bindings
-    "-DNGQ_VERSION_PATCH=%s" % util.Interpolate('%(prop:buildnumber)s'),
+    "-DWITH_PYTHON=TRUE",
+    util.Interpolate('-DNGQ_VERSION_PATCH=%(prop:buildnumber)s'),
 ]
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
