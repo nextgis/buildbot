@@ -1,6 +1,6 @@
 # -*- python -*-
 # ex: set syntax=python:
-    
+
 from buildbot.plugins import *
 from buildbot.steps.source.git import Git
 from buildbot.steps.python import Sphinx
@@ -25,23 +25,23 @@ git_poller = GitPoller(project = project_name,
                        repourl = repourl,
                        workdir = project_name + '-workdir',
                        branches = ['master', 'dev'],
-                       pollinterval = 7200,) 
+                       pollinterval = 7200,)
 c['change_source'] = [git_poller]
-                       
+
 scheduler1 = schedulers.SingleBranchScheduler(
                             name=project_name,
                             change_filter=util.ChangeFilter(project = project_name, branch="master"),
                             treeStableTimer=1*60,
-                            builderNames=[project_name + "_win", project_name + "_deb"])                       
+                            builderNames=[project_name + "_win", project_name + "_deb"])
 scheduler2 = schedulers.SingleBranchScheduler(
                             name=project_name + "_dev",
                             change_filter=util.ChangeFilter(project = project_name, branch="dev"),
                             treeStableTimer=1*60,
-                            builderNames=[project_name + "_debdev"])                       
+                            builderNames=[project_name + "_debdev"])
 c['schedulers'] = [scheduler1, scheduler2]
 c['schedulers'].append(schedulers.ForceScheduler(
                             name=project_name + "_force",
-                            builderNames=[project_name + "_win", project_name + "_deb", project_name + "_debdev"]))      
+                            builderNames=[project_name + "_win", project_name + "_deb", project_name + "_debdev"]))
 
 #### build gdal
 
@@ -65,106 +65,106 @@ factory_win.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=Fa
 
 # fill log file
 gdal_latest_file = 'gdal_latest.log'
-factory_win.addStep(steps.ShellCommand(command=['c:\Python2712\python', '../../dch.py', 
-                                                '-n', project_ver, '-a', 'GDAL', '-p', 
-                                                'simple', '-f', code_dir_last, '-o', 
-                                                gdal_latest_file], 
+factory_win.addStep(steps.ShellCommand(command=['c:\Python2712\python', '../../dch.py',
+                                                '-n', project_ver, '-a', 'GDAL', '-p',
+                                                'simple', '-f', code_dir_last, '-o',
+                                                gdal_latest_file],
                                         name='log last comments',
                                         description=["log", "last comments"],
-                                        descriptionDone=["logged", "last comments"], haltOnFailure=True))  
+                                        descriptionDone=["logged", "last comments"], haltOnFailure=True))
 
 # 2. build gdal 32
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build32"))
 # configure view cmake
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'],
                                        name="configure step 1",
                                        description=["cmake", "configure for win32"],
-                                       descriptionDone=["cmake", "configured for win32"], 
-                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       descriptionDone=["cmake", "configured for win32"],
+                                       haltOnFailure=False, warnOnWarnings=True,
                                        flunkOnFailure=False, warnOnFailure=True,
                                        workdir=code_dir + "/build32"))
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'],
                                        name="configure step 2",
                                        description=["cmake", "configure for win32"],
-                                       descriptionDone=["cmake", "configured for win32"], haltOnFailure=True, 
+                                       descriptionDone=["cmake", "configured for win32"], haltOnFailure=True,
                                        workdir=code_dir + "/build32"))
 # make
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build],
                                        name="make",
                                        description=["cmake", "make for win32"],
-                                       descriptionDone=["cmake", "made for win32"], haltOnFailure=True, 
+                                       descriptionDone=["cmake", "made for win32"], haltOnFailure=True,
                                        workdir=code_dir + "/build32",
                                        env={'LANG': 'en_US'}))
 # make tests
 # make package
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        name="make package",
                                        description=["cmake", "pack for win32"],
-                                       descriptionDone=["cmake", "packed for win32"], haltOnFailure=True, 
+                                       descriptionDone=["cmake", "packed for win32"], haltOnFailure=True,
                                        workdir=code_dir + "/build32",
                                        env={'LANG': 'en_US'}))
-                                            
+
 # 3. build gdal 64
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=code_dir + "/build64"))
 # configure view cmake
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'],
                                        name="configure step 1",
                                        description=["cmake", "configure for win64"],
-                                       descriptionDone=["cmake", "configured for win64"], 
-                                       haltOnFailure=False, warnOnWarnings=True, 
-                                       flunkOnFailure=False, warnOnFailure=True, 
+                                       descriptionDone=["cmake", "configured for win64"],
+                                       haltOnFailure=False, warnOnWarnings=True,
+                                       flunkOnFailure=False, warnOnFailure=True,
                                        workdir=code_dir + "/build64"))
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'],
                                        name="configure step 2",
                                        description=["cmake", "configure for win64"],
-                                       descriptionDone=["cmake", "configured for win64"], haltOnFailure=True, 
-                                       workdir=code_dir + "/build64"))                                            
+                                       descriptionDone=["cmake", "configured for win64"], haltOnFailure=True,
+                                       workdir=code_dir + "/build64"))
 # make
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build],
                                        name="make",
                                        description=["cmake", "make for win64"],
-                                       descriptionDone=["cmake", "made for win64"], haltOnFailure=True, 
+                                       descriptionDone=["cmake", "made for win64"], haltOnFailure=True,
                                        workdir=code_dir + "/build64",
                                        env={'LANG': 'en_US'}))
 # make tests
 # make package
-factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack], 
+factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        name="make package",
                                        description=["cmake", "pack for win64"],
-                                       descriptionDone=["cmake", "packed for win64"], haltOnFailure=True, 
+                                       descriptionDone=["cmake", "packed for win64"], haltOnFailure=True,
                                        workdir=code_dir + "/build64",
-                                       env={'LANG': 'en_US'}))                                            
+                                       env={'LANG': 'en_US'}))
 # upload package
 #ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
 upld_file_lst = ['build32/GDAL-' + project_ver + '-win32.exe', 'build32/GDAL-' + project_ver + '-win32.zip', 'build64/GDAL-' + project_ver + '-win64.exe', 'build64/GDAL-' + project_ver + '-win64.zip']
 for upld_file in upld_file_lst:
-    factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_mynextgis_user, 
+    factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_mynextgis_user,
                                            '-T', upld_file, '--ftp-create-dirs', myftp + 'gdal/'],
-                                           name="upload to ftp", 
+                                           name="upload to ftp",
                                            description=["upload", "to ftp " + upld_file],
-                                           descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False, 
+                                           descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False,
                                            workdir= code_dir ))
 #generate and load gdal_latest.log
-factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user, 
+factory_win.addStep(steps.ShellCommand(command=['curl', '-u', bbconf.ftp_upldsoft_user,
                                            '-T', gdal_latest_file, '--ftp-create-dirs', ftp + 'qgis/'],
-                                           name="upload to ftp gdal_latest.log", 
+                                           name="upload to ftp gdal_latest.log",
                                            description=["upload", "gdal files to ftp"],
                                            descriptionDone=["uploaded", "gdal files to ftp"], haltOnFailure=False))
-         
-factory_win.addStep(steps.ShellCommand(command=['c:\Python2712\python', '../../dch.py', 
-                                                '-n', project_ver, '-a', 'GDAL', '-p', 
-                                                'store', '-f', code_dir_last], 
+
+factory_win.addStep(steps.ShellCommand(command=['c:\Python2712\python', '../../dch.py',
+                                                '-n', project_ver, '-a', 'GDAL', '-p',
+                                                'store', '-f', code_dir_last],
                                        name='log last comments',
                                        description=["log", "last comments"],
-                                       descriptionDone=["logged", "last comments"], haltOnFailure=True))  
-                                                                            
+                                       descriptionDone=["logged", "last comments"], haltOnFailure=True))
+
 builder_win = BuilderConfig(name = project_name + '_win', slavenames = ['build-ngq-win7'], factory = factory_win)
 
 ## release build ###############################################################
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'wily', 'xenial']
+ubuntu_distributions = ['trusty', 'xenial', 'yakkety']
 # check out the source
 deb_name = 'gdal'
 deb_dir = 'build/gdal_deb'
@@ -176,72 +176,72 @@ factory_deb.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, wo
 #cleanup
 clean_exts = ['.tar.gz', '.changes', '.dsc', '.build', '.upload']
 for clean_ext in clean_exts:
-    factory_deb.addStep(steps.ShellCommand(command=['/bin/bash', '-c', 'rm *' + clean_ext], 
+    factory_deb.addStep(steps.ShellCommand(command=['/bin/bash', '-c', 'rm *' + clean_ext],
                                        name="rm of " + clean_ext,
                                        description=["rm", "delete"],
-                                       descriptionDone=["rm", "deleted"], 
+                                       descriptionDone=["rm", "deleted"],
                                        haltOnFailure=False, warnOnWarnings=True, 
                                        flunkOnFailure=False, warnOnFailure=True))
 # tar orginal sources
-factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, '-a', 
-                                                deb_name, '-p', 'tar', '-f', 
-                                                code_dir_last], 
+factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, '-a',
+                                                deb_name, '-p', 'tar', '-f',
+                                                code_dir_last],
                                        name="tar",
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
 # copy lib_gdal2 -> debian
-factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/master/debian", dest=code_dir + "/debian", 
+factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/master/debian", dest=code_dir + "/debian",
                                         name="add debian folder", haltOnFailure=True))
 # update changelog
 for ubuntu_distribution in ubuntu_distributions:
-    factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', 
-                                                deb_name, '-p', 'fill', '-f', 
-                                                code_dir_last,'-o', 'changelog', '-d', 
-                                                ubuntu_distribution], 
+    factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a',
+                                                deb_name, '-p', 'fill', '-f',
+                                                code_dir_last,'-o', 'changelog', '-d',
+                                                ubuntu_distribution],
                                         name='create changelog for ' + ubuntu_distribution,
                                         description=["create", "changelog"],
                                         descriptionDone=["created", "changelog"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                        haltOnFailure=True)) 
-                                        
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        haltOnFailure=True))
+
     # debuild -us -uc -d -S
-    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-us', '-uc', '-S'], 
+    factory_deb.addStep(steps.ShellCommand(command=['debuild', '-us', '-uc', '-S'],
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                         haltOnFailure=True,
-                                        workdir=code_dir)) 
-                                                                       
-    factory_deb.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_deb"], 
+                                        workdir=code_dir))
+
+    factory_deb.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_deb"],
                                         name='debsign for ' + ubuntu_distribution,
                                         description=["debsign", "package"],
                                         descriptionDone=["debsigned", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                        haltOnFailure=True)) 
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        haltOnFailure=True))
     # upload to launchpad
     factory_deb.addStep(steps.ShellCommand(command=['/bin/bash','-c',
-                                        'dput ppa:nextgis/ppa ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'], 
+                                        'dput ppa:nextgis/ppa ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'],
                                         name='dput for ' + ubuntu_distribution,
                                         description=["dput", "package"],
                                         descriptionDone=["dputed", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                        haltOnFailure=True)) 
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        haltOnFailure=True))
 
 # store changelog
-factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
+factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'],
                                  name='log last comments',
                                  description=["log", "last comments"],
-                                 descriptionDone=["logged", "last comments"],           
-                                 env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                 haltOnFailure=True))  
-                                       
+                                 descriptionDone=["logged", "last comments"],
+                                 env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                 haltOnFailure=True))
+
 builder_deb = BuilderConfig(name = project_name + '_deb', slavenames = ['build-nix'], factory = factory_deb)
 
 ## development build ###########################################################
-project_verdev = '2.1.2'
+project_verdev = '2.1.3'
 factory_debdev = util.BuildFactory()
-ubuntu_distributions_dev = ['trusty', 'wily', 'xenial']
+ubuntu_distributions_dev = ['trusty', 'wily', 'xenial', 'yakkety']
 # check out the source
 debdev_dir = 'build/gdal_debdev'
 
@@ -249,66 +249,66 @@ factory_debdev.addStep(steps.Git(repourl=deb_repourl, mode='incremental', submod
 factory_debdev.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
 #cleanup
 for clean_ext in clean_exts:
-    factory_debdev.addStep(steps.ShellCommand(command=['/bin/bash', '-c', 'rm *' + clean_ext], 
+    factory_debdev.addStep(steps.ShellCommand(command=['/bin/bash', '-c', 'rm *' + clean_ext],
                                        name="rm of " + clean_ext,
                                        description=["rm", "delete"],
-                                       descriptionDone=["rm", "deleted"], 
-                                       haltOnFailure=False, warnOnWarnings=True, 
+                                       descriptionDone=["rm", "deleted"],
+                                       haltOnFailure=False, warnOnWarnings=True,
                                        flunkOnFailure=False, warnOnFailure=True))
 # tar orginal sources
-factory_debdev.addStep(steps.ShellCommand(command=["dch.py", '-n', project_verdev, '-a', 
-                                                deb_name, '-p', 'tar', '-f', 
-                                                code_dir_last], 
+factory_debdev.addStep(steps.ShellCommand(command=["dch.py", '-n', project_verdev, '-a',
+                                                deb_name, '-p', 'tar', '-f',
+                                                code_dir_last],
                                        name="tar",
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
 # copy lib_gdal2 -> debian
-factory_debdev.addStep(steps.CopyDirectory(src=debdev_dir + "/" + deb_name + "/dev/debian", dest=code_dir + "/debian", 
+factory_debdev.addStep(steps.CopyDirectory(src=debdev_dir + "/" + deb_name + "/dev/debian", dest=code_dir + "/debian",
                                         name="add debian folder", haltOnFailure=True))
 # update changelog
 for ubuntu_distribution in ubuntu_distributions_dev:
-    factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_verdev, '-a', 
-                                                deb_name, '-p', 'fill', '-f', 
-                                                code_dir_last,'-o', 'changelog', '-d', 
-                                                ubuntu_distribution], 
+    factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_verdev, '-a',
+                                                deb_name, '-p', 'fill', '-f',
+                                                code_dir_last,'-o', 'changelog', '-d',
+                                                ubuntu_distribution],
                                         name='create changelog for ' + ubuntu_distribution,
                                         description=["create", "changelog"],
                                         descriptionDone=["created", "changelog"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                        haltOnFailure=True)) 
-                                        
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        haltOnFailure=True))
+
     # debuild -us -uc -d -S
-    factory_debdev.addStep(steps.ShellCommand(command=['debuild', '-us', '-uc', '-S'], 
+    factory_debdev.addStep(steps.ShellCommand(command=['debuild', '-us', '-uc', '-S'],
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                         haltOnFailure=True,
-                                        workdir=code_dir)) 
-                                                                       
-    factory_debdev.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_debdev"], 
+                                        workdir=code_dir))
+
+    factory_debdev.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_debdev"],
                                         name='debsign for ' + ubuntu_distribution,
                                         description=["debsign", "package"],
                                         descriptionDone=["debsigned", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                        haltOnFailure=True)) 
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        haltOnFailure=True))
     # upload to launchpad
     factory_debdev.addStep(steps.ShellCommand(command=['/bin/bash','-c',
-                                        'dput ppa:nextgis/dev ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'], 
+                                        'dput ppa:nextgis/dev ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'],
                                         name='dput for ' + ubuntu_distribution,
                                         description=["dput", "package"],
                                         descriptionDone=["dputed", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                        haltOnFailure=True)) 
+                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        haltOnFailure=True))
 
 # store changelog
-factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_verdev, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'], 
+factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_verdev, '-a', deb_name, '-p', 'store', '-f', code_dir_last,'-o', 'changelog'],
                                  name='log last comments',
                                  description=["log", "last comments"],
-                                 descriptionDone=["logged", "last comments"],           
-                                 env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},           
-                                 haltOnFailure=True))  
-                                       
+                                 descriptionDone=["logged", "last comments"],
+                                 env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                 haltOnFailure=True))
+
 builder_debdev = BuilderConfig(name = project_name + '_debdev', slavenames = ['build-nix'], factory = factory_debdev)
 
-c['builders'] = [builder_win, builder_deb, builder_debdev]                                                        
+c['builders'] = [builder_win, builder_deb, builder_debdev]
