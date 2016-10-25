@@ -162,7 +162,7 @@ deb_repourl = 'git://github.com/nextgis/ppa.git'
 
 factory_deb = util.BuildFactory()
 factory_deb_dev = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial']
+ubuntu_distributions = ['trusty', 'xenial', 'yakkety']
 
 deb_name = 'ngqgis'
 deb_dir = 'build/ngq_deb'
@@ -316,8 +316,8 @@ for ubuntu_distribution in ubuntu_distributions:
 
     # delete code_dir + "/debian"
     step_clean_debian = steps.RemoveDirectory(
-        dir=code_dir + "/debian", 
-        name="remove debian folder for " + ubuntu_distribution, 
+        dir=code_dir + "/debian",
+        name="remove debian folder for " + ubuntu_distribution,
         haltOnFailure=True
     )
     factory_deb.addStep(step_clean_debian)
