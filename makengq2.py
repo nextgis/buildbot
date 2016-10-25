@@ -64,6 +64,7 @@ cmake_config = [
     "-DENABLE_TESTS=FALSE",
     "-DWITH_INTERNAL_QWTPOLAR=FALSE",
     "-DCMAKE_BUILD_TYPE=Release",
+    "-DWITH_PYSPATIALITE=TRUE",
     "-DWITH_PYTHON=TRUE",
     util.Interpolate('-DNGQ_VERSION_PATCH=%(prop:buildnumber)s'),
 ]
