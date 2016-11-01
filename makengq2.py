@@ -66,7 +66,7 @@ cmake_config = [
     '-DCMAKE_BUILD_TYPE=Release',
     '-DWITH_PYSPATIALITE=TRUE',
     '-DWITH_PYTHON=TRUE',
-    '-DGDAL_EXT_CMAKE_OPTIONS=-DENABLE_ECW=ON;-DWITH_ECW_EXTERNAL=TRUE',
+    '-DGDAL_EXT_CMAKE_OPTIONS=-DENABLE_ECW=ON;-DWITH_ECW_EXTERNAL=TRUE;-DENABLE_MRSID=ON;-DWITH_MRSID_EXTERNAL=TRUE',
     util.Interpolate('-DNGQ_VERSION_PATCH=%(prop:buildnumber)s'),
 ]
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
