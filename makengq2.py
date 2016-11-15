@@ -6,7 +6,7 @@ import bbconf
 
 c = {}
 
-ngq_repourl = 'git@github.com:nextgis/NextGIS-QGIS.git'
+ngq_repourl = 'git@github.com:nextgis/NextGIS_QGIS.git'
 ngq_branch = 'ngq_borsch'
 project_name = 'ngq2'
 
@@ -67,7 +67,6 @@ cmake_config = [
     '-DWITH_PYSPATIALITE=TRUE',
     '-DWITH_PYTHON=TRUE',
     '-DGDAL_EXT_CMAKE_OPTIONS=-DENABLE_ECW=ON;-DWITH_ECW_EXTERNAL=TRUE;-DENABLE_MRSID=ON;-DWITH_MRSID_EXTERNAL=TRUE',
-    util.Interpolate('-DNGQ_VERSION_PATCH=%(prop:buildnumber)s'),
 ]
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
@@ -175,7 +174,8 @@ deb_fullname = 'Alexander Lisovenko'
 
 env_vars = {'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname}
 
-project_ver = util.Interpolate('16.1.%(prop:buildnumber)s')
+#project_ver = util.Interpolate('16.3.1-%(prop:buildnumber)s')
+project_ver = util.Interpolate('16.8.1')
 
 step_ppa_checkout = steps.Git(
     repourl=deb_repourl,
