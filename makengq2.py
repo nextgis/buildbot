@@ -7,7 +7,7 @@ import bbconf
 c = {}
 
 ngq_repourl = 'git@github.com:nextgis/NextGIS_QGIS.git'
-ngq_branch = 'ngq_borsch'
+ngq_branch = 'ngq-16'
 project_name = 'ngq2'
 
 c['change_source'] = []
