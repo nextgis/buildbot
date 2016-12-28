@@ -52,7 +52,7 @@ cmake_config = ['-DBUILD_SHARED_LIBS=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTER
 cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
 cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
 ftp = 'ftp://192.168.255.1/'
-myftp = 'ftp://192.168.255.51/'
+myftp = 'ftp://192.168.255.51/software/'
 
 ## build windows ###############################################################
 
