@@ -83,19 +83,66 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Vi
                                        descriptionDone=["cmake", "configured for win32"],
                                        haltOnFailure=False, warnOnWarnings=True,
                                        flunkOnFailure=False, warnOnFailure=True,
-                                       workdir=code_dir + "/build32"))
+                                       workdir=code_dir + "/build32",
+                                       env={'PYTHONPATH': "C:\Python2712", 
+                                            'LANG': 'en_US',
+                                            'PATH': ['C:\Python2712', 
+                                                     'C:\Python2712\Scripts', 
+                                                     'C:\Python2712\DLLs', 
+                                                     'C:\Windows\system32', 
+                                                     'C:\Windows', 
+                                                     'C:\Windows\System32\Wbem', 
+                                                     'C:\Windows\System32\WindowsPowerShell\v1.0\', 
+                                                     'C:\Program Files (x86)\CMake\bin', 
+                                                     'C:\Program Files (x86)\Git\bin', 
+                                                     'C:\Program Files\Microsoft Windows Performance Toolkit\',
+                                                     'C:\Program Files (x86)\GnuWin32\bin',
+                                                     'C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\',
+                                                     'C:\Program Files\Microsoft SQL Server\120\Tools\Binn']}
+                                      ))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013', '-T', 'v120_xp', '../'],
                                        name="configure step 2",
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"], haltOnFailure=True,
-                                       workdir=code_dir + "/build32"))
+                                       workdir=code_dir + "/build32",
+                                       env={'PYTHONPATH': "C:\Python2712", 
+                                            'LANG': 'en_US',
+                                            'PATH': ['C:\Python2712', 
+                                                     'C:\Python2712\Scripts', 
+                                                     'C:\Python2712\DLLs', 
+                                                     'C:\Windows\system32', 
+                                                     'C:\Windows', 
+                                                     'C:\Windows\System32\Wbem', 
+                                                     'C:\Windows\System32\WindowsPowerShell\v1.0\', 
+                                                     'C:\Program Files (x86)\CMake\bin', 
+                                                     'C:\Program Files (x86)\Git\bin', 
+                                                     'C:\Program Files\Microsoft Windows Performance Toolkit\',
+                                                     'C:\Program Files (x86)\GnuWin32\bin',
+                                                     'C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\',
+                                                     'C:\Program Files\Microsoft SQL Server\120\Tools\Binn']}
+                                      ))
 # make
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build],
                                        name="make",
                                        description=["cmake", "make for win32"],
                                        descriptionDone=["cmake", "made for win32"], haltOnFailure=True,
                                        workdir=code_dir + "/build32",
-                                       env={'LANG': 'en_US'}))
+                                       env={'PYTHONPATH': "C:\Python2712", 
+                                            'LANG': 'en_US',
+                                            'PATH': ['C:\Python2712', 
+                                                     'C:\Python2712\Scripts', 
+                                                     'C:\Python2712\DLLs', 
+                                                     'C:\Windows\system32', 
+                                                     'C:\Windows', 
+                                                     'C:\Windows\System32\Wbem', 
+                                                     'C:\Windows\System32\WindowsPowerShell\v1.0\', 
+                                                     'C:\Program Files (x86)\CMake\bin', 
+                                                     'C:\Program Files (x86)\Git\bin', 
+                                                     'C:\Program Files\Microsoft Windows Performance Toolkit\',
+                                                     'C:\Program Files (x86)\GnuWin32\bin',
+                                                     'C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\',
+                                                     'C:\Program Files\Microsoft SQL Server\120\Tools\Binn']}
+                                      ))
 # make tests
 # make package
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
@@ -103,7 +150,22 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        description=["cmake", "pack for win32"],
                                        descriptionDone=["cmake", "packed for win32"], haltOnFailure=True,
                                        workdir=code_dir + "/build32",
-                                       env={'LANG': 'en_US'}))
+                                       env={'PYTHONPATH': "C:\Python2712", 
+                                            'LANG': 'en_US',
+                                            'PATH': ['C:\Python2712', 
+                                                     'C:\Python2712\Scripts', 
+                                                     'C:\Python2712\DLLs', 
+                                                     'C:\Windows\system32', 
+                                                     'C:\Windows', 
+                                                     'C:\Windows\System32\Wbem', 
+                                                     'C:\Windows\System32\WindowsPowerShell\v1.0\', 
+                                                     'C:\Program Files (x86)\CMake\bin', 
+                                                     'C:\Program Files (x86)\Git\bin', 
+                                                     'C:\Program Files\Microsoft Windows Performance Toolkit\',
+                                                     'C:\Program Files (x86)\GnuWin32\bin',
+                                                     'C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\',
+                                                     'C:\Program Files\Microsoft SQL Server\120\Tools\Binn']}
+                                      ))
 
 # 3. build gdal 64
 # make build dir
@@ -115,19 +177,66 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Vi
                                        descriptionDone=["cmake", "configured for win64"],
                                        haltOnFailure=False, warnOnWarnings=True,
                                        flunkOnFailure=False, warnOnFailure=True,
-                                       workdir=code_dir + "/build64"))
+                                       workdir=code_dir + "/build64",
+                                       env={'PYTHONPATH': "C:\Python2712-64",
+                                            'LANG': 'en_US',
+                                            'PATH': ['C:\Python2712-64', 
+                                                     'C:\Python2712-64\Scripts', 
+                                                     'C:\Python2712-64\DLLs', 
+                                                     'C:\Windows\system32', 
+                                                     'C:\Windows', 
+                                                     'C:\Windows\System32\Wbem', 
+                                                     'C:\Windows\System32\WindowsPowerShell\v1.0\', 
+                                                     'C:\Program Files (x86)\CMake\bin', 
+                                                     'C:\Program Files (x86)\Git\bin', 
+                                                     'C:\Program Files\Microsoft Windows Performance Toolkit\',
+                                                     'C:\Program Files (x86)\GnuWin32\bin',
+                                                     'C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\',
+                                                     'C:\Program Files\Microsoft SQL Server\120\Tools\Binn' ]}
+                                      ))
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Visual Studio 12 2013 Win64', '-T', 'v120_xp', '../'],
                                        name="configure step 2",
                                        description=["cmake", "configure for win64"],
                                        descriptionDone=["cmake", "configured for win64"], haltOnFailure=True,
-                                       workdir=code_dir + "/build64"))
+                                       workdir=code_dir + "/build64",
+                                       env={'PYTHONPATH': "C:\Python2712-64", 
+                                            'LANG': 'en_US',
+                                            'PATH': ['C:\Python2712-64', 
+                                                     'C:\Python2712-64\Scripts', 
+                                                     'C:\Python2712-64\DLLs', 
+                                                     'C:\Windows\system32', 
+                                                     'C:\Windows', 
+                                                     'C:\Windows\System32\Wbem', 
+                                                     'C:\Windows\System32\WindowsPowerShell\v1.0\', 
+                                                     'C:\Program Files (x86)\CMake\bin', 
+                                                     'C:\Program Files (x86)\Git\bin', 
+                                                     'C:\Program Files\Microsoft Windows Performance Toolkit\',
+                                                     'C:\Program Files (x86)\GnuWin32\bin',
+                                                     'C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\',
+                                                     'C:\Program Files\Microsoft SQL Server\120\Tools\Binn']}
+                                      ))
 # make
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build],
                                        name="make",
                                        description=["cmake", "make for win64"],
                                        descriptionDone=["cmake", "made for win64"], haltOnFailure=True,
                                        workdir=code_dir + "/build64",
-                                       env={'LANG': 'en_US'}))
+                                       env={'PYTHONPATH': "C:\Python2712-64", 
+                                            'LANG': 'en_US',
+                                            'PATH': ['C:\Python2712-64', 
+                                                     'C:\Python2712-64\Scripts', 
+                                                     'C:\Python2712-64\DLLs', 
+                                                     'C:\Windows\system32', 
+                                                     'C:\Windows', 
+                                                     'C:\Windows\System32\Wbem', 
+                                                     'C:\Windows\System32\WindowsPowerShell\v1.0\', 
+                                                     'C:\Program Files (x86)\CMake\bin', 
+                                                     'C:\Program Files (x86)\Git\bin', 
+                                                     'C:\Program Files\Microsoft Windows Performance Toolkit\',
+                                                     'C:\Program Files (x86)\GnuWin32\bin',
+                                                     'C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\',
+                                                     'C:\Program Files\Microsoft SQL Server\120\Tools\Binn']}
+                                      ))
 # make tests
 # make package
 factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
@@ -135,7 +244,22 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                        description=["cmake", "pack for win64"],
                                        descriptionDone=["cmake", "packed for win64"], haltOnFailure=True,
                                        workdir=code_dir + "/build64",
-                                       env={'LANG': 'en_US'}))
+                                       env={'PYTHONPATH': "C:\Python2712-64", 
+                                            'LANG': 'en_US',
+                                            'PATH': ['C:\Python2712-64', 
+                                                     'C:\Python2712-64\Scripts', 
+                                                     'C:\Python2712-64\DLLs', 
+                                                     'C:\Windows\system32', 
+                                                     'C:\Windows', 
+                                                     'C:\Windows\System32\Wbem', 
+                                                     'C:\Windows\System32\WindowsPowerShell\v1.0\', 
+                                                     'C:\Program Files (x86)\CMake\bin', 
+                                                     'C:\Program Files (x86)\Git\bin', 
+                                                     'C:\Program Files\Microsoft Windows Performance Toolkit\',
+                                                     'C:\Program Files (x86)\GnuWin32\bin',
+                                                     'C:\Program Files (x86)\Microsoft SDKs\TypeScript\1.0\',
+                                                     'C:\Program Files\Microsoft SQL Server\120\Tools\Binn']}
+                                      ))
 # upload package
 #ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/gdal/"
 upld_file_lst = ['build32/GDAL-' + project_ver + '-win32.exe', 'build32/GDAL-' + project_ver + '-win32.zip', 'build64/GDAL-' + project_ver + '-win64.exe', 'build64/GDAL-' + project_ver + '-win64.zip']
