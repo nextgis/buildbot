@@ -93,10 +93,10 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Vi
                                                      'C:\\Windows', 
                                                      'C:\\Windows\\System32\\Wbem', 
                                                      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0', 
-                                                     'C:\\Program Files (x86)\CMake\bin', 
+                                                     'C:\\Program Files (x86)\CMake\\bin', 
                                                      'C:\\Program Files (x86)\\Git\\bin', 
                                                      'C:\\Program Files\\Microsoft Windows Performance Toolkit',
-                                                     'C:\\Program Files (x86)\\GnuWin32\bin',
+                                                     'C:\\Program Files (x86)\\GnuWin32\\bin',
                                                      'C:\\Program Files (x86)\\Microsoft SDKs\\TypeScript\\1.0',
                                                      'C:\\Program Files\\Microsoft SQL Server\\120\\Tools\\Binn']}
                                       ))
@@ -117,7 +117,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Vi
                                                      'C:\\Program Files (x86)\\CMake\\bin', 
                                                      'C:\\Program Files (x86)\\Git\\bin', 
                                                      'C:\\Program Files\\Microsoft Windows Performance Toolkit',
-                                                     'C:\\Program Files (x86)\GnuWin32\\bin',
+                                                     'C:\\Program Files (x86)\\GnuWin32\\bin',
                                                      'C:\\Program Files (x86)\\Microsoft SDKs\\TypeScript\\1.0',
                                                      'C:\\Program Files\\Microsoft SQL Server\\120\\Tools\\Binn']}
                                       ))
@@ -140,7 +140,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_build],
                                                      'C:\\Program Files (x86)\\Git\\bin', 
                                                      'C:\\Program Files\\Microsoft Windows Performance Toolkit',
                                                      'C:\\Program Files (x86)\\GnuWin32\\bin',
-                                                     'C:\\Program Files (x86)\Microsoft SDKs\\TypeScript\\1.0',
+                                                     'C:\\Program Files (x86)\\Microsoft SDKs\\TypeScript\\1.0',
                                                      'C:\\Program Files\\Microsoft SQL Server\\120\\Tools\\Binn']}
                                       ))
 # make tests
@@ -164,7 +164,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                                      'C:\\Program Files\\Microsoft Windows Performance Toolkit',
                                                      'C:\\Program Files (x86)\\GnuWin32\\bin',
                                                      'C:\\Program Files (x86)\\Microsoft SDKs\\TypeScript\\1.0',
-                                                     'C:\\Program Files\Microsoft SQL Server\\120\\Tools\\Binn']}
+                                                     'C:\\Program Files\\Microsoft SQL Server\\120\\Tools\\Binn']}
                                       ))
 
 # 3. build gdal 64
@@ -187,10 +187,10 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_config, '-G', 'Vi
                                                      'C:\\Windows', 
                                                      'C:\\Windows\\System32\\Wbem', 
                                                      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0', 
-                                                     'C:\\Program Files (x86)\CMake\\bin', 
+                                                     'C:\\Program Files (x86)\\CMake\\bin', 
                                                      'C:\\Program Files (x86)\\Git\\bin', 
                                                      'C:\\Program Files\\Microsoft Windows Performance Toolkit',
-                                                     'C:\\Program Files (x86)\GnuWin32\\bin',
+                                                     'C:\\Program Files (x86)\\GnuWin32\\bin',
                                                      'C:\\Program Files (x86)\\Microsoft SDKs\\TypeScript\\1.0',
                                                      'C:\\Program Files\\Microsoft SQL Server\\120\\Tools\\Binn']}
                                       ))
@@ -251,7 +251,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", cmake_pack],
                                                      'C:\\Python2712-64\\DLLs', 
                                                      'C:\\Windows\\system32', 
                                                      'C:\\Windows', 
-                                                     'C:\\Windows\\System32\Wbem', 
+                                                     'C:\\Windows\\System32\\Wbem', 
                                                      'C:\\Windows\\System32\\WindowsPowerShell\\v1.0', 
                                                      'C:\\Program Files (x86)\\CMake\\bin', 
                                                      'C:\\Program Files (x86)\\Git\\bin', 
