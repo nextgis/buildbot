@@ -17,7 +17,7 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis-borsch/lib_gdal.git'
-project_ver = '2.1.2'
+project_ver = '2.1.3'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'gdal'
 
