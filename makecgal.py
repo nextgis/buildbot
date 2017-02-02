@@ -24,7 +24,7 @@ project_name = 'cgal'
 git_poller = GitPoller(project = project_name,
                        repourl = repourl,
                        workdir = project_name + '-workdir',
-                       branch = 'master', #TODO: buildbot
+                       branch = 'master', #TODO: buildbot 
                        pollinterval = 7200,)
 c['change_source'] = [git_poller]
 
