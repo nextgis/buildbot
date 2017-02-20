@@ -68,6 +68,14 @@ factory.addStep(steps.ShellCommand(command=["git", "config", "user.email", bbcon
                                   description=["set", "git config useremail"],
                                   descriptionDone=["set", "git config useremail"],
                                   workdir="build"))
+
+factory.addStep(steps.ShellCommand(command=["git", "submodule", "foreach", "git", "checkout", "master"],
+                                  description=["git", "submodule foreach git checkout master"],
+                                  workdir="build"))
+
+factory.addStep(steps.ShellCommand(command=["git", "checkout", "3"],
+                                  description=["git", "checkout 3"],
+                                  workdir="build/source/docs_ngweb_dev"))
 for lang in langs:
     factory.addStep(steps.ShellCommand(command=["sh", "switch_lang.sh", lang],
                                       description=["switch", "language to " + lang],
