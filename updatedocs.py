@@ -45,7 +45,7 @@ project_name = 'updatedocs'
 for lang in langs:
     scheduler = schedulers.SingleBranchScheduler(
                         name=project_name + '_' + lang,
-                        change_filter=util.ChangeFilter(project = poller_name + '*',
+                        change_filter=util.ChangeFilter(project_re = poller_name + '_*',
                                                         branch=lang),
                         treeStableTimer=2*60,
                         builderNames=[project_name])
