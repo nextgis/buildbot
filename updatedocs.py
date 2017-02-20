@@ -42,29 +42,38 @@ for repo in repos:
 
 project_name = 'updatedocs'
 
-scheduler = schedulers.SingleBranchScheduler(
-                    name=project_name,
-                    change_filter=util.ChangeFilter(project = poller_name + '*',
-                                                    branch=langs),
-                    treeStableTimer=2*60,
-                    builderNames=[project_name])
-c['schedulers'].append(scheduler)
-c['schedulers'].append(schedulers.ForceScheduler(
-                            name=project_name + "_force",
-                            builderNames=[project_name],
-))
+for lang in langs:
+    scheduler = schedulers.SingleBranchScheduler(
+                        name=project_name + '_' + lang,
+                        change_filter=util.ChangeFilter(project = poller_name + '*',
+                                                        branch=lang),
+                        treeStableTimer=2*60,
+                        builderNames=[project_name])
+    c['schedulers'].append(scheduler)
+# c['schedulers'].append(schedulers.ForceScheduler(
+#                             name=project_name + "_force",
+#                             builderNames=[project_name],
+# ))
 
 #### update docs
 
 factory = util.BuildFactory()
 
 factory.addStep(steps.Git(repourl=main_repourl, mode='incremental', submodules=True))
+factory.addStep(steps.ShellCommand(command=["git", "config", "user.name", bbconf.git_user_name],
+                                  description=["set", "git config username"],
+                                  descriptionDone=["set", "git config username"],
+                                  workdir="build"))
+factory.addStep(steps.ShellCommand(command=["git", "config", "user.email", bbconf.git_user_email],
+                                  description=["set", "git config useremail"],
+                                  descriptionDone=["set", "git config useremail"],
+                                  workdir="build"))
 for lang in langs:
     factory.addStep(steps.ShellCommand(command=["sh", "switch_lang.sh", lang],
                                       description=["switch", "language to " + lang],
                                       descriptionDone=["switched", "language to " + lang],
                                       workdir="build"))
-    factory.addStep(steps.ShellCommand(command=["sh", "update_docs.sh"], 
+    factory.addStep(steps.ShellCommand(command=["sh", "update_docs.sh"],
                                       description=["update", lang + " documentation"],
                                       descriptionDone=["updated", lang + " documentation"],
                                       workdir="build"))
