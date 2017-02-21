@@ -28,7 +28,7 @@ repos = [
 
 main_repourl = 'git://github.com/nextgis/docs_ng.git'
 
-langs = ['ru', 'en']
+langs = ['ru', 'en', 'master']
 
 poller_name = 'updatedocs'
 
