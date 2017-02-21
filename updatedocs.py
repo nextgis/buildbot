@@ -76,6 +76,8 @@ factory.addStep(steps.ShellCommand(command=["git", "config", "user.email", bbcon
 # factory.addStep(steps.ShellCommand(command=["git", "checkout", "3"],
 #                                   description=["git", "checkout 3"],
 #                                   workdir="build/source/docs_ngweb_dev"))
+langs.pop()
+
 for lang in langs:
     factory.addStep(steps.ShellCommand(command=["sh", "switch_lang.sh", lang],
                                       description=["switch", "language to " + lang],
