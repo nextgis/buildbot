@@ -63,7 +63,7 @@ factory.addStep(steps.RemoveDirectory(dir="build/build"))
 factory.addStep(steps.RemoveDirectory(dir="build/libngui/build"))
 
 factory.addStep(steps.ShellCommand(
-    command=["/bin/bash", "gradlew", "assembleRelease"],
+    command=["/bin/bash", "gradlew", "--info", "assembleRelease"],
     name='create apk',
     description=["prepare", "environment for build"],
     descriptionDone=["prepared", "environment for build"],
