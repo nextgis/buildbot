@@ -67,7 +67,10 @@ factory.addStep(steps.ShellCommand(
     name='create apk',
     description=["prepare", "environment for build"],
     descriptionDone=["prepared", "environment for build"],
-    env={'ANDROID_HOME': '/opt/android-sdk-linux'}
+    env={
+        'ANDROID_HOME': '/opt/android-sdk-linux',
+        'ANDROID_NDK_HOME': '/opt/android-sdk-linux/ndk-bundle'
+    }
 ))
 factory.addStep(steps.ShellCommand(
     command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile v3', '-p', 'simple',
