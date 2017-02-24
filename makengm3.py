@@ -80,6 +80,9 @@ factory.addStep(steps.ShellCommand(
     descriptionDone=["logged", "last comments"],
     haltOnFailure=True
 ))
+
+# Simlink is needed from testfairy-upload-android-ngm3.sh to virtual env/bin
+# ln -s /full/path/to/testfairy-upload-android-ngm3.sh env/bin/
 factory.addStep(steps.ShellCommand(
     command=['/bin/bash', 'testfairy-upload-android-ngm3.sh', 'app/build/outputs/apk'],
     description=["upload", "testfairy"],

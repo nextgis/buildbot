@@ -54,6 +54,8 @@ factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextG
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"], haltOnFailure=True))  
+# Simlink is needed from testfairy-upload-android.sh to virtual env/bin
+# ln -s /full/path/to/testfairy-upload-android.sh env/bin/
 factory.addStep(steps.ShellCommand(command=['/bin/bash', 'testfairy-upload-android.sh', 'app/build/outputs/apk'], 
                                  description=["upload", "testfairy"],
                                  descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))  
