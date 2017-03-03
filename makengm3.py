@@ -9,6 +9,7 @@ from buildbot.changes.gitpoller import GitPoller
 from buildbot.schedulers.basic  import SingleBranchScheduler
 from buildbot.config import BuilderConfig
 from buildbot.steps.master import MasterShellCommand
+from buildbot.status.mail import MailNotifier
 
 import bbconf
 
