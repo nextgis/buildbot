@@ -74,8 +74,12 @@ factory_debdev.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, 
 for ubuntu_distribution in ubuntu_distributions:
 
     # copy lib_opencad -> debian
-    factory_debdev.addStep(steps.CopyDirectory(src=debdev_dir + "/" + deb_name + "/dev/debian", dest=code_dir + "/debian",
-                                            name="add debian folder for " + deb_name, haltOnFailure=True))
+    factory_debdev.addStep(steps.CopyDirectory(src=debdev_dir + "/" + deb_name + "/dev/debian", 
+                                               dest=code_dir + "/debian",
+                                               name="add debian folder for " + deb_name, 
+                                               description=["copy", "debian folder"],
+                                               descriptionDone=["copied", "debian folder"],
+                                               haltOnFailure=True))
 
     factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a',
                                                 deb_name, '-p', 'fill', '-f',
