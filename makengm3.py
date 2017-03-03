@@ -14,7 +14,7 @@ import bbconf
 
 c = {}
 
-repourl = 'git@github.com:nextgis/android_nextgis_mobile.git'
+repourl = 'git://github.com/nextgis/android_nextgis_mobile.git'
 project_name = 'ngm3'
 
 git_poller = GitPoller(
