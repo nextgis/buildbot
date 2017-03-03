@@ -74,8 +74,12 @@ factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, '-a
 for ubuntu_distribution, postgis_version in (zip(ubuntu_distributions, postgis_versions)):	 
                                           
     # copy lib_gdal2 -> debian
-    factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/pg" + postgis_version + "/debian", dest=code_dir + "/debian", 
-                                            name="add debian folder for " + postgis_version, haltOnFailure=True))
+    factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/pg" + postgis_version + "/debian", 
+                                            dest=code_dir + "/debian", 
+                                            name="add debian folder for " + postgis_version, 
+                                            description=["copy", "debian folder"],
+                                            descriptionDone=["copied", "debian folder"],
+                                            haltOnFailure=True))
 
     factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a', 
                                                 deb_name, '-p', 'fill', '-f', 
