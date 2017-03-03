@@ -98,6 +98,8 @@ factory_deb.addStep(steps.CopyDirectory(
     src=deb_dir + "/" + deb_name + "/debian",
     dest=code_dir + "/debian",
     name="add debian folder",
+    description=["copy", "debian folder"],
+    descriptionDone=["copied", "debian folder"],
     haltOnFailure=True
 ))
 
