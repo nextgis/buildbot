@@ -100,3 +100,17 @@ factory.addStep(steps.ShellCommand(
 
 builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
 c['builders'] = [builder]
+
+# NOTIFIER
+import bbconf
+
+ngm3_mn = MailNotifier(fromaddr='buildbot@nextgis.com',
+                       sendToInterestedUsers=True,
+                       builders=[builder.name],
+                       mode=('all'),
+                       extraRecipients=bbconf.ngm_email_recipients,
+                       relayhost='192.168.255.1',
+                       useTls=True
+                      )
+
+c['status'] = [ngm3_mn]
