@@ -69,8 +69,12 @@ factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, '-a
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
 # copy lib_gdal2 -> debian
-factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/debian", dest=code_dir + "/debian",
-                                        name="add debian folder", haltOnFailure=True))
+factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/debian", 
+                                        dest=code_dir + "/debian",
+                                        name="add debian folder", 
+                                        description=["copy", "debian folder"],
+                                        descriptionDone=["copied", "debian folder"],
+                                        haltOnFailure=True))
 # update changelog
 for ubuntu_distribution in ubuntu_distributions:
     factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a',
