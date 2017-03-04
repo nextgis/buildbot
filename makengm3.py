@@ -106,7 +106,7 @@ factory.addStep(steps.ShellCommand(
 #upld_file_lst = ['app/build/outputs/apk/ngmobile3-' + project_ver + '.apk']
 upld_file_lst = ['app/build/outputs/apk/ngmobile3-0.4.apk']
 for upld_file in upld_file_lst:
-    factory_win.addStep(steps.ShellCommand(
+    factory.addStep(steps.ShellCommand(
         command=['curl', '-u', bbconf.ftp_mynextgis_user, '-T', upld_file, '--ftp-create-dirs', myftp + 'ngm3/'],
         name="upload to ftp",
         description=["upload", "to ftp " + upld_file],
