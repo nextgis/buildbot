@@ -23,7 +23,7 @@ git_poller = GitPoller(
     repourl = repourl,
     workdir = project_name + '-workdir',
     branch = 'master',
-    pollinterval = 7200 # each 2 hours
+    pollinterval = 3600 # each 1 hour
 )
 c['change_source'] = [git_poller]
 
@@ -103,8 +103,6 @@ builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory
 c['builders'] = [builder]
 
 # NOTIFIER
-import bbconf
-
 ngm3_mn = MailNotifier(fromaddr='buildbot@nextgis.com',
                        sendToInterestedUsers=True,
                        builders=[builder.name],
