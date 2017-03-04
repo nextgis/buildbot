@@ -47,7 +47,7 @@ for repo in repos_m:
     git_poller = GitPoller(project = poller_name + '_' + repo,
                        repourl = 'git://github.com/nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
-                       branches = 'master',
+                       branches = ['master'],
                        pollinterval = 900,)
     c['change_source'].append(git_poller)
     
