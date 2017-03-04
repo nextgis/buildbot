@@ -17,7 +17,7 @@ c = {}
 
 repourl = 'git://github.com/nextgis/android_nextgis_mobile.git'
 project_name = 'ngm3'
-ftp = 'ftp://192.168.255.1/'
+apk_ver = '0.4'
 myftp = 'ftp://192.168.255.51/'
 
 git_poller = GitPoller(
@@ -103,11 +103,10 @@ factory.addStep(steps.ShellCommand(
 
 # Upload apk to ftp
 #ftp_upload_command = "curl -u " + bbconf.ftp_user + " --ftp-create-dirs -T file ftp://nextgis.ru/programs/ngm3/"
-#upld_file_lst = ['app/build/outputs/apk/ngmobile3-' + project_ver + '.apk']
-upld_file_lst = ['app/build/outputs/apk/ngmobile3-0.4.apk']
+upld_file_lst = ['app/build/outputs/apk/ngmobile3-' + apk_ver + '.apk']
 for upld_file in upld_file_lst:
     factory.addStep(steps.ShellCommand(
-        command=['curl', '-u', bbconf.ftp_mynextgis_user, '-T', upld_file, '--ftp-create-dirs', myftp + 'ngm3/'],
+        command=['curl', '-u', bbconf.ftp_mynextgis_user, '-T', upld_file, '--ftp-create-dirs', myftp + 'ngm3-dev/'],
         name="upload to ftp",
         description=["upload", "to ftp " + upld_file],
         descriptionDone=["uploaded", "NGM3 files to ftp"],
@@ -128,13 +127,14 @@ builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory
 c['builders'] = [builder]
 
 # NOTIFIER
-ngm3_mn = MailNotifier(fromaddr='buildbot@nextgis.com',
-                       sendToInterestedUsers=True,
-                       builders=[builder.name],
-                       mode=('all'),
-                       extraRecipients=bbconf.ngm_email_recipients,
-                       relayhost='192.168.255.1',
-                       useTls=True
-                      )
+ngm3_mn = MailNotifier(
+    fromaddr='buildbot@nextgis.com',
+    sendToInterestedUsers=True,
+    builders=[builder.name],
+    mode=('all'),
+    extraRecipients=bbconf.ngm_email_recipients,
+    relayhost='192.168.255.1',
+    useTls=True
+)
 
 c['status'] = [ngm3_mn]
