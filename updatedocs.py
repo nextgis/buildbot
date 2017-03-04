@@ -19,16 +19,19 @@ c['builders'] = []
 
 # 'git://github.com/nextgis/docs_howto.git',
 repos = [
-    'docs_howto',
     'docs_ngcom',
     'docs_ngmobile',
     'docs_ngqgis',
     'docs_ngweb'
 ]
 
+repos_m = [
+    'docs_howto',
+]
+
 main_repourl = 'git://github.com/nextgis/docs_ng.git'
 
-langs = ['ru', 'en', 'master']
+langs = ['ru', 'en']
 
 poller_name = 'updatedocs'
 
@@ -40,8 +43,18 @@ for repo in repos:
                        pollinterval = 900,)
     c['change_source'].append(git_poller)
 
+for repo in repos_m:
+    git_poller = GitPoller(project = poller_name + '_' + repo,
+                       repourl = 'git://github.com/nextgis/' + repo + '.git',
+                       workdir = poller_name + '-' + repo + '-workdir',
+                       branches = 'master',
+                       pollinterval = 900,)
+    c['change_source'].append(git_poller)
+    
+    
 project_name = 'updatedocs'
 
+# RU, EN
 for lang in langs:
     scheduler = schedulers.SingleBranchScheduler(
                         name=project_name + '_' + lang,
@@ -50,6 +63,16 @@ for lang in langs:
                         treeStableTimer=2*60,
                         builderNames=[project_name])
     c['schedulers'].append(scheduler)
+
+# Master
+scheduler = schedulers.SingleBranchScheduler(
+                    name=project_name + '_master',
+                    change_filter=util.ChangeFilter(project_re = poller_name + '_*',
+                                                    branch='master'),
+                    treeStableTimer=2*60,
+                    builderNames=[project_name])
+
+    c['schedulers'].append(scheduler)    
 # c['schedulers'].append(schedulers.ForceScheduler(
 #                             name=project_name + "_force",
 #                             builderNames=[project_name],
@@ -76,7 +99,6 @@ factory.addStep(steps.ShellCommand(command=["git", "config", "user.email", bbcon
 # factory.addStep(steps.ShellCommand(command=["git", "checkout", "3"],
 #                                   description=["git", "checkout 3"],
 #                                   workdir="build/source/docs_ngweb_dev"))
-langs.pop()
 
 for lang in langs:
     factory.addStep(steps.ShellCommand(command=["sh", "switch_lang.sh", lang],
