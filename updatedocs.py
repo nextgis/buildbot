@@ -72,7 +72,7 @@ scheduler = schedulers.SingleBranchScheduler(
                     treeStableTimer=2*60,
                     builderNames=[project_name])
 
-    c['schedulers'].append(scheduler)    
+c['schedulers'].append(scheduler)    
 # c['schedulers'].append(schedulers.ForceScheduler(
 #                             name=project_name + "_force",
 #                             builderNames=[project_name],
