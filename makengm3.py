@@ -66,7 +66,7 @@ factory.addStep(steps.RemoveDirectory(dir="build/build"))
 factory.addStep(steps.RemoveDirectory(dir="build/libngui/build"))
 
 factory.addStep(steps.ShellCommand(
-    command=["cp", "--remove-destination", "../sentry.properties.ngm3", "build/sentry.properties"],
+    command=["cp", "--remove-destination", "../../sentry.properties.ngm3", "sentry.properties"],
     name='Copy sentry.properties',
     description=["Copy", "sentry.properties"],
     descriptionDone=["Copied", "sentry.properties"],
