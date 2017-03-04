@@ -64,6 +64,13 @@ factory.addStep(steps.RemoveDirectory(dir="build/build"))
 factory.addStep(steps.RemoveDirectory(dir="build/libngui/build"))
 
 factory.addStep(steps.ShellCommand(
+    command=["/bin/bash", "cp", "--remove-destination", "../sentry.properties.ngm3", "build/sentry.properties"],
+    name='Copy sentry.properties',
+    description=["Copy", "sentry.properties"],
+    descriptionDone=["Copy", "sentry.properties"],
+    haltOnFailure=True
+))
+factory.addStep(steps.ShellCommand(
     command=["/bin/bash", "gradlew", "--info", "assembleRelease"],
     name='create apk',
     description=["prepare", "environment for build"],
