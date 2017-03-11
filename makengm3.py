@@ -17,7 +17,7 @@ c = {}
 
 repourl = 'git://github.com/nextgis/android_nextgis_mobile.git'
 project_name = 'ngm3'
-apk_ver = '0.4'
+apk_ver = '0.5'
 myftp = 'ftp://192.168.255.51/'
 
 git_poller = GitPoller(
@@ -106,8 +106,16 @@ factory.addStep(steps.ShellCommand(
 upld_file_lst = ['app/build/outputs/apk/ngmobile3-' + apk_ver + '.apk']
 for upld_file in upld_file_lst:
     factory.addStep(steps.ShellCommand(
-        command=['curl', '-u', bbconf.ftp_mynextgis_user, '-T', upld_file, '--ftp-create-dirs', myftp + 'ngm3-dev/'],
-        name="upload to ftp",
+        command=['curl', '-u', bbconf.ftp_mynextgis_user, '-T', upld_file, '--ftp-create-dirs', myftp + 'software/ngm3-dev/'],
+        name="upload to ftp, folder 'software'",
+        description=["upload", "to ftp " + upld_file],
+        descriptionDone=["uploaded", "NGM3 files to ftp"],
+        haltOnFailure=False,
+        workdir="build/"
+    ))
+    factory.addStep(steps.ShellCommand(
+        command=['curl', '-u', bbconf.ftp_mynextgis_user, '-T', upld_file, '--ftp-create-dirs', myftp + 'software_supported/ngm3-dev/'],
+        name="upload to ftp, folder 'software_supported'",
         description=["upload", "to ftp " + upld_file],
         descriptionDone=["uploaded", "NGM3 files to ftp"],
         haltOnFailure=False,
