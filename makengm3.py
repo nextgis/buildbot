@@ -70,11 +70,11 @@ factory.addStep(steps.Git(
 #))
 
 # Clean. Do not clean app/.externalNativeBuild/third-party-src
-#factory.addStep(steps.RemoveDirectory(dir="build/.gradle"))
-#factory.addStep(steps.RemoveDirectory(dir="build/app/build"))
-#factory.addStep(steps.RemoveDirectory(dir="build/app/.externalNativeBuild/cmake"))
-#factory.addStep(steps.RemoveDirectory(dir="build/build"))
-#factory.addStep(steps.RemoveDirectory(dir="build/libngui/build"))
+factory.addStep(steps.RemoveDirectory(dir="build/.gradle"))
+factory.addStep(steps.RemoveDirectory(dir="build/app/build"))
+factory.addStep(steps.RemoveDirectory(dir="build/app/.externalNativeBuild/cmake"))
+factory.addStep(steps.RemoveDirectory(dir="build/build"))
+factory.addStep(steps.RemoveDirectory(dir="build/libngui/build"))
 
 factory.addStep(steps.ShellCommand(
     command=["cp", "--remove-destination", "../../sentry.properties.ngm3", "sentry.properties"],
@@ -83,17 +83,17 @@ factory.addStep(steps.ShellCommand(
     descriptionDone=["Copied", "sentry.properties"],
     haltOnFailure=True
 ))
-#factory.addStep(steps.ShellCommand(
-#    command=["/bin/bash", "gradlew", "--info", "assembleRelease"],
-#    name='create apk',
-#    description=["prepare", "environment for build"],
-#    descriptionDone=["prepared", "environment for build"],
-#    env={
-#        'ANDROID_HOME': android_home,
-#        'ANDROID_NDK_HOME': android_ndk_home
-#    },
-#    haltOnFailure=True
-#))
+factory.addStep(steps.ShellCommand(
+    command=["/bin/bash", "gradlew", "--info", "assembleRelease"],
+    name='create apk',
+    description=["prepare", "environment for build"],
+    descriptionDone=["prepared", "environment for build"],
+    env={
+        'ANDROID_HOME': android_home,
+        'ANDROID_NDK_HOME': android_ndk_home
+    },
+    haltOnFailure=True
+))
 # Simlink is needed from apk-signer.sh to virtual env/bin
 # ln -s /full/path/to/apk-signer.sh env/bin/
 factory.addStep(steps.ShellCommand(
@@ -106,14 +106,14 @@ factory.addStep(steps.ShellCommand(
     },
     haltOnFailure=True
 ))
-#factory.addStep(steps.ShellCommand(
-#    command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile v3', '-p', 'simple',
-#        '-f', '.', '-o', 'app/build/outputs/apk/git.log'],
-#    name='log last comments',
-#    description=["log", "last comments"],
-#    descriptionDone=["logged", "last comments"],
-#    haltOnFailure=True
-#))
+factory.addStep(steps.ShellCommand(
+    command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile v3', '-p', 'simple',
+        '-f', '.', '-o', 'app/build/outputs/apk/git.log'],
+    name='log last comments',
+    description=["log", "last comments"],
+    descriptionDone=["logged", "last comments"],
+    haltOnFailure=True
+))
 
 # Simlink is needed from testfairy-upload-android-ngm3.sh to virtual env/bin
 # ln -s /full/path/to/testfairy-upload-android-ngm3.sh env/bin/
@@ -145,13 +145,13 @@ for upld_file in upld_file_lst:
         workdir="build/"
     ))
 
-#factory.addStep(steps.ShellCommand(
-#    command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile v3', '-p', 'store', '-f', '.'],
-#    name='log last comments',
-#    description=["log", "last comments"],
-#    descriptionDone=["logged", "last comments"],
-#    haltOnFailure=True
-#))
+factory.addStep(steps.ShellCommand(
+    command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile v3', '-p', 'store', '-f', '.'],
+    name='log last comments',
+    description=["log", "last comments"],
+    descriptionDone=["logged", "last comments"],
+    haltOnFailure=True
+))
 
 
 builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
