@@ -1,61 +1,90 @@
 # -*- coding: utf-8 -*-
 
 import ldap
+from twisted.cred.checkers import ICredentialsChecker
+from twisted.cred.credentials import IUsernamePassword
+from twisted.cred.error import UnauthorizedLogin
+from twisted.internet import defer
+from zope.interface.declarations import implements
+from zope.interface import implementer
+from twisted.cred.portal import Portal
+from twisted.web.error import Error
+from twisted.web.guard import BasicCredentialFactory
+from twisted.web.guard import HTTPAuthSessionWrapper
+from buildbot.www import auth
+from buildbot.www import resource
 
-from zope.interface import Interface
-from zope.interface import implements
+class LDAPAuth(auth.AuthBase):
 
-from buildbot.status.web.auth import IAuth
-from buildbot.status.web.auth import AuthBase
+    def __init__(self, lserver, bind, group, **kwargs):
+        self.credentialFactories = [BasicCredentialFactory("buildbot"),]
+        self.checkers = [LDAPAuthChecker(lserver, bind, group),]
+        self.userInfoProvider = LDAPUserInfoProvider(lserver, bind)
 
-class LdapAuth(AuthBase):
-    implements(IAuth)
-    """Implement basic authentication against a ldap."""
+    def getLoginResource(self):
+        return HTTPAuthSessionWrapper(
+            Portal(auth.AuthRealm(self.master, self), self.checkers),
+            self.credentialFactories)
+
+
+class LDAPUserInfoProvider(auth.UserInfoProviderBase):
+    name = "LDAP"
+    lserver = ""
+    base_dn = ""
+    scope = ldap.SCOPE_SUBTREE
+
+    def __init__(self, lserver, bind):
+        self.lserver = lserver
+        self.base_dn = bind
+
+    def getUserInfo(self, username):
+        l = ldap.initialize(self.lserver)
+        l.set_option(ldap.OPT_REFERRALS, 0)
+        l.protocol_version = 3
+        filter = "(&(objectClass=posixAccount)(uid="+username+"))"
+        results = l.search_s(self.base_dn, self.scope, filter)
+        details = results[0][1]
+        return defer.succeed(dict(userName=username, fullName=details['displayName'][0], email=details['mail'][0], groups=['buildbot', username]))
+
+
+class LDAPAuthChecker():
+    implements (ICredentialsChecker)
+
+    credentialInterfaces = IUsernamePassword,
+
     lserver = ""
     base_dn = ""
     scope = ldap.SCOPE_SUBTREE
     group = ""
 
-    def getUserInfo(self, user):
-        l = ldap.initialize(self.lserver)
-        l.set_option(ldap.OPT_REFERRALS, 0)
-        l.protocol_version = 3
-        filter = "(&(objectClass=posixAccount)(uid="+user+"))"
-        results = l.search_s(self.base_dn, self.scope, filter)
-        detailes = results[0][1]
-        return dict(userName=user, fullName=detailes['displayName'][0], email=detailes['mail'][0], groups=[user])
 
     def __init__(self, lserver, bind, group):
         self.lserver = lserver
         self.base_dn = bind
         self.group = group
 
-    def authenticate(self, user, passwd):
-        l = ldap.initialize(self.lserver)
-        l.set_option(ldap.OPT_REFERRALS, 0)
-        l.protocol_version = 3
+    def requestAvatarId(self, credentials):
+	l = ldap.initialize(self.lserver)
+	l.set_option(ldap.OPT_REFERRALS, 0)
+	l.protocol_version = 3
 
-        filter = "(&(objectClass=posixAccount)(uid="+user+"))"
-        groupFilter = '(&(cn='+self.group+')(memberUid=' +user+'))'
+	filter = "(&(objectClass=posixAccount)(uid="+credentials.username+"))"
+	groupFilter = '(&(cn='+self.group+')(memberUid=' +credentials.username+'))'
 
-        #1. get user cn
-        results = l.search_s(self.base_dn, self.scope, filter)
-        for dn,entry in results:
-            dn = str(dn)
+#	return defer.succeed(credentials.username)
+	#1. get user cn
+	results = l.search_s(self.base_dn, self.scope, filter)
+	for dn,entry in results:
+	    dn = str(dn)
 
-        #2. check auth
-        try:
-            l.simple_bind_s(dn, passwd)
-        except ldap.INVALID_CREDENTIALS:
-            self.err = "Invalid credentials for " + user
-            return False
+    	#2. check auth
+	l.simple_bind_s(dn, credentials.password)
 
-        #3. check group
-        results = l.search_s(base_dn, scope, groupFilter)
+    	#3. check group
+	results = l.search_s(self.base_dn, self.scope, groupFilter)
 
-        if len(results) > 0:
-            self.err = ""
-            return True
+	if len(results) > 0:
+	    return defer.succeed(credentials.username)
 
-        self.err = "Invalid username or password"
-        return False
+        # Something went wrong. Simply fail authentication
+        return defer.fail(UnauthorizedLogin("unable to verify password"))        
