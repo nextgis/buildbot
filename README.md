@@ -1,6 +1,6 @@
-# NextGIS buildbot
+# NextGIS BuildBot
 
-Buildbot config for self-update
+BuildBot config for self-update
 
 ![Language](https://img.shields.io/badge/Language-Python-green.svg?maxAge=2592000)
 
