@@ -8,8 +8,8 @@ Buildbot config for self-update
 
 ![build status](http://buildbot.nextgis.com/png?builder=selfupdate)
 
-License information:
--------------
+# License
+
 This program is licensed under GNU GPL v2 or any later version
 
 ![License](https://img.shields.io/badge/License-GPL v2-blue.svg?maxAge=2592000)
