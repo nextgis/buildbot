@@ -2,14 +2,6 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-from buildbot.steps.source.git import Git
-from buildbot.steps.python import Sphinx
-from buildbot.steps.transfer import DirectoryUpload
-from buildbot.changes.gitpoller import GitPoller
-from buildbot.schedulers.basic  import SingleBranchScheduler
-from buildbot.config import BuilderConfig
-from buildbot.steps.master import MasterShellCommand
-
 import bbconf
 
 c = {}
@@ -33,7 +25,7 @@ langs = ['ru', 'en', 'master']
 poller_name = 'updatedocs'
 
 for repo in repos:
-    git_poller = GitPoller(project = poller_name + '_' + repo,
+    git_poller = changes.GitPoller(project = poller_name + '/' + repo,
                        repourl = 'git://github.com/nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
                        branches = langs,
@@ -45,7 +37,7 @@ project_name = 'updatedocs'
 for lang in langs:
     scheduler = schedulers.SingleBranchScheduler(
                         name=project_name + '_' + lang,
-                        change_filter=util.ChangeFilter(project_re = poller_name + '_*',
+                        change_filter=util.ChangeFilter(project_re = poller_name + '/*',
                                                         branch=lang),
                         treeStableTimer=2*60,
                         builderNames=[project_name])
@@ -88,5 +80,5 @@ for lang in langs:
                                       descriptionDone=["updated", lang + " documentation"],
                                       workdir="build"))
 
-builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+builder = util.BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
 c['builders'].append(builder)
