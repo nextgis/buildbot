@@ -4,9 +4,9 @@ BuildBot config for self-update
 
 ![Language](https://img.shields.io/badge/Language-Python-green.svg?maxAge=2592000)
 
-# Build status
+<!-- # Build status
 
-![build status](http://buildbot.nextgis.com/png?builder=selfupdate)
+![build status](http://buildbot.nextgis.com/png?builder=selfupdate) -->
 
 # License
 
