@@ -3,6 +3,8 @@
 BuildBot config for self-update
 
 ![Language](https://img.shields.io/badge/Language-Python-green.svg?maxAge=2592000)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/nextgis/buildbot.svg)](http://isitmaintained.com/project/nextgis/buildbot "Average time to resolve an issue")
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/nextgis/buildbot.svg)](http://isitmaintained.com/project/nextgis/buildbot "Percentage of issues still open")
 
 <!-- # Build status
 
