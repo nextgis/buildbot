@@ -35,7 +35,7 @@ for repo in repos:
     c['change_source'].append(git_poller)
 
 for repo in repos_m:
-    git_poller = GitPoller(project = poller_name + '/' + repo,
+    git_poller = changes.GitPoller(project = poller_name + '/' + repo,
                        repourl = 'git://github.com/nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
                        branches = ['master'],
@@ -101,5 +101,5 @@ for lang in langs:
                                       descriptionDone=["updated", lang + " documentation"],
                                       workdir="build"))
 
-builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+builder = util.BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
 c['builders'].append(builder)
