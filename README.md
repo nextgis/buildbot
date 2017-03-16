@@ -15,7 +15,7 @@ BuildBot config for self-update
 
 This program is licensed under GNU GPL v2 or any later version
 
-![License](https://img.shields.io/badge/License-GPL v2-blue.svg?maxAge=2592000)
+![License](https://img.shields.io/badge/License-GPL%20v2-blue.svg?maxAge=2592000)
 
 # Commercial support
 
