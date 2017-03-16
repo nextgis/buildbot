@@ -145,7 +145,7 @@ factory.addStep(steps.ShellCommand(
 ))
 
 
-builder = util.BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'], factory = factory)
 c['builders'] = [builder]
 
 # NOTIFIER
@@ -159,4 +159,4 @@ ngm3_mn = reporters.MailNotifier(
     useTls=True
 )
 
-c['status'] = [ngm3_mn]
+c['services'] = [ngm3_mn]

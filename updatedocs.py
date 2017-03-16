@@ -101,5 +101,5 @@ for lang in langs:
                                       descriptionDone=["updated", lang + " documentation"],
                                       workdir="build"))
 
-builder = util.BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'], factory = factory)
 c['builders'].append(builder)

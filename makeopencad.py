@@ -112,6 +112,6 @@ factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, 
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-builder_debdev = util.BuilderConfig(name = project_name + '_debdev', slavenames = ['build-nix'], factory = factory_debdev)
+builder_debdev = util.BuilderConfig(name = project_name + '_debdev', workernames = ['build-nix'], factory = factory_debdev)
 
 c['builders'] = [builder_debdev]

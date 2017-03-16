@@ -82,7 +82,7 @@ factory.addStep(steps.ShellCommand(name='Run behave tests',
                 )
 
 # BUILDER
-ngid_builder = util.BuilderConfig(name=project_name, slavenames=['build-nix'], factory=factory)
+ngid_builder = util.BuilderConfig(name=project_name, workernames=['build-nix'], factory=factory)
 c['builders'] = [ngid_builder]
 
 # NOTIFIER
@@ -97,4 +97,4 @@ ngid_mn = reporters.MailNotifier(fromaddr='buildbot@nextgis.com',
                        useTls=True
                       )
 
-c['status'] = [ngid_mn]
+c['services'] = [ngid_mn]
