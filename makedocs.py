@@ -2,14 +2,6 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-from buildbot.steps.source.git import Git
-from buildbot.steps.python import Sphinx
-from buildbot.steps.transfer import DirectoryUpload
-from buildbot.changes.gitpoller import GitPoller
-from buildbot.schedulers.basic  import SingleBranchScheduler
-from buildbot.config import BuilderConfig
-from buildbot.steps.master import MasterShellCommand
-
 import bbconf
 
 c = {}
@@ -21,7 +13,8 @@ repourl = 'git://github.com/nextgis/docs_ng.git'
 langs = ['ru', 'en']
 
 poller_name = 'docs'
-git_poller = GitPoller(project = poller_name,
+git_project_name = 'nextgis/docs_ng'
+git_poller = changes.GitPoller(project = git_project_name,
                    repourl = repourl,
                    workdir = poller_name + '-workdir',
                    branches = langs,
@@ -35,7 +28,7 @@ for lang in langs:
 
     scheduler = schedulers.SingleBranchScheduler(
                             name=project_name,
-                            change_filter=util.ChangeFilter(project = poller_name,
+                            change_filter=util.ChangeFilter(project = git_project_name,
                                                             branch=lang),
                             treeStableTimer=5*60,
                             builderNames=[project_name])
@@ -78,12 +71,12 @@ for lang in langs:
                                       description=["make", "pdf for NextGIS forest inspector"],
                                       workdir="build/source/docs_forestinspector"))
     # 3. build html
-    factory.addStep(Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
+    factory.addStep(steps.Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
     # 4. upload to ftp
     factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
                                        description=["sync", "to web server"]))
 
-    builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+    builder = util.BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
     c['builders'].append(builder)
 
 c['schedulers'].append(schedulers.ForceScheduler(

@@ -20,7 +20,7 @@ repos_m = [
     'docs_howto',
 ]
 
-main_repourl = 'git://github.com/nextgis/docs_ng.git'
+main_repourl = 'git@github.com:nextgis/docs_ng.git'
 
 langs = ['ru', 'en']
 
@@ -73,7 +73,7 @@ c['schedulers'].append(scheduler)
 
 factory = util.BuildFactory()
 
-factory.addStep(steps.Git(repourl=main_repourl, mode='incremental', submodules=True))
+# factory.addStep(steps.Git(repourl=main_repourl, mode='incremental', submodules=True))
 factory.addStep(steps.ShellCommand(command=["git", "config", "user.name", bbconf.git_user_name],
                                   description=["set", "git config username"],
                                   descriptionDone=["set", "git config username"],
