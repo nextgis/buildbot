@@ -40,6 +40,13 @@ for lang in langs:
     factory = util.BuildFactory()
     # 1. check out the source
     factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True)) #mode='full', method='clobber'
+
+    # install NGW
+    factory.addStep(steps.ShellCommand(command=["pip", "install", "-e", "./nextgisweb"],
+                                      description=["install", "nextgisweb"],
+                                      descriptionDone=["installed", "nextgisweb"],
+                                      workdir="build/source/docs_ngweb_dev"))
+
     factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"],
                                       description=["make", "javadoc for mobile (android)"],
                                       descriptionDone=["made", "javadoc for mobile (android)"],
