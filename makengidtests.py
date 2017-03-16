@@ -11,7 +11,7 @@ repourl = 'git@github.com:nextgis/nextgisid.git'
 project_name = 'nextgisid'
 git_project_name = 'nextgis/nextgisid'
 
-git_poller = GitPoller(project=git_project_name,
+git_poller = changes.GitPoller(project=git_project_name,
                        repourl=repourl,
                        workdir=project_name + '-workdir',
                        branch='master',
