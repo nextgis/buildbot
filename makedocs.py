@@ -83,7 +83,7 @@ for lang in langs:
     factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
                                        description=["sync", "to web server"]))
 
-    builder = util.BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+    builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'], factory = factory)
     c['builders'].append(builder)
 
 c['schedulers'].append(schedulers.ForceScheduler(
