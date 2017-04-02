@@ -42,7 +42,7 @@ for lang in langs:
     factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True)) #mode='full', method='clobber'
 
     # install NGW
-    factory.addStep(steps.ShellCommand(command=["pip", "install", "-e", "docs_ngweb_dev"],
+    factory.addStep(steps.ShellCommand(command=["pip", "install", "-e", "docs_ngweb_dev", "--upgrade"],
                                       description=["install", "nextgisweb"],
                                       descriptionDone=["installed", "nextgisweb"],
                                       workdir="build/source"))
