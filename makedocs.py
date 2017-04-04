@@ -45,6 +45,10 @@ for lang in langs:
     factory.addStep(steps.ShellCommand(command=["pip", "install", "-e", "docs_ngweb_dev", "--upgrade"],
                                       description=["install", "nextgisweb"],
                                       descriptionDone=["installed", "nextgisweb"],
+                                      haltOnFailure=False, 
+                                      warnOnWarnings=True,
+                                      flunkOnFailure=False, 
+                                      warnOnFailure=True,
                                       workdir="build/source"))
 
     factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"],
