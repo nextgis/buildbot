@@ -39,7 +39,7 @@ for lang in langs:
 
     factory = util.BuildFactory()
     # 1. check out the source
-    factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True)) #mode='full', method='clobber'
+    factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True, clobberOnFailure=True)) #mode='full', method='clobber'
 
     # install NGW
     factory.addStep(steps.ShellCommand(command=["pip", "install", "-e", "docs_ngweb_dev", "--upgrade"],
