@@ -351,7 +351,7 @@ factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-builder_deb = BuilderConfig(name = project_name + '_deb', slavenames = ['build-nix'], factory = factory_deb)
+builder_deb = util.BuilderConfig(name = project_name + '_deb', slavenames = ['build-nix'], factory = factory_deb)
 
 ## development build ###########################################################
 project_verdev = '2.1.4'
@@ -424,6 +424,6 @@ factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_verde
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-builder_debdev = BuilderConfig(name = project_name + '_debdev', slavenames = ['build-nix'], factory = factory_debdev)
+builder_debdev = util.BuilderConfig(name = project_name + '_debdev', slavenames = ['build-nix'], factory = factory_debdev)
 
-c['builders'] = [builder_deb, builder_debdev] # TODO: builder_win, 
+c['builders'] = [builder_deb, builder_debdev] # TODO: builder_win,
