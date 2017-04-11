@@ -23,7 +23,7 @@ scheduler1 = schedulers.SingleBranchScheduler(
                             name=project_name,
                             change_filter=util.ChangeFilter(project = git_project_name, branch="master"),
                             treeStableTimer=1*60,
-                            builderNames=[project_name + "_win", project_name + "_deb"])
+                            builderNames=[project_name + "_deb"]) # TODO: project_name + "_win",
 scheduler2 = schedulers.SingleBranchScheduler(
                             name=project_name + "_dev",
                             change_filter=util.ChangeFilter(project = git_project_name, branch="dev"),
