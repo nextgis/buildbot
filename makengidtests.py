@@ -1,36 +1,36 @@
 # -*- python -*-
 # ex: set syntax=python:
-from buildbot.changes.gitpoller import GitPoller
-from buildbot.config import BuilderConfig
+
 from buildbot.plugins import *
-from buildbot.status.mail import MailNotifier
 
 c = {}
 
 # SOURCES
 repourl = 'git@github.com:nextgis/nextgisid.git'
 
-git_poller = GitPoller(project='make_ngid_tests',
+project_name = 'nextgisid'
+git_project_name = 'nextgis/nextgisid'
+
+git_poller = changes.GitPoller(project=git_project_name,
                        repourl=repourl,
-                       workdir='ngid_tests',
+                       workdir=project_name + '-workdir',
                        branch='master',
                        pollinterval=3600, )
 c['change_source'] = [git_poller]
 
 # SCHEDULERS
 scheduler = schedulers.SingleBranchScheduler(
-    name="make_ngid_tests",
-    change_filter=util.ChangeFilter(project='make_ngid_tests'),
+    name=project_name,
+    change_filter=util.ChangeFilter(project=git_project_name),
     treeStableTimer=5 * 60,
-    builderNames=["make_ngid_tests_builder"])
+    builderNames=[project_name])
 
 force_scheduler = schedulers.ForceScheduler(
-    name="make_ngid_tests_force",
-    builderNames=["make_ngid_tests_builder"],
+    name=project_name + "_force",
+    builderNames=[project_name],
 )
 
 c['schedulers'] = [scheduler, force_scheduler]
-
 
 # BUILD FACTORY
 factory = util.BuildFactory()
@@ -82,13 +82,13 @@ factory.addStep(steps.ShellCommand(name='Run behave tests',
                 )
 
 # BUILDER
-ngid_builder = BuilderConfig(name='make_ngid_tests_builder', slavenames=['build-nix'], factory=factory)
+ngid_builder = util.BuilderConfig(name=project_name, workernames=['build-nix'], factory=factory)
 c['builders'] = [ngid_builder]
 
 # NOTIFIER
 import bbconf
 
-ngid_mn = MailNotifier(fromaddr='buildbot@nextgis.com',
+ngid_mn = reporters.MailNotifier(fromaddr='buildbot@nextgis.com',
                        sendToInterestedUsers=True,
                        builders=[ngid_builder.name],
                        mode=('all'),
@@ -97,4 +97,4 @@ ngid_mn = MailNotifier(fromaddr='buildbot@nextgis.com',
                        useTls=True
                       )
 
-c['status'] = [ngid_mn]
+c['services'] = [ngid_mn]

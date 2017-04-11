@@ -43,28 +43,26 @@ factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True))
 factory.addStep(steps.ShellCommand(command=['chmod', '+x', 'gradlew'],
                                  name='fix premissions',
                                  description=["fix", "permissions"],
-                                 descriptionDone=["fixed", "permissions"], haltOnFailure=True))                                 
-factory.addStep(steps.RemoveDirectory(dir="build/app/build/outputs/apk"))                                 
+                                 descriptionDone=["fixed", "permissions"], haltOnFailure=True))
+factory.addStep(steps.RemoveDirectory(dir="build/app/build/outputs/apk"))
 factory.addStep(steps.ShellCommand(command=["/bin/bash", "gradlew", "assembleRelease"],
                                             name='create apk' ,
                                             description=["prepare", "environment for build"],
                                             descriptionDone=["prepared", "environment for build"],
                                             env={'ANDROID_HOME': '/opt/android-sdk-linux'}))
-factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'simple', '-f', '.', '-o', 'app/build/outputs/apk/git.log'], 
+factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'simple', '-f', '.', '-o', 'app/build/outputs/apk/git.log'],
                                  name='log last comments',
                                  description=["log", "last comments"],
-                                 descriptionDone=["logged", "last comments"], haltOnFailure=True))  
-# Simlink is needed from testfairy-upload-android.sh to virtual env/bin
-# ln -s /full/path/to/testfairy-upload-android.sh env/bin/
-factory.addStep(steps.ShellCommand(command=['/bin/bash', 'testfairy-upload-android.sh', 'app/build/outputs/apk'], 
+                                 descriptionDone=["logged", "last comments"], haltOnFailure=True))
+factory.addStep(steps.ShellCommand(command=['/bin/bash', 'testfairy-upload-android.sh', 'app/build/outputs/apk'],
                                  description=["upload", "testfairy"],
-                                 descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))  
-factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'store', '-f', '.'], 
+                                 descriptionDone=["uploaded", "testfairy"], haltOnFailure=True))
+factory.addStep(steps.ShellCommand(command=['dch.py', '-n', 'test', '-a', 'NextGIS Mobile', '-p', 'store', '-f', '.'],
                                  name='log last comments',
                                  description=["log", "last comments"],
-                                 descriptionDone=["logged", "last comments"],           
-                                 haltOnFailure=True))                                                                  
+                                 descriptionDone=["logged", "last comments"],
+                                 haltOnFailure=True))
 
-                                            
-builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
-c['builders'] = [builder]                            
+
+builder = BuilderConfig(name = project_name, workernames = ['build-nix'], factory = factory)
+c['builders'] = [builder]

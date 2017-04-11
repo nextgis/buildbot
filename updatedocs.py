@@ -2,14 +2,6 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-from buildbot.steps.source.git import Git
-from buildbot.steps.python import Sphinx
-from buildbot.steps.transfer import DirectoryUpload
-from buildbot.changes.gitpoller import GitPoller
-from buildbot.schedulers.basic  import SingleBranchScheduler
-from buildbot.config import BuilderConfig
-from buildbot.steps.master import MasterShellCommand
-
 import bbconf
 
 c = {}
@@ -17,7 +9,6 @@ c['change_source'] = []
 c['schedulers'] = []
 c['builders'] = []
 
-# 'git://github.com/nextgis/docs_howto.git',
 repos = [
     'docs_ngcom',
     'docs_ngmobile',
@@ -29,14 +20,14 @@ repos_m = [
     'docs_howto',
 ]
 
-main_repourl = 'git://github.com/nextgis/docs_ng.git'
+main_repourl = 'git@github.com:nextgis/docs_ng.git'
 
 langs = ['ru', 'en']
 
 poller_name = 'updatedocs'
 
 for repo in repos:
-    git_poller = GitPoller(project = poller_name + '_' + repo,
+    git_poller = changes.GitPoller(project = poller_name + '/' + repo,
                        repourl = 'git://github.com/nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
                        branches = langs,
@@ -44,21 +35,21 @@ for repo in repos:
     c['change_source'].append(git_poller)
 
 for repo in repos_m:
-    git_poller = GitPoller(project = poller_name + '_' + repo,
+    git_poller = changes.GitPoller(project = poller_name + '/' + repo,
                        repourl = 'git://github.com/nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
                        branches = ['master'],
                        pollinterval = 900,)
     c['change_source'].append(git_poller)
-    
-    
+
+
 project_name = 'updatedocs'
 
 # RU, EN
 for lang in langs:
     scheduler = schedulers.SingleBranchScheduler(
                         name=project_name + '_' + lang,
-                        change_filter=util.ChangeFilter(project_re = poller_name + '_*',
+                        change_filter=util.ChangeFilter(project_re = poller_name + '/*',
                                                         branch=lang),
                         treeStableTimer=2*60,
                         builderNames=[project_name])
@@ -67,12 +58,12 @@ for lang in langs:
 # Master
 scheduler = schedulers.SingleBranchScheduler(
                     name=project_name + '_master',
-                    change_filter=util.ChangeFilter(project_re = poller_name + '_*',
+                    change_filter=util.ChangeFilter(project_re = poller_name + '/*',
                                                     branch='master'),
                     treeStableTimer=2*60,
                     builderNames=[project_name])
 
-c['schedulers'].append(scheduler)    
+c['schedulers'].append(scheduler)
 # c['schedulers'].append(schedulers.ForceScheduler(
 #                             name=project_name + "_force",
 #                             builderNames=[project_name],
@@ -110,5 +101,5 @@ for lang in langs:
                                       descriptionDone=["updated", lang + " documentation"],
                                       workdir="build"))
 
-builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'], factory = factory)
 c['builders'].append(builder)

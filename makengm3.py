@@ -2,22 +2,13 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-from buildbot.steps.source.git import Git
-from buildbot.steps.python import Sphinx
-from buildbot.steps.transfer import DirectoryUpload
-from buildbot.changes.gitpoller import GitPoller
-from buildbot.schedulers.basic  import SingleBranchScheduler
-from buildbot.config import BuilderConfig
-from buildbot.steps.master import MasterShellCommand
-from buildbot.status.mail import MailNotifier
-
 import bbconf
 
 c = {}
 
-
 repourl = 'git://github.com/nextgis/android_nextgis_mobile.git'
 project_name = 'ngm3'
+git_project_name = 'nextgis/android_nextgis_mobile'
 apk_ver = '0.5'
 apk_file_name_unsigned = 'ngmobile3-' + apk_ver + '.apk'
 apk_file_name_signed = 'ngmobile3-' + apk_ver + '-release.apk'
@@ -31,8 +22,8 @@ android_build_tools = android_home + '/build-tools/' + android_build_tools_versi
 myftp = 'ftp://192.168.255.51/'
 
 
-git_poller = GitPoller(
-    project = project_name,
+git_poller = changes.GitPoller(
+    project = git_project_name,
     repourl = repourl,
     workdir = project_name + '-workdir',
     branch = 'master',
@@ -42,7 +33,7 @@ c['change_source'] = [git_poller]
 
 scheduler = schedulers.SingleBranchScheduler(
     name=project_name,
-    change_filter=util.ChangeFilter(project = project_name),
+    change_filter=util.ChangeFilter(project = git_project_name),
     treeStableTimer=2*60,
     builderNames=[project_name]
 )
@@ -154,11 +145,11 @@ factory.addStep(steps.ShellCommand(
 ))
 
 
-builder = BuilderConfig(name = project_name, slavenames = ['build-nix'], factory = factory)
+builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'], factory = factory)
 c['builders'] = [builder]
 
 # NOTIFIER
-ngm3_mn = MailNotifier(
+ngm3_mn = reporters.MailNotifier(
     fromaddr='buildbot@nextgis.com',
     sendToInterestedUsers=True,
     builders=[builder.name],
@@ -168,4 +159,4 @@ ngm3_mn = MailNotifier(
     useTls=True
 )
 
-c['status'] = [ngm3_mn]
+c['services'] = [ngm3_mn]

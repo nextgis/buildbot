@@ -3,17 +3,6 @@
 # opencad developer build into nextgis dev ppa
 
 from buildbot.plugins import *
-from buildbot.steps.source.git import Git
-from buildbot.steps.python import Sphinx
-from buildbot.steps.transfer import FileUpload
-from buildbot.steps.transfer import DirectoryUpload
-from buildbot.changes.gitpoller import GitPoller
-from buildbot.schedulers.basic  import SingleBranchScheduler
-from buildbot.config import BuilderConfig
-from buildbot.steps.master import MasterShellCommand
-from buildbot.steps.shell import WithProperties
-
-import bbconf
 
 c = {}
 
@@ -21,8 +10,9 @@ repourl = 'git://github.com/nextgis-borsch/lib_opencad.git'
 project_ver = '0.3.2'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'opencad'
+git_project_name = 'nextgis-borsch/lib_opencad'
 
-git_poller = GitPoller(project = project_name,
+git_poller = changes.GitPoller(project = git_project_name,
                        repourl = repourl,
                        workdir = project_name + '-workdir',
                        branch = 'master', #TODO: dev
@@ -31,7 +21,7 @@ c['change_source'] = [git_poller]
 
 scheduler = schedulers.SingleBranchScheduler(
                             name=project_name,
-                            change_filter=util.ChangeFilter(project = project_name),
+                            change_filter=util.ChangeFilter(project = git_project_name),
                             treeStableTimer=1*60,
                             builderNames=[project_name + "_debdev"])
 c['schedulers'] = [scheduler]
@@ -126,6 +116,6 @@ factory_debdev.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, 
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-builder_debdev = BuilderConfig(name = project_name + '_debdev', slavenames = ['build-nix'], factory = factory_debdev)
+builder_debdev = util.BuilderConfig(name = project_name + '_debdev', workernames = ['build-nix'], factory = factory_debdev)
 
 c['builders'] = [builder_debdev]
