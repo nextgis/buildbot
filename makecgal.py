@@ -34,7 +34,7 @@ code_dir = 'build/' + code_dir_last
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial', 'yakkety']
+ubuntu_distributions = ['trusty', 'xenial', 'zesty']
 # 1. check out the source
 deb_name = 'cgal'
 deb_dir = 'build/cgal_deb'
