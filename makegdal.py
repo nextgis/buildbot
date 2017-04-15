@@ -279,7 +279,7 @@ code_dir = 'build/' + code_dir_last
 
 ## release build ###############################################################
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial', 'yakkety']
+ubuntu_distributions = ['trusty', 'xenial', 'zesty']
 # check out the source
 deb_name = 'gdal'
 deb_dir = 'build/gdal_deb'
