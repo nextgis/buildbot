@@ -7,7 +7,7 @@ from buildbot.plugins import *
 c = {}
 
 repourl = 'git://github.com/nextgis-borsch/lib_gdal.git'
-project_ver = '2.1.3'
+project_ver = '2.2.0'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'gdal'
 git_project_name = 'nextgis-borsch/lib_gdal'
