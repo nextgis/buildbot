@@ -97,7 +97,7 @@ for ubuntu_distribution in ubuntu_distributions:
                                         haltOnFailure=True))
     # upload to launchpad
     factory_debdev.addStep(steps.ShellCommand(command=['/bin/bash','-c',
-                                        'dput ppa:nextgis/dev ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'],
+                                        'dput ppa:nextgis/ppa ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'],
                                         name='dput for ' + ubuntu_distribution,
                                         description=["dput", "package"],
                                         descriptionDone=["dputed", "package"],
