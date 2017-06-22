@@ -115,7 +115,7 @@ for ubuntu_distribution, postgresql_version in (zip(ubuntu_distributions, postgr
                                         haltOnFailure=True)) 
     # delete code_dir + "/debian"
     factory_deb.addStep(steps.RemoveDirectory(dir=code_dir + "/debian", 
-                                              name="remove debian folder for " + postgresql_versions, 
+                                              name="remove debian folder for " + postgresql_version, 
                                               haltOnFailure=True))
     
 # store changelog
