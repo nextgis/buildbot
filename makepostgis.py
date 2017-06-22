@@ -17,7 +17,7 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis-borsch/postgis.git'
-project_ver = '2.2.2'
+project_ver = '2.3.2'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'postgis'
 
@@ -45,8 +45,8 @@ code_dir = 'build/' + code_dir_last
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial']
-postgis_versions = ['9.3', '9.5']
+ubuntu_distributions = ['trusty', 'xenial', 'zesty']
+postgresql_versions = ['9.3', '9.5', '9.6']
 # 1. check out the source
 deb_dir = 'build/' + deb_name + '_deb'
 deb_email = 'dmitry.baryshnikov@nextgis.com'
@@ -71,12 +71,12 @@ factory_deb.addStep(steps.ShellCommand(command=["dch.py", '-n', project_ver, '-a
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
 
-for ubuntu_distribution, postgis_version in (zip(ubuntu_distributions, postgis_versions)):	 
+for ubuntu_distribution, postgresql_version in (zip(ubuntu_distributions, postgresql_versions)):	 
                                           
     # copy lib_gdal2 -> debian
-    factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/pg" + postgis_version + "/debian", 
+    factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/pg" + postgresql_version + "/debian", 
                                             dest=code_dir + "/debian", 
-                                            name="add debian folder for " + postgis_version, 
+                                            name="add debian folder for " + postgresql_version, 
                                             description=["copy", "debian folder"],
                                             descriptionDone=["copied", "debian folder"],
                                             haltOnFailure=True))
@@ -115,7 +115,7 @@ for ubuntu_distribution, postgis_version in (zip(ubuntu_distributions, postgis_v
                                         haltOnFailure=True)) 
     # delete code_dir + "/debian"
     factory_deb.addStep(steps.RemoveDirectory(dir=code_dir + "/debian", 
-                                              name="remove debian folder for " + postgis_version, 
+                                              name="remove debian folder for " + postgresql_versions, 
                                               haltOnFailure=True))
     
 # store changelog
