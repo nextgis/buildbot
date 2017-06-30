@@ -7,7 +7,7 @@ from buildbot.plugins import *
 c = {}
 
 repourl = 'git://github.com/nextgis-borsch/lib_opencad.git'
-project_ver = '0.3.2'
+project_ver = '0.3.3'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'opencad'
 git_project_name = 'nextgis-borsch/lib_opencad'
