@@ -7,7 +7,7 @@ from buildbot.plugins import *
 c = {}
 
 repourl = 'git://github.com/nextgis-borsch/lib_gdal.git'
-project_ver = '2.2.0'
+project_ver = '2.2.1'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'gdal'
 git_project_name = 'nextgis-borsch/lib_gdal'
@@ -358,7 +358,7 @@ factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a
 builder_deb = util.BuilderConfig(name = project_name + '_deb', slavenames = ['build-nix'], factory = factory_deb)
 
 ## development build ###########################################################
-project_verdev = '2.1.4'
+project_verdev = '2.3.0'
 factory_debdev = util.BuildFactory()
 ubuntu_distributions_dev = ['trusty', 'xenial', 'yakkety']
 # check out the source
