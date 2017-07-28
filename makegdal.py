@@ -358,7 +358,7 @@ factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a
 builder_deb = util.BuilderConfig(name = project_name + '_deb', slavenames = ['build-nix'], factory = factory_deb)
 
 ## development build ###########################################################
-project_verdev = '2.3.2'
+project_verdev = '2.3.3'
 factory_debdev = util.BuildFactory()
 ubuntu_distributions_dev = ['trusty', 'xenial', 'zesty']
 # check out the source
