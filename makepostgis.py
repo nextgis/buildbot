@@ -17,7 +17,7 @@ import bbconf
 c = {}
 
 repourl = 'git://github.com/nextgis-borsch/postgis.git'
-project_ver = '2.3.2'
+project_ver = '2.4'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'postgis'
 
