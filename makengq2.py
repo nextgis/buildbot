@@ -24,7 +24,8 @@ c['schedulers'] = []
 c['schedulers'].append(
     schedulers.ForceScheduler(
         name="%s force" % project_name,
-        builderNames=["makengq2_deb", "makengq2_deb_dev"]
+        # builderNames=["makengq2_deb", "makengq2_deb_dev"]
+        builderNames=["makengq2_deb_dev"]
     )
 )
 
