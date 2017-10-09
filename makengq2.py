@@ -6,8 +6,8 @@ import bbconf
 
 c = {}
 
-ngq_repourl = 'git@github.com:nextgis/NextGIS_QGIS.git'
-ngq_branch = 'ngq-16'
+ngq_repourl = 'https://github.com/nextgis/nextgisqgis.git'
+ngq_branch = 'up_to_2.18'
 project_name = 'ngq2'
 
 c['change_source'] = []
@@ -24,145 +24,18 @@ c['schedulers'] = []
 c['schedulers'].append(
     schedulers.ForceScheduler(
         name="%s force" % project_name,
-        builderNames=["makengq2", "makengq2_deb"]
+        builderNames=["makengq2_deb"]
     )
 )
 
 c['builders'] = []
-
-cmake_config = [
-    '-DWITH_GRASS=FALSE',
-    '-DWITH_GRASS7=FALSE',
-    '-DWITH_DESKTOP=TRUE',
-    '-DWITH_PostgreSQL=TRUE',
-    '-DWITH_BINDINGS=TRUE',
-    '-DWITH_SERVER=FALSE',
-    '-DWITH_SERVER=FALSE',
-    '-DWITH_CUSTOM_WIDGETS=FALSE',
-    '-DWITH_ASTYLE=FALSE',
-    '-DWITH_ICONV_EXTERNAL=TRUE',
-    '-DWITH_ZLIB_EXTERNAL=TRUE',
-    '-DWITH_CURL_EXTERNAL=TRUE',
-    '-DWITH_EXPAT_EXTERNAL=TRUE',
-    '-DWITH_JSONC_EXTERNAL=TRUE',
-    '-DWITH_GDAL_EXTERNAL=TRUE',
-    '-DWITH_JPEG_EXTERNAL=TRUE',
-    '-DWITH_TIFF_EXTERNAL=TRUE',
-    '-DWITH_PROJ4_EXTERNAL=TRUE',
-    '-DWITH_GeoTIFF_EXTERNAL=TRUE',
-    '-DWITH_PNG_EXTERNAL=TRUE',
-    '-DWITH_GEOS_EXTERNAL=TRUE',
-    '-DWITH_Sqlite3_EXTERNAL=TRUE',
-    '-DWITH_Spatialindex_EXTERNAL=TRUE',
-    '-DWITH_Spatialite_EXTERNAL=TRUE',
-    '-DWITH_LibXml2_EXTERNAL=TRUE',
-    '-DWITH_Freexl_EXTERNAL=TRUE',
-    '-DWITH_PostgreSQL_EXTERNAL=TRUE',
-    '-DWITH_GSL_EXTERNAL=TRUE',
-    '-DWITH_OpenSSL=TRUE',
-    '-DWITH_OpenSSL_EXTERNAL=TRUE',
-    '-DENABLE_TESTS=FALSE',
-    '-DWITH_INTERNAL_QWTPOLAR=FALSE',
-    '-DCMAKE_BUILD_TYPE=Release',
-    '-DWITH_PYSPATIALITE=TRUE',
-    '-DWITH_PYTHON=TRUE',
-    '-DGDAL_EXT_CMAKE_OPTIONS=-DENABLE_ECW=ON;-DWITH_ECW_EXTERNAL=TRUE;-DENABLE_MRSID=ON;-DWITH_MRSID_EXTERNAL=TRUE',
-]
-cmake_build = ['--build', '.', '--config', 'release', '--clean-first']
-cmake_pack = ['--build', '.', '--target', 'package', '--config', 'release']
-ftp = 'ftp://192.168.255.1'
-ftp_myng_server = 'ftp://192.168.255.51'
-
-build_env = {
-    'LANG': 'en_US',
-}
-
-# 1. check out the source
-ngq_get_src_bld_step = Git(
-    name='checkout ngq',
-    repourl=ngq_repourl,
-    branch=ngq_branch,
-    mode='incremental',
-    submodules=True,
-    workdir='ngq_src',
-    timeout=1800
-)
-
-# 2. configuration
-ngq_configrate = steps.ShellCommand(
-    command=[
-        "cmake",
-        cmake_config,
-        '-G', 'Visual Studio 12 2013',
-        '-T', 'v120_xp',
-        util.Interpolate('%(prop:workdir)s\\ngq_src')
-    ],
-    name="configure",
-    description=["cmake", "configure for win32"],
-    descriptionDone=["cmake", "configured for win32"],
-    haltOnFailure=False, warnOnWarnings=True,
-    flunkOnFailure=False, warnOnFailure=True,
-    workdir="ngq_build32",
-    env=build_env,
-)
-
-
-# 3. build
-ngq_make = steps.ShellCommand(
-    command=["cmake", cmake_build],
-    name="make",
-    description=["cmake", "make for win32"],
-    descriptionDone=["cmake", "made for win32"],
-    haltOnFailure=True,
-    workdir="ngq_build32",
-    env=build_env,
-)
-
-# 4. make installer
-ngq_make_package = steps.ShellCommand(
-    command=["cmake", cmake_pack],
-    name="make package",
-    description=["cmake", "pack for win32"],
-    descriptionDone=["cmake", "packed for win32"],
-    haltOnFailure=True,
-    workdir="ngq_build32",
-    env=build_env,
-)
-
-# 5. upload package
-
-ngq_upload_package = steps.ShellCommand(
-    command=["call", "ftp_upload.bat", bbconf.ftp_mynextgis_user, ftp_myng_server + '/qgis/'],
-    name="upload to ftp ",
-    description=["upload", "ngq files to ftp"],
-    descriptionDone=["uploaded", "ngq files to ftp"], haltOnFailure=False,
-    workdir="ngq_build32"
-)
-
-ngq_steps = [
-    ngq_get_src_bld_step,
-    ngq_configrate,
-    ngq_configrate,  # hak for borsch
-    ngq_make,
-    ngq_make_package,
-    ngq_upload_package,
-]
-
-ngq_factory = util.BuildFactory(ngq_steps)
-ngq_release_builder = BuilderConfig(
-    name='makengq2',
-    slavenames=['build-ngq2-win7'],
-    factory=ngq_factory
-)
-c['builders'].append(ngq_release_builder)
-
 
 # deb package --------------------------------------------------
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 
 factory_deb = util.BuildFactory()
 factory_deb_dev = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial', 'zesty']
+ubuntu_distributions = ['trusty', 'xenial', 'yakkety']
 
 deb_name = 'ngqgis'
 deb_dir = 'build/ngq_deb'
@@ -175,7 +48,7 @@ deb_fullname = 'Alexander Lisovenko'
 env_vars = {'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname}
 
 #project_ver = util.Interpolate('16.3.1-%(prop:buildnumber)s')
-project_ver = util.Interpolate('16.8.1')
+project_ver = util.Interpolate('17.10.0')
 
 step_ppa_checkout = steps.Git(
     repourl=deb_repourl,
@@ -348,4 +221,4 @@ ngq_deb_dev_builder = BuilderConfig(
 )
 
 c['builders'].append(ngq_deb_release_builder)
-# c['builders'].append(ngq_deb_dev_builder)
+c['builders'].append(ngq_deb_dev_builder)
