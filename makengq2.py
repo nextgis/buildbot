@@ -24,7 +24,7 @@ c['schedulers'] = []
 c['schedulers'].append(
     schedulers.ForceScheduler(
         name="%s force" % project_name,
-        builderNames=["makengq2_deb"]
+        builderNames=["makengq2_deb", "makengq2_deb_dev"]
     )
 )
 
@@ -220,5 +220,5 @@ ngq_deb_dev_builder = BuilderConfig(
     factory=factory_deb_dev
 )
 
-c['builders'].append(ngq_deb_release_builder)
+# c['builders'].append(ngq_deb_release_builder)
 c['builders'].append(ngq_deb_dev_builder)
