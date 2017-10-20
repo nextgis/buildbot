@@ -53,13 +53,13 @@ for lang in langs:
 #                                      workdir="build/source"))
 
     # 2. build pdf for each doc except dev
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Mobile"],
                                       workdir="build/source/docs_ngmobile"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '--interaction=nonstopmode'],
                                       description=["make", "pdf for NextGIS Web"],
                                       workdir="build/source/docs_ngweb"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex --interaction=nonstopmode'],
                                       description=["make", "pdf for NextGIS Manager"],
                                       workdir="build/source/docs_ngmanager"))
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
