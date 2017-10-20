@@ -56,25 +56,25 @@ for lang in langs:
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Mobile"],
                                       workdir="build/source/docs_ngmobile"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Web"],
                                       workdir="build/source/docs_ngweb"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex --interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Manager"],
                                       workdir="build/source/docs_ngmanager"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS FormBuilder"],
                                       workdir="build/source/docs_formbuilder"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Bio"],
                                       workdir="build/source/docs_ngbio"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS QGIS"],
                                       workdir="build/source/docs_ngqgis"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS open geodata portal"],
                                       workdir="build/source/docs_ogportal"))
-    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS', '-xelatex', '--interaction=nonstopmode'],
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS forest inspector"],
                                       workdir="build/source/docs_forestinspector"))
     
