@@ -85,6 +85,11 @@ for lang in langs:
                                       descriptionDone=["made", "javadoc for mobile (android)"],
                                       workdir="build/source/ngmobile_dev"))
     
+    factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
+                                      description=["make", "swiftdoc for mobile (ios)"],
+                                      descriptionDone=["made", "swiftdoc for mobile (ios)"],
+                                      workdir="build/source/ngmobile_dev"))
+    
     # 3. build html
     factory.addStep(steps.Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
     # 4. upload to ftp
