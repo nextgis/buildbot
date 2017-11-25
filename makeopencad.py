@@ -42,7 +42,7 @@ code_dir = 'build/' + code_dir_last
 ## release build ###############################################################
 # 1. check out the source
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial', 'zesty', 'artful']
+ubuntu_distributions = ['trusty', 'xenial', 'artful']
 # 1. check out the source
 deb_dir = 'build/' + deb_name + '_deb'
 deb_email = 'dmitry.baryshnikov@nextgis.com'
@@ -127,7 +127,7 @@ builder_deb = util.BuilderConfig(name = project_name + '_deb', workernames = ['b
 ## development build ###########################################################
 project_verdev = '2.3.3'
 factory_debdev = util.BuildFactory()
-ubuntu_distributions_dev = ['trusty', 'xenial', 'zesty', 'artful']
+ubuntu_distributions_dev = ['trusty', 'xenial', 'artful']
 # check out the source
 debdev_dir = 'build/' + deb_name + '_debdev'
 
