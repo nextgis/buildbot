@@ -4,7 +4,7 @@
 # Purpose:  prepare changelog by input values
 # Author:   Dmitry Barishnikov, dmitry.baryshnikov@nextgis.ru
 ################################################################################
-# Copyright (C) 2016, NextGIS <info@nextgis.com>
+# Copyright (C) 2016-2017, NextGIS <info@nextgis.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
