@@ -73,7 +73,7 @@ if __name__ == "__main__":
     parser.add_argument('-n', '--number', help='package number')
     parser.add_argument('-o', '--origin', help='inited changelog file or file to save changes')
     parser.add_argument('-f', '--folder', help='destination git folder')
-    parser.add_argument('-d', '--distro', help='ubuntu distribution', choices=['precise', 'trusty', 'wily', 'xenial', 'yakkety', 'zesty'])
+    parser.add_argument('-d', '--distro', help='ubuntu distribution', choices=['precise', 'trusty', 'wily', 'xenial', 'yakkety', 'zesty', 'artful'])
     parser.add_argument('-p', '--process', help='operation fill or store', choices=['fill', 'store', 'simple', 'tar'], required=True)
     parser.add_argument('-a', '--app', help='application name')
 
