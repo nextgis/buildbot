@@ -33,7 +33,7 @@ code_dir = 'build/' + code_dir_last
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial', 'zesty', 'artful']
+ubuntu_distributions = ['trusty', 'xenial', 'artful']
 # 1. check out the source
 deb_name = 'geos'
 deb_dir = 'build/geos_deb'
