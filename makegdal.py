@@ -279,7 +279,7 @@ code_dir = 'build/' + code_dir_last
 
 ## release build ###############################################################
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial', 'zesty']
+ubuntu_distributions = ['trusty', 'xenial', 'artful']
 # check out the source
 deb_name = 'gdal'
 deb_dir = 'build/gdal_deb'
@@ -360,7 +360,7 @@ builder_deb = util.BuilderConfig(name = project_name + '_deb', slavenames = ['bu
 ## development build ###########################################################
 project_verdev = '2.3.4'
 factory_debdev = util.BuildFactory()
-ubuntu_distributions_dev = ['trusty', 'xenial', 'zesty']
+ubuntu_distributions_dev = ['trusty', 'xenial', 'artful']
 # check out the source
 debdev_dir = 'build/gdal_debdev'
 
