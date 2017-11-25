@@ -45,7 +45,7 @@ code_dir = 'build/' + code_dir_last
 
 # 1. check out the source
 factory_deb = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial', 'zesty']
+ubuntu_distributions = ['trusty', 'xenial', 'zesty', 'artful']
 postgresql_versions = ['9.3', '9.5', '9.6']
 # 1. check out the source
 deb_dir = 'build/' + deb_name + '_deb'
