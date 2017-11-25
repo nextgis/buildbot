@@ -36,7 +36,7 @@ deb_repourl = 'git://github.com/nextgis/ppa.git'
 
 factory_deb = util.BuildFactory()
 factory_deb_dev = util.BuildFactory()
-ubuntu_distributions = ['trusty', 'xenial', 'zesty', 'artful']
+ubuntu_distributions = ['trusty', 'xenial', 'artful']
 
 deb_name = 'ngqgis'
 deb_dir = 'build/ngq_deb'
@@ -49,7 +49,7 @@ deb_fullname = 'Alexander Lisovenko'
 env_vars = {'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname}
 
 #project_ver = util.Interpolate('16.3.1-%(prop:buildnumber)s')
-project_ver = util.Interpolate('17.10.0')
+project_ver = util.Interpolate('17.11.0')
 
 step_ppa_checkout = steps.Git(
     repourl=deb_repourl,
