@@ -6,7 +6,7 @@ from buildbot.plugins import *
 
 c = {}
 
-repourl = 'git@github.com:nextgis/nextgisutilities.git'
+repourl = 'git://github.com/nextgis/nextgisutilities.git'
 project_ver = '0.1.0'
 deb_repourl = 'git://github.com/nextgis/ppa.git'
 project_name = 'nextgisutilities'
