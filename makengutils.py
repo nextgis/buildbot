@@ -1,6 +1,6 @@
 # -*- python -*-
 # ex: set syntax=python:
-# opencad developer build into nextgis dev ppa
+# nextgisutilities build into nextgis ppa
 
 from buildbot.plugins import *
 
@@ -16,7 +16,7 @@ git_poller = changes.GitPoller(project = git_project_name,
                        repourl = repourl,
                        workdir = project_name + '-workdir',
                        branches = ['master'],
-                       pollinterval = 7200,)
+                       pollinterval = 1800,)
 c['change_source'] = [git_poller]
 
 scheduler1 = schedulers.SingleBranchScheduler(
