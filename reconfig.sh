@@ -1,11 +1,11 @@
 #!/bin/sh
 
-while inotifywait -q -e modify /opt/buildbot/master/master.cfg; do
+inotifywait -q -m -e attrib /opt/buildbot/master/master.cfg | while read events; do
     sleep 30
     /opt/buildbot/sandbox/bin/buildbot restart master
 done &
 
-while inotifywait -q -e modify /opt/buildbot/master/*.py; do 
+inotifywait -q -m -e attrib /opt/buildbot/master/*.py | while read events; do 
     sleep 30
     /opt/buildbot/sandbox/bin/buildbot restart master
 done &
