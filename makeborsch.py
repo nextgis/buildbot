@@ -13,31 +13,31 @@ repositories = [
 
 for repository in repositories:
     project_name = repository['repo']
-    repourl = 'git://github.com/nextgis-borsch/lib_{}.git'.formar(project_name)
+    repourl = 'git://github.com/nextgis-borsch/lib_{}.git'.format(project_name)
     git_project_name = 'nextgis-borsch/lib_{}'.format(project_name)
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
                            workdir = project_name + '-workdir',
                            branches = ['master', 'dev'],
                            pollinterval = 600,) # TODO: change 10min on 2 hours (7200)
-    c['change_source'].append(git_poller)
+    c['change_source'] = [git_poller]
 
     scheduler1 = schedulers.SingleBranchScheduler(
                                 name=project_name,
                                 change_filter=util.ChangeFilter(project = git_project_name, branch="master"),
                                 treeStableTimer=1*60,
                                 builderNames=[project_name + "_win"]) # TODO: project_name + "_mac",
-    c['schedulers'].append(scheduler1)
+    c['schedulers'] = [scheduler1]
     forceScheduler = schedulers.ForceScheduler(
                                 name=project_name + "_force",
-                                builderNames=[project_name + "_win"])) # TODO: project_name + "_mac",
+                                builderNames=[project_name + "_win"]) # TODO: project_name + "_mac",
     c['schedulers'].append(forceScheduler)
 
     code_dir_last = '{}_code'.format(project_name)
     code_dir = 'build/' + code_dir_last
 
     run_args = repository['args']
-    run_args.expand('-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release', '-DSKIP_DEFAULTS=ON')
+    run_args.extend(['-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release', '-DSKIP_DEFAULTS=ON'])
     cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
     if sys.platform == 'darwin':
@@ -121,6 +121,6 @@ for repository in repositories:
 
     # Upload archives
 
-    builder_win = BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
+    builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
-    c['builders'].append(builder_win)
+    c['builders'] = [builder_win]
