@@ -11,6 +11,9 @@ repositories = [
     {'repo':'z', 'args':[]},
 ]
 
+max_os_min_version = '10.11'
+mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
+
 for repository in repositories:
     project_name = repository['repo']
     repourl = 'git://github.com/nextgis-borsch/lib_{}.git'.format(project_name)
@@ -18,7 +21,7 @@ for repository in repositories:
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
                            workdir = project_name + '-workdir',
-                           branches = ['master', 'dev'],
+                           branches = ['master'],
                            pollinterval = 600,) # TODO: change 10min on 2 hours (7200)
     c['change_source'] = [git_poller]
 
@@ -60,7 +63,7 @@ for repository in repositories:
 
     # configure view cmake
     factory_win.addStep(steps.ShellCommand(command=["cmake", run_args, '-G', 'Visual Studio 15 2017', '../'],
-                                           name="configure",
+                                           name="configure 32 bit",
                                            description=["cmake", "configure for win32"],
                                            descriptionDone=["cmake", "configured for win32"],
                                            haltOnFailure=True,
@@ -69,7 +72,7 @@ for repository in repositories:
 
     # make
     factory_win.addStep(steps.ShellCommand(command=cmake_build,
-                                           name="make",
+                                           name="make 32 bit",
                                            description=["cmake", "make for win32"],
                                            descriptionDone=["cmake", "made for win32"],
                                            haltOnFailure=True,
@@ -78,7 +81,7 @@ for repository in repositories:
 
     # make tests
     factory_win.addStep(steps.ShellCommand(command=['ctest', '.'],
-                                           name="make",
+                                           name="test 32 bit",
                                            description=["test", "for win32"],
                                            descriptionDone=["tested", "for win32"],
                                            haltOnFailure=True,
@@ -94,7 +97,7 @@ for repository in repositories:
 
     # configure view cmake
     factory_win.addStep(steps.ShellCommand(command=["cmake", run_args, '-G', 'Visual Studio 15 2017 Win64', '../'],
-                                           name="configure step",
+                                           name="configure 64 bit",
                                            description=["cmake", "configure for win64"],
                                            descriptionDone=["cmake", "configured for win64"],
                                            haltOnFailure=True,
@@ -103,7 +106,7 @@ for repository in repositories:
 
     # make
     factory_win.addStep(steps.ShellCommand(command=cmake_build,
-                                       name="make",
+                                       name="make 64 bit",
                                        description=["cmake", "make for win64"],
                                        descriptionDone=["cmake", "made for win64"], haltOnFailure=True,
                                        workdir=build_dir,
@@ -111,7 +114,7 @@ for repository in repositories:
 
     # make tests
     factory_win.addStep(steps.ShellCommand(command=['ctest', '.'],
-                                           name="make",
+                                           name="test 64 bit",
                                            description=["test", "for win64"],
                                            descriptionDone=["tested", "for win64"],
                                            haltOnFailure=True,
