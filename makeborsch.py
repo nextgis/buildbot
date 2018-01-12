@@ -59,7 +59,8 @@ for repository in repositories:
     build_dir = code_dir + "/build32"
     env = {'PYTHONPATH': 'C:\\Python27_32', 'LANG': 'en_US'}
     # make build dir
-    factory_win.addStep(steps.MakeDirectory(dir=build_dir))
+    factory_win.addStep(steps.MakeDirectory(dir=build_dir,
+                                            name="Make directory 32 bit"))
 
     # configure view cmake
     factory_win.addStep(steps.ShellCommand(command=["cmake", run_args, '-G', 'Visual Studio 15 2017', '../'],
@@ -93,7 +94,8 @@ for repository in repositories:
     build_dir = code_dir + "/build64"
     env = {'PYTHONPATH': 'C:\\Python27', 'LANG': 'en_US'}
     # make build dir
-    factory_win.addStep(steps.MakeDirectory(dir=build_dir))
+    factory_win.addStep(steps.MakeDirectory(dir=build_dir,
+                                            name="Make directory 64 bit"))
 
     # configure view cmake
     factory_win.addStep(steps.ShellCommand(command=["cmake", run_args, '-G', 'Visual Studio 15 2017 Win64', '../'],
