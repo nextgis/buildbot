@@ -2,7 +2,7 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-import sys, os
+import sys
 import multiprocessing
 import bbconf
 
@@ -16,6 +16,7 @@ max_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/github_release.py'
+script_name = 'github_release.py'
 username = 'bishopgis'
 userkey = bbconf.githubAPIToken
 
@@ -27,7 +28,7 @@ for repository in repositories:
                            repourl = repourl,
                            workdir = project_name + '-workdir',
                            branches = ['master'],
-                           pollinterval = 600,) # TODO: change 10min on 2 hours (7200)
+                           pollinterval = 600,) # TODO: change 10min to 2 hours (7200)
     c['change_source'] = [git_poller]
 
     scheduler1 = schedulers.SingleBranchScheduler(
@@ -59,13 +60,12 @@ for repository in repositories:
 
     factory_win = util.BuildFactory()
     factory_win.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
-    factory_win.addStep(steps.ShellCommand(command=["curl", release_script_src],
+    factory_win.addStep(steps.ShellCommand(command=["curl", release_script_src, '-o', script_name, '-s'],
                                            name="download script",
                                            description=["curl", "download script"],
                                            descriptionDone=["curl", "downloaded script"],
                                            haltOnFailure=True,
-                                           workdir=code_dir)
-    script_path = os.path.join(code_dir, 'github_release.py')
+                                           workdir=code_dir))
 
     # Build 32bit ##############################################################
     build_dir = code_dir + "/build32"
@@ -110,12 +110,12 @@ for repository in repositories:
                                            workdir=build_dir,
                                            env=env))
     # send package to github
-    factory_win.addStep(steps.ShellCommand(command=['python', script_path, '--login', username, '--key', userkey, '--repo_path', code_dir, '--build_path', build_dir],
+    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--repo_path', code_dir, '--build_path', build_dir],
                                            name="send 32 bit package to github",
                                            description=["send", "32 bit package to github"],
                                            descriptionDone=["sent", "32 bit package to github"],
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=code_dir))
 
     # Build 64bit ##############################################################
     build_dir = code_dir + "/build64"
@@ -160,12 +160,12 @@ for repository in repositories:
                                            workdir=build_dir,
                                            env=env))
     # send package to github
-    factory_win.addStep(steps.ShellCommand(command=['python', script_path, '--login', username, '--key', userkey, '--repo_path', code_dir, '--build_path', build_dir],
+    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--repo_path', code_dir, '--build_path', build_dir],
                                            name="send 64 bit package to github",
                                            description=["send", "64 bit package to github"],
                                            descriptionDone=["sent", "64 bit package to github"],
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=code_dir))
 
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
