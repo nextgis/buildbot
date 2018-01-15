@@ -44,7 +44,7 @@ for repository in repositories:
     c['schedulers'].append(forceScheduler)
 
     code_dir_last = '{}_code'.format(project_name)
-    code_dir = os.path.join(os.getcwd(), 'build', code_dir_last)
+    code_dir = os.path.join('build', code_dir_last)
 
     run_args = repository['args']
     run_args.extend(['-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release', '-DSKIP_DEFAULTS=ON'])
@@ -111,7 +111,7 @@ for repository in repositories:
                                            workdir=build_dir,
                                            env=env))
     # send package to github
-    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--repo_path', code_dir, '--build_path', build_dir],
+    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--build_path', build_dir],
                                            name="send 32 bit package to github",
                                            description=["send", "32 bit package to github"],
                                            descriptionDone=["sent", "32 bit package to github"],
@@ -161,7 +161,7 @@ for repository in repositories:
                                            workdir=build_dir,
                                            env=env))
     # send package to github
-    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--repo_path', code_dir, '--build_path', build_dir],
+    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--build_path', build_dir],
                                            name="send 64 bit package to github",
                                            description=["send", "64 bit package to github"],
                                            descriptionDone=["sent", "64 bit package to github"],
