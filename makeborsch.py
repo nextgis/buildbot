@@ -56,16 +56,18 @@ for repository in repositories:
     cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
     # Windows specific
-    win_run_args = run_args
-    win_cmake_build = cmake_build
+    win_run_args = list(run_args)
+    win_cmake_build = list(cmake_build)
     win_run_args.append('-DBUILD_SHARED_LIBS=TRUE')
     win_cmake_build.append('/m:' + str(multiprocessing.cpu_count()))
 
     # Mac OS X specific
-    mac_run_args = run_args
-    mac_cmake_build = cmake_build
+    mac_run_args = list(run_args)
+    mac_cmake_build = list(cmake_build)
     mac_run_args.extend(['-DOSX_FRAMEWORK=ON', '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + max_os_min_version])
     mac_cmake_build.append('-j' + str(multiprocessing.cpu_count()))
+
+    ############################################################################
 
     factory_win = util.BuildFactory()
     factory_win.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
