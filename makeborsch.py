@@ -10,7 +10,8 @@ import bbconf
 c = {}
 
 repositories = [
-    {'repo':'z', 'args':[]},
+    {'repo':'z', 'args':[], 'requirements':[]},
+    {'repo':'openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':['perl']}, # TODO: Install additional programs or requirements
 ]
 
 max_os_min_version = '10.11'
@@ -50,14 +51,17 @@ for repository in repositories:
     run_args.extend(['-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release', '-DSKIP_DEFAULTS=ON'])
     cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
-    if sys.platform == 'darwin':
-        run_args.append('-DOSX_FRAMEWORK=ON')
-        run_args.append('-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk')
-        run_args.append('-DCMAKE_OSX_DEPLOYMENT_TARGET=' + max_os_min_version)
-        cmake_build.append('-j' + str(multiprocessing.cpu_count()))
-    elif sys.platform == 'win32':
-        run_args.append('-DBUILD_SHARED_LIBS=TRUE')
-        cmake_build.append('/m:' + str(multiprocessing.cpu_count()))
+    # Windows specific
+    win_run_args = run_args
+    win_cmake_build = cmake_build
+    win_run_args.append('-DBUILD_SHARED_LIBS=TRUE')
+    win_cmake_build.append('/m:' + str(multiprocessing.cpu_count()))
+
+    # Mac OS X specific
+    mac_run_args = run_args
+    mac_cmake_build = cmake_build
+    mac_run_args.extend(['-DOSX_FRAMEWORK=ON', '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + max_os_min_version])
+    mac_cmake_build.append('-j' + str(multiprocessing.cpu_count()))
 
     factory_win = util.BuildFactory()
     factory_win.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
@@ -77,7 +81,7 @@ for repository in repositories:
                                             name="Make directory 32 bit"))
 
     # configure view cmake
-    factory_win.addStep(steps.ShellCommand(command=["cmake", run_args, '-G', 'Visual Studio 15 2017', '../'],
+    factory_win.addStep(steps.ShellCommand(command=["cmake", win_run_args, '-G', 'Visual Studio 15 2017', '../'],
                                            name="configure 32 bit",
                                            description=["cmake", "configure for win32"],
                                            descriptionDone=["cmake", "configured for win32"],
@@ -86,7 +90,7 @@ for repository in repositories:
                                            env=env))
 
     # make
-    factory_win.addStep(steps.ShellCommand(command=cmake_build,
+    factory_win.addStep(steps.ShellCommand(command=win_cmake_build,
                                            name="make 32 bit",
                                            description=["cmake", "make for win32"],
                                            descriptionDone=["cmake", "made for win32"],
@@ -128,7 +132,7 @@ for repository in repositories:
                                             name="Make directory 64 bit"))
 
     # configure view cmake
-    factory_win.addStep(steps.ShellCommand(command=["cmake", run_args, '-G', 'Visual Studio 15 2017 Win64', '../'],
+    factory_win.addStep(steps.ShellCommand(command=["cmake", win_run_args, '-G', 'Visual Studio 15 2017 Win64', '../'],
                                            name="configure 64 bit",
                                            description=["cmake", "configure for win64"],
                                            descriptionDone=["cmake", "configured for win64"],
@@ -137,7 +141,7 @@ for repository in repositories:
                                            env=env))
 
     # make
-    factory_win.addStep(steps.ShellCommand(command=cmake_build,
+    factory_win.addStep(steps.ShellCommand(command=win_cmake_build,
                                        name="make 64 bit",
                                        description=["cmake", "make for win64"],
                                        descriptionDone=["cmake", "made for win64"], haltOnFailure=True,
