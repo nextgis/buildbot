@@ -3,6 +3,7 @@
 
 from buildbot.plugins import *
 import sys
+import os
 import multiprocessing
 import bbconf
 
@@ -43,7 +44,7 @@ for repository in repositories:
     c['schedulers'].append(forceScheduler)
 
     code_dir_last = '{}_code'.format(project_name)
-    code_dir = 'build/' + code_dir_last
+    code_dir = os.path.join(os.getcwd(), 'build', code_dir_last)
 
     run_args = repository['args']
     run_args.extend(['-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release', '-DSKIP_DEFAULTS=ON'])
@@ -68,7 +69,7 @@ for repository in repositories:
                                            workdir=code_dir))
 
     # Build 32bit ##############################################################
-    build_dir = code_dir + "/build32"
+    build_dir = os.path.join(code_dir, 'build32')
     env = {'PYTHONPATH': 'C:\\Python27_32', 'LANG': 'en_US'}
     # make build dir
     factory_win.addStep(steps.MakeDirectory(dir=build_dir,
@@ -118,7 +119,7 @@ for repository in repositories:
                                            workdir=code_dir))
 
     # Build 64bit ##############################################################
-    build_dir = code_dir + "/build64"
+    build_dir = os.path.join(code_dir, 'build64')
     env = {'PYTHONPATH': 'C:\\Python27', 'LANG': 'en_US'}
     # make build dir
     factory_win.addStep(steps.MakeDirectory(dir=build_dir,
