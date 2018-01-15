@@ -2,8 +2,9 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-import sys
+import sys, os
 import multiprocessing
+import bbconf
 
 c = {}
 
@@ -13,6 +14,10 @@ repositories = [
 
 max_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
+
+release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/github_release.py'
+username = 'bishopgis'
+userkey = bbconf.githubAPIToken
 
 for repository in repositories:
     project_name = repository['repo']
@@ -54,6 +59,13 @@ for repository in repositories:
 
     factory_win = util.BuildFactory()
     factory_win.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
+    factory_win.addStep(steps.ShellCommand(command=["curl", release_script_src],
+                                           name="download script",
+                                           description=["curl", "download script"],
+                                           descriptionDone=["curl", "downloaded script"],
+                                           haltOnFailure=True,
+                                           workdir=code_dir)
+    script_path = os.path.join(code_dir, 'github_release.py')
 
     # Build 32bit ##############################################################
     build_dir = code_dir + "/build32"
@@ -88,7 +100,22 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=build_dir,
                                            env=env))
-    # TODO: Install and make archive
+
+    # make package
+    factory_win.addStep(steps.ShellCommand(command=['cpack', '.'],
+                                           name="pack 32 bit",
+                                           description=["pack", "for win32"],
+                                           descriptionDone=["packed", "for win32"],
+                                           haltOnFailure=True,
+                                           workdir=build_dir,
+                                           env=env))
+    # send package to github
+    factory_win.addStep(steps.ShellCommand(command=['python', script_path, '--login', username, '--key', userkey, '--repo_path', code_dir, '--build_path', build_dir],
+                                           name="send 32 bit package to github",
+                                           description=["send", "32 bit package to github"],
+                                           descriptionDone=["sent", "32 bit package to github"],
+                                           haltOnFailure=True,
+                                           workdir=build_dir))
 
     # Build 64bit ##############################################################
     build_dir = code_dir + "/build64"
@@ -122,9 +149,23 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=build_dir,
                                            env=env))
-    # TODO: Install and make archive
 
-    # Upload archives
+
+    # make package
+    factory_win.addStep(steps.ShellCommand(command=['cpack', '.'],
+                                           name="pack 64 bit",
+                                           description=["pack", "for win64"],
+                                           descriptionDone=["packed", "for win64"],
+                                           haltOnFailure=True,
+                                           workdir=build_dir,
+                                           env=env))
+    # send package to github
+    factory_win.addStep(steps.ShellCommand(command=['python', script_path, '--login', username, '--key', userkey, '--repo_path', code_dir, '--build_path', build_dir],
+                                           name="send 64 bit package to github",
+                                           description=["send", "64 bit package to github"],
+                                           descriptionDone=["sent", "64 bit package to github"],
+                                           haltOnFailure=True,
+                                           workdir=build_dir))
 
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
