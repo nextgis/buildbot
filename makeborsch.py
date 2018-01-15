@@ -22,6 +22,10 @@ script_name = 'github_release.py'
 username = 'bishopgis'
 userkey = bbconf.githubAPIToken
 
+c['change_source'] = []
+c['schedulers'] = []
+c['builders'] = []
+
 for repository in repositories:
     project_name = repository['repo']
     repourl = 'git://github.com/nextgis-borsch/lib_{}.git'.format(project_name)
@@ -31,14 +35,14 @@ for repository in repositories:
                            workdir = project_name + '-workdir',
                            branches = ['master'],
                            pollinterval = 600,) # TODO: change 10min to 2 hours (7200)
-    c['change_source'] = [git_poller]
+    c['change_source'].append(git_poller)
 
     scheduler1 = schedulers.SingleBranchScheduler(
                                 name=project_name,
                                 change_filter=util.ChangeFilter(project = git_project_name, branch="master"),
                                 treeStableTimer=1*60,
                                 builderNames=[project_name + "_win"]) # TODO: project_name + "_mac",
-    c['schedulers'] = [scheduler1]
+    c['schedulers'].append(scheduler1)
     forceScheduler = schedulers.ForceScheduler(
                                 name=project_name + "_force",
                                 builderNames=[project_name + "_win"]) # TODO: project_name + "_mac",
@@ -176,4 +180,4 @@ for repository in repositories:
 
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
-    c['builders'] = [builder_win]
+    c['builders'].append(builder_win)
