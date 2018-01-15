@@ -69,7 +69,8 @@ for repository in repositories:
                                            workdir=code_dir))
 
     # Build 32bit ##############################################################
-    build_dir = os.path.join(code_dir, 'build32')
+    build_subdir = 'build32'
+    build_dir = os.path.join(code_dir, build_subdir)
     env = {'PYTHONPATH': 'C:\\Python27_32', 'LANG': 'en_US'}
     # make build dir
     factory_win.addStep(steps.MakeDirectory(dir=build_dir,
@@ -111,7 +112,7 @@ for repository in repositories:
                                            workdir=build_dir,
                                            env=env))
     # send package to github
-    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--build_path', build_dir],
+    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--build_path', build_subdir],
                                            name="send 32 bit package to github",
                                            description=["send", "32 bit package to github"],
                                            descriptionDone=["sent", "32 bit package to github"],
@@ -119,7 +120,8 @@ for repository in repositories:
                                            workdir=code_dir))
 
     # Build 64bit ##############################################################
-    build_dir = os.path.join(code_dir, 'build64')
+    build_subdir = 'build64'
+    build_dir = os.path.join(code_dir, build_subdir)
     env = {'PYTHONPATH': 'C:\\Python27', 'LANG': 'en_US'}
     # make build dir
     factory_win.addStep(steps.MakeDirectory(dir=build_dir,
@@ -161,7 +163,7 @@ for repository in repositories:
                                            workdir=build_dir,
                                            env=env))
     # send package to github
-    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--build_path', build_dir],
+    factory_win.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--build_path', build_subdir],
                                            name="send 64 bit package to github",
                                            description=["send", "64 bit package to github"],
                                            descriptionDone=["sent", "64 bit package to github"],
