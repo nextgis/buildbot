@@ -34,7 +34,11 @@ def install_dependencies(factory, requirements, os):
                             mastersrc="/opt/buildbot/distrib/perl.msi",
                             workerdest="perl.msi"))
             # Execute install
-            factory.addStep(steps.ShellCommand(command=['msiexec', '/package', 'perl.msi', '/quiet', '/norestart']))
+            factory.addStep(steps.ShellCommand(command=['msiexec', '/package', 'perl.msi', '/quiet', '/norestart'],
+                                                name="install " + requirement,
+                                                description=[requirement, "install"],
+                                                descriptionDone=[requirement, "installed"],
+                                                haltOnFailure=True))
 
 
 for repository in repositories:
