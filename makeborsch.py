@@ -26,6 +26,17 @@ c['change_source'] = []
 c['schedulers'] = []
 c['builders'] = []
 
+def install_dependencies(factory, requirements, os):
+    for requirement in requirements:
+        if requirement == 'perl' and os == 'win':
+            # Upload distro to worker
+            factory.addStep(steps.FileDownload(
+                            mastersrc="/opt/buildbot/distrib/perl.msi",
+                            workerdest="perl.msi"))
+            # Execute install
+            factory.addStep(steps.ShellCommand(command=['msiexec', '/package', 'perl.msi', '/quiet', '/norestart']))
+
+
 for repository in repositories:
     project_name = repository['repo']
     repourl = 'git://github.com/nextgis-borsch/lib_{}.git'.format(project_name)
@@ -70,6 +81,9 @@ for repository in repositories:
     ############################################################################
 
     factory_win = util.BuildFactory()
+    # Install common dependencies
+    install_dependencies(factory_win, repository['requirements'], 'win')
+
     factory_win.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
     factory_win.addStep(steps.ShellCommand(command=["curl", release_script_src, '-o', script_name, '-s'],
                                            name="download script",
