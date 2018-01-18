@@ -11,7 +11,7 @@ c = {}
 
 repositories = [
     {'repo':'z', 'args':[], 'requirements':[]},
-    {'repo':'openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':['perl']}, # TODO: Install additional programs or requirements
+    {'repo':'openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]}, # TODO: Install additional programs or requirements
 ]
 
 max_os_min_version = '10.11'
@@ -28,7 +28,7 @@ c['builders'] = []
 
 def install_dependencies(factory, requirements, os):
     for requirement in requirements:
-        if requirement == 'perl' and os == 'win':
+        if requirement == 'perl' and os == 'win': # This is exampe. Perl already on VM.
             # Upload distro to worker
             factory.addStep(steps.FileDownload(
                             mastersrc="/opt/buildbot/distrib/perl.msi",
