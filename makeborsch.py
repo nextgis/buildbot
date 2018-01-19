@@ -99,7 +99,12 @@ for repository in repositories:
     # Build 32bit ##############################################################
     build_subdir = 'build32'
     build_dir = os.path.join(code_dir, build_subdir)
-    env = {'PYTHONPATH': 'C:\\Python27_32', 'LANG': 'en_US'}
+    env = {
+        'PYTHONPATH': 'C:\\Python27_32',
+        'LANG': 'en_US',
+        'PATH': ["C:\\buildbot\worker\\" + project_name + "_win\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
+                            "${PATH}"],
+    }
     # make build dir
     factory_win.addStep(steps.MakeDirectory(dir=build_dir,
                                             name="Make directory 32 bit"))
@@ -150,7 +155,12 @@ for repository in repositories:
     # Build 64bit ##############################################################
     build_subdir = 'build64'
     build_dir = os.path.join(code_dir, build_subdir)
-    env = {'PYTHONPATH': 'C:\\Python27', 'LANG': 'en_US'}
+    env = env = {
+        'PYTHONPATH': 'C:\\Python27', 
+        'LANG': 'en_US',
+        'PATH': ["C:\\buildbot\worker\\" + project_name + "_win\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
+                            "${PATH}"],
+    }
     # make build dir
     factory_win.addStep(steps.MakeDirectory(dir=build_dir,
                                             name="Make directory 64 bit"))
