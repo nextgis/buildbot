@@ -259,7 +259,8 @@ for repository in repositories:
                                            description=["cmake", "configure"],
                                            descriptionDone=["cmake", "configured"],
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
 
     # make
     factory_mac.addStep(steps.ShellCommand(command=mac_cmake_build,
@@ -267,7 +268,8 @@ for repository in repositories:
                                            description=["cmake", "make"],
                                            descriptionDone=["cmake", "made"],
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
 
     # make tests
     factory_mac.addStep(steps.ShellCommand(command=['ctest', '.'],
@@ -275,7 +277,8 @@ for repository in repositories:
                                            description=["test", "for MacOS X"],
                                            descriptionDone=["tested", "for MacOS X"],
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
 
     # make package
     factory_mac.addStep(steps.ShellCommand(command=['cpack', '.'],
@@ -283,14 +286,16 @@ for repository in repositories:
                                            description=["pack", "for MacOS X"],
                                            descriptionDone=["packed", "for MacOS X"],
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
     # send package to github
     factory_mac.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--build_path', build_subdir],
                                            name="send MacOS X package to github",
                                            description=["send", "MacOS X package to github"],
                                            descriptionDone=["sent", "MacOS X package to github"],
                                            haltOnFailure=True,
-                                           workdir=code_dir))
+                                           workdir=code_dir,
+                                           env=env))
 
 
     builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
