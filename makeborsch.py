@@ -110,8 +110,10 @@ for repository in repositories:
     env = {
         'PYTHONPATH': 'C:\\Python27_32',
         'LANG': 'en_US',
-        'PATH': ["C:\\buildbot\worker\\" + project_name + "_win\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
-                            "${PATH}"],
+        'PATH': [
+                    "C:\\buildbot\worker\\" + project_name + "_win\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
+                    "${PATH}"
+                ],
     }
     # make build dir
     factory_win.addStep(steps.MakeDirectory(dir=build_dir,
@@ -166,8 +168,10 @@ for repository in repositories:
     env = env = {
         'PYTHONPATH': 'C:\\Python27',
         'LANG': 'en_US',
-        'PATH': ["C:\\buildbot\worker\\" + project_name + "_win\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
-                            "${PATH}"],
+        'PATH': [
+                    "C:\\buildbot\worker\\" + project_name + "_win\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
+                    "${PATH}"
+                ],
     }
     # make build dir
     factory_win.addStep(steps.MakeDirectory(dir=build_dir,
@@ -238,6 +242,12 @@ for repository in repositories:
     # Build 32bit ##############################################################
     build_subdir = 'build'
     build_dir = os.path.join(code_dir, build_subdir)
+    env = {
+        'PATH': [
+                    "/usr/local/bin",
+                    "${PATH}"
+                ],
+    }
 
     # make build dir
     factory_mac.addStep(steps.MakeDirectory(dir=build_dir,
