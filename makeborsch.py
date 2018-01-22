@@ -11,8 +11,10 @@ c = {}
 
 repositories = [
     {'repo':'z', 'args':[], 'requirements':[]},
-    {'repo':'openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]}, # TODO: Install additional programs or requirements
+    {'repo':'openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]},
 ]
+
+vm_cpu_count = 8
 
 max_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
@@ -28,7 +30,7 @@ c['builders'] = []
 
 def install_dependencies(factory, requirements, os):
     for requirement in requirements:
-        if requirement == 'perl' and os == 'win': # This is exampe. Perl already on VM.
+        if requirement == 'perl' and os == 'win': # This is example. Perl already installed in VM.
             # Upload distro to worker
             factory.addStep(steps.FileDownload(
                             mastersrc="/opt/buildbot/distrib/perl.msi",
@@ -56,11 +58,17 @@ for repository in repositories:
                                 name=project_name,
                                 change_filter=util.ChangeFilter(project = git_project_name, branch="master"),
                                 treeStableTimer=1*60,
-                                builderNames=[project_name + "_win"]) # TODO: project_name + "_mac",
+                                builderNames=[
+                                                project_name + "_win",
+                                                project_name + "_mac",
+                                            ])
     c['schedulers'].append(scheduler1)
     forceScheduler = schedulers.ForceScheduler(
                                 name=project_name + "_force",
-                                builderNames=[project_name + "_win"]) # TODO: project_name + "_mac",
+                                builderNames=[
+                                                project_name + "_win",
+                                                project_name + "_mac",
+                                            ])
     c['schedulers'].append(forceScheduler)
 
     code_dir_last = '{}_code'.format(project_name)
@@ -74,15 +82,15 @@ for repository in repositories:
     win_run_args = list(run_args)
     win_cmake_build = list(cmake_build)
     win_run_args.append('-DBUILD_SHARED_LIBS=TRUE')
-    win_cmake_build.append('/m:' + str(multiprocessing.cpu_count()))
+    win_cmake_build.append('/m:' + str(vm_cpu_count))
 
     # Mac OS X specific
     mac_run_args = list(run_args)
     mac_cmake_build = list(cmake_build)
     mac_run_args.extend(['-DOSX_FRAMEWORK=ON', '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + max_os_min_version])
-    mac_cmake_build.append('-j' + str(multiprocessing.cpu_count()))
+    mac_cmake_build.append('-j' + str(vm_cpu_count))
 
-    ############################################################################
+    # Windows ##################################################################
 
     factory_win = util.BuildFactory()
     # Install common dependencies
@@ -156,7 +164,7 @@ for repository in repositories:
     build_subdir = 'build64'
     build_dir = os.path.join(code_dir, build_subdir)
     env = env = {
-        'PYTHONPATH': 'C:\\Python27', 
+        'PYTHONPATH': 'C:\\Python27',
         'LANG': 'en_US',
         'PATH': ["C:\\buildbot\worker\\" + project_name + "_win\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
                             "${PATH}"],
@@ -211,3 +219,70 @@ for repository in repositories:
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
     c['builders'].append(builder_win)
+
+
+    # MacOS X ##################################################################
+
+    factory_mac = util.BuildFactory()
+    # Install common dependencies
+    install_dependencies(factory_mac, repository['requirements'], 'mac')
+
+    factory_mac.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
+    factory_mac.addStep(steps.ShellCommand(command=["curl", release_script_src, '-o', script_name, '-s'],
+                                           name="download script",
+                                           description=["curl", "download script"],
+                                           descriptionDone=["curl", "downloaded script"],
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
+
+    # Build 32bit ##############################################################
+    build_subdir = 'build'
+    build_dir = os.path.join(code_dir, build_subdir)
+
+    # make build dir
+    factory_mac.addStep(steps.MakeDirectory(dir=build_dir,
+                                            name="Make directory"))
+
+    # configure view cmake
+    factory_mac.addStep(steps.ShellCommand(command=["cmake", mac_run_args, '../'],
+                                           name="configure",
+                                           description=["cmake", "configure"],
+                                           descriptionDone=["cmake", "configured"],
+                                           haltOnFailure=True,
+                                           workdir=build_dir,))
+
+    # make
+    factory_mac.addStep(steps.ShellCommand(command=mac_cmake_build,
+                                           name="make",
+                                           description=["cmake", "make"],
+                                           descriptionDone=["cmake", "made"],
+                                           haltOnFailure=True,
+                                           workdir=build_dir,))
+
+    # make tests
+    factory_mac.addStep(steps.ShellCommand(command=['ctest', '.'],
+                                           name="test",
+                                           description=["test", "for MacOS X"],
+                                           descriptionDone=["tested", "for MacOS X"],
+                                           haltOnFailure=True,
+                                           workdir=build_dir,))
+
+    # make package
+    factory_mac.addStep(steps.ShellCommand(command=['cpack', '.'],
+                                           name="pack 32 bit",
+                                           description=["pack", "for MacOS X"],
+                                           descriptionDone=["packed", "for MacOS X"],
+                                           haltOnFailure=True,
+                                           workdir=build_dir,))
+    # send package to github
+    factory_mac.addStep(steps.ShellCommand(command=['python', script_name, '--login', username, '--key', userkey, '--build_path', build_subdir],
+                                           name="send MacOS X package to github",
+                                           description=["send", "MacOS X package to github"],
+                                           descriptionDone=["sent", "MacOS X package to github"],
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
+
+
+    builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
+
+    c['builders'].append(builder_mac)
