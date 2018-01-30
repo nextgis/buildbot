@@ -12,6 +12,7 @@ c = {}
 repositories = [
     {'repo':'z', 'args':[], 'requirements':[]},
     {'repo':'openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]},
+    {'repo':'curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[]},
 ]
 
 vm_cpu_count = 8
@@ -23,6 +24,10 @@ release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/ma
 script_name = 'github_release.py'
 username = 'bishopgis'
 userkey = bbconf.githubAPIToken
+ngftp = 'ftp://192.168.255.51/installer/src/'
+ngftp_user = bbconf.ftp_mynextgis_user
+upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
+upload_script_name = 'ftp_upload.py'
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -104,6 +109,13 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
+    factory_win.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
+                                           name="download upload script",
+                                           description=["curl", "download upload script"],
+                                           descriptionDone=["curl", "downloaded upload script"],
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
+
     # Build 32bit ##############################################################
     build_subdir = 'build32'
     build_dir = os.path.join(code_dir, build_subdir)
@@ -159,6 +171,17 @@ for repository in repositories:
                                            name="send 32 bit package to github",
                                            description=["send", "32 bit package to github"],
                                            descriptionDone=["sent", "32 bit package to github"],
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
+
+    # upload to ftp
+    factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                    '--ftp_user', ngftp_user, '--ftp',
+                                                    ngftp + project_name + '_win32', 
+                                                    '--build_path', build_subdir],
+                                           name="send 32 bit package to ftp",
+                                           description=["send", "32 bit package to ftp"],
+                                           descriptionDone=["sent", "32 bit package to ftp"],
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
@@ -220,6 +243,17 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
+    # upload to ftp
+    factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                    '--ftp_user', ngftp_user, '--ftp',
+                                                    ngftp + project_name + '_win64',
+                                                    '--build_path', build_subdir],
+                                           name="send 64 bit package to ftp",
+                                           description=["send", "64 bit package to ftp"],
+                                           descriptionDone=["sent", "64 bit package to ftp"],
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
+
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
     c['builders'].append(builder_win)
@@ -236,6 +270,13 @@ for repository in repositories:
                                            name="download script",
                                            description=["curl", "download script"],
                                            descriptionDone=["curl", "downloaded script"],
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
+
+    factory_mac.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
+                                           name="download upload script",
+                                           description=["curl", "download upload script"],
+                                           descriptionDone=["curl", "downloaded upload script"],
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
@@ -297,6 +338,15 @@ for repository in repositories:
                                            workdir=code_dir,
                                            env=env))
 
+    factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                    '--ftp_user', ngftp_user, '--ftp',
+                                                    ngftp + project_name + '_macos',
+                                                    '--build_path', build_subdir],
+                                           name="send package to ftp",
+                                           description=["send", "package to ftp"],
+                                           descriptionDone=["sent", "package to ftp"],
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
 
     builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
 
