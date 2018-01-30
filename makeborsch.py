@@ -24,7 +24,7 @@ release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/ma
 script_name = 'github_release.py'
 username = 'bishopgis'
 userkey = bbconf.githubAPIToken
-ngftp = 'ftp://192.168.255.51/installer/src/'
+ngftp = 'ftp://192.168.255.51/software/installer/src/'
 ngftp_user = bbconf.ftp_mynextgis_user
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
@@ -177,7 +177,7 @@ for repository in repositories:
     # upload to ftp
     factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                     '--ftp_user', ngftp_user, '--ftp',
-                                                    ngftp + project_name + '_win32', 
+                                                    ngftp + project_name + '_win32',
                                                     '--build_path', build_subdir],
                                            name="send 32 bit package to ftp",
                                            description=["send", "32 bit package to ftp"],

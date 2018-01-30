@@ -26,6 +26,8 @@ if __name__ == "__main__":
     content = [x.strip() for x in content]
 
     release_file = os.path.join(build_path, content[2]) + '.zip'
+    package_file = os.path.join(build_path, 'package.zip')
+    os.rename(release_file, package_file)
 
-    args = ['curl', '-u', user, '-T', '{' + release_file + ',' + version_file + '}', '--ftp-create-dirs', ftp_url]
+    args = ['curl', '-u', user, '-T', '{' + package_file + ',' + version_file + '}', '--ftp-create-dirs', ftp_url]
     subprocess.check_output(args)
