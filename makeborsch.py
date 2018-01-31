@@ -150,7 +150,7 @@ for repository in repositories:
                                            env=env))
 
     # make tests
-    factory_win.addStep(steps.ShellCommand(command=['ctest', '.'],
+    factory_win.addStep(steps.ShellCommand(command=['ctest', '-C', 'release'],
                                            name="test 32 bit",
                                            description=["test", "for win32"],
                                            descriptionDone=["tested", "for win32"],
@@ -218,7 +218,7 @@ for repository in repositories:
                                        env=env))
 
     # make tests
-    factory_win.addStep(steps.ShellCommand(command=['ctest', '.'],
+    factory_win.addStep(steps.ShellCommand(command=['ctest', '-C', 'release'],
                                            name="test 64 bit",
                                            description=["test", "for win64"],
                                            descriptionDone=["tested", "for win64"],
@@ -313,7 +313,7 @@ for repository in repositories:
                                            env=env))
 
     # make tests
-    factory_mac.addStep(steps.ShellCommand(command=['ctest', '.'],
+    factory_mac.addStep(steps.ShellCommand(command=['ctest', '-C', 'release'],
                                            name="test",
                                            description=["test", "for MacOS X"],
                                            descriptionDone=["tested", "for MacOS X"],
