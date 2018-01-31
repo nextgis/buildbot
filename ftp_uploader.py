@@ -69,6 +69,9 @@ if __name__ == "__main__":
     ftp_url = args.ftp
     build_path = args.build
 
+    if ftp_url[-1:] != '/':
+        ftp_url += '/'
+
     version_file = os.path.join(build_path, 'version.str')
     with open(version_file) as f:
         content = f.readlines()
