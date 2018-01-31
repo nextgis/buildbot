@@ -82,6 +82,6 @@ if __name__ == "__main__":
     package_file = os.path.join(build_path, 'package.zip')
     os.rename(release_file, package_file)
 
-    color_print('Upload files {} and {}'.format(package_file, version_file), True, 'LGREEN')
-    args = ['curl', '-u', user, '-T', '{' + package_file + ',' + version_file + '}', '--ftp-create-dirs', ftp_url]
+    color_print('Upload files {} and {} to ftp'.format(package_file, version_file), True, 'LGREEN')
+    args = ['curl', '-u', user, '-T', '{package.zip,version.str}', '--ftp-create-dirs', ftp_url]
     subprocess.check_output(args, cwd=build_path)
