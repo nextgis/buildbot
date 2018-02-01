@@ -40,6 +40,7 @@ c['schedulers'].append(forceScheduler)
 openssl_args = ['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DBUILD_STATIC_LIBS=TRUE',
                 '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
                 '-DSKIP_DEFAULTS=ON']
+openssl_git = 'git://github.com/nextgis-borsch/lib_openssl.git'
 cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
 # Windows specific
@@ -56,6 +57,9 @@ mac_cmake_build.append('-j' + str(vm_cpu_count))
 code_dir_last = '{}_code'.format('openssl')
 code_dir = os.path.join('build', code_dir_last)
 build_dir = os.path.join(code_dir, 'build')
+open_ssl_include1 = os.path.join(code_dir, 'include')
+open_ssl_include2 = os.path.join(build_dir, 'include')
+open_ssl_lib = os.path.join(build_dir, 'release')
 
 # Windows ##################################################################
 
@@ -63,10 +67,14 @@ factory_win = util.BuildFactory()
 # Install common dependencies
 install_dependencies(factory_win, repository['requirements'], 'win')
 
-factory_win.addStep(steps.Git(repourl='git://github.com/nextgis-borsch/lib_openssl.git',
+factory_win.addStep(steps.Git(repourl=openssl_git,
                                 mode='full',
                                 submodules=False,
                                 workdir=code_dir))
+
+# make build dir
+factory_win.addStep(steps.MakeDirectory(dir=build_dir,
+                                        name="Make directory 32 bit"))
 
 # configure view cmake
 factory_win.addStep(steps.ShellCommand(command=["cmake", win_run_args, '-G', 'Visual Studio 15 2017', '../'],
@@ -85,6 +93,50 @@ factory_win.addStep(steps.ShellCommand(command=win_cmake_build,
                                        workdir=build_dir))
 
 # 2. Build qt5 static minimal
+
+code_dir_last = '{}_code'.format('qt')
+code_dir = os.path.join('build', code_dir_last)
+build_dir = os.path.join(code_dir, 'build')
+
+# make build dir
+factory_win.addStep(steps.MakeDirectory(dir=code_dir,
+                                        name="Make qt directory"))
+
+qt_version = '{}.{}.{}'.format(qt_ver_major, qt_ver_minor, qt_ver_patch)
+qt_subfolder = 'single/'
+qt_input_name = 'qt-everywhere-src-{}'.format(qt_version)
+qt_url = 'http://download.qt.io/official_releases/qt/{}.{}/{}/{}{}.tar.xz'.format(qt_ver_major, qt_ver_minor, qt_version, qt_subfolder, qt_input_name)
+
+qt_args = [ '-release', '-static', '-opensource', '-confirm-license',
+            '-accessibility', '-no-opengl', '-no-icu', '-no-sql-sqlite',
+            '-no-qml-debug', '-nomake', 'examples', '-nomake', 'tests', '-skip',
+            'qtactiveqt', '-skip', 'qtlocation', '-skip', 'qtmultimedia', '-skip',
+            'qtserialport', '-skip', 'qtsensors', '-skip', 'qtxmlpatterns',
+            '-skip', 'qtquickcontrols', '-skip', 'qtquickcontrols2', '-skip',
+            'qt3d', '-openssl-linked']
+
+factory_win.addStep(steps.ShellCommand(command=["curl", qt_url, '-o', 'qt.tar.xz', '-s'],
+                                       name="download qt",
+                                       description=["curl", "download qt"],
+                                       descriptionDone=["curl", "downloaded qt"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
+
+factory_win.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'qt.tar.xz'],
+                                       name="extract qt",
+                                       description=["cmake", "extract qt"],
+                                       descriptionDone=["cmake", "extracted qt"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
+
+factory_win.addStep(steps.ShellCommand(command=["configure", '-prefix', '%CD%\\qtbase', '-platform', 'win32-msvc2017', qt_args,
+                                                '-I', open_ssl_include1, '-I', open_ssl_include2, '-L', open_ssl_lib, '-l', 'Gdi32', '-l', 'User32']
+                                       name="configure qt",
+                                       description=["configure", "qt"],
+                                       descriptionDone=["configure", "qt"],
+                                       haltOnFailure=True,
+                                       workdir=os.path.join(code_dir, 'qt_input_name')))
+
 # 3. Build installer framework
 # 4. Upload installer framework to ftp
 
@@ -99,7 +151,7 @@ build_dir = os.path.join(code_dir, 'build')
 
 factory_mac = util.BuildFactory()
 
-factory_mac.addStep(steps.Git(repourl='git://github.com/nextgis-borsch/lib_openssl.git',
+factory_mac.addStep(steps.Git(repourl=openssl_git,
                                 mode='full',
                                 submodules=False,
                                 workdir=code_dir))
