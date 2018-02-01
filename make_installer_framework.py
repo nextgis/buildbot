@@ -44,12 +44,12 @@ openssl_git = 'git://github.com/nextgis-borsch/lib_openssl.git'
 cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
 # Windows specific
-win_run_args = list(run_args)
+win_run_args = list(openssl_args)
 win_cmake_build = list(cmake_build)
 win_cmake_build.append('/m:' + str(vm_cpu_count))
 
 # Mac OS X specific
-mac_run_args = list(run_args)
+mac_run_args = list(openssl_args)
 mac_cmake_build = list(cmake_build)
 mac_run_args.extend(['-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + max_os_min_version])
 mac_cmake_build.append('-j' + str(vm_cpu_count))
@@ -129,8 +129,10 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'qt
                                        haltOnFailure=True,
                                        workdir=code_dir))
 
-factory_win.addStep(steps.ShellCommand(command=["configure", '-prefix', '%CD%\\qtbase', '-platform', 'win32-msvc2017', qt_args,
-                                                '-I', open_ssl_include1, '-I', open_ssl_include2, '-L', open_ssl_lib, '-l', 'Gdi32', '-l', 'User32'],
+factory_win.addStep(steps.ShellCommand(command=["configure", '-prefix', '%CD%\\qtbase',
+                                                '-platform', 'win32-msvc2017', qt_args,
+                                                '-I', open_ssl_include1, '-I', open_ssl_include2,
+                                                '-L', open_ssl_lib, '-l', 'Gdi32', '-l', 'User32'],
                                        name="configure qt",
                                        description=["configure", "qt"],
                                        descriptionDone=["configure", "qt"],
