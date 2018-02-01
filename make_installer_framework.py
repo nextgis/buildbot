@@ -43,6 +43,8 @@ openssl_args = ['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DBUILD_STATIC_LIBS=TRUE',
 openssl_git = 'git://github.com/nextgis-borsch/lib_openssl.git'
 cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
+installer_url = 'git://github.com/nextgis/nextgis_installer.git'
+
 # Windows specific
 win_run_args = list(openssl_args)
 win_cmake_build = list(cmake_build)
@@ -138,7 +140,25 @@ factory_win.addStep(steps.ShellCommand(command=["configure", '-prefix', '%CD%\\q
                                        haltOnFailure=True,
                                        workdir=os.path.join(code_dir, qt_input_name)))
 
+factory_win.addStep(steps.ShellCommand(command=["nmake"],
+                                       name="make qt",
+                                       description=["make", "qt"],
+                                       descriptionDone=["made", "qt"],
+                                       haltOnFailure=True,
+                                       workdir=os.path.join(code_dir, qt_input_name)))
+
 # 3. Build installer framework
+code_dir_last = '{}_code'.format('installer')
+code_dir = os.path.join('build', code_dir_last)
+build_dir = os.path.join(code_dir, 'build')
+
+factory_win.addStep(steps.Git(repourl=installer_git,
+                                mode='full',
+                                submodules=False,
+                                workdir=code_dir))
+
+# qtifw/tools/build_installer.py                                
+
 # 4. Upload installer framework to ftp
 
 builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
