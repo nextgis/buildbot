@@ -49,6 +49,8 @@ qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
           ]
 cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
+installer_git = 'git://github.com/nextgis/nextgis_installer.git'
+
 # Windows ##################################################################
 win_run_args = list(qt_args)
 win_cmake_build = list(cmake_build)
