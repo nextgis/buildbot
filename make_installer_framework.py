@@ -65,7 +65,6 @@ open_ssl_lib = os.path.join(build_dir, 'release')
 
 factory_win = util.BuildFactory()
 # Install common dependencies
-install_dependencies(factory_win, repository['requirements'], 'win')
 
 factory_win.addStep(steps.Git(repourl=openssl_git,
                                 mode='full',
