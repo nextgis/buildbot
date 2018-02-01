@@ -136,7 +136,7 @@ factory_win.addStep(steps.ShellCommand(command=["configure", '-prefix', '%CD%\\q
                                        description=["configure", "qt"],
                                        descriptionDone=["configure", "qt"],
                                        haltOnFailure=True,
-                                       workdir=os.path.join(code_dir, 'qt_input_name')))
+                                       workdir=os.path.join(code_dir, qt_input_name)))
 
 # 3. Build installer framework
 # 4. Upload installer framework to ftp
