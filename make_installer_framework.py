@@ -130,7 +130,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'qt
                                        workdir=code_dir))
 
 factory_win.addStep(steps.ShellCommand(command=["configure", '-prefix', '%CD%\\qtbase', '-platform', 'win32-msvc2017', qt_args,
-                                                '-I', open_ssl_include1, '-I', open_ssl_include2, '-L', open_ssl_lib, '-l', 'Gdi32', '-l', 'User32']
+                                                '-I', open_ssl_include1, '-I', open_ssl_include2, '-L', open_ssl_lib, '-l', 'Gdi32', '-l', 'User32'],
                                        name="configure qt",
                                        description=["configure", "qt"],
                                        descriptionDone=["configure", "qt"],
