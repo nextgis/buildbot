@@ -114,7 +114,7 @@ qt_args = [ '-release', '-static', '-opensource', '-confirm-license',
             '-skip', 'qtquickcontrols', '-skip', 'qtquickcontrols2', '-skip',
             'qt3d', '-openssl-linked']
 
-factory_win.addStep(steps.ShellCommand(command=["curl", qt_url, '-o', 'qt.tar.xz', '-s'],
+factory_win.addStep(steps.ShellCommand(command=["curl", qt_url, '-o', 'qt.tar.xz', '-s', '-L'],
                                        name="download qt",
                                        description=["curl", "download qt"],
                                        descriptionDone=["curl", "downloaded qt"],

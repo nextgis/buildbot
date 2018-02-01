@@ -102,7 +102,7 @@ for repository in repositories:
     install_dependencies(factory_win, repository['requirements'], 'win')
 
     factory_win.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
-    factory_win.addStep(steps.ShellCommand(command=["curl", release_script_src, '-o', script_name, '-s'],
+    factory_win.addStep(steps.ShellCommand(command=["curl", release_script_src, '-o', script_name, '-s', '-L'],
                                            name="download script",
                                            description=["curl", "download script"],
                                            descriptionDone=["curl", "downloaded script"],
@@ -266,7 +266,7 @@ for repository in repositories:
     install_dependencies(factory_mac, repository['requirements'], 'mac')
 
     factory_mac.addStep(steps.Git(repourl=repourl, mode='full', submodules=False, workdir=code_dir))
-    factory_mac.addStep(steps.ShellCommand(command=["curl", release_script_src, '-o', script_name, '-s'],
+    factory_mac.addStep(steps.ShellCommand(command=["curl", release_script_src, '-o', script_name, '-s', '-L'],
                                            name="download script",
                                            description=["curl", "download script"],
                                            descriptionDone=["curl", "downloaded script"],
