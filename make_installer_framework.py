@@ -43,7 +43,7 @@ build_dir = os.path.join(code_dir, 'build')
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
-qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON'
+qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
             '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
             '-DSKIP_DEFAULTS=ON', '-DQT_CONFIGURE_ARGS="-accessibility;-no-opengl;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtlocation;-skip;qtmultimedia;-skip;qtserialport;-skip;qtsensors;-skip;qtxmlpatterns;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qt3d"',
           ]
