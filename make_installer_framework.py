@@ -46,6 +46,8 @@ qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
             '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
             '-DSKIP_DEFAULTS=ON', '-DQT_CONFIGURE_ARGS="-accessibility;-no-opengl;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtlocation;-skip;qtmultimedia;-skip;qtserialport;-skip;qtsensors;-skip;qtxmlpatterns;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qt3d"',
+            '-DWITH_ZLIB=OFF', '-DWITH_Freetype=OFF', '-DWITH_JPEG=OFF',
+            '-DWITH_PNG=OFF', '-DWITH_SQLite3=OFF', '-DWITH_PostgreSQL=OFF',
           ]
 cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
@@ -116,6 +118,8 @@ factory_mac.addStep(steps.ShellCommand(command=mac_cmake_build,
                                        workdir=build_dir,
                                        env=env))
 
+qt_build_dir = build_dir
+
 # 2. Build installer framework
 code_dir_last = '{}_code'.format('installer')
 code_dir = os.path.join('build', code_dir_last)
@@ -130,7 +134,28 @@ factory_mac.addStep(steps.Git(repourl=installer_git,
                                 submodules=False,
                                 workdir=code_dir))
 
-# qtifw/tools/build_installer.py
+factory_win.addStep(steps.MakeDirectory(dir=build_dir,
+                                        name="Make directory for installer build"))
+factory_mac.addStep(steps.MakeDirectory(dir=build_dir,
+                                        name="Make directory for installer build"))
+
+factory_win.addStep(steps.ShellCommand(command=['python', 'build_installer.py',
+                                                '--qtdir', qt_build_dir,
+                                                '--make', 'nmake', '--targetdir', build_dir],
+                                        name="build_installer.py",
+                                        description=["build_installer.py", "make"],
+                                        descriptionDone=["build_installer.py", "made"],
+                                        haltOnFailure=True,
+                                        workdir=os.path.join(code_dir, 'qtifw', 'tools')))
+factory_mac.addStep(steps.ShellCommand(command=['python', 'build_installer.py',
+                                                '--qtdir', qt_build_dir,
+                                                '--make', 'make', '--targetdir', build_dir],
+                                        name="build_installer.py",
+                                        description=["build_installer.py", "make"],
+                                        descriptionDone=["build_installer.py", "made"],
+                                        haltOnFailure=True,
+                                        workdir=os.path.join(code_dir, 'qtifw', 'tools'),
+                                        env=env))
 
 # 3. Upload installer framework to ftp
 
