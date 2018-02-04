@@ -45,7 +45,7 @@ qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
             '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
-            '-DSKIP_DEFAULTS=ON', '-DQT_CONFIGURE_ARGS=-accessibility;-no-opengl;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtlocation;-skip;qtmultimedia;-skip;qtserialport;-skip;qtsensors;-skip;qtxmlpatterns;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qt3d;-skip;qtconnectivity;-skip;qtandroidextras;-skip;qtcanvas3d;-skip;qtcharts;-skip;qtdatavis3d;-skip;qtgamepad;-skip;qtpurchasing;-skip;qtquickcontrols2;-skip;qtserialbus;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebglplugin;-skip;qtwebsockets;-skip;qtwebview;-no-feature-ftp;-no-feature-socks5',
+            '-DSKIP_DEFAULTS=ON',  '-DQT_CONFIGURE_ARGS=-accessibility;-no-opengl;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtlocation;-skip;qtmultimedia;-skip;qtserialport;-skip;qtsensors;-skip;qtxmlpatterns;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qt3d;-skip;qtconnectivity;-skip;qtandroidextras;-skip;qtcanvas3d;-skip;qtcharts;-skip;qtdatavis3d;-skip;qtgamepad;-skip;qtpurchasing;-skip;qtquickcontrols2;-skip;qtserialbus;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebglplugin;-skip;qtwebsockets;-skip;qtwebview;-no-feature-ftp;-no-feature-socks5',
             '-DWITH_ZLIB=OFF', '-DWITH_Freetype=OFF', '-DWITH_JPEG=OFF',
             '-DWITH_PNG=OFF', '-DWITH_SQLite3=OFF', '-DWITH_PostgreSQL=OFF',
           ]
@@ -120,6 +120,22 @@ factory_mac.addStep(steps.ShellCommand(command=mac_cmake_build,
 
 qt_build_dir = build_dir
 
+# TODO: Store Qt static bin directory with tools too
+# f.addStep(steps.CopyDirectory(src="build/data", dest="tmp/data"))
+factory_win.addStep(steps.ShellCommand(command=['cpack', '.'],
+                                       name="pack qt",
+                                       description=["pack", "for win32"],
+                                       descriptionDone=["packed", "for win32"],
+                                       haltOnFailure=True,
+                                       workdir=build_dir))
+factory_mac.addStep(steps.ShellCommand(command=['cpack', '.'],
+                                       name="pack qt",
+                                       description=["pack", "for MacOS X"],
+                                       descriptionDone=["packed", "for MacOS X"],
+                                       haltOnFailure=True,
+                                       workdir=build_dir,
+                                       env=env))
+
 # 2. Build installer framework
 code_dir_last = '{}_code'.format('installer')
 code_dir = os.path.join('build', code_dir_last)
@@ -157,7 +173,60 @@ factory_mac.addStep(steps.ShellCommand(command=['python', 'build_installer.py',
                                         workdir=os.path.join(code_dir, 'qtifw', 'tools'),
                                         env=env))
 
+create_archive = ['cmake', '-E', 'tar', 'cfv', 'archive.zip', '--format=zip', os.path.join(build_dir, 'qtifw_pkg')]
+factory_win.addStep(steps.ShellCommand(command=create_archive,
+                                       name="archive",
+                                       description=["cmake", "make archive"],
+                                       descriptionDone=["cmake", "made archive"],
+                                       haltOnFailure=True,
+                                       workdir=build_dir))
+factory_mac.addStep(steps.ShellCommand(command=create_archive,
+                                       name="archive",
+                                       description=["cmake", "make archive"],
+                                       descriptionDone=["cmake", "made archive"],
+                                       haltOnFailure=True,
+                                       workdir=build_dir,
+                                       env=env))
+
+factory_win.addStep(steps.StringDownload("0.0.0\nnow\narchive",
+                                        workerdest="version.str",
+                                        workdir=build_dir))
+factory_mac.addStep(steps.StringDownload("0.0.0\nnow\narchive",
+                                        workerdest="version.str",
+                                        workdir=build_dir))
+
 # 3. Upload installer framework to ftp
+factory_win.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
+                                       name="download upload script",
+                                       description=["curl", "download upload script"],
+                                       descriptionDone=["curl", "downloaded upload script"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
+factory_mac.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
+                                       name="download upload script",
+                                       description=["curl", "download upload script"],
+                                       descriptionDone=["curl", "downloaded upload script"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
+
+factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                '--ftp_user', ngftp_user, '--ftp',
+                                                ngftp + project_name + '_win',
+                                                '--build_path', build_subdir],
+                                       name="send 32 bit package to ftp",
+                                       description=["send", "32 bit package to ftp"],
+                                       descriptionDone=["sent", "32 bit package to ftp"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
+factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                '--ftp_user', ngftp_user, '--ftp',
+                                                ngftp + project_name + '_macos',
+                                                '--build_path', build_subdir],
+                                       name="send package to ftp",
+                                       description=["send", "package to ftp"],
+                                       descriptionDone=["sent", "package to ftp"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
 
 builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
