@@ -76,17 +76,28 @@ for platform in platforms:
                                            name="Download installer package",
                                            haltOnFailure=True,
                                            workdir=build_dir))
+    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
+                                           name="Extract installer package",
+                                           haltOnFailure=True,
+                                           workdir=build_dir))
 
     factory.addStep(steps.ShellCommand(command=["curl", ngftp + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download qt package",
                                            haltOnFailure=True,
                                            workdir=build_qt_dir))
+    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
+                                           name="Extract qt package",
+                                           haltOnFailure=True,
+                                           workdir=build_qt_dir))
 
     # 2. Get repository from ftp
-    
+
     # 3. Get compiled libraries
+
     # 4. Create or update repository
+
     # 5. Upload repository archive to site
+
     # 6. Upload repository archive to ftp
 
     builder = util.BuilderConfig(name = project_name + "_" + platform['name'],

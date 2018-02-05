@@ -50,6 +50,7 @@ qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
             '-DSKIP_DEFAULTS=ON',  '-DQT_CONFIGURE_ARGS=-accessibility;-no-opengl;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtlocation;-skip;qtmultimedia;-skip;qtserialport;-skip;qtsensors;-skip;qtxmlpatterns;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qt3d;-skip;qtconnectivity;-skip;qtandroidextras;-skip;qtcanvas3d;-skip;qtcharts;-skip;qtdatavis3d;-skip;qtgamepad;-skip;qtpurchasing;-skip;qtquickcontrols2;-skip;qtserialbus;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebglplugin;-skip;qtwebsockets;-skip;qtwebview;-no-feature-ftp;-no-feature-socks5',
             '-DWITH_ZLIB=OFF', '-DWITH_Freetype=OFF', '-DWITH_JPEG=OFF',
             '-DWITH_PNG=OFF', '-DWITH_SQLite3=OFF', '-DWITH_PostgreSQL=OFF',
+            '-DCREATE_CPACK=ON',
           ]
 cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
@@ -70,13 +71,17 @@ factory_mac = util.BuildFactory()
 # Install common dependencies
 
 factory_win.addStep(steps.Git(repourl=qt_git,
-                              mode='full',
-                              submodules=False,
-                              workdir=code_dir))
+                            mode='full',
+                            method='clobber',
+                            submodules=False,
+                            shallow = True,
+                            workdir=code_dir))
 factory_mac.addStep(steps.Git(repourl=qt_git,
-                                mode='full',
-                                submodules=False,
-                                workdir=code_dir))
+                            mode='full',
+                            method='clobber',
+                            submodules=False,
+                            shallow = True,
+                            workdir=code_dir))
 
 # make build dir
 factory_win.addStep(steps.MakeDirectory(dir=build_dir,
@@ -106,19 +111,19 @@ factory_mac.addStep(steps.ShellCommand(command=["cmake", mac_run_args, '..'],
                                        env=env))
 
 # make
-# factory_win.addStep(steps.ShellCommand(command=win_cmake_build,
-#                                        name="make 32 bit",
-#                                        description=["cmake", "make for win32"],
-#                                        descriptionDone=["cmake", "made for win32"],
-#                                        haltOnFailure=True,
-#                                        workdir=build_dir))
-# factory_mac.addStep(steps.ShellCommand(command=mac_cmake_build,
-#                                        name="make",
-#                                        description=["cmake", "make"],
-#                                        descriptionDone=["cmake", "made"],
-#                                        haltOnFailure=True,
-#                                        workdir=build_dir,
-#                                        env=env))
+factory_win.addStep(steps.ShellCommand(command=win_cmake_build,
+                                       name="make 32 bit",
+                                       description=["cmake", "make for win32"],
+                                       descriptionDone=["cmake", "made for win32"],
+                                       haltOnFailure=True,
+                                       workdir=build_dir))
+factory_mac.addStep(steps.ShellCommand(command=mac_cmake_build,
+                                       name="make",
+                                       description=["cmake", "make"],
+                                       descriptionDone=["cmake", "made"],
+                                       haltOnFailure=True,
+                                       workdir=build_dir,
+                                       env=env))
 
 qt_build_dir = build_dir
 
@@ -175,11 +180,15 @@ build_dir = os.path.join(code_dir, build_subdir)
 
 factory_win.addStep(steps.Git(repourl=installer_git,
                                 mode='full',
+                                method='clobber',
                                 submodules=False,
+                                shallow = True,
                                 workdir=code_dir))
 factory_mac.addStep(steps.Git(repourl=installer_git,
                                 mode='full',
+                                method='clobber',
                                 submodules=False,
+                                shallow = True,
                                 workdir=code_dir))
 
 factory_win.addStep(steps.MakeDirectory(dir=build_dir,
