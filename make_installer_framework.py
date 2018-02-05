@@ -120,8 +120,6 @@ factory_mac.addStep(steps.ShellCommand(command=mac_cmake_build,
 
 qt_build_dir = build_dir
 
-# TODO: Store Qt static bin directory with tools too
-# f.addStep(steps.CopyDirectory(src="build/data", dest="tmp/data"))
 factory_win.addStep(steps.ShellCommand(command=['cpack', '.'],
                                        name="pack qt",
                                        description=["pack", "for win32"],
@@ -135,6 +133,38 @@ factory_mac.addStep(steps.ShellCommand(command=['cpack', '.'],
                                        haltOnFailure=True,
                                        workdir=build_dir,
                                        env=env))
+
+factory_win.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
+                                       name="download upload script",
+                                       description=["curl", "download upload script"],
+                                       descriptionDone=["curl", "downloaded upload script"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
+factory_mac.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
+                                       name="download upload script",
+                                       description=["curl", "download upload script"],
+                                       descriptionDone=["curl", "downloaded upload script"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
+
+factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                '--ftp_user', ngftp_user, '--ftp',
+                                                ngftp + project_name + '_win',
+                                                '--build_path', build_dir],
+                                       name="send 32 bit package to ftp",
+                                       description=["send", "32 bit package to ftp"],
+                                       descriptionDone=["sent", "32 bit package to ftp"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
+factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                '--ftp_user', ngftp_user, '--ftp',
+                                                ngftp + project_name + '_macos',
+                                                '--build_path', build_dir],
+                                       name="send package to ftp",
+                                       description=["send", "package to ftp"],
+                                       descriptionDone=["sent", "package to ftp"],
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
 
 # 2. Build installer framework
 code_dir_last = '{}_code'.format('installer')
@@ -208,7 +238,7 @@ factory_mac.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o',
                                        descriptionDone=["curl", "downloaded upload script"],
                                        haltOnFailure=True,
                                        workdir=code_dir))
-
+                                       
 factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_win',

@@ -29,7 +29,7 @@ def create_image_clone(vir_domain):
 
 if __name__ == "__main__":
     vir_domain, action = sys.argv[1:3]
-    if vir_domain is not None:
+    if vir_domain in domains:
 
         if action in ["prepare"]:
             create_image_clone(vir_domain)
