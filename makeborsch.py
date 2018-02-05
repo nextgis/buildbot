@@ -10,10 +10,10 @@ import bbconf
 c = {}
 
 repositories = [
-    {'repo':'z', 'args':[], 'requirements':[]},
-    {'repo':'openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]},
-    {'repo':'curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[]},
-    # {'repo':'qt5', 'args':['-DCREATE_CPACK=ON','-DQT_CONFIGURE_ARGS=-accessibility;...'], 'requirements':[]},
+    {'repo':'lib_z', 'args':[], 'requirements':[]},
+    {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]},
+    {'curl', 'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[]},
+    # {'repo':'lib_qt5', 'args':['-DCREATE_CPACK=ON','-DQT_CONFIGURE_ARGS=-accessibility;...'], 'requirements':[]},
 ]
 
 vm_cpu_count = 8
@@ -29,6 +29,7 @@ ngftp = 'ftp://192.168.255.51/software/installer/src/'
 ngftp_user = bbconf.ftp_mynextgis_user
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
+ci_project_name = 'create_installer'
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -51,8 +52,8 @@ def install_dependencies(factory, requirements, os):
 
 for repository in repositories:
     project_name = repository['repo']
-    repourl = 'git://github.com/nextgis-borsch/lib_{}.git'.format(project_name)
-    git_project_name = 'nextgis-borsch/lib_{}'.format(project_name)
+    repourl = 'git://github.com/nextgis-borsch/{}.git'.format(project_name)
+    git_project_name = 'nextgis-borsch/{}'.format(project_name)
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
                            workdir = project_name + '-workdir',
@@ -186,6 +187,9 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
+    factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win32'],
+                                      waitForFinish=True))
+
     # Build 64bit ##############################################################
     build_subdir = 'build64'
     build_dir = os.path.join(code_dir, build_subdir)
@@ -254,6 +258,9 @@ for repository in repositories:
                                            descriptionDone=["sent", "64 bit package to ftp"],
                                            haltOnFailure=True,
                                            workdir=code_dir))
+
+    factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win64'],
+                                      waitForFinish=True))
 
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
@@ -348,6 +355,9 @@ for repository in repositories:
                                            descriptionDone=["sent", "package to ftp"],
                                            haltOnFailure=True,
                                            workdir=code_dir))
+
+    factory_mac.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_mac'],
+                                      waitForFinish=True))
 
     builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
 
