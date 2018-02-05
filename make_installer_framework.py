@@ -196,7 +196,7 @@ factory_win.addStep(steps.MakeDirectory(dir=build_dir,
 factory_mac.addStep(steps.MakeDirectory(dir=build_dir,
                                         name="Make directory for installer build"))
 
-factory_win.addStep(steps.ShellCommand(command=['python', 'build_installer.py',
+factory_win.addStep(steps.ShellCommand(command=['python', 'build_installer_bb.py',
                                                 '--qtdir', qt_build_dir,
                                                 '--make', 'nmake'],
                                         name="build_installer.py",
@@ -204,7 +204,7 @@ factory_win.addStep(steps.ShellCommand(command=['python', 'build_installer.py',
                                         descriptionDone=["build_installer.py", "made"],
                                         haltOnFailure=True,
                                         workdir=os.path.join(code_dir, 'qtifw', 'tools')))
-factory_mac.addStep(steps.ShellCommand(command=['python', 'build_installer.py',
+factory_mac.addStep(steps.ShellCommand(command=['python', 'build_installer_bb.py',
                                                 '--qtdir', qt_build_dir,
                                                 '--make', 'make'],
                                         name="build_installer.py",

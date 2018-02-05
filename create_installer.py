@@ -79,7 +79,7 @@ for platform in platforms:
     if 'win' in platform['name']:
         if_prefix = '_win'
 
-    factory.addStep(steps.ShellCommand(command=["curl", ngftp + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'],
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download installer package",
                                            haltOnFailure=True,
                                            workdir=build_dir))
@@ -88,7 +88,7 @@ for platform in platforms:
                                            haltOnFailure=True,
                                            workdir=build_dir))
 
-    factory.addStep(steps.ShellCommand(command=["curl", ngftp + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download qt package",
                                            haltOnFailure=True,
                                            workdir=build_qt_dir))
