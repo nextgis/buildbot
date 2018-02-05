@@ -66,6 +66,8 @@ for platform in platforms:
 
     factory.addStep(steps.Git(repourl=installer_git,
                                mode='full',
+                               shallow=True,
+                               method='clobber',
                                submodules=False,
                                workdir=code_dir))
 

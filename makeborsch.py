@@ -188,7 +188,7 @@ for repository in repositories:
                                            workdir=code_dir))
 
     factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win32'],
-                                      waitForFinish=True))
+                                      waitForFinish=False))
 
     # Build 64bit ##############################################################
     build_subdir = 'build64'
@@ -260,7 +260,7 @@ for repository in repositories:
                                            workdir=code_dir))
 
     factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win64'],
-                                      waitForFinish=True))
+                                      waitForFinish=False))
 
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
@@ -357,7 +357,7 @@ for repository in repositories:
                                            workdir=code_dir))
 
     factory_mac.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_mac'],
-                                      waitForFinish=True))
+                                      waitForFinish=False))
 
     builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
 
