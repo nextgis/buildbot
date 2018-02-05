@@ -18,6 +18,7 @@ ngftp = 'ftp://192.168.255.51/software/installer/src/'
 ngftp_user = bbconf.ftp_mynextgis_user
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
+ci_project_name = 'create_installer'
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -39,7 +40,8 @@ c['schedulers'].append(forceScheduler)
 #==============================================================================#
 code_dir_last = '{}_code'.format('qt')
 code_dir = os.path.join('build', code_dir_last)
-build_dir = os.path.join(code_dir, 'build')
+build_subdir = 'build'
+build_dir = os.path.join(code_dir, build_subdir)
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
@@ -150,7 +152,7 @@ factory_mac.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o',
 factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_win',
-                                                '--build_path', build_dir],
+                                                '--build_path', build_subdir],
                                        name="send 32 bit package to ftp",
                                        description=["send", "32 bit package to ftp"],
                                        descriptionDone=["sent", "32 bit package to ftp"],
@@ -159,7 +161,7 @@ factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
 factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_macos',
-                                                '--build_path', build_dir],
+                                                '--build_path', build_subdir],
                                        name="send package to ftp",
                                        description=["send", "package to ftp"],
                                        descriptionDone=["sent", "package to ftp"],
@@ -169,7 +171,7 @@ factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
 # 2. Build installer framework
 code_dir_last = '{}_code'.format('installer')
 code_dir = os.path.join('build', code_dir_last)
-build_dir = os.path.join(code_dir, 'build')
+build_dir = os.path.join(code_dir, build_subdir)
 
 factory_win.addStep(steps.Git(repourl=installer_git,
                                 mode='full',
@@ -238,11 +240,11 @@ factory_mac.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o',
                                        descriptionDone=["curl", "downloaded upload script"],
                                        haltOnFailure=True,
                                        workdir=code_dir))
-                                       
+
 factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_win',
-                                                '--build_path', build_dir],
+                                                '--build_path', build_subdir],
                                        name="send 32 bit package to ftp",
                                        description=["send", "32 bit package to ftp"],
                                        descriptionDone=["sent", "32 bit package to ftp"],
@@ -251,7 +253,7 @@ factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
 factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_macos',
-                                                '--build_path', build_dir],
+                                                '--build_path', build_subdir],
                                        name="send package to ftp",
                                        description=["send", "package to ftp"],
                                        descriptionDone=["sent", "package to ftp"],
