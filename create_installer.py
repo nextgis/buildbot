@@ -28,14 +28,14 @@ c['builders'] = []
 project_name = 'create_installer'
 
 forceScheduler_create = schedulers.ForceScheduler(
-                            name=project_name + "_update_force",
+                            name=project_name + "_update",
                             builderNames=[
                                             project_name + "_win32",
                                             project_name + "_win64",
                                             project_name + "_mac",
                                         ])
 forceScheduler_update = schedulers.ForceScheduler(
-                            name=project_name + "_create_force",
+                            name=project_name + "_create",
                             builderNames=[
                                             project_name + "_win32",
                                             project_name + "_win64",
