@@ -69,6 +69,7 @@ for platform in platforms:
                                shallow=True,
                                method='clobber',
                                submodules=False,
+                               alwaysUseLatest=True,
                                workdir=code_dir))
 
     factory.addStep(steps.MakeDirectory(dir=build_dir,

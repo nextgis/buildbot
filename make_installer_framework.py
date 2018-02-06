@@ -75,12 +75,14 @@ factory_win.addStep(steps.Git(repourl=qt_git,
                             method='clobber',
                             submodules=False,
                             shallow=True,
+                            alwaysUseLatest=True,
                             workdir=code_dir))
 factory_mac.addStep(steps.Git(repourl=qt_git,
                             mode='full',
                             method='clobber',
                             submodules=False,
                             shallow = True,
+                            alwaysUseLatest=True,
                             workdir=code_dir))
 
 # make build dir
@@ -184,12 +186,14 @@ factory_win.addStep(steps.Git(repourl=installer_git,
                                 method='clobber',
                                 submodules=False,
                                 shallow = True,
+                                alwaysUseLatest=True,
                                 workdir=code_dir))
 factory_mac.addStep(steps.Git(repourl=installer_git,
                                 mode='full',
                                 method='clobber',
                                 submodules=False,
                                 shallow = True,
+                                alwaysUseLatest=True,
                                 workdir=code_dir))
 
 factory_win.addStep(steps.MakeDirectory(dir=build_dir,
