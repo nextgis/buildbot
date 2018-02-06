@@ -11,7 +11,7 @@ c = {}
 
 vm_cpu_count = 8
 
-mac_os_min_version = '10.11'
+mac_os_min_version = '10.10'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 ngftp = 'ftp://192.168.255.51/software/installer/src/'
@@ -219,27 +219,27 @@ factory_mac.addStep(steps.ShellCommand(command=['python', 'build_installer_bb.py
                                         workdir=os.path.join(code_dir, 'qtifw', 'tools'),
                                         env=env))
 
-create_archive = ['cmake', '-E', 'tar', 'cfv', 'archive.zip', '--format=zip', os.path.join(build_dir, 'qtifw_pkg')]
+create_archive = ['cmake', '-E', 'tar', 'cfv', 'archive.zip', '--format=zip', os.path.join('qtifw_build', 'bin')]
 factory_win.addStep(steps.ShellCommand(command=create_archive,
                                        name="archive",
                                        description=["cmake", "make archive"],
                                        descriptionDone=["cmake", "made archive"],
                                        haltOnFailure=True,
-                                       workdir=build_dir))
+                                       workdir=code_dir))
 factory_mac.addStep(steps.ShellCommand(command=create_archive,
                                        name="archive",
                                        description=["cmake", "make archive"],
                                        descriptionDone=["cmake", "made archive"],
                                        haltOnFailure=True,
-                                       workdir=build_dir,
+                                       workdir=code_dir,
                                        env=env))
 
 factory_win.addStep(steps.StringDownload("0.0.0\nnow\narchive",
                                         workerdest="version.str",
-                                        workdir=build_dir))
+                                        workdir=code_dir))
 factory_mac.addStep(steps.StringDownload("0.0.0\nnow\narchive",
                                         workerdest="version.str",
-                                        workdir=build_dir))
+                                        workdir=code_dir))
 
 # 3. Upload installer framework to ftp
 factory_win.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
@@ -254,14 +254,14 @@ factory_mac.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o',
 factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_win',
-                                                '--build_path', build_subdir],
+                                                '--build_path', ''],
                                        name="send 32 bit package to ftp",
                                        haltOnFailure=True,
                                        workdir=code_dir))
 factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_macos',
-                                                '--build_path', build_subdir],
+                                                '--build_path', ''],
                                        name="send package to ftp",
                                        haltOnFailure=True,
                                        workdir=code_dir))

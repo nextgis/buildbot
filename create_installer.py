@@ -27,21 +27,22 @@ c['builders'] = []
 
 project_name = 'create_installer'
 
-forceScheduler = schedulers.ForceScheduler(
+forceScheduler_create = schedulers.ForceScheduler(
                             name=project_name + "_update_force",
                             builderNames=[
                                             project_name + "_win32",
                                             project_name + "_win64",
                                             project_name + "_mac",
                                         ])
-forceScheduler = schedulers.ForceScheduler(
+forceScheduler_update = schedulers.ForceScheduler(
                             name=project_name + "_create_force",
                             builderNames=[
                                             project_name + "_win32",
                                             project_name + "_win64",
                                             project_name + "_mac",
                                         ])
-c['schedulers'].append(forceScheduler)
+c['schedulers'].append(forceScheduler_create)
+c['schedulers'].append(forceScheduler_update)
 
 platforms = [
     {'name' : 'win32', 'worker' : 'build-win'},
