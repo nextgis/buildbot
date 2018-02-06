@@ -103,6 +103,7 @@ env = {
                 "/usr/local/bin",
                 "${PATH}"
             ],
+    'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
 }
 factory_mac.addStep(steps.ShellCommand(command=["cmake", mac_run_args, '..'],
                                        name="configure",
@@ -254,14 +255,14 @@ factory_mac.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o',
 factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_win',
-                                                '--build_path', ''],
+                                                '--build_path', '.'],
                                        name="send 32 bit package to ftp",
                                        haltOnFailure=True,
                                        workdir=code_dir))
 factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + project_name + '_macos',
-                                                '--build_path', ''],
+                                                '--build_path', '.'],
                                        name="send package to ftp",
                                        haltOnFailure=True,
                                        workdir=code_dir))

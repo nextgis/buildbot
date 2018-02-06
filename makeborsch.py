@@ -18,7 +18,7 @@ repositories = [
 
 vm_cpu_count = 8
 
-max_os_min_version = '10.11'
+mac_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/github_release.py'
@@ -94,7 +94,7 @@ for repository in repositories:
     # Mac OS X specific
     mac_run_args = list(run_args)
     mac_cmake_build = list(cmake_build)
-    mac_run_args.extend(['-DOSX_FRAMEWORK=ON', '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + max_os_min_version])
+    mac_run_args.extend(['-DOSX_FRAMEWORK=ON', '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version])
     mac_cmake_build.append('-j' + str(vm_cpu_count))
 
     # Windows ##################################################################
@@ -296,6 +296,7 @@ for repository in repositories:
                     "/usr/local/bin",
                     "${PATH}"
                 ],
+        'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
     }
 
     # make build dir
