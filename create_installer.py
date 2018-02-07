@@ -70,7 +70,7 @@ for platform in platforms:
 for platform in platforms:
     code_dir_last = '{}_{}_code'.format('installer', platform['name'])
     code_dir = os.path.join('build', code_dir_last)
-    build_dir_name = 'inst'
+    build_dir_name = 'build'
     build_dir = os.path.join(code_dir, build_dir_name)
 
     factory = util.BuildFactory()
@@ -123,7 +123,7 @@ for platform in platforms:
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
-        'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '--target_dir', build_dir_name],
+        'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '--target_dir', build_dir_name + '/inst'],
                                            name="Prepare packages data",
                                            haltOnFailure=True,
                                            workdir=code_dir))
