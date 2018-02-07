@@ -27,6 +27,8 @@ scheduler1 = schedulers.SingleBranchScheduler(
 c['schedulers'] = [scheduler1]
 c['schedulers'].append(schedulers.ForceScheduler(
                             name=project_name + "_force",
+                            label="Force make",
+                            buttonName="Force make",
                             builderNames=[project_name + "_deb"]))
 
 deb_name = 'nextgisutilities'
@@ -117,6 +119,6 @@ factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-builder_deb = util.BuilderConfig(name = project_name + '_deb', workernames = ['build-nix'], factory = factory_deb)
+builder_deb = util.BuilderConfig(name = "Make NextGIS utilities [ppa]", workernames = ['build-nix'], factory = factory_deb)
 
 c['builders'] = [builder_deb]

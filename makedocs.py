@@ -46,9 +46,9 @@ for lang in langs:
 #        factory.addStep(steps.ShellCommand(command=["pip", "install", "-e", "docs_ngweb_dev", "--upgrade", "--ignore-installed"],
 #                                      description=["install", "nextgisweb"],
 #                                      descriptionDone=["installed", "nextgisweb"],
-#                                      haltOnFailure=False, 
+#                                      haltOnFailure=False,
 #                                      warnOnWarnings=True,
-#                                      flunkOnFailure=False, 
+#                                      flunkOnFailure=False,
 #                                      warnOnFailure=True,
 #                                      workdir="build/source"))
 
@@ -78,13 +78,13 @@ for lang in langs:
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS forest inspector"],
                                       workdir="build/source/docs_forestinspector"))
-    
-    
+
+
     factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"],
                                       description=["make", "javadoc for mobile (android)"],
                                       descriptionDone=["made", "javadoc for mobile (android)"],
                                       workdir="build/source/ngmobile_dev"))
-    
+
     factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
                                       description=["make", "swiftdoc for mobile (ios)"],
                                       descriptionDone=["made", "swiftdoc for mobile (ios)"],
@@ -96,10 +96,12 @@ for lang in langs:
     factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
                                        description=["sync", "to web server"]))
 
-    builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'], factory = factory)
+    builder = util.BuilderConfig(name = 'Make documentation [' + lang + ']', workernames = ['build-nix'], factory = factory)
     c['builders'].append(builder)
 
 c['schedulers'].append(schedulers.ForceScheduler(
             name=poller_name + "_force",
+            label="Force make",
+            buttonName="Force make documentation",
             builderNames=builderNames,
 ))

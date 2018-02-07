@@ -29,18 +29,22 @@ project_name = 'create_installer'
 
 forceScheduler_create = schedulers.ForceScheduler(
                             name=project_name + "_update",
+                            label="Update installer",
+                            buttonName="Update installer",
                             builderNames=[
                                             project_name + "_win32",
                                             project_name + "_win64",
                                             project_name + "_mac",
                                         ],
-                            propeties=[util.StringParameter(name="force",
+                            properties=[util.StringParameter(name="force",
                                             label="Force update specified packages even not any changes exists :",
                                             default="all", size=280),
                                        ],
                         )
 forceScheduler_update = schedulers.ForceScheduler(
                             name=project_name + "_create",
+                            label="Create installer",
+                            buttonName="Create installer",
                             builderNames=[
                                             project_name + "_win32",
                                             project_name + "_win64",
@@ -66,8 +70,8 @@ for platform in platforms:
 for platform in platforms:
     code_dir_last = '{}_{}_code'.format('installer', platform['name'])
     code_dir = os.path.join('build', code_dir_last)
-    build_dir = os.path.join(code_dir, 'build')
-    build_qt_dir = os.path.join(code_dir, 'qt')
+    build_dir_name = 'inst'
+    build_dir = os.path.join(code_dir, build_dir_name)
 
     factory = util.BuildFactory()
 
@@ -81,8 +85,6 @@ for platform in platforms:
 
     factory.addStep(steps.MakeDirectory(dir=build_dir,
                                         name="Make build directory"))
-    factory.addStep(steps.MakeDirectory(dir=build_qt_dir,
-                                        name="Make qt static directory"))
 
     # 1. Get and unpack installer and qt5 static from ftp
     if_prefix = '_mac'
@@ -103,11 +105,11 @@ for platform in platforms:
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download qt package",
                                            haltOnFailure=True,
-                                           workdir=build_qt_dir))
+                                           workdir=build_dir))
     factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
                                            name="Extract qt package",
                                            haltOnFailure=True,
-                                           workdir=build_qt_dir))
+                                           workdir=build_dir))
 
     # 2. Get repository from ftp
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + 'repo_' + platform['name'] + '/package.zip', '-o', 'package.zip', '-s'],
@@ -121,7 +123,7 @@ for platform in platforms:
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
-        'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '--target_dir','build/inst'],
+        'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '--target_dir', build_dir_name],
                                            name="Prepare packages data",
                                            haltOnFailure=True,
                                            workdir=code_dir))
@@ -131,7 +133,7 @@ for platform in platforms:
 
     # 6. Upload repository archive to ftp
 
-    builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
+    builder = util.BuilderConfig(name = "Create/update installer on " + platform['name'], #project_name + "_" + platform['name'],
                                  workernames = [platform['worker']],
                                  factory = factory)
 

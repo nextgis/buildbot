@@ -71,6 +71,8 @@ for repository in repositories:
     c['schedulers'].append(scheduler1)
     forceScheduler = schedulers.ForceScheduler(
                                 name=project_name + "_force",
+                                label="Force build",
+                                buttonName="Force build",
                                 builderNames=[
                                                 project_name + "_win",
                                                 project_name + "_mac",
@@ -265,7 +267,7 @@ for repository in repositories:
                                       waitForFinish=False,
                                       ))
 
-    builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
+    builder_win = util.BuilderConfig(name = "Create " + project_name + ' [Windows]', workernames = ['build-win'], factory = factory_win)
 
     c['builders'].append(builder_win)
 
@@ -352,7 +354,7 @@ for repository in repositories:
 
     factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                     '--ftp_user', ngftp_user, '--ftp',
-                                                    ngftp + project_name + '_macos',
+                                                    ngftp + project_name + '_mac',
                                                     '--build_path', build_subdir],
                                            name="send package to ftp",
                                            description=["send", "package to ftp"],
@@ -365,6 +367,6 @@ for repository in repositories:
                                       waitForFinish=False,
                                       ))
 
-    builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
+    builder_mac = util.BuilderConfig(name = "Create " + project_name + ' [Mac OS]', workernames = ['build-mac'], factory = factory_mac)
 
     c['builders'].append(builder_mac)

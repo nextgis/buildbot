@@ -27,6 +27,8 @@ c['builders'] = []
 project_name = 'inst_framework'
 forceScheduler = schedulers.ForceScheduler(
                             name=project_name + "_force",
+                            label="Make installer framework",
+                            buttonName="Make installer framework",
                             builderNames=[
                                             project_name + "_win",
                                             project_name + "_mac",
@@ -171,7 +173,7 @@ factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                        workdir=code_dir))
 factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
-                                                ngftp + project_name + '_macos' + '/qt',
+                                                ngftp + project_name + '_mac' + '/qt',
                                                 '--build_path', build_subdir],
                                        name="send package to ftp",
                                        description=["send", "package to ftp"],
@@ -263,14 +265,16 @@ factory_win.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                        workdir=code_dir))
 factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
-                                                ngftp + project_name + '_macos',
+                                                ngftp + project_name + '_mac',
                                                 '--build_path', '.'],
                                        name="send package to ftp",
                                        haltOnFailure=True,
                                        workdir=code_dir))
 
-builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
-builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
+builder_win = util.BuilderConfig(name = "Create installer framework [Windows]",#project_name + '_win',
+                                workernames = ['build-win'], factory = factory_win)
+builder_mac = util.BuilderConfig(name = "Create installer framework [Mac OS]",#project_name + '_mac',
+                                workernames = ['build-mac'], factory = factory_mac)
 
 c['builders'].append(builder_win)
 c['builders'].append(builder_mac)
