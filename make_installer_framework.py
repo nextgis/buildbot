@@ -97,6 +97,7 @@ factory_win.addStep(steps.ShellCommand(command=["cmake", win_run_args, '-G', 'Vi
                                        description=["cmake", "configure for win32"],
                                        descriptionDone=["cmake", "configured for win32"],
                                        haltOnFailure=True,
+                                       timeout = 60 * 40,
                                        workdir=build_dir))
 env = {
     'PATH': [
@@ -110,6 +111,7 @@ factory_mac.addStep(steps.ShellCommand(command=["cmake", mac_run_args, '..'],
                                        description=["cmake", "configure"],
                                        descriptionDone=["cmake", "configured"],
                                        haltOnFailure=True,
+                                       timeout = 60 * 40,
                                        workdir=build_dir,
                                        env=env))
 

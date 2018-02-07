@@ -186,6 +186,11 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
+    # create installer trigger
+    factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win32'],
+                                      waitForFinish=False,
+                                      ))
+
     # Build 64bit ##############################################################
     build_subdir = 'build64'
     build_dir = os.path.join(code_dir, build_subdir)
@@ -255,20 +260,9 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
-    # trigger build of installer
-    factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win32'],
-                                      waitForFinish=True,
-                                      haltOnFailure=False,
-                                      flunkOnFailure=False,
-                                      flunkOnWarnings=False,
-                                      warnOnWarnings=False,
-                                      ))
+    # create installer trigger
     factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win64'],
-                                        waitForFinish=True,
-                                        haltOnFailure=False,
-                                        flunkOnFailure=False,
-                                        flunkOnWarnings=False,
-                                        warnOnWarnings=False,
+                                      waitForFinish=False,
                                       ))
 
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
@@ -366,6 +360,7 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
+    # create installer trigger
     factory_mac.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_mac'],
                                       waitForFinish=False,
                                       ))
