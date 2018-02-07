@@ -80,8 +80,10 @@ for platform in platforms:
 
     # 1. Get and unpack installer and qt5 static from ftp
     if_prefix = '_mac'
+    separator = '/'
     if 'win' in platform['name']:
         if_prefix = '_win'
+        separator = '\\'
 
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download installer package",
@@ -112,7 +114,7 @@ for platform in platforms:
                                            workdir=build_dir))
 
     # 3. Get compiled libraries
-    factory.addStep(steps.ShellCommand(command=["python", 'create_installer.py',
+    factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
         'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '--target_dir','build/inst'],
                                            name="Prepare packages data",
                                            haltOnFailure=True,

@@ -88,7 +88,7 @@ for repository in repositories:
     win_run_args = list(run_args)
     win_cmake_build = list(cmake_build)
     win_run_args.append('-DBUILD_SHARED_LIBS=TRUE')
-    win_cmake_build.append('/m:' + str(vm_cpu_count))
+    win_cmake_build.append('/MP' + str(vm_cpu_count))
 
     # Mac OS X specific
     mac_run_args = list(run_args)
