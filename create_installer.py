@@ -10,7 +10,7 @@ c = {}
 
 vm_cpu_count = 8
 
-max_os_min_version = '10.11'
+mac_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 ngftp = 'ftp://192.168.255.51/software/installer/src/'
@@ -102,9 +102,21 @@ for platform in platforms:
                                            workdir=build_qt_dir))
 
     # 2. Get repository from ftp
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + 'repo_' + platform['name'] + '/package.zip', '-o', 'package.zip', '-s'],
+                                           name="Download repository",
+                                           haltOnFailure=False, # The repository may not be exists
+                                           workdir=build_dir))
+    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
+                                           name="Extract repository from archive",
+                                           haltOnFailure=False, # The repository may not be exists
+                                           workdir=build_dir))
 
     # 3. Get compiled libraries
-
+    factory.addStep(steps.ShellCommand(command=["python", 'create_installer.py',
+        'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '--target_dir','build/inst'],
+                                           name="Prepare packages data",
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
     # 4. Create or update repository
 
     # 5. Upload repository archive to site

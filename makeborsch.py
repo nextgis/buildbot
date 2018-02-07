@@ -49,7 +49,6 @@ def install_dependencies(factory, requirements, os):
                                                 descriptionDone=[requirement, "installed"],
                                                 haltOnFailure=True))
 
-
 for repository in repositories:
     project_name = repository['repo']
     repourl = 'git://github.com/nextgis-borsch/{}.git'.format(project_name)
@@ -187,9 +186,6 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
-    factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win32'],
-                                      waitForFinish=False))
-
     # Build 64bit ##############################################################
     build_subdir = 'build64'
     build_dir = os.path.join(code_dir, build_subdir)
@@ -259,8 +255,21 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
+    # trigger build of installer
+    factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win32'],
+                                      waitForFinish=True,
+                                      haltOnFailure=False,
+                                      flunkOnFailure=False,
+                                      flunkOnWarnings=False,
+                                      warnOnWarnings=False,
+                                      ))
     factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win64'],
-                                      waitForFinish=False))
+                                        waitForFinish=True,
+                                        haltOnFailure=False,
+                                        flunkOnFailure=False,
+                                        flunkOnWarnings=False,
+                                        warnOnWarnings=False,
+                                      ))
 
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
@@ -358,7 +367,8 @@ for repository in repositories:
                                            workdir=code_dir))
 
     factory_mac.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_mac'],
-                                      waitForFinish=False))
+                                      waitForFinish=False,
+                                      ))
 
     builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
 
