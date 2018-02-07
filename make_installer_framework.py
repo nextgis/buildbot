@@ -59,7 +59,7 @@ installer_git = 'git://github.com/nextgis/nextgis_installer.git'
 # Windows ##################################################################
 win_run_args = list(qt_args)
 win_cmake_build = list(cmake_build)
-win_cmake_build.append('/MP' + str(vm_cpu_count))
+win_cmake_build.append('/m:' + str(vm_cpu_count))
 
 mac_run_args = list(qt_args)
 mac_cmake_build = list(cmake_build)

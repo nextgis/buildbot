@@ -33,14 +33,20 @@ forceScheduler_create = schedulers.ForceScheduler(
                                             project_name + "_win32",
                                             project_name + "_win64",
                                             project_name + "_mac",
-                                        ])
+                                        ],
+                            propeties=[util.StringParameter(name="force",
+                                            label="Force update specified packages even not any changes exists :",
+                                            default="all", size=280),
+                                       ],
+                        )
 forceScheduler_update = schedulers.ForceScheduler(
                             name=project_name + "_create",
                             builderNames=[
                                             project_name + "_win32",
                                             project_name + "_win64",
                                             project_name + "_mac",
-                                        ])
+                                        ],
+                        )
 c['schedulers'].append(forceScheduler_create)
 c['schedulers'].append(forceScheduler_update)
 
