@@ -54,6 +54,20 @@ forceScheduler_update = schedulers.ForceScheduler(
 c['schedulers'].append(forceScheduler_create)
 c['schedulers'].append(forceScheduler_update)
 
+@util.renderer
+def commandArgs(props):
+    command = []
+    if props.getProperty('scheduler') ==  project_name + "_create":
+        command.append('create')
+    elif props.getProperty('scheduler') ==  project_name + "_update":
+        command.append('update')
+        command.append('--force')
+        command.append(props.getProperty('force'))
+    else:
+        command.append('update')
+
+    return command
+
 platforms = [
     {'name' : 'win32', 'worker' : 'build-win'},
     {'name' : 'win64', 'worker' : 'build-win'},
@@ -138,13 +152,30 @@ for platform in platforms:
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
-        'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '-s', build_dir_name + '/inst',
-        '-q', build_dir_name + '/qttools', '-t', build_dir_name],
+                                                '-s', build_dir_name + '/inst',
+                                                '-q', build_dir_name + '/qttools',
+                                                '-t', build_dir_name,
+                                                'prepare', '--ftp_user', ngftp_user,
+                                                '--ftp', ngftp,
+                                                ],
                                            name="Prepare packages data",
                                            haltOnFailure=True,
                                            workdir=code_dir,
                                            env=env))
     # 4. Create or update repository
+
+    factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
+                                                '-s', build_dir_name + '/inst',
+                                                '-q', build_dir_name + '/qttools',
+                                                '-t', build_dir_name,
+                                                '-n', '-r', 'https://nextgis.com/programs/desktop/repository-' + platform['name'],
+                                                '-i', 'nextgis-setup',
+                                                util.Interpolate('%(kw:ca)s', ca=commandArgs),
+                                                ],
+                                        name="Create/Update repository",
+                                        haltOnFailure=True,
+                                        workdir=code_dir,
+                                        env=env))
 
     # 5. Upload repository archive to site
 
