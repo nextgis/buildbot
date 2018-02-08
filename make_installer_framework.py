@@ -64,11 +64,11 @@ for os_type in os_types:
     cmake_build_ext = list(cmake_build)
     env = {}
     worker_name = ''
-    if os_types == 'win':
+    if os_type == 'win':
         run_args_ext.extend(['-G', 'Visual Studio 15 2017'])
         cmake_build_ext.append('--')
         cmake_build_ext.append('/m:' + str(vm_cpu_count))
-    elif os_types == 'mac':
+    elif os_type == 'mac':
         run_args_ext.extend(['-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version])
         cmake_build_ext.append('--')
         cmake_build_ext.append('-j' + str(vm_cpu_count))
@@ -141,10 +141,10 @@ for os_type in os_types:
     build_installer_cmd = ['python', 'build_installer_bb.py', '--qtdir',
                             qt_build_dir, '--make']
     separator = '/'
-    if os_types == 'win':
+    if os_type == 'win':
         separator = '\\'
         build_installer_cmd.append('nmake')
-    elif os_types == 'mac':
+    elif os_type == 'mac':
         build_installer_cmd.append('make')
 
 
