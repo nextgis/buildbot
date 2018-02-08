@@ -35,12 +35,6 @@ forceScheduler = schedulers.ForceScheduler(
                                         ])
 c['schedulers'].append(forceScheduler)
 
-# 1. Build qt static
-# 2. Build installer
-# 3. Upload to ftp
-
-#==============================================================================#
-
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
