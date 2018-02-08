@@ -89,44 +89,60 @@ for platform in platforms:
     # 1. Get and unpack installer and qt5 static from ftp
     if_prefix = '_mac'
     separator = '/'
+    env = {
+        'PATH': [
+                    "/usr/local/bin",
+                    "${PATH}"
+                ],
+    }
     if 'win' in platform['name']:
         if_prefix = '_win'
         separator = '\\'
+        env = {}
 
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download installer package",
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
+
     factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
                                            name="Extract installer package",
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
 
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download qt package",
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
+
     factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
                                            name="Extract qt package",
                                            haltOnFailure=True,
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
 
     # 2. Get repository from ftp
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + 'repo_' + platform['name'] + '/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download repository",
                                            haltOnFailure=False, # The repository may not be exists
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
     factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
                                            name="Extract repository from archive",
                                            haltOnFailure=False, # The repository may not be exists
-                                           workdir=build_dir))
+                                           workdir=build_dir,
+                                           env=env))
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
         'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '--target_dir', build_dir_name + '/inst'],
                                            name="Prepare packages data",
                                            haltOnFailure=True,
-                                           workdir=code_dir))
+                                           workdir=code_dir,
+                                           env=env))
     # 4. Create or update repository
 
     # 5. Upload repository archive to site
