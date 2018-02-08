@@ -140,8 +140,8 @@ for platform in platforms:
                                            haltOnFailure=True,
                                            workdir=build_dir,
                                            env=env))
-    factory.addStep(steps.CopyDirectory(src=build_dir + "/inst", dest=code_dir + "/qt"))
-    factory.addStep(steps.RemoveDirectory(dir=build_dir + "/inst/bin"))
+    factory.addStep(steps.CopyDirectory(src=code_dir + "/inst", dest=code_dir + "/qt"))
+    factory.addStep(steps.RemoveDirectory(dir=code_dir + "/inst"))
 
     # 2. Get repository from ftp
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + 'repo_' + platform['name'] + '/package.zip', '-o', 'package.zip', '-s'],
