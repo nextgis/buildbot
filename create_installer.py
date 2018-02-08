@@ -125,6 +125,7 @@ for platform in platforms:
                                            haltOnFailure=True,
                                            workdir=build_dir,
                                            env=env))
+    factory.addStep(steps.CopyDirectory(src=build_dir + "/qtifw_build", dest=code_dir + "/qtifw_pkg"))
 
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download qt package",
@@ -132,11 +133,14 @@ for platform in platforms:
                                            workdir=build_dir,
                                            env=env))
 
+
     factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
                                            name="Extract qt package",
                                            haltOnFailure=True,
                                            workdir=build_dir,
                                            env=env))
+    factory.addStep(steps.CopyDirectory(src=build_dir + "/inst", dest=code_dir + "/qt"))
+    factory.addStep(steps.RemoveDirectory(dir=build_dir + "/inst/bin"))
 
     # 2. Get repository from ftp
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + 'repo_' + platform['name'] + '/package.zip', '-o', 'package.zip', '-s'],
@@ -153,7 +157,7 @@ for platform in platforms:
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', build_dir_name + '/inst',
-                                                '-q', build_dir_name + '/qttools',
+                                                '-q', 'qt/bin',
                                                 '-t', build_dir_name,
                                                 'prepare', '--ftp_user', ngftp_user,
                                                 '--ftp', ngftp,
@@ -166,7 +170,7 @@ for platform in platforms:
 
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', build_dir_name + '/inst',
-                                                '-q', build_dir_name + '/qttools',
+                                                '-q', 'qt/bin',
                                                 '-t', build_dir_name,
                                                 '-n', '-r', 'https://nextgis.com/programs/desktop/repository-' + platform['name'],
                                                 '-i', 'nextgis-setup',
