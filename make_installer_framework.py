@@ -40,10 +40,6 @@ c['schedulers'].append(forceScheduler)
 # 3. Upload to ftp
 
 #==============================================================================#
-code_dir_last = '{}_code'.format('qt')
-code_dir = os.path.join('build', code_dir_last)
-build_subdir = 'build'
-build_dir = os.path.join(code_dir, build_subdir)
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
@@ -60,6 +56,12 @@ installer_git = 'git://github.com/nextgis/nextgis_installer.git'
 
 os_types = ['win', 'mac']
 for os_type in os_types:
+
+    code_dir_last = '{}_code'.format('qt')
+    code_dir = os.path.join('build', code_dir_last)
+    build_subdir = 'build'
+    build_dir = os.path.join(code_dir, build_subdir)
+
     run_args_ext = list(qt_args)
     cmake_build_ext = list(cmake_build)
     env = {}
