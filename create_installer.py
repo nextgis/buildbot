@@ -133,8 +133,9 @@ for platform in platforms:
 
     # 6. Upload repository archive to ftp
 
-    builder = util.BuilderConfig(name = "Create/update installer on " + platform['name'], #project_name + "_" + platform['name'],
+    builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
                                  workernames = [platform['worker']],
-                                 factory = factory)
+                                 factory = factory,
+                                 description="Create/update installer on " + platform['name'],)
 
     c['builders'].append(builder)

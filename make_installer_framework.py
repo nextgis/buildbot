@@ -271,10 +271,12 @@ factory_mac.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                        haltOnFailure=True,
                                        workdir=code_dir))
 
-builder_win = util.BuilderConfig(name = "Create installer framework [Windows]",#project_name + '_win',
-                                workernames = ['build-win'], factory = factory_win)
-builder_mac = util.BuilderConfig(name = "Create installer framework [Mac OS]",#project_name + '_mac',
-                                workernames = ['build-mac'], factory = factory_mac)
+builder_win = util.BuilderConfig(name = project_name + '_win',
+                                workernames = ['build-win'], factory = factory_win,
+                                description="Create installer framework [Windows]")
+builder_mac = util.BuilderConfig(name = project_name + '_mac',
+                                workernames = ['build-mac'], factory = factory_mac,
+                                description="Create installer framework [Mac OS]")
 
 c['builders'].append(builder_win)
 c['builders'].append(builder_mac)

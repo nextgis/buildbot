@@ -119,6 +119,8 @@ factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-builder_deb = util.BuilderConfig(name = "Make NextGIS utilities [ppa]", workernames = ['build-nix'], factory = factory_deb)
+builder_deb = util.BuilderConfig(name = project_name + "_deb", workernames = ['build-nix'],
+                                factory = factory_deb,
+                                description =  "Make NextGIS utilities [ppa]")
 
 c['builders'] = [builder_deb]

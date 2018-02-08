@@ -267,7 +267,7 @@ for repository in repositories:
                                       waitForFinish=False,
                                       ))
 
-    builder_win = util.BuilderConfig(name = "Create " + project_name + ' [Windows]', workernames = ['build-win'], factory = factory_win)
+    builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
 
     c['builders'].append(builder_win)
 
@@ -367,6 +367,6 @@ for repository in repositories:
                                       waitForFinish=False,
                                       ))
 
-    builder_mac = util.BuilderConfig(name = "Create " + project_name + ' [Mac OS]', workernames = ['build-mac'], factory = factory_mac)
+    builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
 
     c['builders'].append(builder_mac)

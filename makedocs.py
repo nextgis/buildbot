@@ -89,14 +89,16 @@ for lang in langs:
                                       description=["make", "swiftdoc for mobile (ios)"],
                                       descriptionDone=["made", "swiftdoc for mobile (ios)"],
                                       workdir="build/source/ngmobile_dev"))
-    
+
     # 3. build html
     factory.addStep(steps.Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
     # 4. upload to ftp
     factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
                                        description=["sync", "to web server"]))
 
-    builder = util.BuilderConfig(name = 'Make documentation [' + lang + ']', workernames = ['build-nix'], factory = factory)
+    builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'],
+                                factory = factory,
+                                description='Make documentation [' + lang + ']')
     c['builders'].append(builder)
 
 c['schedulers'].append(schedulers.ForceScheduler(
