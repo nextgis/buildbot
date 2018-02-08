@@ -126,6 +126,7 @@ for platform in platforms:
                                            workdir=build_dir,
                                            env=env))
     factory.addStep(steps.CopyDirectory(src=build_dir + "/qtifw_build", dest=code_dir + "/qtifw_pkg"))
+    factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download qt package",
