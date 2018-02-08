@@ -138,7 +138,8 @@ for platform in platforms:
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
-        'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '--target_dir', build_dir_name + '/inst'],
+        'prepare', '--ftp_user', ngftp_user, '--ftp', ngftp, '-s', build_dir_name + '/inst',
+        '-q', build_dir_name + '/qttools', '-t', build_dir_name],
                                            name="Prepare packages data",
                                            haltOnFailure=True,
                                            workdir=code_dir,
