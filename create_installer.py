@@ -13,8 +13,10 @@ vm_cpu_count = 8
 mac_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
-ngftp = 'ftp://192.168.255.51/software/installer/src/'
+ngftp = 'ftp://192.168.255.51/software/installer'
+sizeftp = 'ftp://192.168.255.1/desktop'
 ngftp_user = bbconf.ftp_mynextgis_user
+siteftp_user = bbconf.ftp_upldsoft_user
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
 if_project_name = 'inst_framework'
@@ -37,8 +39,11 @@ forceScheduler_create = schedulers.ForceScheduler(
                                             project_name + "_mac",
                                         ],
                             properties=[util.StringParameter(name="force",
-                                            label="Force update specified packages even not any changes exists :",
+                                            label="Force update specified packages even not any changes exists:",
                                             default="all", size=280),
+                                        util.StringParameter(name="suffix",
+                                                        label="Installer name and URL path suffix (can be empty):",
+                                                        default="-dev", size=40),
                                        ],
                         )
 forceScheduler_update = schedulers.ForceScheduler(
@@ -50,6 +55,10 @@ forceScheduler_update = schedulers.ForceScheduler(
                                             project_name + "_win64",
                                             project_name + "_mac",
                                         ],
+                            properties=[util.StringParameter(name="suffix",
+                                                            label="Installer name and URL path suffix (can be empty):",
+                                                            default="-dev", size=40),
+                                       ],
                         )
 c['schedulers'].append(forceScheduler_create)
 c['schedulers'].append(forceScheduler_update)
@@ -109,12 +118,17 @@ for platform in platforms:
                     "${PATH}"
                 ],
     }
+    installer_ext = '.dmg'
     if 'win' in platform['name']:
         if_prefix = '_win'
         separator = '\\'
         env = {}
+        installer_ext = '.exe'
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'],
+    repo_name_base = 'repository-' + platform['name']
+    repo_archive = 'repository-' + platform['name'] + '.zip'
+
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download installer package",
                                            haltOnFailure=True,
                                            workdir=build_dir,
@@ -128,7 +142,7 @@ for platform in platforms:
     factory.addStep(steps.CopyDirectory(src=build_dir + "/qtifw_build", dest=code_dir + "/qtifw_pkg"))
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
                                            name="Download qt package",
                                            haltOnFailure=True,
                                            workdir=build_dir,
@@ -140,16 +154,16 @@ for platform in platforms:
                                            haltOnFailure=True,
                                            workdir=build_dir,
                                            env=env))
-    factory.addStep(steps.CopyDirectory(src=code_dir + "/inst", dest=code_dir + "/qt"))
-    factory.addStep(steps.RemoveDirectory(dir=code_dir + "/inst"))
+    factory.addStep(steps.CopyDirectory(src=build_dir + "/inst", dest=code_dir + "/qt"))
+    factory.addStep(steps.RemoveDirectory(dir=build_dir + "/inst"))
 
     # 2. Get repository from ftp
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + 'repo_' + platform['name'] + '/package.zip', '-o', 'package.zip', '-s'],
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + repo_archive, '-o', repo_archive, '-s'],
                                            name="Download repository",
                                            haltOnFailure=False, # The repository may not be exists
                                            workdir=build_dir,
                                            env=env))
-    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
+    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', repo_archive],
                                            name="Extract repository from archive",
                                            haltOnFailure=False, # The repository may not be exists
                                            workdir=build_dir,
@@ -161,20 +175,37 @@ for platform in platforms:
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
                                                 'prepare', '--ftp_user', ngftp_user,
-                                                '--ftp', ngftp,
+                                                '--ftp', ngftp + '/src/',
                                                 ],
                                            name="Prepare packages data",
                                            haltOnFailure=True,
                                            workdir=code_dir,
                                            env=env))
     # 4. Create or update repository
+    # Install NextGIS sign sertificate
+    if 'mac' == platform['name']:
+        factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
+                                            workerdest=code_dir + "/dev.p12",
+                                            ))
+        factory.addStep(steps.ShellCommand(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain', '&&',
+                                                    'security', 'default-keychain', '-s', 'codesign.keychain', '&&',
+                                                    'security', 'unlock-keychain', '-p', 'none', 'codesign.keychain', '&&',
+                                                    'security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '\'\'', '-A',
+                                                    ],
+                                            name="Install NextGIS sign sertificate",
+                                            haltOnFailure=True,
+                                            workdir=code_dir,
+                                            env=env))
 
+
+    repo_url_base = 'https://nextgis.com/programs/desktop/repository-' + platform['name']
+    installer_name_base = 'nextgis-setup-' + platform['name']
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', build_dir_name + '/inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
-                                                '-n', '-r', 'https://nextgis.com/programs/desktop/repository-' + platform['name'],
-                                                '-i', 'nextgis-setup',
+                                                '-n', '-r', util.Interpolate('%(kw:url)s%(prop:suffix)s', url=repo_url_base),
+                                                '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                                                 util.Interpolate('%(kw:ca)s', ca=commandArgs),
                                                 ],
                                         name="Create/Update repository",
@@ -182,9 +213,49 @@ for platform in platforms:
                                         workdir=code_dir,
                                         env=env))
 
-    # 5. Upload repository archive to site
+    # 5. Upload installer to ftp
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
+                                        util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext,
+                                                        basename=installer_name_base),
+                                        '-s', '--ftp-create-dirs', ngftp],
+                                       name="Upload installer to ftp",
+                                       haltOnFailure=True,
+                                       doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create")
+                                       workdir=build_dir,
+                                       env=env))
 
-    # 6. Upload repository archive to ftp
+    # 6. Create zip from repository
+    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'cfv', repo_archive, '--format=zip',
+                                        util.Interpolate('%(kw:basename)s%(prop:suffix)s',
+                                            basename=repo_name_base)],
+                                        name="Create zip from repository",
+                                        haltOnFailure=True,
+                                        workdir=build_dir,
+                                        env=env))
+
+    # 7. Upload repository archive to ftp
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
+                                        repo_archive, '-s', '--ftp-create-dirs',
+                                        ngftp + '/src/' + 'repo_' + platform['name'],],
+                                       name="Upload repository archive to ftp",
+                                       haltOnFailure=True,
+                                       workdir=build_dir,
+                                       env=env))
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
+                                        'versions.pkl', '-s', '--ftp-create-dirs',
+                                        ngftp + '/src/' + 'repo_' + platform['name'],],
+                                       name="Upload versions.pkl to ftp",
+                                       haltOnFailure=True,
+                                       workdir=build_dir,
+                                       env=env))
+
+    # 8. Upload repository archive to site
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', siteftp_user, '-T',
+                                        repo_archive, '-s', '--ftp-create-dirs', siteftp],
+                                       name="Upload repository archive to site",
+                                       haltOnFailure=True,
+                                       workdir=build_dir,
+                                       env=env))
 
     builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
                                  workernames = [platform['worker']],
