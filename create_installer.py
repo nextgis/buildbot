@@ -65,15 +65,13 @@ c['schedulers'].append(forceScheduler_update)
 
 @util.renderer
 def commandArgs(props):
-    command = []
+    command = ''
     if props.getProperty('scheduler') ==  project_name + "_create":
-        command.append('create')
+        command = 'create'
     elif props.getProperty('scheduler') ==  project_name + "_update":
-        command.append('update')
-        command.append('--force')
-        command.append(props.getProperty('force'))
+        command = 'update --force ' + props.getProperty('force'))
     else:
-        command.append('update')
+        command = 'update'
 
     return command
 
