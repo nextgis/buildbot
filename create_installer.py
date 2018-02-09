@@ -192,11 +192,12 @@ for platform in platforms:
         factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
                                             workerdest=code_dir + "/dev.p12",
                                             ))
+        logfile = 'stdio'
         factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain']),
-            util.ShellArg(command=['security', 'default-keychain', '-s', 'codesign.keychain']),
-            util.ShellArg(command=['security', 'unlock-keychain', '-p', 'none', 'codesign.keychain']),
-            util.ShellArg(command=['security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '', '-A']),
+                util.ShellArg(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain'], logfile=logfile),
+                util.ShellArg(command=['security', 'default-keychain', '-s', 'codesign.keychain'], logfile=logfile),
+                util.ShellArg(command=['security', 'unlock-keychain', '-p', 'none', 'codesign.keychain'], logfile=logfile),
+                util.ShellArg(command=['security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '', '-A'], logfile=logfile),
             ],
             name="Install NextGIS sign sertificate",
             haltOnFailure=True,
