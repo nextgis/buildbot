@@ -192,15 +192,26 @@ for platform in platforms:
         factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
                                             workerdest=code_dir + "/dev.p12",
                                             ))
-        factory.addStep(steps.ShellCommand(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain', '&&',
-                                                    'security', 'default-keychain', '-s', 'codesign.keychain', '&&',
-                                                    'security', 'unlock-keychain', '-p', 'none', 'codesign.keychain', '&&',
-                                                    'security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '\'\'', '-A',
-                                                    ],
-                                            name="Install NextGIS sign sertificate",
-                                            haltOnFailure=True,
-                                            workdir=code_dir,
-                                            env=env))
+        factory.addStep(steps.ShellSequence(commands=[
+            util.ShellArg(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain']),
+            util.ShellArg(command=['security', 'default-keychain', '-s', 'codesign.keychain']),
+            util.ShellArg(command=['security', 'unlock-keychain', '-p', 'none', 'codesign.keychain']),
+            util.ShellArg(command=['security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '', '-A']),
+            ],
+            name="Install NextGIS sign sertificate",
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env))
+
+        # factory.addStep(steps.ShellCommand(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain', '&&',
+        #                                             'security', 'default-keychain', '-s', 'codesign.keychain', '&&',
+        #                                             'security', 'unlock-keychain', '-p', 'none', 'codesign.keychain', '&&',
+        #                                             'security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '\'\'', '-A',
+        #                                             ],
+        #                                     name="Install NextGIS sign sertificate",
+        #                                     haltOnFailure=True,
+        #                                     workdir=code_dir,
+        #                                     env=env))
 
 
     repo_url_base = 'https://nextgis.com/programs/desktop/repository-' + platform['name']
