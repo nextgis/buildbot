@@ -69,7 +69,7 @@ def commandArgs(props):
     if props.getProperty('scheduler') ==  project_name + "_create":
         command = 'create'
     elif props.getProperty('scheduler') ==  project_name + "_update":
-        command = 'update --force ' + props.getProperty('force'))
+        command = 'update --force ' + props.getProperty('force')
     else:
         command = 'update'
 
