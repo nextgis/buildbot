@@ -14,7 +14,7 @@ mac_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 ngftp = 'ftp://192.168.255.51/software/installer'
-sizeftp = 'ftp://192.168.255.1/desktop'
+siteftp = 'ftp://192.168.255.1/desktop'
 ngftp_user = bbconf.ftp_mynextgis_user
 siteftp_user = bbconf.ftp_upldsoft_user
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
@@ -158,7 +158,7 @@ for platform in platforms:
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/inst"))
 
     # 2. Get repository from ftp
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + repo_archive, '-o', repo_archive, '-s'],
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/' + repo_archive, '-o', repo_archive, '-s'],
                                            name="Download repository",
                                            haltOnFailure=False, # The repository may not be exists
                                            workdir=build_dir,
@@ -168,12 +168,17 @@ for platform in platforms:
                                            haltOnFailure=False, # The repository may not be exists
                                            workdir=build_dir,
                                            env=env))
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/versions.pkl', '-o', 'versions.pkl', '-s'],
+                                           name="Download versions.pkl",
+                                           haltOnFailure=False, # The repository may not be exists
+                                           workdir=code_dir,
+                                           env=env))
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
-                                                '-s', build_dir_name + '/inst',
+                                                '-s', 'inst',
                                                 '-q', 'qt/bin',
-                                                '-t', build_dir_name,
+                                                '-t', 'inst',
                                                 'prepare', '--ftp_user', ngftp_user,
                                                 '--ftp', ngftp + '/src/',
                                                 ],
@@ -201,7 +206,7 @@ for platform in platforms:
     repo_url_base = 'https://nextgis.com/programs/desktop/repository-' + platform['name']
     installer_name_base = 'nextgis-setup-' + platform['name']
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
-                                                '-s', build_dir_name + '/inst',
+                                                '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
                                                 '-n', '-r', util.Interpolate('%(kw:url)s%(prop:suffix)s', url=repo_url_base),
@@ -220,7 +225,7 @@ for platform in platforms:
                                         '-s', '--ftp-create-dirs', ngftp],
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
-                                       doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create")
+                                       doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
                                        workdir=build_dir,
                                        env=env))
 
@@ -246,7 +251,7 @@ for platform in platforms:
                                         ngftp + '/src/' + 'repo_' + platform['name'],],
                                        name="Upload versions.pkl to ftp",
                                        haltOnFailure=True,
-                                       workdir=build_dir,
+                                       workdir=code_dir,
                                        env=env))
 
     # 8. Upload repository archive to site
