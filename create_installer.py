@@ -127,47 +127,40 @@ for platform in platforms:
 
     repo_name_base = 'repository-' + platform['name']
     repo_archive = 'repository-' + platform['name'] + '.zip'
+    logfile = 'stdio'
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'],
-                                           name="Download installer package",
-                                           haltOnFailure=True,
-                                           workdir=build_dir,
-                                           env=env))
-
-    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
-                                           name="Extract installer package",
-                                           haltOnFailure=True,
-                                           workdir=build_dir,
-                                           env=env))
+    factory.addStep(steps.ShellSequence(commands=[
+            util.ShellArg(command=["curl", '-u', ngftp_user, ngftp + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'], logfile=logfile),
+            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logfile=logfile),
+        ],
+        name="Download installer package",
+        haltOnFailure=True,
+        workdir=build_dir,
+        env=env))
     factory.addStep(steps.CopyDirectory(src=build_dir + "/qtifw_build", dest=code_dir + "/qtifw_pkg"))
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'],
-                                           name="Download qt package",
-                                           haltOnFailure=True,
-                                           workdir=build_dir,
-                                           env=env))
-
-
-    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'],
-                                           name="Extract qt package",
-                                           haltOnFailure=True,
-                                           workdir=build_dir,
-                                           env=env))
+    factory.addStep(steps.ShellSequence(commands=[
+            util.ShellArg(command=["curl", '-u', ngftp_user, ngftp + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'], logfile=logfile),
+            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logfile=logfile),
+        ],
+        name="Download qt package",
+        haltOnFailure=True,
+        workdir=build_dir,
+        env=env))
     factory.addStep(steps.CopyDirectory(src=build_dir + "/inst", dest=code_dir + "/qt"))
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/inst"))
 
     # 2. Get repository from ftp
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/' + repo_archive, '-o', repo_archive, '-s'],
-                                           name="Download repository",
-                                           haltOnFailure=False, # The repository may not be exists
-                                           workdir=build_dir,
-                                           env=env))
-    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'xzf', repo_archive],
-                                           name="Extract repository from archive",
-                                           haltOnFailure=False, # The repository may not be exists
-                                           workdir=build_dir,
-                                           env=env))
+    factory.addStep(steps.ShellSequence(commands=[
+            util.ShellArg(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/' + repo_archive, '-o', repo_archive, '-s'], logfile=logfile),
+            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', repo_archive], logfile=logfile),
+        ],
+        name="Download repository",
+        haltOnFailure=False,
+        workdir=build_dir,
+        env=env))
+
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/versions.pkl', '-o', 'versions.pkl', '-s'],
                                            name="Download versions.pkl",
                                            haltOnFailure=False, # The repository may not be exists
@@ -190,9 +183,8 @@ for platform in platforms:
     # Install NextGIS sign sertificate
     if 'mac' == platform['name']:
         factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
-                                            workerdest=code_dir + "/dev.p12",
+                                            workerdest=code_dir_last + "/dev.p12",
                                             ))
-        logfile = 'stdio'
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain'], logfile=logfile),
                 util.ShellArg(command=['security', 'default-keychain', '-s', 'codesign.keychain'], logfile=logfile),
