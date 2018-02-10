@@ -155,21 +155,23 @@ for platform in platforms:
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', repo_archive], logfile=logfile),
         ],
         name="Download repository",
-        haltOnFailure=False,
+        haltOnFailure=True,
+        doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
         workdir=build_dir,
         env=env))
 
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/versions.pkl', '-o', 'versions.pkl', '-s'],
-                                           name="Download versions.pkl",
-                                           haltOnFailure=False, # The repository may not be exists
-                                           workdir=code_dir,
-                                           env=env))
+                                        name="Download versions.pkl",
+                                        haltOnFailure=True, # The repository may not be exists
+                                        doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
+                                        workdir=code_dir,
+                                        env=env))
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
-                                                '-t', 'inst',
+                                                '-t', build_dir_name,
                                                 'prepare', '--ftp_user', ngftp_user,
                                                 '--ftp', ngftp + '/src/',
                                                 ],
