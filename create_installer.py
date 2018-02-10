@@ -182,6 +182,12 @@ for platform in platforms:
     # 4. Create or update repository
     # Install NextGIS sign sertificate
     if 'mac' == platform['name']:
+        factory.addStep(steps.ShellCommand(command=['pip', 'install', '--user', 'dmgbuild'],
+                                            name="Install dmgbuild python package",
+                                            haltOnFailure=True,
+                                            workdir=code_dir,
+                                            env=env))
+
         factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
                                             workerdest=code_dir_last + "/dev.p12",
                                             ))
@@ -195,17 +201,6 @@ for platform in platforms:
             haltOnFailure=True,
             workdir=code_dir,
             env=env))
-
-        # factory.addStep(steps.ShellCommand(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain', '&&',
-        #                                             'security', 'default-keychain', '-s', 'codesign.keychain', '&&',
-        #                                             'security', 'unlock-keychain', '-p', 'none', 'codesign.keychain', '&&',
-        #                                             'security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '\'\'', '-A',
-        #                                             ],
-        #                                     name="Install NextGIS sign sertificate",
-        #                                     haltOnFailure=True,
-        #                                     workdir=code_dir,
-        #                                     env=env))
-
 
     repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
     installer_name_base = 'nextgis-setup-' + platform['name']
