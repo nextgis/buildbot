@@ -192,7 +192,10 @@ for platform in platforms:
                                             workerdest=code_dir_last + "/dev.p12",
                                             ))
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain'], logfile=logfile),
+                util.ShellArg(command=['security', 'create-keychain', '-p', 'none', 'codesign.keychain'],
+                              logfile=logfile,
+                              haltOnFailure=False, flunkOnWarnings=False, flunkOnFailure=False,
+                              warnOnWarnings=False, warnOnFailure=False),
                 util.ShellArg(command=['security', 'default-keychain', '-s', 'codesign.keychain'], logfile=logfile),
                 util.ShellArg(command=['security', 'unlock-keychain', '-p', 'none', 'codesign.keychain'], logfile=logfile),
                 util.ShellArg(command=['security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '', '-A'], logfile=logfile),
