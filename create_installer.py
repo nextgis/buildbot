@@ -207,7 +207,7 @@ for platform in platforms:
         #                                     env=env))
 
 
-    repo_url_base = 'https://nextgis.com/programs/desktop/repository-' + platform['name']
+    repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
     installer_name_base = 'nextgis-setup-' + platform['name']
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',
