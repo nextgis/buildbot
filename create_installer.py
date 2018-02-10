@@ -199,6 +199,7 @@ for platform in platforms:
                 util.ShellArg(command=['security', 'default-keychain', '-s', 'codesign.keychain'], logfile=logfile),
                 util.ShellArg(command=['security', 'unlock-keychain', '-p', 'none', 'codesign.keychain'], logfile=logfile),
                 util.ShellArg(command=['security', 'import', './dev.p12', '-k', 'codesign.keychain', '-P', '', '-A'], logfile=logfile),
+                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-s', '-k', 'none', 'codesign.keychain',], logfile=logfile),
             ],
             name="Install NextGIS sign sertificate",
             haltOnFailure=True,
