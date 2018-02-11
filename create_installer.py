@@ -191,18 +191,19 @@ for platform in platforms:
         factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
                                             workerdest=code_dir_last + "/dev.p12",
                                             ))
-        keychain_name = 'login.keychain'
+        keychain_name = 'cs.keychain'
         factory.addStep(steps.ShellSequence(commands=[
                 # For use in separate keychain
-                # util.ShellArg(command=['security', 'create-keychain', '-p', bbconf.login_keychain, keychain_name],
-                #               logfile=logfile,
-                #               haltOnFailure=False, flunkOnWarnings=False, flunkOnFailure=False,
-                #               warnOnWarnings=False, warnOnFailure=False),
-                # util.ShellArg(command=['security', 'default-keychain', '-s', keychain_name], logfile=logfile),
-                # util.ShellArg(command=['security', 'unlock-keychain', '-p', bbconf.login_keychain, keychain_name], logfile=logfile),
-
+                util.ShellArg(command=['security', 'create-keychain', '-p', bbconf.login_keychain, keychain_name],
+                              logfile=logfile,
+                              haltOnFailure=False, flunkOnWarnings=False, flunkOnFailure=False,
+                              warnOnWarnings=False, warnOnFailure=False),
+                util.ShellArg(command=['security', 'default-keychain', '-s', keychain_name], logfile=logfile),
+                util.ShellArg(command=['security', 'unlock-keychain', '-p', bbconf.login_keychain, keychain_name], logfile=logfile),
                 util.ShellArg(command=['security', 'import', './dev.p12', '-k', keychain_name, '-P', '', '-A'], logfile=logfile),
                 util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', bbconf.login_keychain, '-s',  keychain_name,], logfile=logfile),
+                util.ShellArg(command=['security', 'list-keychains', '-s', keychain_name], logfile=logfile),
+                util.ShellArg(command=['security', 'list-keychains'], logfile=logfile),
             ],
             name="Install NextGIS sign sertificate",
             haltOnFailure=True,
@@ -211,13 +212,18 @@ for platform in platforms:
 
     repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
     installer_name_base = 'nextgis-setup-' + platform['name']
+    create_opt = []
+    if 'mac' == platform['name']:
+        create_opt = ['-k', bbconf.login_keychain]
+    if 'win64' == platform['name']:
+        create_opt = ['-w64']
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
                                                 '-n', '-r', util.Interpolate('%(kw:url)s%(prop:suffix)s', url=repo_url_base),
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
-                                                util.Interpolate('%(kw:ca)s', ca=commandArgs),
+                                                create_opt, util.Interpolate('%(kw:ca)s', ca=commandArgs),
                                                 ],
                                         name="Create/Update repository",
                                         haltOnFailure=True,
@@ -228,7 +234,7 @@ for platform in platforms:
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
                                         util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext,
                                                         basename=installer_name_base),
-                                        '-s', '--ftp-create-dirs', ngftp],
+                                        '-s', '--ftp-create-dirs', ngftp + '/'],
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
                                        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
@@ -247,14 +253,14 @@ for platform in platforms:
     # 7. Upload repository archive to ftp
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
                                         repo_archive, '-s', '--ftp-create-dirs',
-                                        ngftp + '/src/' + 'repo_' + platform['name'],],
+                                        ngftp + '/src/' + 'repo_' + platform['name'] + '/',],
                                        name="Upload repository archive to ftp",
                                        haltOnFailure=True,
                                        workdir=build_dir,
                                        env=env))
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
                                         'versions.pkl', '-s', '--ftp-create-dirs',
-                                        ngftp + '/src/' + 'repo_' + platform['name'],],
+                                        ngftp + '/src/' + 'repo_' + platform['name'] + '/',],
                                        name="Upload versions.pkl to ftp",
                                        haltOnFailure=True,
                                        workdir=code_dir,
@@ -262,7 +268,7 @@ for platform in platforms:
 
     # 8. Upload repository archive to site
     factory.addStep(steps.ShellCommand(command=["curl", '-u', siteftp_user, '-T',
-                                        repo_archive, '-s', '--ftp-create-dirs', siteftp],
+                                        repo_archive, '-s', '--ftp-create-dirs', siteftp + '/'],
                                        name="Upload repository archive to site",
                                        haltOnFailure=True,
                                        workdir=build_dir,
