@@ -193,16 +193,16 @@ for platform in platforms:
                                             ))
         keychain_name = 'login.keychain'
         factory.addStep(steps.ShellSequence(commands=[
-                # util.ShellArg(command=['security', 'create-keychain', '-p', 'none', keychain_name],
+                # For use in separate keychain
+                # util.ShellArg(command=['security', 'create-keychain', '-p', bbconf.login_keychain, keychain_name],
                 #               logfile=logfile,
                 #               haltOnFailure=False, flunkOnWarnings=False, flunkOnFailure=False,
                 #               warnOnWarnings=False, warnOnFailure=False),
                 # util.ShellArg(command=['security', 'default-keychain', '-s', keychain_name], logfile=logfile),
-                # util.ShellArg(command=['security', 'unlock-keychain', '-p', 'none', keychain_name], logfile=logfile),
+                # util.ShellArg(command=['security', 'unlock-keychain', '-p', bbconf.login_keychain, keychain_name], logfile=logfile),
 
-                #'-k', 'none',
                 util.ShellArg(command=['security', 'import', './dev.p12', '-k', keychain_name, '-P', '', '-A'], logfile=logfile),
-                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-s',  keychain_name,], logfile=logfile),
+                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', bbconf.login_keychain, '-s',  keychain_name,], logfile=logfile),
             ],
             name="Install NextGIS sign sertificate",
             haltOnFailure=True,
