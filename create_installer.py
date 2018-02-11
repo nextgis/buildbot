@@ -213,8 +213,6 @@ for platform in platforms:
     repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
     installer_name_base = 'nextgis-setup-' + platform['name']
     create_opt = []
-    if 'mac' == platform['name']:
-        create_opt = ['-k', bbconf.login_keychain]
     if 'win64' == platform['name']:
         create_opt = ['-w64']
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
