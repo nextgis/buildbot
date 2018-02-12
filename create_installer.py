@@ -124,7 +124,6 @@ for platform in platforms:
         installer_ext = '.exe'
 
     repo_name_base = 'repository-' + platform['name']
-    repo_archive = 'repository-' + platform['name'] + '.zip'
     logfile = 'stdio'
 
     factory.addStep(steps.ShellSequence(commands=[
@@ -151,8 +150,9 @@ for platform in platforms:
 
     # 2. Get repository from ftp
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/' + repo_archive, '-o', repo_archive, '-s'], logfile=logfile),
-            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', repo_archive], logfile=logfile),
+            util.ShellArg(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/' + util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base),
+                                    '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base), '-s'], logfile=logfile),
+            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base)], logfile=logfile),
         ],
         name="Download repository",
         haltOnFailure=True,
@@ -230,9 +230,9 @@ for platform in platforms:
 
     # 5. Upload installer to ftp
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
-                                        util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext,
-                                                        basename=installer_name_base),
-                                        '-s', '--ftp-create-dirs', ngftp + '/'],
+                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext,
+                                                    basename=installer_name_base),
+                                                '-s', '--ftp-create-dirs', ngftp + '/'],
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
                                        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
@@ -240,9 +240,11 @@ for platform in platforms:
                                        env=env))
 
     # 6. Create zip from repository
-    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'cfv', repo_archive, '--format=zip',
-                                        util.Interpolate('%(kw:basename)s%(prop:suffix)s',
-                                            basename=repo_name_base)],
+    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'cfv',
+                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+                                                    basename=repo_name_base), '--format=zip',
+                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s',
+                                                    basename=repo_name_base)],
                                         name="Create zip from repository",
                                         haltOnFailure=True,
                                         workdir=build_dir,
@@ -250,7 +252,9 @@ for platform in platforms:
 
     # 7. Upload repository archive to ftp
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
-                                        repo_archive, '-s', '--ftp-create-dirs',
+                                        util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+                                            basename=repo_name_base),
+                                        '-s', '--ftp-create-dirs',
                                         ngftp + '/src/' + 'repo_' + platform['name'] + '/',],
                                        name="Upload repository archive to ftp",
                                        haltOnFailure=True,
@@ -266,7 +270,9 @@ for platform in platforms:
 
     # 8. Upload repository archive to site
     factory.addStep(steps.ShellCommand(command=["curl", '-u', siteftp_user, '-T',
-                                        repo_archive, '-s', '--ftp-create-dirs', siteftp + '/'],
+                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+                                                    basename=repo_name_base),
+                                                '-s', '--ftp-create-dirs', siteftp + '/'],
                                        name="Upload repository archive to site",
                                        haltOnFailure=True,
                                        workdir=build_dir,
