@@ -150,9 +150,17 @@ for platform in platforms:
 
     # 2. Get repository from ftp
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/' + util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base),
-                                    '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base), '-s'], logfile=logfile),
-            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base)], logfile=logfile),
+            util.ShellArg(command=["curl", '-u', ngftp_user,
+                                    '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+                                        basename=repo_name_base),
+                                    '-s', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+                                        basename=ngftp + '/src/' + 'repo_' + platform['name'] + '/' + repo_name_base),
+                                    ],
+                            logfile=logfile),
+            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
+                                    util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+                                        basename=repo_name_base)],
+                            logfile=logfile),
         ],
         name="Download repository",
         haltOnFailure=True,
@@ -160,7 +168,10 @@ for platform in platforms:
         workdir=build_dir,
         env=env))
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, ngftp + '/src/' + 'repo_' + platform['name'] + '/versions.pkl', '-o', 'versions.pkl', '-s'],
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-o', 'versions.pkl', '-s',
+                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
+                                                    basename=ngftp + '/src/' + 'repo_' + platform['name'] + '/versions'),
+                                                ],
                                         name="Download versions.pkl",
                                         haltOnFailure=True, # The repository may not be exists
                                         doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
@@ -261,8 +272,10 @@ for platform in platforms:
                                        workdir=build_dir,
                                        env=env))
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
-                                        'versions.pkl', '-s', '--ftp-create-dirs',
-                                        ngftp + '/src/' + 'repo_' + platform['name'] + '/',],
+                                                'versions.pkl', '-s', '--ftp-create-dirs',
+                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
+                                                    basename=ngftp + '/src/' + 'repo_' + platform['name'] + '/versions'),
+                                                ],
                                        name="Upload versions.pkl to ftp",
                                        haltOnFailure=True,
                                        workdir=code_dir,
