@@ -112,7 +112,7 @@ for repository in repositories:
                             "${PATH}"
                         ],
             }
-            if 'win32' == platform['name']
+            if 'win32' == platform['name']:
                 env['PYTHONPATH'] = 'C:\\Python27_32'
                 run_args_ex.extend(['-G', 'Visual Studio 15 2017'])
             else:
@@ -200,6 +200,6 @@ for repository in repositories:
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
                                     workernames = [platform['worker']],
                                     factory = factory,
-                                    description="Make {} on {}".format(repository, platform['name']),)
+                                    description="Make {} on {}".format(project_name, platform['name']),)
 
         c['builders'].append(builder)
