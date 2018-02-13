@@ -204,7 +204,7 @@ for platform in platforms:
                                            name="Prepare packages data",
                                            haltOnFailure=True,
                                            workdir=code_dir,
-                                           timeout=300, # 5 min
+                                           timeout=180, # 3 min
                                            env=env))
     # 4. Create or update repository
     # Install NextGIS sign sertificate
