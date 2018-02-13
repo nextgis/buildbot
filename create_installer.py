@@ -65,13 +65,13 @@ c['schedulers'].append(forceScheduler_update)
 
 @util.renderer
 def commandArgs(props):
-    command = ''
+    command = []
     if props.getProperty('scheduler') ==  project_name + "_create":
-        command = 'create'
+        command.append('create')
     elif props.getProperty('scheduler') ==  project_name + "_update":
-        command = 'update --force ' + props.getProperty('force')
+        command.extend(['update', '--force', props.getProperty('force'),])
     else:
-        command = 'update'
+        command.append('update')
 
     return command
 
@@ -225,14 +225,16 @@ for platform in platforms:
     installer_name_base = 'nextgis-setup-' + platform['name']
     create_opt = []
     if 'win64' == platform['name']:
-        create_opt = ['-w64']
+        create_opt.append('-w64')
+
+
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
                                                 '-n', '-r', util.Interpolate('%(kw:url)s%(prop:suffix)s', url=repo_url_base),
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
-                                                create_opt, util.Interpolate('%(kw:ca)s', ca=commandArgs),
+                                                create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
                                         haltOnFailure=True,
