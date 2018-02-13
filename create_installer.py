@@ -122,6 +122,8 @@ for platform in platforms:
         separator = '\\'
         env = {}
         installer_ext = '.exe'
+        if 'win32' == platform['name']:
+            env = { 'PYTHONPATH': 'C:\\Python27_32' }
 
     repo_name_base = 'repository-' + platform['name']
     logfile = 'stdio'
