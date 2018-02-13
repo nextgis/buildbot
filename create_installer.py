@@ -180,14 +180,14 @@ for platform in platforms:
                                         workdir=code_dir,
                                         env=env))
 
-    if 'win' in platform['name']:
-        factory.addStep(steps.ShellSequence(commands=[
-                                            util.ShellArg(command=['pip', 'install', '--user', 'pytz'], logfile=logfile),
-                                        ],
-                                        name="Install pytz python package",
-                                        haltOnFailure=True,
-                                        workdir=code_dir,
-                                        env=env))
+    # if 'win' in platform['name']:
+    #     factory.addStep(steps.ShellSequence(commands=[
+    #                                         util.ShellArg(command=['pip', 'install', '--user', 'pytz'], logfile=logfile),
+    #                                     ],
+    #                                     name="Install pytz python package",
+    #                                     haltOnFailure=True,
+    #                                     workdir=code_dir,
+    #                                     env=env))
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
