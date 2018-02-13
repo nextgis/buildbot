@@ -191,6 +191,7 @@ for repository in repositories:
     # create installer trigger
     factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win32'],
                                       waitForFinish=False,
+                                      set_properties={ 'suffix' : '-dev' },
                                       ))
 
     # Build 64bit ##############################################################
@@ -265,6 +266,7 @@ for repository in repositories:
     # create installer trigger
     factory_win.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_win64'],
                                       waitForFinish=False,
+                                      set_properties={ 'suffix' : '-dev' },
                                       ))
 
     builder_win = util.BuilderConfig(name = project_name + '_win', workernames = ['build-win'], factory = factory_win)
@@ -365,6 +367,7 @@ for repository in repositories:
     # create installer trigger
     factory_mac.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_mac'],
                                       waitForFinish=False,
+                                      set_properties={ 'suffix' : '-dev' },
                                       ))
 
     builder_mac = util.BuilderConfig(name = project_name + '_mac', workernames = ['build-mac'], factory = factory_mac)
