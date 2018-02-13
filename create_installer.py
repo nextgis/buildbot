@@ -96,6 +96,10 @@ for platform in platforms:
 
     factory = util.BuildFactory()
 
+    # Radically cleand all
+    factory.addStep(steps.RemoveDirectory(dir=code_dir,
+                                        name="Clean all"))
+
     factory.addStep(steps.Git(repourl=installer_git,
                                mode='full',
                                shallow=True,
@@ -200,6 +204,7 @@ for platform in platforms:
                                            name="Prepare packages data",
                                            haltOnFailure=True,
                                            workdir=code_dir,
+                                           timeout=300, # 5 min
                                            env=env))
     # 4. Create or update repository
     # Install NextGIS sign sertificate
