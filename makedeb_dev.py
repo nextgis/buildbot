@@ -137,6 +137,8 @@ for repository in repositories:
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-    builder_deb = util.BuilderConfig(name = project_name + '_debdev', workernames = ['build-nix'], factory = factory_deb)
+    builder_deb = util.BuilderConfig(name = project_name + '_debdev',
+        workernames = ['build-nix'], factory = factory_deb,
+        description =  "Make NextGIS dev Ubuntu ppa package")   
 
     c['builders'].append(builder_deb)

@@ -11,6 +11,7 @@ repositories = [
     {'repo':'lib_gdal', 'version':'2.2.3', 'deb':'gdal'},
     {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad'},
     {'repo':'postgis','version':'2.4', 'deb':'postgis'},
+    {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities'},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
@@ -139,6 +140,9 @@ for repository in repositories:
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-    builder_deb = util.BuilderConfig(name = project_name + '_deb', workernames = ['build-nix'], factory = factory_deb)
+    builder_deb = util.BuilderConfig(name = project_name + '_deb',
+        workernames = ['build-nix'],
+        factory = factory_deb,
+        description =  "Make NextGIS Ubuntu ppa package")
 
     c['builders'].append(builder_deb)
