@@ -13,6 +13,7 @@ repositories = [
     {'repo':'lib_z', 'args':[], 'requirements':[]},
     {'repo':'lib_sqlite', 'args':[], 'requirements':[]},
     {'repo':'lib_gif', 'args':[], 'requirements':[]},
+    {'repo':'lib_geos', 'args':[], 'requirements':[]},
     {'repo':'lib_qhull', 'args':[], 'requirements':[]},
     {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]},
     {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON'], 'requirements':[]},
