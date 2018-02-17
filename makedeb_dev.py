@@ -35,14 +35,14 @@ for repository in repositories:
     c['change_source'].append(git_poller)
 
     scheduler = schedulers.SingleBranchScheduler(
-                                name=project_name,
+                                name=project_name + "_debdev",
                                 change_filter=util.ChangeFilter(project = git_project_name, branch="dev"),
                                 treeStableTimer=1*60,
                                 builderNames=[project_name + "_debdev"])
     c['schedulers'].append(scheduler)
 
     c['schedulers'].append(schedulers.ForceScheduler(
-                                name=project_name + "_force_dev",
+                                name=project_name + "_force_debdev",
                                 builderNames=[project_name + "_debdev"]))
 
     deb_name = repository['deb']
@@ -139,6 +139,6 @@ for repository in repositories:
 
     builder_deb = util.BuilderConfig(name = project_name + '_debdev',
         workernames = ['build-nix'], factory = factory_deb,
-        description =  "Make NextGIS dev Ubuntu ppa package")   
+        description =  "Make NextGIS dev Ubuntu ppa package")
 
     c['builders'].append(builder_deb)

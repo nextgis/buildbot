@@ -38,14 +38,14 @@ for repository in repositories:
     c['change_source'].append(git_poller)
 
     scheduler = schedulers.SingleBranchScheduler(
-                                name=project_name,
+                                name=project_name + "_deb",
                                 change_filter=util.ChangeFilter(project = git_project_name, branch="master"),
                                 treeStableTimer=1*60,
                                 builderNames=[project_name + "_deb"])
     c['schedulers'].append(scheduler)
 
     c['schedulers'].append(schedulers.ForceScheduler(
-                                name=project_name + "_force",
+                                name=project_name + "_force_deb",
                                 builderNames=[project_name + "_deb"]))
 
     deb_name = repository['deb']
