@@ -33,7 +33,7 @@ for repository in repositories:
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
                            workdir = project_name + '-workdir',
-                           branches = ['master'],
+                           branches = ['master', 'dev'],
                            pollinterval = 7200,)
     c['change_source'].append(git_poller)
 

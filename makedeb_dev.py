@@ -27,12 +27,7 @@ for repository in repositories:
     repourl = 'git://github.com/nextgis-borsch/{}.git'.format(project_name)
     project_ver = repository['version']
     git_project_name = 'nextgis-borsch/{}'.format(project_name)
-    git_poller = changes.GitPoller(project = git_project_name,
-                           repourl = repourl,
-                           workdir = project_name + '-dev' + '-workdir',
-                           branches = ['dev'],
-                           pollinterval = 7200,)
-    c['change_source'].append(git_poller)
+    # Git poller is in makedeb.py
 
     scheduler = schedulers.SingleBranchScheduler(
                                 name=project_name + "_debdev",
