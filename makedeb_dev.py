@@ -29,7 +29,7 @@ for repository in repositories:
     git_project_name = 'nextgis-borsch/{}'.format(project_name)
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
-                           workdir = project_name + '-workdir',
+                           workdir = project_name + '-dev' + '-workdir',
                            branches = ['dev'],
                            pollinterval = 7200,)
     c['change_source'].append(git_poller)
