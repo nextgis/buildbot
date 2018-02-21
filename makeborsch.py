@@ -18,6 +18,7 @@ repositories = [
     {'repo':'lib_expat', 'args':[], 'requirements':[]},
     {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[]},
     {'repo':'lib_opencad', 'args':['-DBUILD_TESTING=ON'], 'requirements':[]},
+    {'repo':'lib_jpeg', 'args':['-DBUILD_TESTING=ON', '-DBUILD_JPEG_12=ON', '-DBUILD_JPEG_8=ON'], 'requirements':[]},
     {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]},
     {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON'], 'requirements':[]},
     {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[]},
