@@ -10,22 +10,23 @@ import bbconf
 c = {}
 
 repositories = [
-    {'repo':'lib_z', 'args':[], 'requirements':[]},
-    {'repo':'lib_sqlite', 'args':[], 'requirements':[]},
-    {'repo':'lib_gif', 'args':[], 'requirements':[]},
-    {'repo':'lib_geos', 'args':[], 'requirements':[]},
-    {'repo':'lib_qhull', 'args':[], 'requirements':[]},
-    {'repo':'lib_expat', 'args':[], 'requirements':[]},
-    {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[]},
-    {'repo':'lib_opencad', 'args':['-DBUILD_TESTING=ON'], 'requirements':[]},
-    {'repo':'lib_jpeg', 'args':['-DBUILD_TESTING=ON', '-DBUILD_JPEG_12=ON', '-DBUILD_JPEG_8=ON'], 'requirements':[]},
-    {'repo':'lib_proj', 'args':['-DBUILD_TESTING=ON'], 'requirements':[]},
-    {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]},
-    {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON'], 'requirements':[]},
-    {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[]},
-    {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[]},
-    {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[]},
-    {'repo':'lib_pq', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON'], 'requirements':[]},
+    {'repo':'lib_z', 'args':[], 'requirements':[], 'skip':[]},
+    {'repo':'lib_sqlite', 'args':[], 'requirements':[], 'skip':[]},
+    {'repo':'lib_gif', 'args':[], 'requirements':[], 'skip':[]},
+    {'repo':'lib_geos', 'args':[], 'requirements':[], 'skip':[]},
+    {'repo':'lib_qhull', 'args':[], 'requirements':[], 'skip':[]},
+    {'repo':'lib_expat', 'args':[], 'requirements':[], 'skip':[]},
+    {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_opencad', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_jpeg', 'args':['-DBUILD_TESTING=ON', '-DBUILD_JPEG_12=ON', '-DBUILD_JPEG_8=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_proj', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['mac']},
+    {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_pq', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
     # {'repo':'lib_qt5', 'args':['-DCREATE_CPACK=ON','-DQT_CONFIGURE_ARGS=-accessibility;...'], 'requirements':[]},
 ]
 
@@ -84,6 +85,8 @@ for repository in repositories:
 
     builderNames = []
     for platform in platforms:
+        if platform in repository['skip']:
+            continue
         builderNames.append(project_name + "_" + platform['name'])
 
     scheduler = schedulers.SingleBranchScheduler(
@@ -105,6 +108,8 @@ for repository in repositories:
     cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
     for platform in platforms:
+        if platform in repository['skip']:
+            continue
 
         code_dir_last = '{}_{}_code'.format(project_name, platform['name'])
         code_dir = os.path.join('build', code_dir_last)
