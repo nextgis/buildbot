@@ -85,7 +85,7 @@ for repository in repositories:
 
     builderNames = []
     for platform in platforms:
-        if platform in repository['skip']:
+        if platform['name'] in repository['skip']:
             continue
         builderNames.append(project_name + "_" + platform['name'])
 
@@ -108,7 +108,7 @@ for repository in repositories:
     cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
 
     for platform in platforms:
-        if platform in repository['skip']:
+        if platform['name'] in repository['skip']:
             continue
 
         code_dir_last = '{}_{}_code'.format(project_name, platform['name'])
