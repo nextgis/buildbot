@@ -21,6 +21,7 @@ repositories = [
     {'repo':'lib_jpeg', 'args':['-DBUILD_TESTING=ON', '-DBUILD_JPEG_12=ON', '-DBUILD_JPEG_8=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_proj', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['mac']},
+    {'repo':'lib_lzma', 'args':['-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
