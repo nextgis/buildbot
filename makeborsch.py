@@ -123,6 +123,8 @@ for repository in repositories:
 
         if 'win' in platform['name']:
             run_args_ex.append('-DBUILD_SHARED_LIBS=TRUE')
+            if project_name == 'lib_lzma':
+                run_args_ex.append('-DWITH_ICONV_EXTERNAL=ON')
             cmake_build_ex.append('/m:' + str(vm_cpu_count))
             env = {
                 'LANG': 'en_US',
