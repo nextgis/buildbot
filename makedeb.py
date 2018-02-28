@@ -7,11 +7,11 @@ from buildbot.plugins import *
 c = {}
 
 repositories = [
-    {'repo':'lib_geos', 'version':'3.6.2', 'deb':'geos',},
-    {'repo':'lib_gdal', 'version':'2.2.3', 'deb':'gdal'},
-    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad'},
-    {'repo':'postgis','version':'2.4', 'deb':'postgis'},
-    {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities'},
+    {'repo':'lib_geos', 'version':'3.6.2', 'deb':'geos', 'subdir': ''},
+    {'repo':'lib_gdal', 'version':'2.2.3', 'deb':'gdal', 'subdir': 'master'},
+    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master'},
+    {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': ''},
+    {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': ''},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
@@ -86,9 +86,17 @@ for repository in repositories:
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
 
     for ubuntu_distribution in ubuntu_distributions:
+        # For postgis
+        if repository['repo'] == 'postgis':
+            if ubuntu_distribution == 'trusty':
+                repository['subdir'] = 'pg9.3'
+            elif ubuntu_distribution == 'xenial':
+                repository['subdir'] = 'pg9.5'
+            elif ubuntu_distribution == 'artful':
+                repository['subdir'] = 'pg9.6'
 
         # copy lib_opencad -> debian
-        factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/master/debian",
+        factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/" + repository['subdir'] + "/debian",
                                                dest=code_dir + "/debian",
                                                name="add debian folder for " + deb_name,
                                                description=["copy", "debian folder"],
