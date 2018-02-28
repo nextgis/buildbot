@@ -29,6 +29,7 @@ repositories = [
     {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_xml2', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_pq', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
     # {'repo':'lib_qt5', 'args':['-DCREATE_CPACK=ON','-DQT_CONFIGURE_ARGS=-accessibility;...'], 'requirements':[]},
 ]
@@ -125,7 +126,7 @@ for repository in repositories:
 
         if 'win' in platform['name']:
             run_args_ex.append('-DBUILD_SHARED_LIBS=TRUE')
-            if project_name == 'lib_lzma':
+            if project_name == 'lib_lzma' or project_name == 'lib_xml2':
                 run_args_ex.append('-DWITH_ICONV_EXTERNAL=ON')
             cmake_build_ex.append('/m:' + str(vm_cpu_count))
             env = {
