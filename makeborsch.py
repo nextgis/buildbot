@@ -31,6 +31,7 @@ repositories = [
     {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_xml2', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_pq', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_spatialite', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_LibLibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DOMIT_FREEXL=ON', '-DENABLE_LWGEOM=FALSE','-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     # {'repo':'lib_qt5', 'args':['-DCREATE_CPACK=ON','-DQT_CONFIGURE_ARGS=-accessibility;...'], 'requirements':[]},
 ]
 
