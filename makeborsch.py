@@ -22,6 +22,7 @@ repositories = [
     {'repo':'lib_opencad', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_openjpeg', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_jpeg', 'args':['-DBUILD_TESTING=ON', '-DBUILD_JPEG_12=ON', '-DBUILD_JPEG_8=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_tiff', 'args':['-DBUILD_TESTING=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_JPEG12_EXTERNAL=ON',], 'requirements':[], 'skip':[]},
     {'repo':'lib_proj', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['mac']},
     {'repo':'lib_lzma', 'args':['-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
