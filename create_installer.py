@@ -28,6 +28,7 @@ c['schedulers'] = []
 c['builders'] = []
 
 project_name = 'create_installer'
+generator = 'Visual Studio 15 2017'
 
 forceScheduler_create = schedulers.ForceScheduler(
                             name=project_name + "_update",
@@ -193,11 +194,21 @@ for platform in platforms:
     #                                     workdir=code_dir,
     #                                     env=env))
 
+    create_opt = []
+    if 'win64' == platform['name']:
+        create_opt.append('-g')
+        create_opt.append(generator + ' Win64')
+        create_opt.append('-w64')
+    elif 'win32' == platform['name']:
+        create_opt.append('-g')
+        create_opt.append(generator)
+
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
+                                                create_opt,
                                                 'prepare', '--ftp_user', ngftp_user,
                                                 '--ftp', ngftp + '/src/',
                                                 ],
@@ -238,10 +249,6 @@ for platform in platforms:
 
     repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
     installer_name_base = 'nextgis-setup-' + platform['name']
-    create_opt = []
-    if 'win64' == platform['name']:
-        create_opt.append('-w64')
-
 
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',

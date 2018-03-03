@@ -62,6 +62,7 @@ platforms = [
     {'name' : 'mac', 'worker' : 'build-mac'} ]
 
 logfile = 'stdio'
+generator = 'Visual Studio 15 2017'
 
 def install_dependencies(factory, requirements, os):
     for requirement in requirements:
@@ -141,10 +142,10 @@ for repository in repositories:
             }
             if 'win32' == platform['name']:
                 env['PYTHONPATH'] = 'C:\\Python27_32'
-                run_args_ex.extend(['-G', 'Visual Studio 15 2017'])
+                run_args_ex.extend(['-G', generator])
             else:
                 env['PYTHONPATH'] = 'C:\\Python27'
-                run_args_ex.extend(['-G', 'Visual Studio 15 2017 Win64'])
+                run_args_ex.extend(['-G', generator + ' Win64'])
         elif 'mac' == platform['name']:
             run_args_ex.extend(['-DOSX_FRAMEWORK=ON', '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version])
             cmake_build_ex.append('-j' + str(vm_cpu_count))
