@@ -140,16 +140,42 @@ for repository in repositories:
             cmake_build_ex.append('/m:' + str(vm_cpu_count))
             env = {
                 'LANG': 'en_US',
-                'PATH': [
-                            "C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
-                            "${PATH}"
-                        ],
             }
             if 'win32' == platform['name']:
                 env['PYTHONPATH'] = 'C:\\Python27_32'
+                env['PATH'] = [
+                    "C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
+                    "C:\\Perl64\\site\\bin",
+                    "C:\\Perl64\\bin",
+                    "C:\\Python27_32",
+                    "C:\\Python27_32\\Scripts",
+                    "C:\\Windows\\system32",
+                    "C:\\Windows",
+                    "C:\\Windows\\System32\\Wbem",
+                    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+                    "C:\\Program Files\\Git\\cmd",
+                    "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
+                    "C:\\Program Files\\CMake\\bin",
+                    "C:\\Python27_32\\lib\\site-packages\\pywin32_system32"
+                ]
                 run_args_ex.extend(['-G', generator])
             else:
                 env['PYTHONPATH'] = 'C:\\Python27'
+                env['PATH'] = [
+                    "C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
+                    "C:\\Perl64\\site\\bin",
+                    "C:\\Perl64\\bin",
+                    "C:\\Python27",
+                    "C:\\Python27\\Scripts",
+                    "C:\\Windows\\system32",
+                    "C:\\Windows",
+                    "C:\\Windows\\System32\\Wbem",
+                    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+                    "C:\\Program Files\\Git\\cmd",
+                    "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
+                    "C:\\Program Files\\CMake\\bin",
+                    "C:\\Python27\\lib\\site-packages\\pywin32_system32"
+                ]
                 run_args_ex.extend(['-G', generator + ' Win64'])
         elif 'mac' == platform['name']:
             run_args_ex.extend(['-DOSX_FRAMEWORK=ON', '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version])
