@@ -118,7 +118,7 @@ for repository in repositories:
 
     run_args = repository['args']
     run_args.extend(['-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release', '-DSKIP_DEFAULTS=ON'])
-    cmake_build = ['cmake', '--build', '.', '--config', 'release', '--']
+    cmake_build = ['cmake', '--build', '.', '--config', 'Release', '--']
 
     for platform in platforms:
         if platform['name'] in repository['skip']:
