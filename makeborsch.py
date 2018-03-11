@@ -72,6 +72,40 @@ logfile = 'stdio'
 generator = 'Visual Studio 15 2017'
 
 def install_dependencies(factory, requirements, os):
+    env = {}
+    if 'win32' == os:
+        env['PYTHONPATH'] = 'C:\\Python27_32'
+        env['PATH'] = [
+            "C:\\Perl64\\site\\bin",
+            "C:\\Perl64\\bin",
+            "C:\\Python27_32",
+            "C:\\Python27_32\\Scripts",
+            "C:\\Windows\\system32",
+            "C:\\Windows",
+            "C:\\Windows\\System32\\Wbem",
+            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+            "C:\\Program Files\\Git\\cmd",
+            "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
+            "C:\\Program Files\\CMake\\bin",
+            "C:\\Python27_32\\lib\\site-packages\\pywin32_system32"
+        ]
+    elif 'win64' == os:
+        env['PYTHONPATH'] = 'C:\\Python27'
+        env['PATH'] = [
+            "C:\\Perl64\\site\\bin",
+            "C:\\Perl64\\bin",
+            "C:\\Python27",
+            "C:\\Python27\\Scripts",
+            "C:\\Windows\\system32",
+            "C:\\Windows",
+            "C:\\Windows\\System32\\Wbem",
+            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+            "C:\\Program Files\\Git\\cmd",
+            "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
+            "C:\\Program Files\\CMake\\bin",
+            "C:\\Python27\\lib\\site-packages\\pywin32_system32"
+        ]
+
     for requirement in requirements:
         if requirement == 'perl' and 'win' in os: # This is example. Perl already installed in VM.
             # Upload distro to worker
@@ -90,7 +124,8 @@ def install_dependencies(factory, requirements, os):
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True)
+                                    haltOnFailure=True,
+                                    env=env)
             )
 
 # Create builders
