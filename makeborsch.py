@@ -23,6 +23,7 @@ repositories = [
     {'repo':'lib_gsl', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_yaml', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'py_yaml', 'args':['-DWITH_YAML_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'py_psycopg', 'args':['-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_jbig', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_szip', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_opencad', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
