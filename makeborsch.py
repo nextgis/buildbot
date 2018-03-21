@@ -177,9 +177,9 @@ for repository in repositories:
         if platform['name'] in repository['skip']:
             continue
 
-        code_dir_last = '{}_{}_code'.format(project_name, platform['name'])
+        code_dir_last = 'src'
         code_dir = os.path.join('build', code_dir_last)
-        build_subdir = 'build'
+        build_subdir = 'bld'
         build_dir = os.path.join(code_dir, build_subdir)
 
         run_args_ex = list(run_args)
