@@ -49,6 +49,7 @@ repositories = [
     {'repo':'python', 'args':['-DBUILD_LIBPYTHON_SHARED=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DUSE_SYSTEM_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_SQlite3_EXTERNAL=ON'], 'requirements':[], 'skip':['mac']},
     {'repo':'lib_qt4', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_ICONV=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_qt5', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_qca', 'args':['-DQT4_BUILD=ON', '-DWITH_Qt4=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_PLUGINS=auto', '-DUSE_RELATIVE_PATHS=OFF', '-DCMAKE_INSTALL_PREFIX=/usr/', '-DBUILD_TESTS=OFF'], 'requirements':[], 'skip':[]},
 ]
 
 vm_cpu_count = 8
