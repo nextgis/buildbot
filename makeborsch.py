@@ -20,6 +20,7 @@ repositories = [
     {'repo':'py_markupsafe', 'args':[], 'requirements':[], 'skip':[]},
     {'repo':'py_subprocess32', 'args':[], 'requirements':[], 'skip':[]},
     {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_spatialindex', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_gsl', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'lib_yaml', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
     {'repo':'py_yaml', 'args':['-DWITH_YAML_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
