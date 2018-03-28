@@ -11,6 +11,7 @@ c = {}
 
 repositories = [
     {'repo':'lib_z', 'args':[], 'requirements':[], 'skip':[]},
+    {'repo':'py_sip', 'args':[], 'requirements':[], 'skip':[]},
     {'repo':'lib_sqlite', 'args':[], 'requirements':[], 'skip':[]},
     {'repo':'lib_gif', 'args':[], 'requirements':[], 'skip':[]},
     {'repo':'lib_geos', 'args':[], 'requirements':[], 'skip':[]},
