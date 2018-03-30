@@ -54,6 +54,7 @@ repositories = [
     {'repo':'lib_qca', 'args':['-DQT4_BUILD=ON', '-DWITH_Qt4=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_PLUGINS=auto', '-DUSE_RELATIVE_PATHS=OFF', '-DCMAKE_INSTALL_PREFIX=/usr/', '-DBUILD_TESTS=OFF'], 'requirements':[], 'skip':[]},
     {'repo':'lib_qwt', 'args':['-DWITH_Qt4_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
     {'repo':'py_qt4', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_qscintilla', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt4_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
 ]
 
 vm_cpu_count = 8
