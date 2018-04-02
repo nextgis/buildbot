@@ -26,7 +26,13 @@ for repository in repositories:
     repourl = 'git://github.com/nextgis/{}.git'.format(project_name)
     project_ver = repository['version']
     git_project_name = 'nextgis/{}'.format(project_name)
-    # Git poller is in makedeb.py
+
+    git_poller = changes.GitPoller(project = git_project_name,
+                           repourl = repourl,
+                           workdir = project_name + '-workdir',
+                           branches = ['master'],
+                           pollinterval = 7200,)
+    c['change_source'].append(git_poller)
 
     scheduler = schedulers.SingleBranchScheduler(
                                 name=project_name + "_debmisc",

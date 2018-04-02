@@ -151,7 +151,7 @@ for repository in repositories:
                            repourl = repourl,
                            workdir = project_name + '-workdir',
                            branches = ['master'],
-                           pollinterval = 600,) # TODO: change 10min to 2 hours (7200)
+                           pollinterval = 3600,) 
     c['change_source'].append(git_poller)
 
     builderNames = []
