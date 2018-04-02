@@ -7,8 +7,7 @@ from buildbot.plugins import *
 c = {}
 
 repositories = [
-    {'repo':'lib_gdal', 'version':'2.3.4', 'deb':'gdal'},
-    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad'},
+    {'repo':'fonts', 'version':'1.0.0', 'deb':'fonts'},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
@@ -24,21 +23,21 @@ c['builders'] = []
 # Create builders
 for repository in repositories:
     project_name = repository['repo']
-    repourl = 'git://github.com/nextgis-borsch/{}.git'.format(project_name)
+    repourl = 'git://github.com/nextgis/{}.git'.format(project_name)
     project_ver = repository['version']
-    git_project_name = 'nextgis-borsch/{}'.format(project_name)
+    git_project_name = 'nextgis/{}'.format(project_name)
     # Git poller is in makedeb.py
 
     scheduler = schedulers.SingleBranchScheduler(
-                                name=project_name + "_debdev",
-                                change_filter=util.ChangeFilter(project = git_project_name, branch="dev"),
+                                name=project_name + "_debmisc",
+                                change_filter=util.ChangeFilter(project = git_project_name, branch="master"),
                                 treeStableTimer=1*60,
-                                builderNames=[project_name + "_debdev"])
+                                builderNames=[project_name + "_debmisc"])
     c['schedulers'].append(scheduler)
 
     c['schedulers'].append(schedulers.ForceScheduler(
                                 name=project_name + "_force_debdev",
-                                builderNames=[project_name + "_debdev"]))
+                                builderNames=[project_name + "_debmisc"]))
 
     deb_name = repository['deb']
 
@@ -49,7 +48,7 @@ for repository in repositories:
     factory_deb = util.BuildFactory()
 
     # 1. check out the source
-    deb_dir = 'build/' + deb_name + '_debdev'
+    deb_dir = 'build/' + deb_name + '_debmisc'
 
     factory_deb.addStep(steps.Git(repourl=deb_repourl,
                                 mode='incremental',
@@ -80,7 +79,7 @@ for repository in repositories:
     for ubuntu_distribution in ubuntu_distributions:
 
         # copy lib_opencad -> debian
-        factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/dev/debian",
+        factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/debian",
                                                dest=code_dir + "/debian",
                                                name="add debian folder for " + deb_name,
                                                description=["copy", "debian folder"],
@@ -105,7 +104,7 @@ for repository in repositories:
                                         env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                         haltOnFailure=True,
                                         workdir=code_dir))
-        factory_deb.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_debdev"],
+        factory_deb.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_debmisc"],
                                         name='debsign for ' + ubuntu_distribution,
                                         description=["debsign", "package"],
                                         descriptionDone=["debsigned", "package"],
@@ -113,7 +112,7 @@ for repository in repositories:
                                         haltOnFailure=True))
         # upload to launchpad
         factory_deb.addStep(steps.ShellCommand(command=['/bin/bash','-c',
-                                        'dput ppa:nextgis/dev ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'],
+                                        'dput ppa:nextgis/misc ' +  deb_name + '*' + ubuntu_distribution + '1_source.changes'],
                                         name='dput for ' + ubuntu_distribution,
                                         description=["dput", "package"],
                                         descriptionDone=["dputed", "package"],
@@ -132,8 +131,8 @@ for repository in repositories:
                                  env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
                                  haltOnFailure=True))
 
-    builder_deb = util.BuilderConfig(name = project_name + '_debdev',
+    builder_deb = util.BuilderConfig(name = project_name + '_debmisc',
         workernames = ['build-nix'], factory = factory_deb,
-        description =  "Make NextGIS dev Ubuntu ppa package")
+        description =  "Make NextGIS misc Ubuntu ppa package")
 
     c['builders'].append(builder_deb)
