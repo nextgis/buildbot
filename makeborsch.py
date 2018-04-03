@@ -141,9 +141,9 @@ def install_dependencies(factory, requirements, os):
                                     haltOnFailure=True,
                                     env=env)
             )
-        elif requirement == 'PyQt4':
+        elif requirement == 'PyQt4' and os == 'mac':
             factory.addStep(
-                steps.ShellCommand(command=['pip', 'install', '--user', 'PyQt4'],
+                steps.ShellCommand(command=['brew', 'install', 'cartr/qt4/pyqt'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
