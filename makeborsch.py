@@ -10,51 +10,52 @@ import bbconf
 c = {}
 
 repositories = [
-    {'repo':'lib_z', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'py_sip', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'lib_sqlite', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'lib_gif', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'lib_geos', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'lib_qhull', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'lib_expat', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'numpy', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'py_markupsafe', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'py_subprocess32', 'args':[], 'requirements':[], 'skip':[]},
-    {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_spatialindex', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_gsl', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_yaml', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'py_yaml', 'args':['-DWITH_YAML_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'py_psycopg', 'args':['-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'py_spatialite', 'args':['-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_ICONV=ON'], 'requirements':[], 'skip':[]}, # TODO: FreeXL,
-    {'repo':'py_matplotlib', 'args':['-DWITH_PNG_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_AGG_EXTERNAL=ON', '-DWITH_QHULL_EXTERNAL=ON', '-DWITH_NUMPY_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_jbig', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_szip', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_opencad', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_openjpeg', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_jpeg', 'args':['-DBUILD_TESTING=ON', '-DBUILD_JPEG_12=ON', '-DBUILD_JPEG_8=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_tiff', 'args':['-DBUILD_TESTING=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_JPEG=ON', '-DWITH_JBIG=ON', '-DWITH_LibLZMA=ON', '-DWITH_JPEG12=ON',], 'requirements':[], 'skip':[]},
-    {'repo':'lib_proj', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['mac']},
-    {'repo':'lib_lzma', 'args':['-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PNG=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_xml2', 'args':['-DWITH_ZLIB=ON', '-DWITH_LibLZMA=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_pq', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_spatialite', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_LibXml2=ON', '-DWITH_ICONV=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_SQLite3=ON', '-DWITH_GEOS=ON', '-DWITH_PROJ4=ON', '-DOMIT_FREEXL=ON', '-DENABLE_LWGEOM=FALSE','-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]}, # TODO: FreeXL, LWGEOM
-    {'repo':'lib_geotiff', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWTH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_UTILITIES=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_hdf4', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_SZIP=ON', '-DWITH_SZIP_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_gdal', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_CURL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON','-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_GIF=ON', '-DWITH_GIF_EXTERNAL=ON', '-DWITH_OpenCAD=ON', '-DWITH_OpenCAD_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_OpenJPEG=ON', '-DWITH_OpenJPEG_EXTERNAL=ON', '-DENABLE_OPENJPEG=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON','-DWITH_PYTHON=ON', '-DWITH_PYTHON3=OFF', '-DENABLE_OZI=ON', '-DENABLE_NITF_RPFTOC_ECRGTOC=ON', '-DGDAL_ENABLE_GNM=ON', '-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON','-DGDAL_BUILD_APPS=ON', '-DWITH_HDF4=ON','-DWITH_HDF4_EXTERNAL=ON','-DENABLE_HDF4=ON', '-DWITH_QHULL=ON', '-DWITH_QHULL_EXTERNAL=ON','-DWITH_QHULL=ON', '-DWITH_Spatialite=ON','-DWITH_Spatialite_EXTERNAL=ON','-DWITH_SZIP=ON','-DWITH_SZIP_EXTERNAL=ON','-DWITH_NUMPY=ON', '-DWITH_NUMPY_EXTERNAL=ON','-DBUILD_TESTING=ON', '-DSKIP_PYTHON_TESTS=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'python', 'args':['-DBUILD_LIBPYTHON_SHARED=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DUSE_SYSTEM_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_SQlite3_EXTERNAL=ON'], 'requirements':[], 'skip':['mac']},
-    {'repo':'lib_qt4', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_ICONV=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_qt5', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_qca', 'args':['-DQT4_BUILD=ON', '-DWITH_Qt4=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_PLUGINS=auto', '-DUSE_RELATIVE_PATHS=OFF', '-DCMAKE_INSTALL_PREFIX=/usr/', '-DBUILD_TESTS=OFF'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_qwt', 'args':['-DWITH_Qt4_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'py_qt4', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
-    {'repo':'lib_qscintilla', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt4_EXTERNAL=ON'], 'requirements':[], 'skip':[]},
+    {'repo':'lib_z', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'py_sip', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_sqlite', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_gif', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_geos', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_qhull', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_expat', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'numpy', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'py_markupsafe', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'py_subprocess32', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_spatialindex', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_gsl', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_yaml', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'py_yaml', 'args':['-DWITH_YAML_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'py_psycopg', 'args':['-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'py_spatialite', 'args':['-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_ICONV=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'}, # TODO: FreeXL,
+    {'repo':'py_matplotlib', 'args':['-DWITH_PNG_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_AGG_EXTERNAL=ON', '-DWITH_QHULL_EXTERNAL=ON', '-DWITH_NUMPY_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_jbig', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_szip', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_opencad', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_openjpeg', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_jpeg', 'args':['-DBUILD_TESTING=ON', '-DBUILD_JPEG_12=ON', '-DBUILD_JPEG_8=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_tiff', 'args':['-DBUILD_TESTING=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_JPEG=ON', '-DWITH_JBIG=ON', '-DWITH_LibLZMA=ON', '-DWITH_JPEG12=ON',], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_proj', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['mac'], 'org':'nextgis-borsch'},
+    {'repo':'lib_lzma', 'args':['-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PNG=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_xml2', 'args':['-DWITH_ZLIB=ON', '-DWITH_LibLZMA=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_pq', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_spatialite', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_LibXml2=ON', '-DWITH_ICONV=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_SQLite3=ON', '-DWITH_GEOS=ON', '-DWITH_PROJ4=ON', '-DOMIT_FREEXL=ON', '-DENABLE_LWGEOM=FALSE','-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'}, # TODO: FreeXL, LWGEOM
+    {'repo':'lib_geotiff', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWTH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_UTILITIES=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_hdf4', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_SZIP=ON', '-DWITH_SZIP_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_gdal', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_CURL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON','-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_GIF=ON', '-DWITH_GIF_EXTERNAL=ON', '-DWITH_OpenCAD=ON', '-DWITH_OpenCAD_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PROJ4=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_OpenJPEG=ON', '-DWITH_OpenJPEG_EXTERNAL=ON', '-DENABLE_OPENJPEG=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON','-DWITH_PYTHON=ON', '-DWITH_PYTHON3=OFF', '-DENABLE_OZI=ON', '-DENABLE_NITF_RPFTOC_ECRGTOC=ON', '-DGDAL_ENABLE_GNM=ON', '-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON','-DGDAL_BUILD_APPS=ON', '-DWITH_HDF4=ON','-DWITH_HDF4_EXTERNAL=ON','-DENABLE_HDF4=ON', '-DWITH_QHULL=ON', '-DWITH_QHULL_EXTERNAL=ON','-DWITH_QHULL=ON', '-DWITH_Spatialite=ON','-DWITH_Spatialite_EXTERNAL=ON','-DWITH_SZIP=ON','-DWITH_SZIP_EXTERNAL=ON','-DWITH_NUMPY=ON', '-DWITH_NUMPY_EXTERNAL=ON','-DBUILD_TESTING=ON', '-DSKIP_PYTHON_TESTS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'python', 'args':['-DBUILD_LIBPYTHON_SHARED=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DUSE_SYSTEM_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_SQlite3_EXTERNAL=ON'], 'requirements':[], 'skip':['mac'], 'org':'nextgis-borsch'},
+    {'repo':'lib_qt4', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_ICONV=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_qt5', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_qca', 'args':['-DQT4_BUILD=ON', '-DWITH_Qt4=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_PLUGINS=auto', '-DUSE_RELATIVE_PATHS=OFF', '-DCMAKE_INSTALL_PREFIX=/usr/', '-DBUILD_TESTS=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_qwt', 'args':['-DWITH_Qt4_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'py_qt4', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_qscintilla', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt4_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'nextgisqgis', 'args':['-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GSL_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_Qca_EXTERNAL=ON', '-DWITH_Qscintilla_EXTERNAL=ON', '-DWITH_Qwt_EXTERNAL=ON', '-DWITH_SpatialIndex_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt4_EXTERNAL=ON', '-DWITH_Qsci_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis'},
 ]
 
 vm_cpu_count = 8
@@ -145,13 +146,14 @@ def install_dependencies(factory, requirements, os):
 for repository in repositories:
 
     project_name = repository['repo']
-    repourl = 'git://github.com/nextgis-borsch/{}.git'.format(project_name)
-    git_project_name = 'nextgis-borsch/{}'.format(project_name)
+    org = repository['org']
+    repourl = 'git://github.com/{}/{}.git'.format(org, project_name)
+    git_project_name = '{}/{}'.format(org, project_name)
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
                            workdir = project_name + '-workdir',
                            branches = ['master'],
-                           pollinterval = 3600,) 
+                           pollinterval = 3600,)
     c['change_source'].append(git_poller)
 
     builderNames = []
@@ -293,7 +295,8 @@ for repository in repositories:
                                            env=env))
 
         # send package to github
-        factory.addStep(steps.ShellCommand(command=['python', script_name, '--login',
+        if org == 'nextgis-borsch':
+            factory.addStep(steps.ShellCommand(command=['python', script_name, '--login',
                                                     username, '--key', userkey, '--build_path', build_subdir
                                                     ],
                                            name="send package to github",

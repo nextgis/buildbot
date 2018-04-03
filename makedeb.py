@@ -7,11 +7,11 @@ from buildbot.plugins import *
 c = {}
 
 repositories = [
-    {'repo':'lib_geos', 'version':'3.6.2', 'deb':'geos', 'subdir': ''},
-    {'repo':'lib_gdal', 'version':'2.2.3', 'deb':'gdal', 'subdir': 'master'},
-    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master'},
-    {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': ''},
-    {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': ''},
+    {'repo':'lib_geos', 'version':'3.6.2', 'deb':'geos', 'subdir': '', 'org':'nextgis-borsch'},
+    {'repo':'lib_gdal', 'version':'2.2.3', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch'},
+    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master', 'org':'nextgis-borsch'},
+    {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch'},
+    {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis-borsch'},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
@@ -27,9 +27,10 @@ c['builders'] = []
 # Create builders
 for repository in repositories:
     project_name = repository['repo']
-    repourl = 'git://github.com/nextgis-borsch/{}.git'.format(project_name)
+    org = repository['org']
+    repourl = 'git://github.com/{}/{}.git'.format(org, project_name)
     project_ver = repository['version']
-    git_project_name = 'nextgis-borsch/{}'.format(project_name)
+    git_project_name = '{}/{}'.format(org, project_name)
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
                            workdir = project_name + '-workdir',
