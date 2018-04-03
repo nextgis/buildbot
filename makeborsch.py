@@ -147,7 +147,9 @@ def install_dependencies(factory, requirements, os):
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
+                                    haltOnFailure=False, # brew install may return 1 instead of 0 (SUCCESS)
+                                    flunkOnWarnings=False,
+                                    flunkOnFailure=False,
                                     env=env)
             )
 
