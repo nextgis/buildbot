@@ -20,6 +20,7 @@ repositories = [
     {'repo':'numpy', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'py_markupsafe', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'py_subprocess32', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'py_kiwisolver', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_spatialindex', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_gsl', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
