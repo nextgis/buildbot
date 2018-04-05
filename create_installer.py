@@ -304,6 +304,7 @@ for platform in platforms:
                                        haltOnFailure=True,
                                        workdir=code_dir,
                                        env=env))
+    # TODO: If create installer - upload updater.zip + version.str to ftp                                    
 
     # 8. Upload repository archive to site
     factory.addStep(steps.ShellCommand(command=["curl", '-u', siteftp_user, '-T',
