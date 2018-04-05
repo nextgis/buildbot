@@ -219,11 +219,21 @@ for platform in platforms:
     # 4. Create or update repository
     # Install NextGIS sign sertificate
     if 'mac' == platform['name']:
-        factory.addStep(steps.ShellCommand(command=['pip', 'install', '--user', 'dmgbuild'], # pip2
-                                            name="Install dmgbuild python package",
-                                            haltOnFailure=True,
-                                            workdir=code_dir,
-                                            env=env))
+        # Try to pip2 and pip install
+
+        factory.addStep(steps.ShellSequence(commands=[
+                util.ShellArg(command=['pip2', 'install', '--user', 'dmgbuild'],
+                                haltOnFailure=False, flunkOnWarnings=False, # Don't fail here
+                                flunkOnFailure=False, warnOnWarnings=False,
+                                warnOnFailure=False,
+                                logfile=logfile),
+                util.ShellArg(command=['pip', 'install', '--user', 'dmgbuild'],
+                                logfile=logfile),
+            ],
+            name="Install dmgbuild python package",
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env))
 
         factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
                                             workerdest=code_dir_last + "/dev.p12",
