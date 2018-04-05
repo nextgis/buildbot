@@ -175,6 +175,15 @@ for platform in platforms:
         workdir=build_dir,
         env=env))
 
+    factory.addStep(steps.ShellSequence(commands=[
+            util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s'], logfile=logfile),
+        ],
+        name="Download scripts",
+        haltOnFailure=True,
+        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
+        workdir=code_dir,
+        env=env))
+
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-o', 'versions.pkl', '-s',
                                                 util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
                                                     basename=ngftp + '/src/' + 'repo_' + platform['name'] + '/versions'),
@@ -202,6 +211,9 @@ for platform in platforms:
     elif 'win32' == platform['name']:
         create_opt.append('-g')
         create_opt.append(generator)
+
+    repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
+    installer_name_base = 'nextgis-setup-' + platform['name']
 
     # 3. Get compiled libraries
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
@@ -260,9 +272,6 @@ for platform in platforms:
             workdir=code_dir,
             env=env))
 
-    repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
-    installer_name_base = 'nextgis-setup-' + platform['name']
-
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
@@ -317,7 +326,15 @@ for platform in platforms:
                                        haltOnFailure=True,
                                        workdir=code_dir,
                                        env=env))
-    # TODO: If create installer - upload updater.zip + version.str to ftp
+    # If create installer - upload updater.zip + version.str to ftp
+    factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                '--ftp_user', ngftp_user, '--ftp',
+                                                ngftp + '/src/nextgis_updater_' + platform['name'],
+                                                '--build_path', code_dir + '/tmp'],
+                                       name="send package to ftp",
+                                       doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
+                                       haltOnFailure=True,
+                                       workdir=code_dir))
 
     # 8. Upload repository archive to site
     factory.addStep(steps.ShellCommand(command=["curl", '-u', siteftp_user, '-T',
