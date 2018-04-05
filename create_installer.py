@@ -208,6 +208,8 @@ for platform in platforms:
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
+                                                '-n', '-r', util.Interpolate('%(kw:url)s%(prop:suffix)s', url=repo_url_base),
+                                                '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                                                 create_opt,
                                                 'prepare', '--ftp_user', ngftp_user,
                                                 '--ftp', ngftp + '/src/',
@@ -216,6 +218,7 @@ for platform in platforms:
                                            haltOnFailure=True,
                                            workdir=code_dir,
                                            env=env))
+
     # 4. Create or update repository
     # Install NextGIS sign sertificate
     if 'mac' == platform['name']:
