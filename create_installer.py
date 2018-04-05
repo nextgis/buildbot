@@ -181,7 +181,7 @@ for platform in platforms:
                                                 ],
                                         name="Download versions.pkl",
                                         haltOnFailure=True, # The repository may not be exists
-                                        doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
+                                        # doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
                                         workdir=code_dir,
                                         env=env))
 
@@ -219,7 +219,7 @@ for platform in platforms:
     # 4. Create or update repository
     # Install NextGIS sign sertificate
     if 'mac' == platform['name']:
-        factory.addStep(steps.ShellCommand(command=['pip2', 'install', '--user', 'dmgbuild'],
+        factory.addStep(steps.ShellCommand(command=['pip', 'install', '--user', 'dmgbuild'], # pip2
                                             name="Install dmgbuild python package",
                                             haltOnFailure=True,
                                             workdir=code_dir,
@@ -304,7 +304,7 @@ for platform in platforms:
                                        haltOnFailure=True,
                                        workdir=code_dir,
                                        env=env))
-    # TODO: If create installer - upload updater.zip + version.str to ftp                                    
+    # TODO: If create installer - upload updater.zip + version.str to ftp
 
     # 8. Upload repository archive to site
     factory.addStep(steps.ShellCommand(command=["curl", '-u', siteftp_user, '-T',
