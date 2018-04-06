@@ -83,6 +83,10 @@ platforms = [
     {'name' : 'win64', 'worker' : 'build-win'},
     {'name' : 'mac', 'worker' : 'build-mac'} ]
 
+build_lock = util.WorkerLock("worker_builds",
+                             maxCount=1,
+                             maxCountForWorker={'build-win': 1, 'build-mac': 1})
+
 logfile = 'stdio'
 generator = 'Visual Studio 15 2017'
 
@@ -341,6 +345,7 @@ for repository in repositories:
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
                                     workernames = [platform['worker']],
                                     factory = factory,
+                                    locks = [build_lock.access('counting')],
                                     description="Make {} on {}".format(project_name, platform['name']),)
 
         c['builders'].append(builder)
