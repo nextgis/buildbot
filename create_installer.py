@@ -330,7 +330,7 @@ for platform in platforms:
     factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
                                                 '--ftp_user', ngftp_user, '--ftp',
                                                 ngftp + '/src/nextgis_updater_' + platform['name'],
-                                                '--build_path', build_dir],
+                                                '--build_path', build_dir_name],
                                        name="send package to ftp",
                                        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
                                        haltOnFailure=True,
