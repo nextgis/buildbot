@@ -12,6 +12,8 @@ repositories = [
     {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master', 'org':'nextgis-borsch'},
     {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch'},
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis-borsch'},
+    {'repo':'dante','version':'1.4.2', 'deb':'dante', 'org':'nextgis'},
+    {'repo':'pam-pgsql','version':'0.7.3.2', 'deb':'pam-pgsql', 'org':'nextgis'},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'

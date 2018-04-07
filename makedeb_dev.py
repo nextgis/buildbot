@@ -7,8 +7,8 @@ from buildbot.plugins import *
 c = {}
 
 repositories = [
-    {'repo':'lib_gdal', 'version':'2.3.4', 'deb':'gdal'},
-    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad'},
+    {'repo':'lib_gdal', 'version':'2.3.4', 'deb':'gdal', 'org':'nextgis-borsch'},
+    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'org':'nextgis-borsch'},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
@@ -24,9 +24,10 @@ c['builders'] = []
 # Create builders
 for repository in repositories:
     project_name = repository['repo']
-    repourl = 'git://github.com/nextgis-borsch/{}.git'.format(project_name)
+    org = repository['org']
+    repourl = 'git://github.com/{}/{}.git'.format(org, project_name)
     project_ver = repository['version']
-    git_project_name = 'nextgis-borsch/{}'.format(project_name)
+    git_project_name = '{}/{}'.format(org, project_name)
     # Git poller is in makedeb.py
 
     scheduler = schedulers.SingleBranchScheduler(
