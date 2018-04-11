@@ -10,7 +10,7 @@ repositories = [
     {'repo':'lib_geos', 'version':'3.6.2', 'deb':'geos', 'subdir': '', 'org':'nextgis-borsch'},
     {'repo':'lib_gdal', 'version':'2.2.3', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch'},
     {'repo':'lib_qscintilla', 'version':'2.10.3', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch'},
-    {'repo':'py_future', 'version':'0.16.0', 'deb':'py_future', 'subdir': '', 'org':'nextgis-borsch'},
+    {'repo':'py_future', 'version':'0.16.0', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch'},
     {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master', 'org':'nextgis-borsch'},
     {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch'},
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis-borsch'},
