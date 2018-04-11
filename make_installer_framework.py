@@ -37,7 +37,7 @@ c['schedulers'].append(forceScheduler)
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
-old_qt = False
+qt_without_openssl = True # To build with openssl need to fix include and library paths to static build 
 
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
             '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
@@ -48,7 +48,7 @@ qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
           ]
 # For qt 5.10 -skip;qtwebglplugin;
 
-if old_qt:
+if qt_without_openssl:
     qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL=OFF',
                 '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
                 '-DSKIP_DEFAULTS=ON',  '-DQT_CONFIGURE_ARGS=-accessibility;-no-ssl;-no-opengl;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtlocation;-skip;qtmultimedia;-skip;qtserialport;-skip;qtsensors;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qt3d;-skip;qtconnectivity;-skip;qtandroidextras;-skip;qtcanvas3d;-skip;qtcharts;-skip;qtdatavis3d;-skip;qtgamepad;-skip;qtpurchasing;-skip;qtserialbus;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebsockets;-skip;qtxmlpatterns;-skip;qtwebview;-no-feature-ftp;-no-feature-socks5',
