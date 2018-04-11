@@ -37,7 +37,7 @@ c['schedulers'].append(forceScheduler)
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
-qt_without_openssl = False 
+qt_without_openssl = True 
 
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
             '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
