@@ -13,7 +13,7 @@ repositories = [
     {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch'},
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis-borsch'},
     {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis'},
-    {'repo':'pam-pgsql','version':'0.7.3.2', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis'},
+    {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis'},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'

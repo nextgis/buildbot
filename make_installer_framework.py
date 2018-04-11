@@ -37,7 +37,7 @@ c['schedulers'].append(forceScheduler)
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
-old_qt = True
+old_qt = False
 
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
             '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
@@ -157,7 +157,7 @@ for os_type in os_types:
 
 
     factory.addStep(steps.ShellCommand(command=build_installer_cmd,
-                                        name="build_installer.py",
+                                        name="build_installer_bb.py",
                                         haltOnFailure=True,
                                         workdir=os.path.join(code_dir, 'qtifw', 'tools'),
                                         env=env))
