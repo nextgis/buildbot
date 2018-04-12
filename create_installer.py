@@ -29,6 +29,7 @@ c['builders'] = []
 
 project_name = 'create_installer'
 generator = 'Visual Studio 15 2017'
+create_updater_package = False
 
 forceScheduler_create = schedulers.ForceScheduler(
                             name=project_name + "_update",
@@ -326,15 +327,16 @@ for platform in platforms:
                                        haltOnFailure=True,
                                        workdir=code_dir,
                                        env=env))
-    # If create installer - upload updater.zip + version.str to ftp
-    factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
-                                                '--ftp_user', ngftp_user, '--ftp',
-                                                ngftp + '/src/nextgis_updater_' + platform['name'],
-                                                '--build_path', build_dir_name],
-                                       name="send package to ftp",
-                                       doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
-                                       haltOnFailure=True,
-                                       workdir=code_dir))
+    if create_updater_package:
+        # If create installer - upload updater.zip + version.str to ftp
+        factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
+                                                    '--ftp_user', ngftp_user, '--ftp',
+                                                    ngftp + '/src/nextgis_updater_' + platform['name'],
+                                                    '--build_path', build_dir_name],
+                                           name="send package to ftp",
+                                           doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
+                                           haltOnFailure=True,
+                                           workdir=code_dir))
 
     # 8. Upload repository archive to site
     factory.addStep(steps.ShellCommand(command=["curl", '-u', siteftp_user, '-T',
