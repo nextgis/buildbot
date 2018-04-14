@@ -31,6 +31,10 @@ project_name = 'create_installer'
 generator = 'Visual Studio 15 2017'
 create_updater_package = False
 
+build_lock = util.WorkerLock("worker_builds",
+                             maxCount=1,
+                             maxCountForWorker={'build-win': 1, 'build-mac': 1})
+
 forceScheduler_create = schedulers.ForceScheduler(
                             name=project_name + "_update",
                             label="Update installer",
@@ -351,6 +355,7 @@ for platform in platforms:
     builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
                                  workernames = [platform['worker']],
                                  factory = factory,
+                                 locks = [build_lock.access('counting')],
                                  description="Create/update installer on " + platform['name'],)
 
     c['builders'].append(builder)
