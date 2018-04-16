@@ -80,7 +80,7 @@ for repository in repositories:
     if repository['url']:
         url = repository['url']
         file_name = url[url.rfind("/")+1:]
-        factory_deb.addStep(steps.ShellCommand(command=["curl", url, '-o', file_name, '-s'],
+        factory_deb.addStep(steps.ShellCommand(command=["curl", url, '-o', file_name, '-s', '-L'],
             name='get package sources',
             env=env,
             workdir=code_dir,
