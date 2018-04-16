@@ -31,7 +31,7 @@ project_name = 'create_installer'
 generator = 'Visual Studio 15 2017'
 create_updater_package = False
 
-build_lock = util.WorkerLock("worker_builds",
+build_lock = util.WorkerLock("create_installer_worker_builds",
                              maxCount=1,
                              maxCountForWorker={'build-win': 1, 'build-mac': 1})
 

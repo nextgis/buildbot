@@ -7,16 +7,16 @@ from buildbot.plugins import *
 c = {}
 
 repositories = [
-    {'repo':'lib_geos', 'version':'3.6.2', 'deb':'geos', 'subdir': '', 'org':'nextgis-borsch'},
-    {'repo':'lib_gdal', 'version':'2.2.3', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch'},
-    {'repo':'lib_qscintilla', 'version':'2.10.3', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch'},
-    {'repo':'py_future', 'version':'0.16.0', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch'},
-    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master', 'org':'nextgis-borsch'},
-    {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch'},
-    {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis-borsch'},
-    {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis'},
-    {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis'},
-    {'repo':'nextgisqgis','version':'18.4.0', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis'},
+    {'repo':'lib_geos', 'version':'3.6.2', 'deb':'geos', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'lib_gdal', 'version':'2.2.3', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'lib_qscintilla', 'version':'2.10.3', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'py_future', 'version':'0.16.0', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://pypi.python.org/packages/00/2b/8d082ddfed935f3608cc61140df6dcbf0edea1bc3ab52fb6c29ae3e81e85/future-0.16.0.tar.gz'},
+    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': ''},
+    {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': ''},
+    {'repo':'nextgisqgis','version':'18.4.0', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': ''},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
@@ -28,6 +28,8 @@ clean_exts = ['.tar.gz', '.changes', '.dsc', '.build', '.upload']
 c['change_source'] = []
 c['schedulers'] = []
 c['builders'] = []
+
+env = {'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname}
 
 # Create builders
 for repository in repositories:
@@ -75,6 +77,15 @@ for repository in repositories:
                                 submodules=False,
                                 workdir=code_dir))
 
+    if repository['url']:
+        url = repository['url']
+        file_name = url[url.rfind("/")+1:]
+        factory_deb.addStep(steps.ShellCommand(command=["curl", url, '-o', file_name, '-s'],
+            name='get package sources',
+            env=env,
+            workdir=code_dir,
+            haltOnFailure=True))
+
     #cleanup
     for clean_ext in clean_exts:
         factory_deb.addStep(steps.ShellCommand(command=['/bin/bash', '-c', 'rm *' + clean_ext],
@@ -90,6 +101,8 @@ for repository in repositories:
                                        name="tar",
                                        description=["tar", "compress"],
                                        descriptionDone=["tar", "compressed"], haltOnFailure=True))
+
+
 
     for ubuntu_distribution in ubuntu_distributions:
         # For postgis
@@ -109,6 +122,7 @@ for repository in repositories:
                                                descriptionDone=["copied", "debian folder"],
                                                haltOnFailure=True))
 
+
         factory_deb.addStep(steps.ShellCommand(command=['dch.py', '-n', project_ver, '-a',
                                                 deb_name, '-p', 'fill', '-f',
                                                 code_dir_last,'-o', 'changelog', '-d',
@@ -116,7 +130,7 @@ for repository in repositories:
                                         name='create changelog for ' + ubuntu_distribution,
                                         description=["create", "changelog"],
                                         descriptionDone=["created", "changelog"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        env=env,
                                         haltOnFailure=True))
 
         # debuild -us -uc -d -S
@@ -124,14 +138,14 @@ for repository in repositories:
                                         name='debuild for ' + ubuntu_distribution,
                                         description=["debuild", "package"],
                                         descriptionDone=["debuilded", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        env=env,
                                         haltOnFailure=True,
                                         workdir=code_dir))
         factory_deb.addStep(steps.ShellCommand(command=['debsign.sh', project_name + "_deb"],
                                         name='debsign for ' + ubuntu_distribution,
                                         description=["debsign", "package"],
                                         descriptionDone=["debsigned", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        env=env,
                                         haltOnFailure=True))
         # upload to launchpad
         factory_deb.addStep(steps.ShellCommand(command=['/bin/bash','-c',
@@ -139,7 +153,7 @@ for repository in repositories:
                                         name='dput for ' + ubuntu_distribution,
                                         description=["dput", "package"],
                                         descriptionDone=["dputed", "package"],
-                                        env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                        env=env,
                                         haltOnFailure=True))
         # delete code_dir + "/debian"
         factory_deb.addStep(steps.RemoveDirectory(dir=code_dir + "/debian",
@@ -151,7 +165,7 @@ for repository in repositories:
                                  name='log last comments',
                                  description=["log", "last comments"],
                                  descriptionDone=["logged", "last comments"],
-                                 env={'DEBEMAIL': deb_email, 'DEBFULLNAME': deb_fullname},
+                                 env=env,
                                  haltOnFailure=True))
 
     builder_deb = util.BuilderConfig(name = project_name + '_deb',
