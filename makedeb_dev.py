@@ -31,7 +31,7 @@ for repository in repositories:
     # Git poller is in makedeb.py
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
-                           workdir = project_name + '-workdir',
+                           workdir = project_name + '-workdirdev',
                            branches = ['dev'],
                            pollinterval = 7200,)
     c['change_source'].append(git_poller)
