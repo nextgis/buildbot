@@ -12,6 +12,7 @@ repositories = [
     {'repo':'lib_qscintilla', 'version':'2.10.3', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'py_future', 'version':'0.16.0', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/00/2b/8d082ddfed935f3608cc61140df6dcbf0edea1bc3ab52fb6c29ae3e81e85/future-0.16.0.tar.gz'},
     {'repo':'py_raven', 'version':'6.6.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/03/8a/f28e01894cbd34c9c33dce88fc9e1a39c8930f9d1ed8e35a8d5499083af8/raven-6.6.0.tar.gz'},
+    {'repo':'py_setuptools', 'version':'39.0.1', 'deb':'python-setuptools', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/72/c2/c09362ab29338413ab687b47dab03bab4a792e2bbb727a1eb5e0a88e3b86/setuptools-39.0.1.zip'},
     {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
