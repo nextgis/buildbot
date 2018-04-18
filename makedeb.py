@@ -82,6 +82,7 @@ for repository in repositories:
     if repository['url']:
         url = repository['url']
         file_name = url[url.rfind("/")+1:]
+        file_name = file_name.replace('.zip', '.tar.gz')
         factory_deb.addStep(steps.ShellCommand(command=["curl", url, '-o', file_name, '-s', '-L'],
             name='get package sources',
             env=env,
