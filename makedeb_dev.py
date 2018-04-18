@@ -29,6 +29,12 @@ for repository in repositories:
     project_ver = repository['version']
     git_project_name = '{}/{}'.format(org, project_name)
     # Git poller is in makedeb.py
+    git_poller = changes.GitPoller(project = git_project_name,
+                           repourl = repourl,
+                           workdir = project_name + '-workdir',
+                           branches = ['dev'],
+                           pollinterval = 7200,)
+    c['change_source'].append(git_poller)
 
     scheduler = schedulers.SingleBranchScheduler(
                                 name=project_name + "_debdev",
