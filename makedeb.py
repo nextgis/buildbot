@@ -89,6 +89,13 @@ for repository in repositories:
             workdir=code_dir,
             haltOnFailure=True))
 
+    if deb_name == 'nextgisqgis':
+        factory_deb.addStep(steps.ShellCommand(command=["python", 'opt/ppa_prepare.py'],
+            name='Get local copy of plugins sources',
+            env=env,
+            workdir=code_dir,
+            haltOnFailure=True))
+
     #cleanup
     for clean_ext in clean_exts:
         factory_deb.addStep(steps.ShellCommand(command=['/bin/bash', '-c', 'rm *' + clean_ext],
