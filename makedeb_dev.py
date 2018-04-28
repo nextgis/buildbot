@@ -12,7 +12,7 @@ repositories = [
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
-ubuntu_distributions = ['trusty', 'xenial', 'artful']
+ubuntu_distributions = ['trusty', 'xenial', 'bionic']
 deb_email = 'dmitry.baryshnikov@nextgis.com'
 deb_fullname = 'Dmitry Baryshnikov'
 clean_exts = ['.tar.gz', '.changes', '.dsc', '.build', '.upload']
