@@ -86,15 +86,15 @@ ngid_builder = util.BuilderConfig(name=project_name, workernames=['build-nix'], 
 c['builders'] = [ngid_builder]
 
 # NOTIFIER
-import bbconf
-
-ngid_mn = reporters.MailNotifier(fromaddr='buildbot@nextgis.com',
-                       sendToInterestedUsers=True,
-                       builders=[ngid_builder.name],
-                       mode=('all'),
-                       extraRecipients=bbconf.ngid_email_recipients,
-                       relayhost='192.168.255.1',
-                       useTls=True
-                      )
-
-c['services'] = [ngid_mn]
+#import bbconf
+#
+#ngid_mn = reporters.MailNotifier(fromaddr='buildbot@nextgis.com',
+#                       sendToInterestedUsers=True,
+#                       builders=[ngid_builder.name],
+#                       mode=('all'),
+#                       extraRecipients=bbconf.ngid_email_recipients,
+#                       relayhost='192.168.255.1',
+#                       useTls=True
+#                      )
+#
+#c['services'] = [ngid_mn]
