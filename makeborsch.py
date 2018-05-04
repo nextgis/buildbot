@@ -57,6 +57,7 @@ repositories = [
     {'repo':'py_qt4', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_qscintilla', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt4_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'nextgisqgis', 'args':['-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GSL_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_Qca_EXTERNAL=ON', '-DWITH_Qscintilla_EXTERNAL=ON', '-DWITH_Qwt_EXTERNAL=ON', '-DWITH_SpatialIndex_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt4_EXTERNAL=ON', '-DWITH_Qsci_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':['PyQt4', 'six'], 'skip':[], 'org':'nextgis'},
+    {'repo':'lib_ngstd', 'args':['-DBUILD_QT5=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis'}, # TODO: add qt4 & sip support
 ]
 
 vm_cpu_count = 8
