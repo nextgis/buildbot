@@ -20,6 +20,7 @@ repositories = [
     {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'nextgisqgis','version':'18.4.0', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'lib_ngstd','version':'0.8.0', 'deb':'ngstd', 'subdir': '', 'org':'nextgis', 'url': ''},
+    {'repo':'formbuilder','version':'2.2', 'deb':'formbuilder', 'subdir': '', 'org':'nextgis', 'url': ''},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
