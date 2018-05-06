@@ -61,6 +61,10 @@ repositories = [
     {'repo':'formbuilder', 'args':['-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_NGSTD_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis'},
 ]
 
+skip_send2github = [
+    "nextgisqgis"
+]
+
 vm_cpu_count = 8
 
 mac_os_min_version = '10.11'
@@ -322,7 +326,7 @@ for repository in repositories:
                                            env=env))
 
         # send package to github
-        if org == 'nextgis-borsch':
+        if project_name not in skip_send2github:
             factory.addStep(steps.ShellCommand(command=['python', script_name, '--login',
                                                     username, '--key', userkey, '--build_path', build_subdir
                                                     ],
