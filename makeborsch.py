@@ -62,7 +62,7 @@ repositories = [
 ]
 
 skip_send2github = [
-    "nextgisqgis"
+    "nextgisqgis", "formbuilder"
 ]
 
 vm_cpu_count = 8
