@@ -8,7 +8,7 @@ c = {}
 
 repositories = [
     {'repo':'lib_geos', 'version':'3.6.2', 'deb':'geos', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
-    {'repo':'lib_gdal', 'version':'2.2.4', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'lib_gdal', 'version':'2.3.0', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'py_future', 'version':'0.16.0', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/00/2b/8d082ddfed935f3608cc61140df6dcbf0edea1bc3ab52fb6c29ae3e81e85/future-0.16.0.tar.gz'},
     {'repo':'py_raven', 'version':'6.7.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/d7/54/7d199f893a0ac01f8df9b7ec39c0f3ac19146e78b33401b1f4984c9d3583/raven-6.7.0.tar.gz'},
