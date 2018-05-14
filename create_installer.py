@@ -194,7 +194,9 @@ for platform in platforms:
                                                     basename=ngftp + '/src/' + 'repo_' + platform['name'] + '/versions'),
                                                 ],
                                         name="Download versions.pkl",
-                                        haltOnFailure=True, # The repository may not be exists
+                                        haltOnFailure=False, warnOnWarnings=True,
+                                        flunkOnFailure=False, warnOnFailure=True
+                                        # haltOnFailure=True, # The repository may not be exists
                                         # doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
                                         workdir=code_dir,
                                         env=env))
