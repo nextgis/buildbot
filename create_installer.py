@@ -47,10 +47,9 @@ forceScheduler_create = schedulers.ForceScheduler(
                             properties=[util.StringParameter(name="force",
                                             label="Force update specified packages even not any changes exists:",
                                             default="all", size=280),
-                                        util.ChoiceStringParameter(name="suffix",
-                                                        choices=["", "-dev", "-test"],
-                                                        label="Installer name and URL path suffix (can be empty):",
-                                                        default="-dev", size=40),
+                                        util.StringParameter(name="suffix",
+                                                        label="Installer name and URL path suffix (use '-dev' for default):",
+                                                        default="", size=40),
                                        ],
                         )
 forceScheduler_update = schedulers.ForceScheduler(
@@ -62,10 +61,9 @@ forceScheduler_update = schedulers.ForceScheduler(
                                             project_name + "_win64",
                                             project_name + "_mac",
                                         ],
-                            properties=[util.ChoiceStringParameter(name="suffix",
-                                                            choices=["", "-dev", "-test"],
-                                                            label="Installer name and URL path suffix (can be empty):",
-                                                            default="-dev", size=40),
+                            properties=[util.StringParameter(name="suffix",
+                                                            label="Installer name and URL path suffix (use '-dev' for default):",
+                                                            default="", size=40),
                                        ],
                         )
 c['schedulers'].append(forceScheduler_create)
