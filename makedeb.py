@@ -46,7 +46,7 @@ for repository in repositories:
                            repourl = repourl,
                            workdir = project_name + '-workdir',
                            branches = ['master'],
-                           pollinterval = 7200,)
+                           pollinterval = 5400,)
     c['change_source'].append(git_poller)
 
     scheduler = schedulers.SingleBranchScheduler(
