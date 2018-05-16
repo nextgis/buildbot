@@ -195,7 +195,7 @@ for platform in platforms:
                                                 ],
                                         name="Download versions.pkl",
                                         haltOnFailure=False, warnOnWarnings=True,
-                                        flunkOnFailure=False, warnOnFailure=True
+                                        flunkOnFailure=False, warnOnFailure=True,
                                         # haltOnFailure=True, # The repository may not be exists
                                         # doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
                                         workdir=code_dir,

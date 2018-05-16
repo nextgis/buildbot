@@ -126,6 +126,15 @@ for repository in repositories:
             elif ubuntu_distribution == 'artful':
                 repository['subdir'] = 'pg9.6'
 
+        # For qscintilla
+        if repository['repo'] == 'lib_qscintilla':
+            if ubuntu_distribution == 'trusty':
+                repository['subdir'] = 'trusty'
+            elif ubuntu_distribution == 'xenial':
+                repository['subdir'] = 'xenial'
+            elif ubuntu_distribution == 'bionic':
+                repository['subdir'] = 'bionic'
+
         # copy lib_opencad -> debian
         factory_deb.addStep(steps.CopyDirectory(src=deb_dir + "/" + deb_name + "/" + repository['subdir'] + "/debian",
                                                dest=code_dir + "/debian",
