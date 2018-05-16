@@ -65,7 +65,7 @@ skip_send2github = [
     "nextgisqgis", "formbuilder"
 ]
 
-vm_cpu_count = 8
+vm_cpu_count = 6
 
 mac_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
@@ -312,14 +312,14 @@ for repository in repositories:
                                            env=env))
 
         # make tests
-        factory.addStep(steps.ShellCommand(command=['ctest', '-C', 'release'],
+        factory.addStep(steps.ShellCommand(command=['ctest', '-C', 'Release'],
                                            name="test",
                                            haltOnFailure=True,
                                            workdir=build_dir,
                                            env=env))
 
         # make package
-        factory.addStep(steps.ShellCommand(command=['cpack', '.'],
+        factory.addStep(steps.ShellCommand(command=['cpack', '-C', 'Release', '-V', '.'],
                                            name="pack",
                                            haltOnFailure=True,
                                            workdir=build_dir,
