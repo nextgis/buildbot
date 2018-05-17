@@ -14,7 +14,7 @@ repositories = [
     {'repo':'py_raven', 'version':'6.8.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/95/52/3ceb4d37d9656d895680bd4d63ea7cc33cffa1d207c1b0cd917006af6ebd/raven-6.8.0.tar.gz'},
     {'repo':'py_setuptools', 'version':'39.1.0', 'deb':'python-setuptools', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/a6/5b/f399fcffb9128d642387133dc3aa9bb81f127b949cd4d9f63e5602ad1d71/setuptools-39.1.0.zip'},
     {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
-    {'repo':'postgis','version':'2.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'postgis','version':'2.4.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': ''},
@@ -125,6 +125,8 @@ for repository in repositories:
                 repository['subdir'] = 'pg9.5'
             elif ubuntu_distribution == 'artful':
                 repository['subdir'] = 'pg9.6'
+            elif ubuntu_distribution == 'bionic':
+                repository['subdir'] = 'pg10.0'
 
         # For qscintilla
         if repository['repo'] == 'lib_qscintilla':
