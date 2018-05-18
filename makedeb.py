@@ -21,6 +21,7 @@ repositories = [
     {'repo':'nextgisqgis','version':'18.5.2', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'lib_ngstd','version':'0.8.0', 'deb':'ngstd', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'formbuilder','version':'2.2', 'deb':'formbuilder', 'subdir': '', 'org':'nextgis', 'url': ''},
+    {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
@@ -129,7 +130,7 @@ for repository in repositories:
                 repository['subdir'] = 'pg10.0'
 
         # For qscintilla
-        if repository['repo'] == 'lib_qscintilla':
+        if repository['repo'] == 'lib_qscintilla' or repository['repo'] == 'protobuf':
             if ubuntu_distribution == 'trusty':
                 repository['subdir'] = 'trusty'
             elif ubuntu_distribution == 'xenial':
