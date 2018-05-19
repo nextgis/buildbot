@@ -131,7 +131,7 @@ for repository in repositories:
                 repository['subdir'] = 'pg10.0'
 
         # For qscintilla
-        if repository['repo'] == 'lib_qscintilla' or repository['repo'] == 'protobuf':
+        if repository['repo'] == 'lib_qscintilla' or repository['repo'] == 'protobuf' or repository['repo'] == 'protobuf-c':
             if ubuntu_distribution == 'trusty':
                 repository['subdir'] = 'trusty'
             elif ubuntu_distribution == 'xenial':
