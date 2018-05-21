@@ -18,7 +18,7 @@ repositories = [
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': ''},
-    {'repo':'nextgisqgis','version':'18.5.2', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': ''},
+    {'repo':'nextgisqgis','version':'18.5.3', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'lib_ngstd','version':'0.8.0', 'deb':'ngstd', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'formbuilder','version':'2.2', 'deb':'formbuilder', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
