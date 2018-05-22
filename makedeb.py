@@ -23,6 +23,7 @@ repositories = [
     {'repo':'formbuilder','version':'2.2', 'deb':'formbuilder', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'mapserver','version':'7.0.7', 'deb':'mapserver', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
@@ -131,7 +132,7 @@ for repository in repositories:
                 repository['subdir'] = 'pg10.0'
 
         # For qscintilla
-        if repository['repo'] == 'lib_qscintilla' or repository['repo'] == 'protobuf' or repository['repo'] == 'protobuf-c':
+        if repository['repo'] == 'lib_qscintilla' or repository['repo'] == 'protobuf' or repository['repo'] == 'protobuf-c' or repository['repo'] == 'mapserver':
             if ubuntu_distribution == 'trusty':
                 repository['subdir'] = 'trusty'
             elif ubuntu_distribution == 'xenial':
