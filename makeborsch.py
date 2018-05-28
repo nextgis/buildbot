@@ -91,7 +91,7 @@ platforms = [
 
 build_lock = util.WorkerLock("borsch_worker_builds",
                              maxCount=1,
-                             # maxCountForWorker={'build-win': 1, 'build-mac': 1}
+                             maxCountForWorker={'build-win': 1, 'build-mac': 1}
                              )
 
 logfile = 'stdio'
