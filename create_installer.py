@@ -49,7 +49,7 @@ forceScheduler_create = schedulers.ForceScheduler(
                                             default="all", size=280),
                                         util.StringParameter(name="suffix",
                                                         label="Installer name and URL path suffix (use '-dev' for default):",
-                                                        default="", size=40),
+                                                        default="-dev", size=40),
                                        ],
                         )
 forceScheduler_update = schedulers.ForceScheduler(
@@ -63,7 +63,7 @@ forceScheduler_update = schedulers.ForceScheduler(
                                         ],
                             properties=[util.StringParameter(name="suffix",
                                                             label="Installer name and URL path suffix (use '-dev' for default):",
-                                                            default="", size=40),
+                                                            default="-dev", size=40),
                                        ],
                         )
 c['schedulers'].append(forceScheduler_create)
