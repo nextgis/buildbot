@@ -347,7 +347,7 @@ for repository in repositories:
 
         # create installer trigger
         factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
-                                      waitForFinish=True,
+                                      waitForFinish=False,
                                       set_properties={ 'suffix' : '-dev' }))
 
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
