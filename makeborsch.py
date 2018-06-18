@@ -41,7 +41,7 @@ repositories = [
     {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PNG=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
-    {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
+    {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DBUILD_APPS=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DHTTP_ONLY=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON', '-DCMAKE_USE_LIBSSH2=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_xml2', 'args':['-DWITH_ZLIB=ON', '-DWITH_LibLZMA=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
     {'repo':'lib_pq', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch'},
