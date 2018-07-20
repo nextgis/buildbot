@@ -7,8 +7,8 @@ from buildbot.plugins import *
 c = {}
 
 repositories = [
-    {'repo':'lib_gdal', 'version':'2.3.4', 'deb':'gdal', 'org':'nextgis-borsch'},
-    {'repo':'lib_opencad','version':'0.3.3', 'deb':'opencad', 'org':'nextgis-borsch'},
+    {'repo':'lib_gdal', 'version':'2.6.0', 'deb':'gdal', 'org':'nextgis-borsch'},
+    {'repo':'lib_opencad','version':'0.3.4', 'deb':'opencad', 'org':'nextgis-borsch'},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
