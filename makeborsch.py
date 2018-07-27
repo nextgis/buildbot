@@ -60,10 +60,11 @@ repositories = [
     {'repo':'lib_ngstd', 'args':['-DBUILD_QT5=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DBUILD_QT4=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_PyQt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis', 'test_regex':[]},
     {'repo':'formbuilder', 'args':['-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_NGSTD_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis', 'test_regex':[]},
     {'repo':'lib_opencv', 'args':['-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB_EXTERNAL=ON','-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DBUILD_opencv_ts=OFF','-DBUILD_opencv_apps=ON','-DBUILD_TESTS=OFF','-DBUILD_PERF_TESTS=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':['-R','opencv_test_(fl|co)']},
+    {'repo':'manuscript', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_NGSTD_EXTERNAL=ON',], 'requirements':[], 'skip':[], 'org':'nextgis', 'test_regex':[]},
 ]
 
 skip_send2github = [
-    "nextgisqgis", "formbuilder"
+    "nextgisqgis", "formbuilder", "manuscript",
 ]
 
 vm_cpu_count = 6
