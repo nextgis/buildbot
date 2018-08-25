@@ -14,7 +14,7 @@ repositories = [
     {'repo':'py_raven', 'version':'6.9.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/8f/80/e8d734244fd377fd7d65275b27252642512ccabe7850105922116340a37b/raven-6.9.0.tar.gz'},
     {'repo':'py_setuptools', 'version':'39.2.0', 'deb':'python-setuptools', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/1a/04/d6f1159feaccdfc508517dba1929eb93a2854de729fa68da9d5c6b48fa00/setuptools-39.2.0.zip'},
     {'repo':'lib_opencad','version':'0.3.4', 'deb':'opencad', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
-    {'repo':'lib_oci','version':'12.2.0.1', 'deb':'oci', 'subdir': 'master', 'org':'nextgis-borsch', 'url': 'http://dev.nextgis.com/third-party/oci/current/lin/lib.tar.gz'},
+    {'repo':'lib_oci','version':'12.2.0.1', 'deb':'oci', 'subdir': '', 'org':'nextgis-borsch', 'url': 'http://dev.nextgis.com/third-party/oci/current/lin/lib.tar.gz'},
     {'repo':'postgis','version':'2.4.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': ''},
