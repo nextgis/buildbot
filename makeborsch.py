@@ -62,6 +62,7 @@ repositories = [
     {'repo':'lib_opencv', 'args':['-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB_EXTERNAL=ON','-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DBUILD_opencv_ts=OFF','-DBUILD_opencv_apps=ON','-DBUILD_TESTS=OFF','-DBUILD_PERF_TESTS=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':['-R','opencv_test_(fl|co)']},
     {'repo':'manuscript', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_NGSTD_EXTERNAL=ON',], 'requirements':[], 'skip':[], 'org':'nextgis', 'test_regex':[]},
     {'repo':'lib_oci', 'args':['-DWITH_Qt4_EXTERNAL=ON', '-DBUILD_QT4=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_shapely', 'args':['-DWITH_GEOS_EXTERNAL=ON', '-DWITH_NUMPY_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
