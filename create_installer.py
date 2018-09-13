@@ -66,13 +66,36 @@ forceScheduler_update = schedulers.ForceScheduler(
                                                             default="", size=40),
                                        ],
                         )
+
+forceScheduler_standalone = schedulers.ForceScheduler(
+                            name=project_name + "_standalone",
+                            label="Create standalone installer",
+                            buttonName="Create standalone installer",
+                            builderNames=[
+                                            project_name + "_win32",
+                                            project_name + "_win64",
+                                            project_name + "_mac",
+                                        ],
+                            properties=[util.StringParameter(name="suffix",
+                                                            label="Installer name and URL path suffix (use '-dev' for default):",
+                                                            default="", size=40),
+                                       ],
+                        )
+
 c['schedulers'].append(forceScheduler_create)
 c['schedulers'].append(forceScheduler_update)
+c['schedulers'].append(forceScheduler_standalone)
+
+@util.renderer
+def now(props):
+    return time.clock()
 
 @util.renderer
 def commandArgs(props):
     command = []
     if props.getProperty('scheduler') ==  project_name + "_create":
+        command.append('create')
+    elif props.getProperty('scheduler') ==  project_name + "_standalone":
         command.append('create')
     elif props.getProperty('scheduler') ==  project_name + "_update":
         command.extend(['update', '--force', props.getProperty('force'),])
@@ -102,7 +125,7 @@ for platform in platforms:
 
     factory = util.BuildFactory()
 
-    # Radically cleand all
+    # Radically clean all
     factory.addStep(steps.RemoveDirectory(dir=code_dir,
                                         name="Clean all"))
 
@@ -220,6 +243,7 @@ for platform in platforms:
         create_opt.append(generator)
 
     repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
+
     installer_name_base = 'nextgis-setup-' + platform['name']
 
     # 3. Get compiled libraries
@@ -288,6 +312,20 @@ for platform in platforms:
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
+                                        doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_standalone"),
+                                        haltOnFailure=True,
+                                        workdir=code_dir,
+                                        env=env))
+
+    factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
+                                                '-s', 'inst',
+                                                '-q', 'qt/bin',
+                                                '-t', build_dir_name,
+                                                '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base + '-standalone', now=now),
+                                                create_opt, commandArgs,
+                                                ],
+                                        name="Create/Update repository",
+                                        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_standalone"),
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
@@ -300,6 +338,16 @@ for platform in platforms:
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
                                        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
+                                       workdir=build_dir,
+                                       env=env))
+
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
+                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,
+                                                    basename=installer_name_base + '-standalone', now=now),
+                                                '-s', '--ftp-create-dirs', ngftp + '/'],
+                                       name="Upload installer to ftp",
+                                       haltOnFailure=True,
+                                       doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_standalone"),
                                        workdir=build_dir,
                                        env=env))
 
@@ -350,6 +398,7 @@ for platform in platforms:
                                                     basename=repo_name_base),
                                                 '-s', '--ftp-create-dirs', siteftp + '/'],
                                        name="Upload repository archive to site",
+                                       doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_standalone"),
                                        haltOnFailure=True,
                                        workdir=build_dir,
                                        env=env))
