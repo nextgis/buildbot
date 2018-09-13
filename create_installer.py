@@ -5,6 +5,7 @@ from buildbot.plugins import *
 import sys
 import os
 import bbconf
+import time
 
 c = {}
 
@@ -88,7 +89,7 @@ c['schedulers'].append(forceScheduler_standalone)
 
 @util.renderer
 def now(props):
-    return time.clock()
+    return time.strftime('%Y%m%d') 
 
 @util.renderer
 def commandArgs(props):
@@ -258,6 +259,7 @@ for platform in platforms:
                                                 '--ftp', ngftp + '/src/',
                                                 ],
                                            name="Prepare packages data",
+                                           timeout=2400,
                                            haltOnFailure=True,
                                            workdir=code_dir,
                                            env=env))
