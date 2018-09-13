@@ -321,7 +321,7 @@ for platform in platforms:
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
-                                                '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base + '-standalone', now=now),
+                                                '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s', basename=installer_name_base + '-standalone', now=now),
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
