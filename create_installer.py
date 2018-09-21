@@ -89,7 +89,7 @@ c['schedulers'].append(forceScheduler_standalone)
 
 @util.renderer
 def now(props):
-    return time.strftime('%Y%m%d') 
+    return time.strftime('%Y%m%d')
 
 @util.renderer
 def commandArgs(props):
@@ -343,15 +343,24 @@ for platform in platforms:
                                        workdir=build_dir,
                                        env=env))
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
-                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,
-                                                    basename=installer_name_base + '-standalone', now=now),
-                                                '-s', '--ftp-create-dirs', ngftp + '/'],
-                                       name="Upload installer to ftp",
-                                       haltOnFailure=True,
-                                       doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_standalone"),
-                                       workdir=build_dir,
-                                       env=env))
+    actory.addStep(
+        steps.ShellSequence(commands=[
+            util.ShellArg(command=["curl", '-u', ngftp_user, '-T',
+                util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext, basename=installer_name_base + '-standalone', now=now),
+                                '-s', '--ftp-create-dirs', ngftp + '/'
+            ],
+            logfile=logfile),
+            util.ShellArg(command=["echo", 'Get standalone installer on this url: https://my.nextgis.com/downloads/software/installer/' +
+                util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext, basename=installer_name_base + '-standalone', now=now)
+            ],
+            logfile=logfile),
+        ],
+        name="Upload standalone installer to ftp",
+        haltOnFailure=True,
+        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_standalone"),
+        workdir=build_dir,
+        env=env)
+    )
 
     # 6. Create zip from repository
     factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'cfv',
