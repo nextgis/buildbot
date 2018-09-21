@@ -343,15 +343,16 @@ for platform in platforms:
                                        workdir=build_dir,
                                        env=env))
 
-    actory.addStep(
+    factory.addStep(
         steps.ShellSequence(commands=[
             util.ShellArg(command=["curl", '-u', ngftp_user, '-T',
                 util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext, basename=installer_name_base + '-standalone', now=now),
                                 '-s', '--ftp-create-dirs', ngftp + '/'
             ],
             logfile=logfile),
-            util.ShellArg(command=["echo", 'Get standalone installer on this url: https://my.nextgis.com/downloads/software/installer/' +
-                util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext, basename=installer_name_base + '-standalone', now=now)
+            util.ShellArg(command=["echo", 
+                util.Interpolate('Get standalone installer on this url: https://my.nextgis.com/downloads/software/installer/%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,
+                    basename=installer_name_base + '-standalone', now=now)
             ],
             logfile=logfile),
         ],
