@@ -13,7 +13,8 @@ repos = [
     'docs_ngcom',
     'docs_ngmobile',
     'docs_ngqgis',
-    'docs_ngweb'
+    'docs_ngweb',
+    'docs_simplecollector',
 ]
 
 repos_m = [
@@ -64,10 +65,10 @@ scheduler = schedulers.SingleBranchScheduler(
                     builderNames=[project_name])
 
 c['schedulers'].append(scheduler)
-# c['schedulers'].append(schedulers.ForceScheduler(
-#                             name=project_name + "_force",
-#                             builderNames=[project_name],
-# ))
+c['schedulers'].append(schedulers.ForceScheduler(
+                            name=project_name + "_force",
+                            builderNames=[project_name],
+))
 
 #### update docs
 
