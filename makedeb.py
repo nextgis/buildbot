@@ -8,7 +8,7 @@ c = {}
 
 repositories = [
     {'repo':'lib_geos', 'version':'3.7.0', 'deb':'geos', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
-    {'repo':'lib_gdal', 'version':'2.3.1', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
+    {'repo':'lib_gdal', 'version':'2.3.2', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
     {'repo':'py_future', 'version':'0.16.0', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/00/2b/8d082ddfed935f3608cc61140df6dcbf0edea1bc3ab52fb6c29ae3e81e85/future-0.16.0.tar.gz'},
     {'repo':'py_raven', 'version':'6.9.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/8f/80/e8d734244fd377fd7d65275b27252642512ccabe7850105922116340a37b/raven-6.9.0.tar.gz'},
@@ -19,7 +19,7 @@ repositories = [
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': ''},
-    {'repo':'nextgisqgis','version':'18.9.0', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': ''},
+    {'repo':'nextgisqgis','version':'18.9.1', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'lib_ngstd','version':'0.9.0', 'deb':'ngstd', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'formbuilder','version':'2.2', 'deb':'formbuilder', 'subdir': '', 'org':'nextgis', 'url': ''},
     {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': ''},
