@@ -84,6 +84,10 @@ for lang in langs:
                                       description=["make", "javadoc for mobile (android)"],
                                       descriptionDone=["made", "javadoc for mobile (android)"],
                                       workdir="build/source/ngmobile_dev"))
+    factory.addStep(steps.ShellCommand(command=["sh", "make_kotlindoc.sh"],
+                                      description=["make", "kotlindoc for mobile (android)"],
+                                      descriptionDone=["made", "kotlindoc for mobile (android)"],
+                                      workdir="build/source/ngmobile_dev"))
 
     factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
                                       description=["make", "swiftdoc for mobile (ios)"],
