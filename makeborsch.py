@@ -10,14 +10,14 @@ import bbconf
 c = {}
 
 repositories = [
-    {'repo':'lib_z', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_z', 'args':[], 'requirements':[], 'skip':['mac'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_sip', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_sqlite', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_gif', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_geos', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qhull', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_expat', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'numpy', 'args':['-DWITH_OpenBLAS_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'numpy', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_markupsafe', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_subprocess32', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_kiwisolver', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
@@ -67,7 +67,7 @@ repositories = [
     {'repo':'lib_kml', 'args':['-DWITH_ZLIB=ON', '-DWITH_Boost=ON', '-DWITH_Boost_EXTERNAL=ON', '-DWITH_UriParser=ON', '-DWITH_UriParser_EXTERNAL=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':['-E','engine_style_resolver|dom_round_trip|engine_feature_view|engine_kmz_file|engine_style_inliner|engine_update']},
     {'repo':'py_proj', 'args':['-DWITH_PROJ4_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'py_sci', 'args':['-DWITH_OpenBLAS_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_sci', 'args':[], 'requirements':[], 'skip':['mac'], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
