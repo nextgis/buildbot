@@ -66,7 +66,7 @@ repositories = [
     {'repo':'lib_uriparser', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_kml', 'args':['-DWITH_ZLIB=ON', '-DWITH_Boost=ON', '-DWITH_Boost_EXTERNAL=ON', '-DWITH_UriParser=ON', '-DWITH_UriParser_EXTERNAL=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':['-E','engine_style_resolver|dom_round_trip|engine_feature_view|engine_kmz_file|engine_style_inliner|engine_update']},
     {'repo':'py_proj', 'args':['-DWITH_PROJ4_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=ON', '-DBUILD_WITHOUT_LAPACK=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_sci', 'args':['-DWITH_OpenBLAS_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
