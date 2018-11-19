@@ -263,8 +263,8 @@ for repository in repositories:
                     "C:\\Program Files\\Git\\cmd",
                     "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
                     "C:\\Program Files\\CMake\\bin",
-                    "C:\\Python27_32\\lib\\site-packages\\pywin32_system32"
-                    "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64_ia32"
+                    "C:\\Python27_32\\lib\\site-packages\\pywin32_system32",
+                    "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64_ia32",
                 ]
                 run_args_ex.extend(['-G', generator])
             else:
@@ -282,8 +282,8 @@ for repository in repositories:
                     "C:\\Program Files\\Git\\cmd",
                     "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
                     "C:\\Program Files\\CMake\\bin",
-                    "C:\\Python27\\lib\\site-packages\\pywin32_system32"
-                    "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64"
+                    "C:\\Python27\\lib\\site-packages\\pywin32_system32",
+                    "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
                 ]
                 run_args_ex.extend(['-G', generator + ' Win64'])
         elif 'mac' == platform['name']:
