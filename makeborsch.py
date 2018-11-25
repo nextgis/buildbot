@@ -107,7 +107,7 @@ build_lock = util.MasterLock("borsch_worker_builds")
 logfile = 'stdio'
 generator = 'Visual Studio 15 2017'
 
-def install_dependencies(factory, requirements, os):
+def get_env(os):
     env = {}
     if 'win32' == os:
         env['PYTHONPATH'] = 'C:\\Python27_32'
@@ -124,8 +124,16 @@ def install_dependencies(factory, requirements, os):
             "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
             "C:\\Program Files\\CMake\\bin",
             "C:\\Python27_32\\lib\\site-packages\\pywin32_system32",
-            "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64_ia32",
+            "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64", # _ia32
         ]
+        env['ARCH_PATH'] = 'ia32'
+        env['C_TARGET_ARCH'] = 'ia32'
+        env['INTEL_TARGET_ARCH_IA32'] = 'ia32'
+        env['NDK_ARCH'] = 'x86'
+        env['TARGET_ARCH'] = 'ia32'
+        env['TARGET_VS'] = '2017'
+        env['TARGET_VS_ARCH'] = 'x86'
+        env['LANG'] = 'en_US'
     elif 'win64' == os:
         env['PYTHONPATH'] = 'C:\\Python27'
         env['PATH'] = [
@@ -143,6 +151,18 @@ def install_dependencies(factory, requirements, os):
             "C:\\Python27\\lib\\site-packages\\pywin32_system32",
             "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
         ]
+    elif 'mac' == os:
+        env = {
+            'PATH': [
+                        "/usr/local/bin",
+                        "${PATH}"
+                    ],
+            'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
+        }
+    return env    
+
+def install_dependencies(factory, requirements, os):
+    env = get_env(os)
 
     for requirement in requirements:
         if requirement == 'perl' and 'win' in os: # This is example. Perl already installed in VM.
@@ -245,57 +265,19 @@ for repository in repositories:
                 run_args_ex.append('-DWITH_ZLIB_EXTERNAL=ON')
 
             cmake_build_ex.append('/m:' + str(vm_cpu_count))
-            env = {
-                'LANG': 'en_US',
-            }
+            env = {}
             if 'win32' == platform['name']:
-                env['PYTHONPATH'] = 'C:\\Python27_32'
-                env['PATH'] = [
-                    "C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
-                    "C:\\Perl64\\site\\bin",
-                    "C:\\Perl64\\bin",
-                    "C:\\Python27_32",
-                    "C:\\Python27_32\\Scripts",
-                    "C:\\Windows\\system32",
-                    "C:\\Windows",
-                    "C:\\Windows\\System32\\Wbem",
-                    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
-                    "C:\\Program Files\\Git\\cmd",
-                    "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
-                    "C:\\Program Files\\CMake\\bin",
-                    "C:\\Python27_32\\lib\\site-packages\\pywin32_system32",
-                    "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64_ia32",
-                ]
+                env = get_env('win32')
+                env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release")
                 run_args_ex.extend(['-G', generator])
             else:
-                env['PYTHONPATH'] = 'C:\\Python27'
-                env['PATH'] = [
-                    "C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release",
-                    "C:\\Perl64\\site\\bin",
-                    "C:\\Perl64\\bin",
-                    "C:\\Python27",
-                    "C:\\Python27\\Scripts",
-                    "C:\\Windows\\system32",
-                    "C:\\Windows",
-                    "C:\\Windows\\System32\\Wbem",
-                    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
-                    "C:\\Program Files\\Git\\cmd",
-                    "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
-                    "C:\\Program Files\\CMake\\bin",
-                    "C:\\Python27\\lib\\site-packages\\pywin32_system32",
-                    "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
-                ]
+                env = get_env('win64')
+                env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release")
                 run_args_ex.extend(['-G', generator + ' Win64'])
         elif 'mac' == platform['name']:
             run_args_ex.extend(['-DOSX_FRAMEWORK=ON', '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version])
             cmake_build_ex.append('-j' + str(vm_cpu_count))
-            env = {
-                'PATH': [
-                            "/usr/local/bin",
-                            "${PATH}"
-                        ],
-                'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
-            }
+            env = get_env('mac')
 
         factory = util.BuildFactory()
 
