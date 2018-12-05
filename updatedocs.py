@@ -14,7 +14,7 @@ repos = [
     'docs_ngmobile',
     'docs_ngqgis',
     'docs_ngweb',
-    'docs_simplecollector',
+    'docs_collector',
 ]
 
 repos_m = [
