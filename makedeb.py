@@ -21,7 +21,7 @@ repositories = [
     {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'nextgisqgis','version':'18.12.0', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'lib_ngstd','version':'0.9.1', 'deb':'ngstd', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    {'repo':'formbuilder','version':'2.2', 'deb':'formbuilder', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['bionic']},
+    {'repo':'formbuilder','version':'3.0', 'deb':'formbuilder', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['bionic']},
     {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'mapserver','version':'7.2.1', 'deb':'mapserver', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
