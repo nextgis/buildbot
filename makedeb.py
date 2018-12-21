@@ -1,6 +1,6 @@
 # -*- python -*-
 # ex: set syntax=python:
-# opencad developer build into nextgis dev ppa
+# production builds into nextgis ppa
 
 from buildbot.plugins import *
 

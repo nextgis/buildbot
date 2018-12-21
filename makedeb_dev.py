@@ -1,13 +1,13 @@
 # -*- python -*-
 # ex: set syntax=python:
-# opencad developer build into nextgis dev ppa
+# developer builds into nextgis dev ppa
 
 from buildbot.plugins import *
 
 c = {}
 
 repositories = [
-    {'repo':'lib_gdal', 'version':'2.6.0', 'deb':'gdal', 'org':'nextgis-borsch'},
+    {'repo':'lib_gdal', 'version':'2.4.0', 'deb':'gdal', 'org':'nextgis-borsch'},
     {'repo':'lib_opencad','version':'0.3.4', 'deb':'opencad', 'org':'nextgis-borsch'},
 ]
 
