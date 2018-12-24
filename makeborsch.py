@@ -98,11 +98,11 @@ platforms = [
     {'name' : 'win64', 'worker' : 'build-win'},
     {'name' : 'mac', 'worker' : 'build-mac'} ]
 
-build_lock = util.MasterLock("borsch_worker_builds")
-# build_lock = util.WorkerLock("borsch_worker_builds",
-#                              maxCount=1,
-#                              maxCountForWorker={'build-win': 1, 'build-mac': 1}
-#                              )
+# build_lock = util.MasterLock("borsch_worker_builds")
+build_lock = util.WorkerLock("borsch_worker_builds",
+                             maxCount=1,
+                             maxCountForWorker={'build-win': 1, 'build-mac': 1}
+                             )
 
 logfile = 'stdio'
 generator = 'Visual Studio 15 2017'
