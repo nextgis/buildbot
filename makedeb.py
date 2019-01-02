@@ -19,7 +19,7 @@ repositories = [
     {'repo':'nextgisutilities','version':'0.1.0', 'deb':'nextgisutilities', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    {'repo':'nextgisqgis','version':'18.12.0', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
+    {'repo':'nextgisqgis','version':'19.1.0', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'lib_ngstd','version':'0.10.0', 'deb':'ngstd', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'formbuilder','version':'3.0', 'deb':'formbuilder', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['bionic']},
     {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
