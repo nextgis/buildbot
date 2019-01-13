@@ -48,6 +48,9 @@ forceScheduler_create = schedulers.ForceScheduler(
                             properties=[util.StringParameter(name="force",
                                             label="Force update specified packages even not any changes exists:",
                                             default="all", size=280),
+                                        util.StringParameter(name="url",
+                                                        label="Installer URL:",
+                                                        default="http://nextgis.com/programs/desktop/repository-", size=40),
                                         util.StringParameter(name="suffix",
                                                         label="Installer name and URL path suffix (use '-dev' for default):",
                                                         default="", size=40),
@@ -62,7 +65,10 @@ forceScheduler_update = schedulers.ForceScheduler(
                                             project_name + "_win64",
                                             project_name + "_mac",
                                         ],
-                            properties=[util.StringParameter(name="suffix",
+                            properties=[util.StringParameter(name="url",
+                                                            label="Installer URL:",
+                                                            default="http://nextgis.com/programs/desktop/repository-", size=40),
+                                        util.StringParameter(name="suffix",
                                                             label="Installer name and URL path suffix (use '-dev' for default):",
                                                             default="", size=40),
                                        ],
@@ -77,7 +83,10 @@ forceScheduler_standalone = schedulers.ForceScheduler(
                                             project_name + "_win64",
                                             project_name + "_mac",
                                         ],
-                            properties=[util.StringParameter(name="suffix",
+                            properties=[util.StringParameter(name="url",
+                                                            label="Installer URL:",
+                                                            default="http://nextgis.com/programs/desktop/repository-", size=40),
+                                        util.StringParameter(name="suffix",
                                                             label="Installer name and URL path suffix (use '-dev' for default):",
                                                             default="", size=40),
                                        ],
@@ -243,8 +252,6 @@ for platform in platforms:
         create_opt.append('-g')
         create_opt.append(generator)
 
-    repo_url_base = 'http://nextgis.com/programs/desktop/repository-' + platform['name']
-
     installer_name_base = 'nextgis-setup-' + platform['name']
 
     # 3. Get compiled libraries
@@ -252,7 +259,7 @@ for platform in platforms:
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
-                                                '-n', '-r', util.Interpolate('%(kw:url)s%(prop:suffix)s', url=repo_url_base),
+                                                '-n', '-r', util.Interpolate('%(prop:url)s%(kw:platform)s%(prop:suffix)s', platform=platform['name']),
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                                                 create_opt,
                                                 'prepare', '--ftp_user', ngftp_user,
@@ -309,7 +316,7 @@ for platform in platforms:
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
-                                                '-n', '-r', util.Interpolate('%(kw:url)s%(prop:suffix)s', url=repo_url_base),
+                                                '-n', '-r', util.Interpolate('%(prop:url)s%(kw:platform)s%(prop:suffix)s', platform=platform['name']),
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                                                 create_opt, commandArgs,
                                                 ],
@@ -350,7 +357,7 @@ for platform in platforms:
                                 '-s', '--ftp-create-dirs', ngftp + '/'
             ],
             logfile=logfile),
-            util.ShellArg(command=["echo", 
+            util.ShellArg(command=["echo",
                 util.Interpolate('Get standalone installer on this url: https://my.nextgis.com/downloads/software/installer/%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,
                     basename=installer_name_base + '-standalone', now=now)
             ],
