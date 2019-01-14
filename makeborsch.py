@@ -349,7 +349,10 @@ for repository in repositories:
         # create installer trigger
         factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
                                       waitForFinish=False,
-                                      set_properties={ 'suffix' : '-dev' }))
+                                      set_properties={
+                                        'suffix' : '-dev',
+                                        'url' : 'http://nextgis.com/programs/desktop/repository-', 
+                                    }))
 
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
                                     workernames = [platform['worker']],
