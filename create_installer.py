@@ -263,9 +263,8 @@ for platform in platforms:
                                                 '--ftp', ngftp + '/src/',
                                                 ],
                                            name="Prepare packages data",
-                                           timeout=10*60,
                                            maxTime=20 * 60,
-                                           timeout=30 * 60 * 60,
+                                           timeout=5 * 60,
                                            haltOnFailure=True,
                                            workdir=code_dir,
                                            env=env))
