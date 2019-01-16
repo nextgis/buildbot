@@ -301,6 +301,8 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=["cmake", run_args_ex, '..'],
                                            name="configure",
                                            haltOnFailure=True,
+                                           timeout=10*60,
+                                           maxTime=30 * 60,
                                            workdir=build_dir,
                                            env=env))
 
@@ -308,6 +310,8 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=cmake_build_ex,
                                            name="make",
                                            haltOnFailure=True,
+                                           timeout=10*60,
+                                           maxTime=2 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
 
@@ -351,7 +355,7 @@ for repository in repositories:
                                       waitForFinish=False,
                                       set_properties={
                                         'suffix' : '-dev',
-                                        'url' : 'http://nextgis.com/programs/desktop/repository-', 
+                                        'url' : 'http://nextgis.com/programs/desktop/repository-',
                                     }))
 
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
