@@ -98,11 +98,11 @@ platforms = [
     {'name' : 'win64', 'worker' : 'build-win'},
     {'name' : 'mac', 'worker' : 'build-mac'} ]
 
-# build_lock = util.MasterLock("borsch_worker_builds")
-build_lock = util.WorkerLock("borsch_worker_builds",
-                             maxCount=1,
-                             maxCountForWorker={'build-win': 1, 'build-mac': 1}
-                             )
+build_lock = util.MasterLock("borsch_worker_builds")
+# build_lock = util.WorkerLock("borsch_worker_builds",
+#                              maxCount=1,
+#                              maxCountForWorker={'build-win': 1, 'build-mac': 1}
+#                              )
 
 logfile = 'stdio'
 generator = 'Visual Studio 15 2017'
@@ -301,7 +301,7 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=["cmake", run_args_ex, '..'],
                                            name="configure",
                                            haltOnFailure=True,
-                                           timeout=10*60,
+                                           timeout=10 * 60,
                                            maxTime=30 * 60,
                                            workdir=build_dir,
                                            env=env))
@@ -310,8 +310,8 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=cmake_build_ex,
                                            name="make",
                                            haltOnFailure=True,
-                                           timeout=10*60,
-                                           maxTime=2 * 60 * 60,
+                                           timeout=10 * 60,
+                                           maxTime=3 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
 
