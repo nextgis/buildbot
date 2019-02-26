@@ -26,6 +26,7 @@ repositories = [
     {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'mapserver','version':'7.2.1', 'deb':'mapserver', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     {'repo':'manuscript','version':'0.1.0', 'deb':'manuscript', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['bionic']},
+    {'repo':'osrm-backend','version':'0.1', 'deb':'osrm-backend', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['bionic']},
 ]
 
 deb_repourl = 'git://github.com/nextgis/ppa.git'
