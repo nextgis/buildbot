@@ -2,7 +2,6 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-import bbconf
 
 c = {}
 c['change_source'] = []

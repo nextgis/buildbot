@@ -26,29 +26,38 @@ class LDAPAuth(auth.AuthBase):
             Portal(auth.AuthRealm(self.master, self), self.checkers),
             self.credentialFactories)
 
-
 class LDAPUserInfoProvider(auth.UserInfoProviderBase):
     name = "LDAP"
     lserver = ""
     base_dn = ""
+    binddn = ""
+    bindpwd = ""
     scope = ldap.SCOPE_SUBTREE
 
-    def __init__(self, lserver, bind):
+    def __init__(self, lserver, base_dn, binddn, bindpwd):
         self.lserver = lserver
-        self.base_dn = bind
+        self.base_dn = base_dn
+        self.binddn = binddn
+        self.bindpwd = bindpwd
 
     def getUserInfo(self, username):
         l = ldap.initialize(self.lserver)
         l.set_option(ldap.OPT_REFERRALS, 0)
         l.protocol_version = 3
-        filter = "(&(objectClass=posixAccount)(uid="+username+"))"
-        results = l.search_s(self.base_dn, self.scope, filter)
-        details = results[0][1]
-        return defer.succeed(dict(userName=username, fullName=details['displayName'][0], email=details['mail'][0], groups=['buildbot', username]))
+        try:
+            l.simple_bind_s(self.binddn, self.bindpw)
+            filter = "(&(objectClass=posixAccount)(uid="+username+"))"
+            results = l.search_s(self.base_dn, self.scope, filter)
+            details = results[0][1]
+            return defer.succeed(dict(userName=username, fullName=details['displayName'][0], email=details['mail'][0], groups=['buildbot', username]))
+        except:
+            pass
 
+        # Something went wrong. Simply fail authentication
+        return defer.fail(UnauthorizedLogin("unable to verify password"))
 
+@implementer(ICredentialsChecker)
 class LDAPAuthChecker():
-    implements (ICredentialsChecker)
 
     credentialInterfaces = IUsernamePassword,
 
@@ -64,27 +73,30 @@ class LDAPAuthChecker():
         self.group = group
 
     def requestAvatarId(self, credentials):
-	l = ldap.initialize(self.lserver)
-	l.set_option(ldap.OPT_REFERRALS, 0)
-	l.protocol_version = 3
+        l = ldap.initialize(self.lserver)
+        l.set_option(ldap.OPT_REFERRALS, 0)
+        l.protocol_version = 3
+        try:
+            l.simple_bind_s(self.binddn, self.bindpw)
+            filter = "(&(objectClass=posixAccount)(uid="+credentials.username+"))"
+            groupFilter = '(&(cn='+self.group+')(memberUid=' +credentials.username+'))'
 
-	filter = "(&(objectClass=posixAccount)(uid="+credentials.username+"))"
-	groupFilter = '(&(cn='+self.group+')(memberUid=' +credentials.username+'))'
+            # return defer.succeed(credentials.username)
+            #1. get user cn
+            results = l.search_s(self.base_dn, self.scope, filter)
+            for dn,entry in results:
+                dn = str(dn)
 
-#	return defer.succeed(credentials.username)
-	#1. get user cn
-	results = l.search_s(self.base_dn, self.scope, filter)
-	for dn,entry in results:
-	    dn = str(dn)
+            #2. check auth
+            l.simple_bind_s(dn, credentials.password)
 
-    	#2. check auth
-	l.simple_bind_s(dn, credentials.password)
+            #3. check group
+            results = l.search_s(self.base_dn, self.scope, groupFilter)
 
-    	#3. check group
-	results = l.search_s(self.base_dn, self.scope, groupFilter)
-
-	if len(results) > 0:
-	    return defer.succeed(credentials.username)
+            if len(results) > 0:
+                return defer.succeed(credentials.username)
+        except:
+            pass
 
         # Something went wrong. Simply fail authentication
-        return defer.fail(UnauthorizedLogin("unable to verify password"))        
+        return defer.fail(UnauthorizedLogin("unable to verify password"))

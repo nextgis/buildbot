@@ -2,7 +2,7 @@
 ################################################################################
 # Project:  ppa buildbot utility
 # Purpose:  prepare changelog by input values
-# Author:   Dmitry Barishnikov, dmitry.baryshnikov@nextgis.ru
+# Author:   Dmitry Baryshnikov, dmitry.baryshnikov@nextgis.ru
 ################################################################################
 # Copyright (C) 2016-2017, NextGIS <info@nextgis.com>
 #
