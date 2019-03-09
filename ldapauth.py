@@ -82,7 +82,7 @@ class LDAPAuthChecker():
             l.set_option(ldap.OPT_REFERRALS, 0)
             l.protocol_version = 3
             l.simple_bind_s(self.binddn, self.bindpwd)
-            username = credentials.username.encode("utf-8")
+            username = str(credentials.username, 'utf-8', 'ignore')
             filter = "(&(objectClass=posixAccount)(uid=" + username + "))"
             groupFilter = "(&(cn=" + self.group + ")(memberUid=" + username + "))"
 
