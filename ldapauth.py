@@ -41,16 +41,17 @@ class LDAPUserInfoProvider(auth.UserInfoProviderBase):
         self.bindpwd = bindpwd
 
     def getUserInfo(self, username):
-        l = ldap.initialize(self.lserver)
-        l.set_option(ldap.OPT_REFERRALS, 0)
-        l.protocol_version = 3
         try:
+            l = ldap.initialize(self.lserver)
+            l.set_option(ldap.OPT_REFERRALS, 0)
+            l.protocol_version = 3
             l.simple_bind_s(self.binddn, self.bindpwd)
             filter = "(&(objectClass=posixAccount)(uid="+username+"))"
             results = l.search_s(self.base_dn, self.scope, filter)
             details = results[0][1]
             return defer.succeed(dict(userName=username, fullName=details['displayName'][0], email=details['mail'][0], groups=['buildbot', username]))
-        except:
+        except ldap.LDAPError as e:
+            print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e))
             pass
 
         # Something went wrong. Simply fail authentication
@@ -77,10 +78,10 @@ class LDAPAuthChecker():
         self.group = group
 
     def requestAvatarId(self, credentials):
-        l = ldap.initialize(self.lserver)
-        l.set_option(ldap.OPT_REFERRALS, 0)
-        l.protocol_version = 3
         try:
+            l = ldap.initialize(self.lserver)
+            l.set_option(ldap.OPT_REFERRALS, 0)
+            l.protocol_version = 3
             l.simple_bind_s(self.binddn, self.bindpwd)
             filter = "(&(objectClass=posixAccount)(uid="+credentials.username+"))"
             groupFilter = '(&(cn='+self.group+')(memberUid=' +credentials.username+'))'
@@ -99,7 +100,8 @@ class LDAPAuthChecker():
 
             if len(results) > 0:
                 return defer.succeed(credentials.username)
-        except:
+        except ldap.LDAPError as e:
+            print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e))
             pass
 
         # Something went wrong. Simply fail authentication
