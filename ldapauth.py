@@ -97,11 +97,14 @@ class LDAPAuthChecker():
             for dn,entry in results:
                 user_dn = str(dn)
                 break
+            if not user_dn:
+                return defer.fail(UnauthorizedLogin("Unable to verify user"))
+
             results = l.search_s(self.base_dn, self.scope, groupFilter)
             in_group = len(results) > 0
 
             #2. check auth
-            l.simple_bind_s(dn, password)
+            l.simple_bind_s(user_dn, password)
 
             #3. check group
             if in_group:
