@@ -16,10 +16,10 @@ from buildbot.www import resource
 
 class LDAPAuth(auth.AuthBase):
 
-    def __init__(self, lserver, bind, group, **kwargs):
+    def __init__(self, lserver, base_dn, binddn, bindpwd, group, **kwargs):
         self.credentialFactories = [BasicCredentialFactory("buildbot"),]
-        self.checkers = [LDAPAuthChecker(lserver, bind, group),]
-        self.userInfoProvider = LDAPUserInfoProvider(lserver, bind)
+        self.checkers = [LDAPAuthChecker(lserver, base_dn, binddn, bindpwd, group),]
+        self.userInfoProvider = LDAPUserInfoProvider(lserver, base_dn, binddn, bindpwd)
 
     def getLoginResource(self):
         return HTTPAuthSessionWrapper(
@@ -45,7 +45,7 @@ class LDAPUserInfoProvider(auth.UserInfoProviderBase):
         l.set_option(ldap.OPT_REFERRALS, 0)
         l.protocol_version = 3
         try:
-            l.simple_bind_s(self.binddn, self.bindpw)
+            l.simple_bind_s(self.binddn, self.bindpwd)
             filter = "(&(objectClass=posixAccount)(uid="+username+"))"
             results = l.search_s(self.base_dn, self.scope, filter)
             details = results[0][1]
@@ -63,13 +63,17 @@ class LDAPAuthChecker():
 
     lserver = ""
     base_dn = ""
+    binddn = ""
+    bindpwd = ""
     scope = ldap.SCOPE_SUBTREE
     group = ""
 
 
-    def __init__(self, lserver, bind, group):
+    def __init__(self, lserver, base_dn, binddn, bindpwd, group):
         self.lserver = lserver
-        self.base_dn = bind
+        self.base_dn = base_dn
+        self.binddn = binddn
+        self.bindpwd = bindpwd
         self.group = group
 
     def requestAvatarId(self, credentials):
@@ -77,7 +81,7 @@ class LDAPAuthChecker():
         l.set_option(ldap.OPT_REFERRALS, 0)
         l.protocol_version = 3
         try:
-            l.simple_bind_s(self.binddn, self.bindpw)
+            l.simple_bind_s(self.binddn, self.bindpwd)
             filter = "(&(objectClass=posixAccount)(uid="+credentials.username+"))"
             groupFilter = '(&(cn='+self.group+')(memberUid=' +credentials.username+'))'
 
