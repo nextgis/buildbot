@@ -47,9 +47,12 @@ class LDAPUserInfoProvider(auth.UserInfoProviderBase):
             l.protocol_version = 3
             l.simple_bind_s(self.binddn, self.bindpwd)
             filter = "(&(objectClass=posixAccount)(uid=" + username + "))"
+
             results = l.search_s(self.base_dn, self.scope, filter)
             details = results[0][1]
-            return defer.succeed(dict(userName=username, fullName=details['displayName'][0], email=details['mail'][0], groups=['buildbot', username]))
+            fullName=str(details['cn'][0], 'utf-8', 'ignore')
+            email=str(details['mail'][0], 'utf-8', 'ignore')
+            return defer.succeed(dict(userName=username, fullName=fullName, email=email, groups=['buildbot', username]))
         except ldap.LDAPError as e:
             print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e)))
 
@@ -83,23 +86,25 @@ class LDAPAuthChecker():
             l.protocol_version = 3
             l.simple_bind_s(self.binddn, self.bindpwd)
             username = str(credentials.username, 'utf-8', 'ignore')
+            password = str(credentials.password, 'utf-8', 'ignore')
             filter = "(&(objectClass=posixAccount)(uid=" + username + "))"
             groupFilter = "(&(cn=" + self.group + ")(memberUid=" + username + "))"
 
-            # return defer.succeed(credentials.username)
             #1. get user cn
             results = l.search_s(self.base_dn, self.scope, filter)
+            user_dn = ''
             for dn,entry in results:
-                dn = str(dn)
+                user_dn = str(dn)
+                break
             results = l.search_s(self.base_dn, self.scope, groupFilter)
             in_group = len(results) > 0
 
             #2. check auth
-            l.simple_bind_s(dn, credentials.password)
+            l.simple_bind_s(dn, password)
 
             #3. check group
             if in_group:
-                return defer.succeed(credentials.username)
+                return defer.succeed(username)
 
         except ldap.LDAPError as e:
             print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e)))
