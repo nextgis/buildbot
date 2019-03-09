@@ -51,11 +51,10 @@ class LDAPUserInfoProvider(auth.UserInfoProviderBase):
             details = results[0][1]
             return defer.succeed(dict(userName=username, fullName=details['displayName'][0], email=details['mail'][0], groups=['buildbot', username]))
         except ldap.LDAPError as e:
-            print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e))
-            pass
+            print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e)))
 
         # Something went wrong. Simply fail authentication
-        return defer.fail(UnauthorizedLogin("unable to verify password"))
+        return defer.fail(UnauthorizedLogin("Unable to verify password"))
 
 @implementer(ICredentialsChecker)
 class LDAPAuthChecker():
@@ -91,18 +90,18 @@ class LDAPAuthChecker():
             results = l.search_s(self.base_dn, self.scope, filter)
             for dn,entry in results:
                 dn = str(dn)
+            results = l.search_s(self.base_dn, self.scope, groupFilter)
+            in_group = len(results) > 0
 
             #2. check auth
             l.simple_bind_s(dn, credentials.password)
 
             #3. check group
-            results = l.search_s(self.base_dn, self.scope, groupFilter)
-
-            if len(results) > 0:
+            if in_group:
                 return defer.succeed(credentials.username)
+
         except ldap.LDAPError as e:
-            print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e))
-            pass
+            print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e)))
 
         # Something went wrong. Simply fail authentication
-        return defer.fail(UnauthorizedLogin("unable to verify password"))
+        return defer.fail(UnauthorizedLogin("Unable to verify password"))
