@@ -13,6 +13,7 @@ from twisted.web.guard import BasicCredentialFactory
 from twisted.web.guard import HTTPAuthSessionWrapper
 from buildbot.www import auth
 from buildbot.www import resource
+from twisted.python import log
 
 class LDAPAuth(auth.AuthBase):
 
@@ -54,7 +55,7 @@ class LDAPUserInfoProvider(auth.UserInfoProviderBase):
             email=str(details['mail'][0], 'utf-8', 'ignore')
             return defer.succeed(dict(userName=username, fullName=fullName, email=email, groups=['buildbot', username]))
         except ldap.LDAPError as e:
-            print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e)))
+            log.msg('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e)))
 
         # Something went wrong. Simply fail authentication
         return defer.fail(UnauthorizedLogin("Unable to verify password"))
@@ -107,7 +108,7 @@ class LDAPAuthChecker():
                 return defer.succeed(username)
 
         except ldap.LDAPError as e:
-            print('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e)))
+            log.msg('LDAP Error: {0}'.format(e.message['desc'] if 'desc' in e.message else str(e)))
 
         # Something went wrong. Simply fail authentication
         return defer.fail(UnauthorizedLogin("Unable to verify password"))
