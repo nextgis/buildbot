@@ -58,7 +58,8 @@ class LDAPUserInfoProvider(auth.UserInfoProviderBase):
             log.msg('LDAP Error: {0}'.format(str(e)))
 
         # Something went wrong. Simply fail authentication
-        return defer.fail(UnauthorizedLogin("Unable to verify password"))
+        log.msg('LDAP Error: Unable to get user information')
+        return defer.fail(UnauthorizedLogin("Unable to get user information"))
 
 @implementer(ICredentialsChecker)
 class LDAPAuthChecker():
@@ -98,6 +99,7 @@ class LDAPAuthChecker():
                 user_dn = str(dn)
                 break
             if not user_dn:
+                log.msg('LDAP Error: Unable to verify user')
                 return defer.fail(UnauthorizedLogin("Unable to verify user"))
 
             results = l.search_s(self.base_dn, self.scope, groupFilter)
@@ -114,4 +116,5 @@ class LDAPAuthChecker():
             log.msg('LDAP Error: {0}'.format(str(e)))
 
         # Something went wrong. Simply fail authentication
+        log.msg('LDAP Error: Unable to verify password or user is not in group')
         return defer.fail(UnauthorizedLogin("Unable to verify password"))
