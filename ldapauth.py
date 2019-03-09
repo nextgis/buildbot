@@ -46,7 +46,7 @@ class LDAPUserInfoProvider(auth.UserInfoProviderBase):
             l.set_option(ldap.OPT_REFERRALS, 0)
             l.protocol_version = 3
             l.simple_bind_s(self.binddn, self.bindpwd)
-            filter = "(&(objectClass=posixAccount)(uid="+username+"))"
+            filter = "(&(objectClass=posixAccount)(uid=" + username + "))"
             results = l.search_s(self.base_dn, self.scope, filter)
             details = results[0][1]
             return defer.succeed(dict(userName=username, fullName=details['displayName'][0], email=details['mail'][0], groups=['buildbot', username]))
@@ -82,8 +82,9 @@ class LDAPAuthChecker():
             l.set_option(ldap.OPT_REFERRALS, 0)
             l.protocol_version = 3
             l.simple_bind_s(self.binddn, self.bindpwd)
-            filter = "(&(objectClass=posixAccount)(uid="+credentials.username+"))"
-            groupFilter = '(&(cn='+self.group+')(memberUid=' +credentials.username+'))'
+            username = credentials.username.encode("utf-8")
+            filter = "(&(objectClass=posixAccount)(uid=" + username + "))"
+            groupFilter = "(&(cn=" + self.group + ")(memberUid=" + username + "))"
 
             # return defer.succeed(credentials.username)
             #1. get user cn
