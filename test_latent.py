@@ -17,6 +17,7 @@ c['builders'] = []
 platforms = [
     {'name' : 'win', 'worker' : 'build-win'},
     {'name' : 'mac', 'worker' : 'build-mac'},
+    {'name' : 'nix', 'worker' : 'build-nix'},
 ]
 
 project_name='test_latent'

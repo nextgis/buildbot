@@ -14,9 +14,9 @@ Need at least qemu 2.9+
 
 # Config
 
-NOTE: To work properly nee to execute following command:
+NOTE: To work properly need to execute following command:
    > sudo su
-   > echo 1 > /sys/module/kvm/parameters/ignore_msrs  
+   > echo 1 > /sys/module/kvm/parameters/ignore_msrs
 
 Success config looks like
 

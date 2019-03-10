@@ -2,7 +2,6 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-import bbconf
 
 c = {}
 c['change_source'] = []
@@ -73,34 +72,25 @@ c['schedulers'].append(schedulers.ForceScheduler(
 #### update docs
 
 factory = util.BuildFactory()
-
-# factory.addStep(steps.Git(repourl=main_repourl, mode='incremental', submodules=True))
-factory.addStep(steps.ShellCommand(command=["git", "config", "user.name", bbconf.git_user_name],
-                                  description=["set", "git config username"],
-                                  descriptionDone=["set", "git config username"],
-                                  workdir="build"))
-factory.addStep(steps.ShellCommand(command=["git", "config", "user.email", bbconf.git_user_email],
-                                  description=["set", "git config useremail"],
-                                  descriptionDone=["set", "git config useremail"],
-                                  workdir="build"))
-
-# factory.addStep(steps.ShellCommand(command=["git", "submodule", "foreach", "git", "checkout", "master"],
-#                                   description=["git", "submodule foreach git checkout master"],
-#                                   workdir="build"))
-#
-# factory.addStep(steps.ShellCommand(command=["git", "checkout", "3"],
-#                                   description=["git", "checkout 3"],
-#                                   workdir="build/source/docs_ngweb_dev"))
+logfile = 'stdio'
+factory.addStep(steps.ShellSequence(commands=[
+        util.ShellArg(command=["git", "config", "user.name", bbconf.git_user_name], logfile=logfile),
+        util.ShellArg(command=["git", "config", "user.email", bbconf.git_user_email], logfile=logfile),
+    ],
+    name="Set git config defaults",
+    haltOnFailure=True,
+    workdir="build",))
 
 for lang in langs:
     factory.addStep(steps.ShellCommand(command=["sh", "switch_lang.sh", lang],
                                       description=["switch", "language to " + lang],
                                       descriptionDone=["switched", "language to " + lang],
                                       workdir="build"))
+    # TODO: github script push
     factory.addStep(steps.ShellCommand(command=["sh", "update_docs.sh"],
                                       description=["update", lang + " documentation"],
                                       descriptionDone=["updated", lang + " documentation"],
                                       workdir="build"))
 
-builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'], factory = factory)
+builder = util.BuilderConfig(name=project_name, workernames=['build-nix'], factory=factory)
 c['builders'].append(builder)
