@@ -208,7 +208,7 @@ for platform in platforms:
         ],
         name="Download repository",
         haltOnFailure=True,
-        doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
+        doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_create"),
         workdir=build_dir,
         env=env))
 
@@ -217,7 +217,7 @@ for platform in platforms:
         ],
         name="Download scripts",
         haltOnFailure=True,
-        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
+        doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
         workdir=code_dir,
         env=env))
 
@@ -229,7 +229,7 @@ for platform in platforms:
                                         haltOnFailure=False, warnOnWarnings=True,
                                         flunkOnFailure=False, warnOnFailure=True,
                                         # haltOnFailure=True, # The repository may not be exists
-                                        # doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_create"),
+                                        # doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_create"),
                                         workdir=code_dir,
                                         env=env))
 
@@ -321,7 +321,7 @@ for platform in platforms:
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
-                                        doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_standalone"),
+                                        doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_standalone"),
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
@@ -334,7 +334,7 @@ for platform in platforms:
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
-                                        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_standalone"),
+                                        doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_standalone"),
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
@@ -346,7 +346,7 @@ for platform in platforms:
                                                 '-s', '--ftp-create-dirs', ngftp + '/'],
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
-                                       doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
+                                       doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
                                        workdir=build_dir,
                                        env=env))
 
@@ -365,7 +365,7 @@ for platform in platforms:
         ],
         name="Upload standalone installer to ftp",
         haltOnFailure=True,
-        doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_standalone"),
+        doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_standalone"),
         workdir=build_dir,
         env=env)
     )
@@ -407,7 +407,7 @@ for platform in platforms:
                                                     ngftp2 + '/src/nextgis_updater_' + platform['name'],
                                                     '--build_path', build_dir_name],
                                            name="send package to ftp",
-                                           doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),
+                                           doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
@@ -417,7 +417,7 @@ for platform in platforms:
                                                     basename=repo_name_base),
                                                 '-s', '--ftp-create-dirs', siteftp + '/'],
                                        name="Upload repository archive to site",
-                                       doStepIf=(lambda(step): step.getProperty("scheduler") != project_name + "_standalone"),
+                                       doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_standalone"),
                                        haltOnFailure=True,
                                        workdir=build_dir,
                                        env=env))
