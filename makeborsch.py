@@ -4,8 +4,6 @@
 from buildbot.plugins import *
 import sys
 import os
-import multiprocessing
-import bbconf
 
 c = {}
 
@@ -74,7 +72,7 @@ skip_send2github = [
     "nextgisqgis", "formbuilder", "manuscript",
 ]
 
-vm_cpu_count = 6
+vm_cpu_count = 8
 
 mac_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
@@ -82,12 +80,12 @@ mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.
 release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/github_release.py'
 script_name = 'github_release.py'
 username = 'bishopgis'
-userkey = bbconf.githubAPIToken
-ngftp = 'ftp://192.168.255.51/software/installer/src/'
-ngftp_user = bbconf.ftp_mynextgis_user
-upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
+userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
+ngftp = 'ftp://192.168.245.227:8121/software/installer/src/'
+ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
+upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
-ci_project_name = 'create_installer'
+# ci_project_name = 'create_installer'
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -351,12 +349,12 @@ for repository in repositories:
                                            workdir=code_dir))
 
         # create installer trigger
-        factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
-                                      waitForFinish=False,
-                                      set_properties={
-                                        'suffix' : '-dev',
-                                        'url' : 'http://nextgis.com/programs/desktop/repository-',
-                                    }))
+        # factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
+        #                               waitForFinish=False,
+        #                               set_properties={
+        #                                 'suffix' : '-dev',
+        #                                 'url' : 'http://nextgis.com/programs/desktop/repository-',
+        #                             }))
 
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
                                     workernames = [platform['worker']],
