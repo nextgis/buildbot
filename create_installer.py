@@ -4,7 +4,6 @@
 from buildbot.plugins import *
 import sys
 import os
-import bbconf
 import time
 
 c = {}
@@ -14,13 +13,16 @@ vm_cpu_count = 8
 mac_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
+ngftp2 = 'ftp://192.168.245.227:8121/software/installer'
 ngftp = 'ftp://192.168.255.51/software/installer'
 siteftp = 'ftp://192.168.255.1/desktop'
-ngftp_user = bbconf.ftp_mynextgis_user
-siteftp_user = bbconf.ftp_upldsoft_user
-upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
+ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
+ngftp2_user = os.environ.get("BUILDBOT_FTP_USER")
+siteftp_user = os.environ.get("BUILDBOT_SITEFTP_USER")
+upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
 if_project_name = 'inst_framework'
+login_keychain = os.environ.get("BUILDBOT_MACOSX_LOGIN_KEYCHAIN")
 
 installer_git = 'git://github.com/nextgis/nextgis_installer.git'
 
@@ -169,7 +171,7 @@ for platform in platforms:
     logfile = 'stdio'
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp_user, ngftp + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'], logfile=logfile),
+            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'], logfile=logfile),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logfile=logfile),
         ],
         name="Download installer package",
@@ -180,7 +182,7 @@ for platform in platforms:
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp_user, ngftp + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'], logfile=logfile),
+            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'], logfile=logfile),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logfile=logfile),
         ],
         name="Download qt package",
@@ -192,11 +194,11 @@ for platform in platforms:
 
     # 2. Get repository from ftp
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp_user,
+            util.ShellArg(command=["curl", '-u', ngftp2_user,
                                     '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
                                         basename=repo_name_base),
                                     '-s', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                        basename=ngftp + '/src/' + 'repo_' + platform['name'] + '/' + repo_name_base),
+                                        basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/' + repo_name_base),
                                     ],
                             logfile=logfile),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
@@ -219,9 +221,9 @@ for platform in platforms:
         workdir=code_dir,
         env=env))
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-o', 'versions.pkl', '-s',
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-o', 'versions.pkl', '-s',
                                                 util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
-                                                    basename=ngftp + '/src/' + 'repo_' + platform['name'] + '/versions'),
+                                                    basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
                                                 ],
                                         name="Download versions.pkl",
                                         haltOnFailure=False, warnOnWarnings=True,
@@ -259,8 +261,8 @@ for platform in platforms:
                                                 '-n', '-r', util.Interpolate('%(prop:url)s%(kw:platform)s%(prop:suffix)s', platform=platform['name']),
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                                                 create_opt,
-                                                'prepare', '--ftp_user', ngftp_user,
-                                                '--ftp', ngftp + '/src/',
+                                                'prepare', '--ftp_user', ngftp2_user,
+                                                '--ftp', ngftp2 + '/src/',
                                                 ],
                                            name="Prepare packages data",
                                            maxTime=20 * 60,
@@ -294,14 +296,14 @@ for platform in platforms:
         keychain_name = 'cs.keychain'
         factory.addStep(steps.ShellSequence(commands=[
                 # For use in separate keychain
-                util.ShellArg(command=['security', 'create-keychain', '-p', bbconf.login_keychain, keychain_name],
+                util.ShellArg(command=['security', 'create-keychain', '-p', login_keychain, keychain_name],
                               logfile=logfile,
                               haltOnFailure=False, flunkOnWarnings=False, flunkOnFailure=False,
                               warnOnWarnings=False, warnOnFailure=False),
                 util.ShellArg(command=['security', 'default-keychain', '-s', keychain_name], logfile=logfile),
-                util.ShellArg(command=['security', 'unlock-keychain', '-p', bbconf.login_keychain, keychain_name], logfile=logfile),
+                util.ShellArg(command=['security', 'unlock-keychain', '-p', login_keychain, keychain_name], logfile=logfile),
                 util.ShellArg(command=['security', 'import', './dev.p12', '-k', keychain_name, '-P', '', '-A'], logfile=logfile),
-                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', bbconf.login_keychain, '-s',  keychain_name,], logfile=logfile),
+                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', login_keychain, '-s',  keychain_name,], logfile=logfile),
                 util.ShellArg(command=['security', 'list-keychains', '-s', keychain_name], logfile=logfile),
                 util.ShellArg(command=['security', 'list-keychains'], logfile=logfile),
             ],
@@ -380,19 +382,19 @@ for platform in platforms:
                                         env=env))
 
     # 7. Upload repository archive to ftp
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
                                         util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
                                             basename=repo_name_base),
                                         '-s', '--ftp-create-dirs',
-                                        ngftp + '/src/' + 'repo_' + platform['name'] + '/',],
+                                        ngftp2 + '/src/' + 'repo_' + platform['name'] + '/',],
                                        name="Upload repository archive to ftp",
                                        haltOnFailure=True,
                                        workdir=build_dir,
                                        env=env))
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
+    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
                                                 'versions.pkl', '-s', '--ftp-create-dirs',
                                                 util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
-                                                    basename=ngftp + '/src/' + 'repo_' + platform['name'] + '/versions'),
+                                                    basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
                                                 ],
                                        name="Upload versions.pkl to ftp",
                                        haltOnFailure=True,
@@ -401,8 +403,8 @@ for platform in platforms:
     if create_updater_package:
         # If create installer - upload updater.zip + version.str to ftp
         factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
-                                                    '--ftp_user', ngftp_user, '--ftp',
-                                                    ngftp + '/src/nextgis_updater_' + platform['name'],
+                                                    '--ftp_user', ngftp2_user, '--ftp',
+                                                    ngftp2 + '/src/nextgis_updater_' + platform['name'],
                                                     '--build_path', build_dir_name],
                                            name="send package to ftp",
                                            doStepIf=(lambda(step): step.getProperty("scheduler") == project_name + "_create"),

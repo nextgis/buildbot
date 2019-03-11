@@ -85,7 +85,7 @@ ngftp = 'ftp://192.168.245.227:8121/software/installer/src/'
 ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
-# ci_project_name = 'create_installer'
+ci_project_name = 'create_installer'
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -349,12 +349,12 @@ for repository in repositories:
                                            workdir=code_dir))
 
         # create installer trigger
-        # factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
-        #                               waitForFinish=False,
-        #                               set_properties={
-        #                                 'suffix' : '-dev',
-        #                                 'url' : 'http://nextgis.com/programs/desktop/repository-',
-        #                             }))
+        factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
+                                      waitForFinish=False,
+                                      set_properties={
+                                        'suffix' : '-dev',
+                                        'url' : 'http://nextgis.com/programs/desktop/repository-',
+                                    }))
 
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
                                     workernames = [platform['worker']],

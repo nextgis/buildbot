@@ -4,8 +4,6 @@
 from buildbot.plugins import *
 import sys
 import os
-import multiprocessing
-import bbconf
 
 c = {}
 
@@ -14,9 +12,9 @@ vm_cpu_count = 8
 mac_os_min_version = '10.10'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
-ngftp = 'ftp://192.168.255.51/software/installer/src/'
-ngftp_user = bbconf.ftp_mynextgis_user
-upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/ftp_uploader.py'
+ngftp = 'ftp://192.168.245.227:8121/software/installer'
+ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
+upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
 ci_project_name = 'create_installer'
 
