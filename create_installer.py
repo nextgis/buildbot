@@ -290,11 +290,12 @@ for platform in platforms:
             workdir=code_dir,
             env=env))
 
-        factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
-                                            workerdest=code_dir_last + "/dev.p12",
-                                            ))
+        # factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
+        #                                     workerdest=code_dir_last + "/dev.p12",
+        #                                     ))
         keychain_name = 'cs.keychain'
         factory.addStep(steps.ShellSequence(commands=[
+                util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/dev.p12', '-o', 'dev.p12', '-s'], logfile=logfile),
                 # For use in separate keychain
                 util.ShellArg(command=['security', 'create-keychain', '-p', login_keychain, keychain_name],
                               logfile=logfile,
