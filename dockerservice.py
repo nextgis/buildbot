@@ -39,6 +39,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
 
         yield super().reconfigService(name, password, docker_host, image, command, volumes, followStartupLogs, masterFQDN, autopull, alwaysPull, **kwargs)
 
+        self.client_args = {'base_url': docker_host, 'tls': False}
         # Prepare the parameters for the Docker Client object.
         self.environment = environment or []
         self.registryAuth = registryAuth or {}
