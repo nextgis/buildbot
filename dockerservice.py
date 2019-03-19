@@ -26,7 +26,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
     def checkConfig(self, name, password, docker_host, image=None, command=None,
                     volumes=None, followStartupLogs=False,
                     masterFQDN=None, autopull=False, alwaysPull=False,
-                    environment=None, networks=None, registryAuth=None,
+                    environment=None, networks=None,
                     placementConstraints=None, **kwargs):
         super().checkConfig(name, password, docker_host, image, volumes, masterFQDN, **kwargs)
 
@@ -34,7 +34,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
     def reconfigService(self, name, password, docker_host, image=None, command=None,
                         volumes=None, followStartupLogs=False,
                         masterFQDN=None, autopull=False, alwaysPull=False,
-                        environment=None, networks=None, registryAuth=None,
+                        environment=None, networks=None,
                         placementConstraints=None, **kwargs):
 
         yield super().reconfigService(name, password, docker_host, image, command, volumes, followStartupLogs, masterFQDN, autopull, alwaysPull, **kwargs)
@@ -42,7 +42,6 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.client_args = {'base_url': docker_host, 'tls': False}
         # Prepare the parameters for the Docker Client object.
         self.environment = environment or []
-        self.registryAuth = registryAuth or {}
         self.networks = networks or []
         self.placementConstraints = placementConstraints or []
 
@@ -62,17 +61,17 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             except NotFound:
                 pass  # that's a race condition
 
-        found = self._image_exists(docker_client, image)
-        if ((not found) or self.alwaysPull) and self.autopull:
-            if (not found):
-                log.msg("Image '%s' not found, pulling from registry" % image)
-            docker_client.pull(image, auth_config=self.registryAuth)
+        # found = self._image_exists(docker_client, image)
+        # if ((not found) or self.alwaysPull) and self.autopull:
+        #     if (not found):
+        #         log.msg("Image '%s' not found, pulling from registry" % image)
+        #     docker_client.pull(image, auth_config=self.registryAuth)
 
-        if (not self._image_exists(docker_client, image)):
-            log.msg("Image '%s' not found" % image)
-            raise LatentWorkerCannotSubstantiate(
-                'Image "%s" not found on docker host.' % image
-            )
+        # if (not self._image_exists(docker_client, image)):
+        #     log.msg("Image '%s' not found" % image)
+        #     raise LatentWorkerCannotSubstantiate(
+        #         'Image "%s" not found on docker host.' % image
+        #     )
 
         volumes, binds = self._thd_parse_volumes(volumes)
 
@@ -93,7 +92,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             mounts.append(docker.types.Mount(bind, volume, read_only=ro))
 
         env = self.createEnvironment()
-        env.extend(self.environment)
+        env.update(self.environment)
 
         placement = docker.types.Placement(constraints=self.placementConstraints)
         container_spec = docker.types.ContainerSpec(image=image, command=self.command, env=env, mounts=mounts)
