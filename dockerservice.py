@@ -26,7 +26,8 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
     def checkConfig(self, name, password, docker_host, image=None, command=None,
                     volumes=None, followStartupLogs=False,
                     masterFQDN=None, autopull=False, alwaysPull=False,
-                    environment=None, registryAuth=None, **kwargs):
+                    environment=None, networks=None, registryAuth=None,
+                    placementConstraints=None, **kwargs):
         super().checkConfig(name, password, docker_host, image, volumes, masterFQDN, **kwargs)
 
     @defer.inlineCallbacks
