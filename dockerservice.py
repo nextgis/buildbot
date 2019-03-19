@@ -7,7 +7,7 @@ from buildbot import config
 from buildbot.interfaces import LatentWorkerCannotSubstantiate
 from buildbot.interfaces import LatentWorkerFailedToSubstantiate
 
-from buildbot.worker import DockerLatentWorker
+from buildbot.worker.docker import DockerLatentWorker
 
 try:
     import docker
