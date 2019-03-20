@@ -25,7 +25,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
 
     def checkConfig(self, name, password, docker_host, image=None, command=None,
                     volumes=None, followStartupLogs=False,
-                    masterFQDN=None, autopull=False, alwaysPull=False,
+                    masterFQDN=None, autopull=False, alwaysPull=False, registryAuth=None,
                     environment=None, networks=None,
                     placementConstraints=None, **kwargs):
         super().checkConfig(name, password, docker_host, image, volumes, masterFQDN, **kwargs)
@@ -33,7 +33,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
     @defer.inlineCallbacks
     def reconfigService(self, name, password, docker_host, image=None, command=None,
                         volumes=None, followStartupLogs=False,
-                        masterFQDN=None, autopull=False, alwaysPull=False,
+                        masterFQDN=None, autopull=False, alwaysPull=False, registryAuth=None,
                         environment=None, networks=None,
                         placementConstraints=None, **kwargs):
 
@@ -44,9 +44,19 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.environment = environment or []
         self.networks = networks or []
         self.placementConstraints = placementConstraints or []
+        self.registryAuth = registryAuth or {}
 
     def _thd_start_instance(self, image, dockerfile, volumes):
         docker_client = self._getDockerClient()
+
+        if self.registryAuth:
+            try:
+                docker_client.login(username=self.registryAuth['username'],
+                                    password=self.registryAuth['password'],
+                                    registry=self.registryAuth['host'])
+            except docker.errors.APIError:
+                log.msg('Error while login to registry host: %s', e)
+
         service_name = self.getContainerName()
         # cleanup the old instances
         instances = docker_client.services(
