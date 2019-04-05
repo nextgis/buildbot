@@ -83,8 +83,6 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         #         'Image "%s" not found on docker host.' % image
         #     )
 
-        volumes, binds = self._thd_parse_volumes(volumes)
-
         mounts = []
         for volume_string in (self.volumes or []):
             try:
@@ -99,7 +97,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                 ro = volume[-2:] == 'ro'
                 volume = volume[:-3]
 
-            mounts.append(docker.types.Mount(bind, volume, read_only=ro))
+            mounts.append(docker.types.Mount(volume, bind, read_only=ro))
 
         env = self.createEnvironment()
         env.update(self.environment)
@@ -137,7 +135,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         docker_client = self._getDockerClient()
         log.msg('Stopping service %s...' % instance['ID'][:6])
         docker_client.remove_service(instance['ID'])
-        if self.image is None:
+        if self.image is None: # This is case where image create locally from Dockerfile.
             try:
                 docker_client.remove_image(image=instance['image'])
             except docker.errors.APIError as e:
