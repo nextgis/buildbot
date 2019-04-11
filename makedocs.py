@@ -21,6 +21,8 @@ git_poller = changes.GitPoller(project = git_project_name,
 c['change_source'].append(git_poller)
 
 builderNames = []
+logfile = 'stdio'
+
 for lang in langs:
     project_name = poller_name + '_' + lang
     builderNames.append(project_name)
@@ -50,10 +52,14 @@ for lang in langs:
 #                                      workdir="build/source"))
 
     # Check documentation errors
-    factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
-                                      description=["make", "spelling"],
-                                      haltOnFailure=True,
-                                      workdir="build"))
+    factory.addStep(steps.ShellSequence(commands=[
+            util.ShellArg(command=['make', 'spelling'], logfile=logfile),
+            util.ShellArg(command=["cat", 'build/spelling/output.txt'], logfile=logfile),
+        ],
+        name="Check spelling",
+        haltOnFailure=True,
+        workdir="build")
+    )
 
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
