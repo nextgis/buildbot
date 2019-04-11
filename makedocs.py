@@ -50,10 +50,6 @@ for lang in langs:
 #                                      workdir="build/source"))
 
     # Check documentation errors
-    factory.addStep(steps.ShellCommand(command=['make', 'doctest'],
-                                      description=["make", "doctest"],
-                                      haltOnFailure=True,
-                                      workdir="build"))
     factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
                                       description=["make", "spelling"],
                                       haltOnFailure=True,
