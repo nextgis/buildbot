@@ -20,13 +20,6 @@ git_poller = changes.GitPoller(project = git_project_name,
                    pollinterval = 600,)
 c['change_source'].append(git_poller)
 
-c['schedulers'].append(schedulers.ForceScheduler(
-            name=poller_name + "_force",
-            label="Force make",
-            buttonName="Force make documentation",
-            builderNames=builderNames,
-))
-
 builderNames = []
 for lang in langs:
     project_name = poller_name + '_' + lang
@@ -40,6 +33,12 @@ for lang in langs:
                             builderNames=[project_name])
     c['schedulers'].append(scheduler)
 
+c['schedulers'].append(schedulers.ForceScheduler(
+            name=poller_name + "_force",
+            label="Force make",
+            buttonName="Force make documentation",
+            builderNames=builderNames,
+))
 
     #### build docs
 
