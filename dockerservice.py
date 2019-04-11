@@ -106,6 +106,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         secretsArr = []
         for secret in self.secrets:
             secretsArr.append(docker.types.SecretReference(
+                secret_id=secret['id'],
                 secret_name=secret['name'],
                 filename=secret['file'],
                 mode=secret['mode'],))
