@@ -58,7 +58,10 @@ for lang in langs:
         ],
         name="Check spelling",
         haltOnFailure=True,
-        workdir="build")
+        workdir="build",
+        env={
+            'LANG': 'ru_RU.UTF-8',
+        })
     )
 
     # 2. build pdf for each doc except dev
