@@ -20,6 +20,13 @@ git_poller = changes.GitPoller(project = git_project_name,
                    pollinterval = 600,)
 c['change_source'].append(git_poller)
 
+c['schedulers'].append(schedulers.ForceScheduler(
+            name=poller_name + "_force",
+            label="Force make",
+            buttonName="Force make documentation",
+            builderNames=builderNames,
+))
+
 builderNames = []
 for lang in langs:
     project_name = poller_name + '_' + lang
@@ -65,24 +72,25 @@ for lang in langs:
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS FormBuilder"],
                                       workdir="build/source/docs_formbuilder"))
-        factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                                      description=["make", "pdf for NextGIS Bio"],
-                                      workdir="build/source/docs_ngbio"))
+        # Create PDF only on common products
+        # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+        #                               description=["make", "pdf for NextGIS Bio"],
+        #                               workdir="build/source/docs_ngbio"))
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS QGIS"],
                                       workdir="build/source/docs_ngqgis"))
-        factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                                      description=["make", "pdf for NextGIS open geodata portal"],
-                                      workdir="build/source/docs_ogportal"))
-        factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                                      description=["make", "pdf for NextGIS forest inspector"],
-                                      workdir="build/source/docs_forestinspector"))
+        # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+        #                               description=["make", "pdf for NextGIS open geodata portal"],
+        #                               workdir="build/source/docs_ogportal"))
+        # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+        #                               description=["make", "pdf for NextGIS forest inspector"],
+        #                               workdir="build/source/docs_forestinspector"))
 
-
-    factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"],
-                                      description=["make", "javadoc for mobile (android)"],
-                                      descriptionDone=["made", "javadoc for mobile (android)"],
-                                      workdir="build/source/ngmobile_dev"))
+    # Skip javadoc for outdated mobile SDK v2
+    # factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"],
+    #                                   description=["make", "javadoc for mobile (android)"],
+    #                                   descriptionDone=["made", "javadoc for mobile (android)"],
+    #                                   workdir="build/source/ngmobile_dev"))
     factory.addStep(steps.ShellCommand(command=["sh", "make_kotlindoc.sh"],
                                       description=["make", "kotlindoc for mobile (android)"],
                                       descriptionDone=["made", "kotlindoc for mobile (android)"],
@@ -96,17 +104,11 @@ for lang in langs:
     # 3. build html
     factory.addStep(steps.Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
     # 4. upload to ftp
-    factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
-                                       description=["sync", "to web server"]))
+    # TODO:
+    # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
+    #                                    description=["sync", "to web server"]))
 
-    builder = util.BuilderConfig(name = project_name, workernames = ['build-nix'],
+    builder = util.BuilderConfig(name = project_name, workernames = ['build-doc'],
                                 factory = factory,
                                 description='Make documentation [' + lang + ']')
     c['builders'].append(builder)
-
-c['schedulers'].append(schedulers.ForceScheduler(
-            name=poller_name + "_force",
-            label="Force make",
-            buttonName="Force make documentation",
-            builderNames=builderNames,
-))
