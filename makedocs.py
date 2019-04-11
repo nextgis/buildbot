@@ -33,13 +33,6 @@ for lang in langs:
                             builderNames=[project_name])
     c['schedulers'].append(scheduler)
 
-c['schedulers'].append(schedulers.ForceScheduler(
-            name=poller_name + "_force",
-            label="Force make",
-            buttonName="Force make documentation",
-            builderNames=builderNames,
-))
-
     #### build docs
 
     factory = util.BuildFactory()
@@ -111,3 +104,10 @@ c['schedulers'].append(schedulers.ForceScheduler(
                                 factory = factory,
                                 description='Make documentation [' + lang + ']')
     c['builders'].append(builder)
+
+c['schedulers'].append(schedulers.ForceScheduler(
+            name=poller_name + "_force",
+            label="Force make",
+            buttonName="Force make documentation",
+            builderNames=builderNames,
+))
