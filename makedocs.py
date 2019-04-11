@@ -50,6 +50,16 @@ for lang in langs:
 #                                      warnOnFailure=True,
 #                                      workdir="build/source"))
 
+    # Check documentation errors
+    factory.addStep(steps.ShellCommand(command=['make', 'doctest'],
+                                      description=["make", "doctest"],
+                                      haltOnFailure=True,
+                                      workdir="build"))
+    factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
+                                      description=["make", "spelling"],
+                                      haltOnFailure=True,
+                                      workdir="build"))
+
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Mobile"],
@@ -94,7 +104,7 @@ for lang in langs:
                                       workdir="build/source/ngmobile_dev"))
 
     # 3. build html
-    factory.addStep(steps.Sphinx(sphinx_builddir="_build/html",sphinx_sourcedir="source",sphinx_builder="html"))
+    factory.addStep(steps.Sphinx(sphinx_builddir="_build/html", sphinx_sourcedir="source", sphinx_builder="html"))
     # 4. upload to ftp
     # TODO:
     # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
