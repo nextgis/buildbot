@@ -27,7 +27,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                     volumes=None, followStartupLogs=False,
                     masterFQDN=None, autopull=False, alwaysPull=False, registryAuth=None,
                     environment=None, networks=None,
-                    placementConstraints=None, **kwargs):
+                    placementConstraints=None, secrets=None, **kwargs):
         super().checkConfig(name, password, docker_host, image, volumes, masterFQDN, **kwargs)
 
     @defer.inlineCallbacks
@@ -35,7 +35,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                         volumes=None, followStartupLogs=False,
                         masterFQDN=None, autopull=False, alwaysPull=False, registryAuth=None,
                         environment=None, networks=None,
-                        placementConstraints=None, **kwargs):
+                        placementConstraints=None, secrets=None, **kwargs):
 
         yield super().reconfigService(name, password, docker_host, image, command, volumes, followStartupLogs, masterFQDN, autopull, alwaysPull, **kwargs)
 
@@ -45,6 +45,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.networks = networks or []
         self.placementConstraints = placementConstraints or []
         self.registryAuth = registryAuth or {}
+        self.secrets = secrets or []
 
     def _thd_start_instance(self, image, dockerfile, volumes):
         docker_client = self._getDockerClient()
@@ -102,14 +103,21 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         env = self.createEnvironment()
         env.update(self.environment)
 
+        secretsArr = []
+        for secret in self.secrets:
+            secretsArr.append(docker.types.SecretReference(
+                secret_name=secret['name'],
+                filename=secret['file'],
+                mode=secret['mode'],))
+
         placement = docker.types.Placement(constraints=self.placementConstraints)
-        container_spec = docker.types.ContainerSpec(image=image, command=self.command, env=env, mounts=mounts)
-        task_tmpl = docker.types.TaskTemplate(container_spec, networks=self.networks, placement=placement)
-        instance = docker_client.create_service(
-            task_tmpl,
+        container_spec = docker.types.ContainerSpec(image=image,
+            command=self.command, env=env, mounts=mounts, secrets=secretsArr)
+        task_tmpl = docker.types.TaskTemplate(container_spec,
+            networks=self.networks, placement=placement)
+        instance = docker_client.create_service(task_tmpl,
             name=self.getContainerName(),
-            networks=self.networks
-        )
+            networks=self.networks)
 
         if instance.get('ID') is None:
             log.msg('Failed to create the service')
@@ -117,7 +125,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                 'Failed to start service'
             )
         shortid = instance['ID'][:6]
-        log.msg('Service created, ID: %s...' % (shortid,))
+        log.msg('Service created, ID: %s ...' % (shortid,))
         instance['image'] = image
         self.instance = instance
 
@@ -133,7 +141,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
 
     def _thd_stop_instance(self, instance, fast):
         docker_client = self._getDockerClient()
-        log.msg('Stopping service %s...' % instance['ID'][:6])
+        log.msg('Stopping service %s ...' % instance['ID'][:6])
         docker_client.remove_service(instance['ID'])
         if self.image is None: # This is case where image create locally from Dockerfile.
             try:
