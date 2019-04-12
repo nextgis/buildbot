@@ -124,9 +124,9 @@ for lang in langs:
     # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
     #                                    description=["sync", "to web server"]))
     factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=['cp', 'build/spelling/output.txt', '_build/html/',]),
-        util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',]),
-        util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p 2022 -i /root/.ssh/www', '_build/html/', '192.168.245.227:/home/docker/data/www/docs/' + lang,]),
+        util.ShellArg(command=['cp', 'build/spelling/output.txt', '_build/html/',], logfile=logfile),
+        util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logfile=logfile),
+        util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p 2022 -i /root/.ssh/www', '_build/html/', '192.168.245.227:/home/docker/data/www/docs/' + lang,], logfile=logfile),
         ],
         name="Copy documentation to web server",
         haltOnFailure=True,
