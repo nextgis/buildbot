@@ -9,6 +9,7 @@ c['schedulers'] = []
 c['builders'] = []
 
 repourl = 'git://github.com/nextgis/docs_ng.git'
+ngw_repo = 'https://github.com/nextgis/nextgisweb.git'
 langs = ['ru', 'en']
 
 poller_name = 'docs'
@@ -39,17 +40,7 @@ for lang in langs:
 
     factory = util.BuildFactory()
     # 1. check out the source
-    factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True, clobberOnFailure=True, branch=lang)) #mode='full', method='clobber'
-    # install NGW
-#    if lang == 'ru':
-#        factory.addStep(steps.ShellCommand(command=["pip", "install", "-e", "docs_ngweb_dev", "--upgrade", "--ignore-installed"],
-#                                      description=["install", "nextgisweb"],
-#                                      descriptionDone=["installed", "nextgisweb"],
-#                                      haltOnFailure=False,
-#                                      warnOnWarnings=True,
-#                                      flunkOnFailure=False,
-#                                      warnOnFailure=True,
-#                                      workdir="build/source"))
+    factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True, clobberOnFailure=True, branch=lang))
 
     # Check documentation errors
     factory.addStep(steps.ShellSequence(commands=[
@@ -61,7 +52,23 @@ for lang in langs:
         workdir="build",
         env={
             'LANG': 'ru_RU.UTF-8',
-        })
+        },
+        logEncoding='utf-8',)
+    )
+
+    # Install NGW
+    factory.addStep(steps.Git(repourl=ngw_repo, mode='incremental', clobberOnFailure=True, branch=lang, workdir="build"))
+    factory.addStep(steps.ShellSequence(commands=[
+        util.ShellArg(command=['2to3', '--output-dir=nextgisweb3', '-W', '-n', 'nextgisweb',], logfile=logfile),
+        util.ShellArg(command=['pip3', 'install', '-e', 'nextgisweb3',], logfile=logfile),
+        ],
+        name="Install NextGIS Web",
+        haltOnFailure=True,
+        workdir="build",
+        env={
+            'LANG': 'ru_RU.UTF-8',
+        },
+        logEncoding='utf-8',)
     )
 
     # 2. build pdf for each doc except dev
