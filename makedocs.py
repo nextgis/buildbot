@@ -40,24 +40,23 @@ for lang in langs:
 
     factory = util.BuildFactory()
     # 1. check out the source
-    factory.addStep(steps.Git(repourl=repourl, mode='incremental', submodules=True, clobberOnFailure=True, branch=lang))
+    factory.addStep(steps.Git(repourl=repourl, mode='full', method='clobber', submodules=True, shallow=True, branch=lang))
 
     # Check documentation errors
-    factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=['make', 'spelling'], logfile=logfile),
-            util.ShellArg(command=["cat", 'build/spelling/output.txt'], logfile=logfile),
-        ],
+    # if lang == 'en':
+    factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
         name="Check spelling",
         haltOnFailure=True,
         workdir="build",
         env={
             'LANG': 'ru_RU.UTF-8',
         },
-        logEncoding='utf-8',)
+        logEncoding='utf-8',
+        logfiles={"spellinglog": "build/spelling/output.txt"})
     )
 
     # Install NGW
-    factory.addStep(steps.Git(repourl=ngw_repo, mode='incremental', clobberOnFailure=True, branch=lang, workdir="build"))
+    factory.addStep(steps.Git(repourl=ngw_repo, mode='full', method='clobber', shallow=True, branch="3", workdir="build"))
     factory.addStep(steps.ShellSequence(commands=[
         util.ShellArg(command=['2to3', '--output-dir=nextgisweb3', '-W', '-n', 'nextgisweb',], logfile=logfile),
         util.ShellArg(command=['pip3', 'install', '-e', 'nextgisweb3',], logfile=logfile),
@@ -65,10 +64,7 @@ for lang in langs:
         name="Install NextGIS Web",
         haltOnFailure=True,
         workdir="build",
-        env={
-            'LANG': 'ru_RU.UTF-8',
-        },
-        logEncoding='utf-8',)
+        )
     )
 
     # 2. build pdf for each doc except dev
