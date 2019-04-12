@@ -20,7 +20,7 @@ repos_m = [
     'docs_howto',
 ]
 
-main_repourl = 'git@github.com:nextgis/docs_ng.git'
+repourl = 'git@github.com:nextgis/docs_ng.git'
 
 langs = ['ru', 'en']
 
@@ -72,9 +72,10 @@ c['schedulers'].append(schedulers.ForceScheduler(
 #### update docs
 git_user_name = "NextGIS BuildBot"
 git_user_email = "buildbot@nextgis.com"
+logfile = 'stdio'
 
 factory = util.BuildFactory()
-logfile = 'stdio'
+factory.addStep(steps.Git(repourl=repourl, mode='full', method='clobber', submodules=True))
 factory.addStep(steps.ShellSequence(commands=[
         util.ShellArg(command=["git", "config", "user.name", git_user_name], logfile=logfile),
         util.ShellArg(command=["git", "config", "user.email", git_user_email], logfile=logfile),
