@@ -56,8 +56,7 @@ for lang in langs:
         haltOnFailure=True,
         workdir="build",
         env=env,
-        logEncoding='utf-8',
-        logfiles={"output": {"filename": "build/spelling/output.txt", "follow": True}})
+        )
     )
 
     # Install NGW
