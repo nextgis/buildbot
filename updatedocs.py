@@ -70,12 +70,14 @@ c['schedulers'].append(schedulers.ForceScheduler(
 ))
 
 #### update docs
+git_user_name = "NextGIS BuildBot"
+git_user_email = "buildbot@nextgis.com"
 
 factory = util.BuildFactory()
 logfile = 'stdio'
 factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=["git", "config", "user.name", bbconf.git_user_name], logfile=logfile),
-        util.ShellArg(command=["git", "config", "user.email", bbconf.git_user_email], logfile=logfile),
+        util.ShellArg(command=["git", "config", "user.name", git_user_name], logfile=logfile),
+        util.ShellArg(command=["git", "config", "user.email", git_user_email], logfile=logfile),
     ],
     name="Set git config defaults",
     haltOnFailure=True,
@@ -92,5 +94,5 @@ for lang in langs:
                                       descriptionDone=["updated", lang + " documentation"],
                                       workdir="build"))
 
-builder = util.BuilderConfig(name=project_name, workernames=['build-nix'], factory=factory)
+builder = util.BuilderConfig(name=project_name, workernames=['build-light'], factory=factory)
 c['builders'].append(builder)
