@@ -60,16 +60,16 @@ for lang in langs:
     )
 
     # Install NGW
-    factory.addStep(steps.Git(repourl=ngw_repo, mode='full', method='clobber', shallow=True, branch="3", workdir="build"))
-    factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=['2to3', '--output-dir=nextgisweb3', '-W', '-n', 'nextgisweb',], logfile=logfile),
-        util.ShellArg(command=['pip3', 'install', '-e', 'nextgisweb3',], logfile=logfile),
-        ],
-        name="Install NextGIS Web",
-        haltOnFailure=True,
-        workdir="build",
-        )
-    )
+    # factory.addStep(steps.Git(repourl=ngw_repo, mode='full', method='clobber', shallow=True, branch="3", workdir="build"))
+    # factory.addStep(steps.ShellSequence(commands=[
+    #     util.ShellArg(command=['2to3', '--output-dir=nextgisweb3', '--write-unchanged-files', '-n', 'nextgisweb',]),
+    #     util.ShellArg(command=['pip3', 'install', '-e', 'nextgisweb3',]),
+    #     ],
+    #     name="Install NextGIS Web",
+    #     haltOnFailure=True,
+    #     workdir="build",
+    #     )
+    # )
 
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
