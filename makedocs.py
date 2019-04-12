@@ -43,16 +43,21 @@ for lang in langs:
     factory.addStep(steps.Git(repourl=repourl, mode='full', method='clobber', submodules=True, shallow=True, branch=lang))
 
     # Check documentation errors
-    # if lang == 'en':
+    if lang == 'ru':
+        env = {
+            'LANG': 'ru_RU.UTF-8',
+        }
+    else:
+        env = {
+            'LANG': 'en_US.UTF-8',
+        }
     factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
         name="Check spelling",
         haltOnFailure=True,
         workdir="build",
-        env={
-            'LANG': 'ru_RU.UTF-8',
-        },
+        env=env,
         logEncoding='utf-8',
-        logfiles={"spellinglog": "build/spelling/output.txt"})
+        logfiles={"output": {"build/spelling/output.txt","follow": True}})
     )
 
     # Install NGW
