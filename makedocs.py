@@ -9,7 +9,6 @@ c['schedulers'] = []
 c['builders'] = []
 
 repourl = 'git://github.com/nextgis/docs_ng.git'
-ngw_repo = 'https://github.com/nextgis/nextgisweb.git'
 langs = ['ru', 'en']
 
 poller_name = 'docs'
@@ -60,9 +59,8 @@ for lang in langs:
     )
 
     # Install NGW
-    # factory.addStep(steps.Git(repourl=ngw_repo, mode='full', method='clobber', shallow=True, branch="3", workdir="build"))
     # factory.addStep(steps.ShellSequence(commands=[
-    #     util.ShellArg(command=['2to3', '--output-dir=nextgisweb3', '--write-unchanged-files', '-n', 'nextgisweb',]),
+    #     util.ShellArg(command=['2to3', '--output-dir=nextgisweb3', '--write-unchanged-files', '-n', 'docs_ng/source/docs_ngweb_dev',]),
     #     util.ShellArg(command=['pip3', 'install', '-e', 'nextgisweb3',]),
     #     ],
     #     name="Install NextGIS Web",
@@ -74,24 +72,29 @@ for lang in langs:
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Mobile"],
-                                      workdir="build/source/docs_ngmobile"))
+                                      workdir="build/source/docs_ngmobile",
+                                      env=env,))
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Web"],
-                                      workdir="build/source/docs_ngweb"))
+                                      workdir="build/source/docs_ngweb",
+                                      env=env,))
     if lang == 'ru':
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Manager"],
-                                      workdir="build/source/docs_ngmanager"))
+                                      workdir="build/source/docs_ngmanager",
+                                      env=env,))
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS FormBuilder"],
-                                      workdir="build/source/docs_formbuilder"))
+                                      workdir="build/source/docs_formbuilder",
+                                      env=env,))
         # Create PDF only on common products
         # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
         #                               description=["make", "pdf for NextGIS Bio"],
         #                               workdir="build/source/docs_ngbio"))
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS QGIS"],
-                                      workdir="build/source/docs_ngqgis"))
+                                      workdir="build/source/docs_ngqgis",
+                                      env=env,))
         # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
         #                               description=["make", "pdf for NextGIS open geodata portal"],
         #                               workdir="build/source/docs_ogportal"))
@@ -106,13 +109,13 @@ for lang in langs:
     #                                   workdir="build/source/ngmobile_dev"))
     factory.addStep(steps.ShellCommand(command=["sh", "make_kotlindoc.sh"],
                                       description=["make", "kotlindoc for mobile (android)"],
-                                      descriptionDone=["made", "kotlindoc for mobile (android)"],
-                                      workdir="build/source/ngmobile_dev"))
+                                      workdir="build/source/ngmobile_dev",
+                                      env=env,))
 
     factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
                                       description=["make", "swiftdoc for mobile (ios)"],
-                                      descriptionDone=["made", "swiftdoc for mobile (ios)"],
-                                      workdir="build/source/ngmobile_dev"))
+                                      workdir="build/source/ngmobile_dev",
+                                      env=env,))
 
     # 3. build html
     factory.addStep(steps.Sphinx(sphinx_builddir="_build/html", sphinx_sourcedir="source", sphinx_builder="html"))
