@@ -81,10 +81,13 @@ release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/ma
 script_name = 'github_release.py'
 username = 'bishopgis'
 userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
-ngftp = 'ftp://192.168.245.227:8121/software/installer/src/'
+ngftp_base = 'ftp://192.168.245.227:8121'
+ngftp = ngftp_base + '/software/installer/src/'
 ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
+install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py'
+install_script_name = 'install_from_ftp.py'
 ci_project_name = 'create_installer'
 
 c['change_source'] = []
@@ -193,16 +196,16 @@ def install_dependencies(factory, requirements, os):
                                     env=env)
             )
         elif requirement == 'PyQt4' and os == 'mac':
-            factory.addStep(
-                steps.ShellCommand(command=['brew', 'install', 'cartr/qt4/pyqt'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=False, # brew install may return 1 instead of 0 (SUCCESS)
-                                    flunkOnWarnings=False,
-                                    flunkOnFailure=False,
-                                    env=env)
-            )
+            factory.addStep(steps.ShellSequence(commands=[
+                    util.ShellArg(command=["curl", install_script_src, '-o', install_script_name, '-s', '-L'], logfile=logfile),
+                    util.ShellArg(command=["python", install_script_name, '--ftp_user', ngftp_user,
+                        '--ftp', ngftp_base, '--build_path', 'install',
+                        '--platform', 'mac', '--packages', 'lib_freetype lib_gif lib_jpeg lib_png lib_sqlite lib_tiff lib_z py_sip lib_qt4', '--create_pth'], logfile=logfile),
+                ],
+                name="Install PyQt4",
+                haltOnFailure=True,
+                workdir=code_dir,
+                env=env))
 
 # Create builders
 for repository in repositories:
