@@ -200,7 +200,7 @@ def install_dependencies(factory, requirements, os):
                     util.ShellArg(command=["curl", install_script_src, '-o', install_script_name, '-s', '-L'], logfile=logfile),
                     util.ShellArg(command=["python", install_script_name, '--ftp_user', ngftp_user,
                         '--ftp', ngftp_base, '--build_path', 'install',
-                        '--platform', 'mac', '--create_pth', '--packages', 'lib_freetype', 'lib_gif', 'lib_jpeg', 'lib_png', 'lib_sqlite', 'lib_tiff', 'lib_z', 'py_sip', 'lib_qt4'], logfile=logfile),
+                        '--platform', 'mac', '--create_pth', '--packages', 'lib_freetype', 'lib_gif', 'lib_jpeg', 'lib_png', 'lib_sqlite', 'lib_tiff', 'lib_z', 'py_sip', 'lib_qt4', 'py_qt4'], logfile=logfile),
                 ],
                 name="Install PyQt4",
                 haltOnFailure=True,
