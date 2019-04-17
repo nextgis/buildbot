@@ -158,6 +158,6 @@ if __name__ == "__main__":
 
     # Create pth
     if args.create_pth:
-        color_print('Create pth file at ' + site.getsitepackages()[0], 'LCYAN')
+        color_print('Create pth file at ' + site.getsitepackages()[0], False, 'LCYAN')
         with open(site.getsitepackages()[0] + '/ng.pth', 'w') as f:
             f.write(build_path + '/Library/Python/2.7/site-packages')
