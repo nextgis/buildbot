@@ -9,6 +9,7 @@ import subprocess
 import sys
 import argparse
 import shutil
+import site
 
 def run(args):
     subprocess.check_call(args)
@@ -110,7 +111,7 @@ if __name__ == "__main__":
     parser.add_argument('--build_path', dest='build', required=True, help='Path to extract packages')
     parser.add_argument('--platform', dest='platform', choices=['mac','win32','win64'], required=True, help='package platform')
     parser.add_argument('--packages', dest='packages', nargs='+', required=True, help='download packages list without platform prefix')
-    parser.add_argument('--create_pth', default=False, action='store_false')
+    parser.add_argument('--create_pth', action='store_true')
 
     args = parser.parse_args()
 
@@ -157,5 +158,5 @@ if __name__ == "__main__":
 
     # Create pth
     if args.create_pth:
-        with open('~/Library/Python/2.7/lib/python/site-packages/ng.pth', 'w') as f:
+        with open(site.getsitepackages()[0] + '/ng.pth', 'w') as f:
             f.write(build_path + '/Library/Python/2.7/site-packages')
