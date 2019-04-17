@@ -204,7 +204,6 @@ def install_dependencies(factory, requirements, os):
                 ],
                 name="Install PyQt4",
                 haltOnFailure=True,
-                workdir=code_dir,
                 env=env))
 
 # Create builders
