@@ -161,4 +161,4 @@ if __name__ == "__main__":
         site_path = site.getusersitepackages()
         color_print('Create pth file at ' + site_path, False, 'LCYAN')
         with open(site_path + '/ng.pth', 'w') as f:
-            f.write(build_path + '/Library/Python/2.7/site-packages')
+            f.write(build_path + '/Library/Python/2.7/site-packages\n')
