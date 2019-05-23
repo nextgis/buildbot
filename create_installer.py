@@ -91,9 +91,31 @@ forceScheduler_standalone = schedulers.ForceScheduler(
                                        ],
                         )
 
+forceScheduler_standalone_ex = schedulers.ForceScheduler(
+                            name=project_name + "_standalone",
+                            label="Create branded standalone installer",
+                            buttonName="Create branded installer",
+                            builderNames=[
+                                            project_name + "_win32",
+                                            project_name + "_win64",
+                                            project_name + "_mac",
+                                        ],
+                            properties=[util.StringParameter(name="suffix",
+                                                            label="Installer name and URL path suffix (use '-dev' for default):",
+                                                            default="", size=40),
+                                        util.StringParameter(name="plugins",
+                                                            label="Plugins names separated by comma to include to installer:",
+                                                            default="", size=80),
+                                        util.StringParameter(name="valid",
+                                                            label="Validity period for supported functions (YYYY-MM-DD):",
+                                                            default="2024-01-01", size=40),
+                                       ],
+                        )
+
 c['schedulers'].append(forceScheduler_create)
 c['schedulers'].append(forceScheduler_update)
 c['schedulers'].append(forceScheduler_standalone)
+c['schedulers'].append(forceScheduler_standalone_ex)
 
 @util.renderer
 def now(props):
@@ -332,6 +354,8 @@ for platform in platforms:
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s', basename=installer_name_base + '-standalone', now=now),
+                                                '-d', util.Interpolate('%(prop:valid)s'),
+                                                '-p', util.Interpolate('%(prop:plugins)s'),
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
@@ -359,7 +383,7 @@ for platform in platforms:
             ],
             logfile=logfile),
             util.ShellArg(command=["echo",
-                util.Interpolate('Get standalone installer on this url: https://my.nextgis.com/downloads/software/installer/%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,
+                util.Interpolate('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,
                     basename=installer_name_base + '-standalone', now=now)
             ],
             logfile=logfile),
