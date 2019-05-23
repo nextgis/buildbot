@@ -92,7 +92,7 @@ forceScheduler_standalone = schedulers.ForceScheduler(
                         )
 
 forceScheduler_standalone_ex = schedulers.ForceScheduler(
-                            name=project_name + "_standalone",
+                            name=project_name + "_brand_standalone",
                             label="Create branded standalone installer",
                             buttonName="Create branded installer",
                             builderNames=[
@@ -126,7 +126,7 @@ def commandArgs(props):
     command = []
     if props.getProperty('scheduler') ==  project_name + "_create":
         command.append('create')
-    elif props.getProperty('scheduler') ==  project_name + "_standalone":
+    elif props.getProperty('scheduler').endswith("_standalone"):
         command.append('create')
     elif props.getProperty('scheduler') ==  project_name + "_update":
         command.extend(['update', '--force', props.getProperty('force'),])
@@ -344,7 +344,7 @@ for platform in platforms:
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
-                                        doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_standalone"),
+                                        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
@@ -359,7 +359,7 @@ for platform in platforms:
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
-                                        doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_standalone"),
+                                        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
@@ -390,7 +390,7 @@ for platform in platforms:
         ],
         name="Upload standalone installer to ftp",
         haltOnFailure=True,
-        doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_standalone"),
+        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
         workdir=build_dir,
         env=env)
     )
@@ -442,7 +442,7 @@ for platform in platforms:
                                                     basename=repo_name_base),
                                                 '-s', '--ftp-create-dirs', siteftp + '/'],
                                        name="Upload repository archive to site",
-                                       doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_standalone"),
+                                       doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
                                        haltOnFailure=True,
                                        workdir=build_dir,
                                        env=env))
