@@ -287,7 +287,7 @@ for platform in platforms:
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                                                 create_opt,
                                                 '-vd', util.Interpolate('%(prop:valid_date)s'),
-                                                '-vu', util.Interpolate('%(prop:valid_date)s'),
+                                                '-vu', util.Interpolate('%(prop:valid_user)s'),
                                                 'prepare', '--ftp_user', ngftp2_user,
                                                 '--ftp', ngftp2 + '/src/',
                                                 '-p', util.Interpolate('%(prop:plugins)s'),
