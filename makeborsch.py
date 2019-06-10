@@ -66,6 +66,7 @@ repositories = [
     {'repo':'py_proj', 'args':['-DWITH_PROJ4_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_sci', 'args':[], 'requirements':['numpy'], 'skip':['mac'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_littlecms', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
