@@ -67,7 +67,7 @@ repositories = [
     {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_sci', 'args':[], 'requirements':['numpy'], 'skip':['mac'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_littlecms', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'lib_webp', 'args':['-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_GIF_EXTERNAL=ON','-DBUILD_TESTING=ON','-DWEBP_BUILD_VWEBP=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_webp', 'args':['-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_GIF_EXTERNAL=ON','-DBUILD_TESTING=ON','-DWEBP_BUILD_VWEBP=OFF', '-DWEBP_BUILD_CWEBP=OFF', '-DWEBP_BUILD_DWEBP=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
