@@ -37,7 +37,7 @@ repositories = [
     {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['mac'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_lzma', 'args':['-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DPNG_TESTS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PNG=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_BZip2=ON', '-DWITH_BZip2_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DBUILD_APPS=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON', '-DCMAKE_USE_LIBSSH2=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
@@ -69,6 +69,7 @@ repositories = [
     {'repo':'lib_littlecms', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_webp', 'args':['-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_GIF_EXTERNAL=ON','-DBUILD_TESTING=ON','-DWEBP_BUILD_VWEBP=OFF', '-DWEBP_BUILD_CWEBP=OFF', '-DWEBP_BUILD_DWEBP=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_bzip2', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_harfbuzz', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
