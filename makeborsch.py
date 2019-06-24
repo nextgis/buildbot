@@ -70,6 +70,7 @@ repositories = [
     {'repo':'lib_webp', 'args':['-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_GIF_EXTERNAL=ON','-DBUILD_TESTING=ON','-DWEBP_BUILD_VWEBP=OFF', '-DWEBP_BUILD_CWEBP=OFF', '-DWEBP_BUILD_DWEBP=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_bzip2', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_harfbuzz', 'args':['-DHB_HAVE_FREETYPE=ON','-DWITH_Freetype_EXTERNAL=ON','-DWITH_Freetype=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_pillow', 'args':['-DWITH_JPEG_EXTERNAL=ON','-DWITH_OpenJPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_Freetype_EXTERNAL=ON','-DWITH_LCMS_EXTERNAL=ON','-DWITH_WEBP_EXTERNAL=ON','-DWITH_WEBPMUX_EXTERNAL=ON','-DWITH_WEBPDEMUX_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
