@@ -316,7 +316,7 @@ for repository in repositories:
                                            name="make",
                                            haltOnFailure=True,
                                            timeout=10 * 60,
-                                           maxTime=3 * 60 * 60,
+                                           maxTime=5 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
 
