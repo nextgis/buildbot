@@ -55,7 +55,7 @@ repositories = [
     {'repo':'py_qt4', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_ZLIB=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qscintilla', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt4_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'nextgisqgis', 'args':['-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GSL_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_PROJ4_EXTERNAL=ON', '-DWITH_Qca_EXTERNAL=ON', '-DWITH_Qscintilla_EXTERNAL=ON', '-DWITH_Qwt_EXTERNAL=ON', '-DWITH_SpatialIndex_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt4_EXTERNAL=ON', '-DWITH_Qsci_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_NGSTD_EXTERNAL=ON', '-DWITH_OpenCV_EXTERNAL=ON', '-DWITH_OCI_EXTERNAL=ON'], 'requirements':['PyQt4', 'six'], 'skip':[], 'org':'nextgis', 'test_regex':[]},
-    {'repo':'lib_ngstd', 'args':['-DBUILD_QT5=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DBUILD_QT4=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_PyQt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DTPS_PLUGIN_SIGN=' + os.environ.get("BUILDBOT_TPS_PLUGIN_SIGN", "0000"),], 'requirements':[], 'skip':[], 'org':'nextgis', 'test_regex':[]},
+    {'repo':'lib_ngstd', 'args':['-DBUILD_QT5=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DBUILD_QT4=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_PyQt4_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DTPS_PLUGIN_SIGN=' + os.environ.get("BUILDBOT_PASSWORD", "0000"),], 'requirements':[], 'skip':[], 'org':'nextgis', 'test_regex':[]},
     {'repo':'formbuilder', 'args':['-DBUILD_NEXTGIS_PACKAGE=ON', '-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_NGSTD_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis', 'test_regex':[]},
     {'repo':'lib_opencv', 'args':['-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB=ON','-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DBUILD_opencv_ts=OFF','-DBUILD_opencv_apps=ON','-DBUILD_TESTS=OFF','-DBUILD_PERF_TESTS=OFF'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':['-R','opencv_test_(fl|co)']},
     {'repo':'manuscript', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_NGSTD_EXTERNAL=ON',], 'requirements':[], 'skip':[], 'org':'nextgis', 'test_regex':[]},
@@ -82,10 +82,10 @@ vm_cpu_count = 8
 mac_os_min_version = '10.11'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
-release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/github_release.py'
-script_name = 'github_release.py'
-username = 'bishopgis'
-userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
+release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/repka_release.py' # 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/github_release.py'
+script_name = 'repka_release.py' # 'github_release.py'
+username = 'buildbot' # username = 'bishopgis'
+userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
 ngftp_base = 'ftp://192.168.245.227:8121'
 ngftp = ngftp_base + '/software/installer/src/'
 ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
@@ -339,10 +339,16 @@ for repository in repositories:
 
         # send package to github
         if project_name not in skip_send2github:
+            # factory.addStep(steps.ShellCommand(command=['python', script_name, '--login',
+            #                                         username, '--key', userkey, '--build_path', build_subdir
+            #                                         ],
+            #                                name="send package to github",
+            #                                haltOnFailure=True,
+            #                                workdir=code_dir))
             factory.addStep(steps.ShellCommand(command=['python', script_name, '--login',
-                                                    username, '--key', userkey, '--build_path', build_subdir
+                                                    username, '--password', userkey, '--build_path', build_subdir
                                                     ],
-                                           name="send package to github",
+                                           name="send package to rm.nextgis.com",
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
