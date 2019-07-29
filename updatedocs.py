@@ -13,7 +13,7 @@ repos = [
     'docs_ngmobile',
     'docs_ngqgis',
     'docs_ngweb',
-    'docs_collector',
+    'docs_toolbox',
 ]
 
 repos_m = [
