@@ -8,7 +8,7 @@ import os
 c = {}
 
 repositories = [
-    {'repo':'lib_z', 'args':[], 'requirements':[], 'skip':['mac'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_z', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_sip', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_sqlite', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_gif', 'args':[], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
@@ -34,7 +34,7 @@ repositories = [
     {'repo':'lib_jpeg', 'args':['-DBUILD_TESTING=ON', '-DBUILD_JPEG_12=ON', '-DBUILD_JPEG_8=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_tiff', 'args':['-DBUILD_TESTING=ON', '-DWITH_ZLIB=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_JPEG12_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JBIG=ON', '-DWITH_LibLZMA=ON', '-DWITH_JPEG12=ON',], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_proj', 'args':['-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DPROJ_TESTS=ON', '-DGENERATE_PROJ_DB=OFF', '-DWITH_GTest_EXTERNAL=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['mac'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_lzma', 'args':['-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DPNG_TESTS=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_BZip2=ON', '-DWITH_BZip2_EXTERNAL=ON','-DWITH_HarfBuzz_EXTERNAL=ON','-DWITH_HarfBuzz=ON'], 'requirements':[], 'skip':[], 'org':'nextgis-borsch', 'test_regex':[]},
