@@ -70,7 +70,7 @@ forceScheduler_create = schedulers.ForceScheduler(
             size=40),
         util.TextParameter(
             name="notes",
-            label="Release notes to be displayed to the user in update available dialog",
+            label="Release notes to be displayed in update available dialog",
             default="", 
             cols=80, 
             rows=5),
@@ -96,7 +96,7 @@ forceScheduler_update = schedulers.ForceScheduler(
             default="", 
             size=40),
         util.TextParameter(name="notes",
-            label="Release notes to be displayed to the user in update available dialog",
+            label="Release notes to be displayed in update available dialog",
             default="", 
             cols=80, 
             rows=5),
@@ -279,11 +279,20 @@ for platform in platforms:
     factory.addStep(steps.ShellSequence(
         commands=[
             util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s'], logfile=logfile),
-            util.ShellArg(command=["curl", repka_script_src, '-o', repka_script_name, '-s'], logfile=logfile),
         ],
         name="Download scripts",
         haltOnFailure=True,
         doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
+        workdir=code_dir,
+        env=env))
+
+    factory.addStep(steps.ShellSequence(
+        commands=[
+            util.ShellArg(command=["curl", repka_script_src, '-o', repka_script_name, '-s'], logfile=logfile),
+        ],
+        name="Download scripts",
+        haltOnFailure=True,
+        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
         workdir=code_dir,
         env=env))
 
