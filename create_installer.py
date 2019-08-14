@@ -21,8 +21,12 @@ ngftp2_user = os.environ.get("BUILDBOT_FTP_USER")
 siteftp_user = os.environ.get("BUILDBOT_SITEFTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
+repka_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/repka_release.py'
+repka_script_name = 'repka_release.py'
 if_project_name = 'inst_framework'
 login_keychain = os.environ.get("BUILDBOT_MACOSX_LOGIN_KEYCHAIN")
+username = 'buildbot' # username = 'bishopgis'
+userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
 
 installer_git = 'git://github.com/nextgis/nextgis_installer.git'
 
@@ -35,85 +39,120 @@ generator = 'Visual Studio 15 2017'
 create_updater_package = False
 
 build_lock = util.WorkerLock("create_installer_worker_builds",
-                             maxCount=1,
-                             maxCountForWorker={'build-win': 1, 'build-mac': 1})
+    maxCount=1,
+    maxCountForWorker={'build-win': 1, 'build-mac': 1}
+)
 
 forceScheduler_create = schedulers.ForceScheduler(
-                            name=project_name + "_update",
-                            label="Update installer",
-                            buttonName="Update installer",
-                            builderNames=[
-                                            project_name + "_win32",
-                                            project_name + "_win64",
-                                            project_name + "_mac",
-                                        ],
-                            properties=[util.StringParameter(name="force",
-                                            label="Force update specified packages even not any changes exists:",
-                                            default="all", size=280),
-                                        util.StringParameter(name="url",
-                                                        label="Installer URL:",
-                                                        default="http://nextgis.com/programs/desktop/repository-", size=40),
-                                        util.StringParameter(name="suffix",
-                                                        label="Installer name and URL path suffix (use '-dev' for default):",
-                                                        default="", size=40),
-                                       ],
-                        )
+    name=project_name + "_update",
+    label="Update installer",
+    buttonName="Update installer",
+    builderNames=[
+        project_name + "_win32",
+        project_name + "_win64",
+        project_name + "_mac",
+    ],
+    properties=[
+        util.StringParameter(
+            name="force",
+            label="Force update specified packages even not any changes exists:",
+            default="all", 
+            size=280),
+        util.StringParameter(
+            name="url",
+            label="Installer URL:",
+            default="http://nextgis.com/programs/desktop/repository-", 
+            size=40),
+        util.StringParameter(
+            name="suffix",
+            label="Installer name and URL path suffix (use '-dev' for default):",
+            default="", 
+            size=40),
+        util.TextParameter(
+            name="notes",
+            label="Release notes to be displayed to the user in update available dialog",
+            default="", 
+            cols=80, 
+            rows=5),
+    ],
+)
+
 forceScheduler_update = schedulers.ForceScheduler(
-                            name=project_name + "_create",
-                            label="Create installer",
-                            buttonName="Create installer",
-                            builderNames=[
-                                            project_name + "_win32",
-                                            project_name + "_win64",
-                                            project_name + "_mac",
-                                        ],
-                            properties=[util.StringParameter(name="url",
-                                                            label="Installer URL:",
-                                                            default="http://nextgis.com/programs/desktop/repository-", size=40),
-                                        util.StringParameter(name="suffix",
-                                                            label="Installer name and URL path suffix (use '-dev' for default):",
-                                                            default="", size=40),
-                                       ],
-                        )
+    name=project_name + "_create",
+    label="Create installer", 
+    buttonName="Create installer",
+    builderNames=[
+        project_name + "_win32",
+        project_name + "_win64",
+        project_name + "_mac",
+    ],
+    properties=[
+        util.StringParameter(name="url", 
+            label="Installer URL:",
+            default="http://nextgis.com/programs/desktop/repository-", 
+            size=40),
+        util.StringParameter(name="suffix",
+            label="Installer name and URL path suffix (use '-dev' for default):",
+            default="", 
+            size=40),
+        util.TextParameter(name="notes",
+            label="Release notes to be displayed to the user in update available dialog",
+            default="", 
+            cols=80, 
+            rows=5),
+    ],
+)
 
 forceScheduler_standalone = schedulers.ForceScheduler(
-                            name=project_name + "_standalone",
-                            label="Create standalone installer",
-                            buttonName="Create standalone installer",
-                            builderNames=[
-                                            project_name + "_win32",
-                                            project_name + "_win64",
-                                            project_name + "_mac",
-                                        ],
-                            properties=[util.StringParameter(name="suffix",
-                                                            label="Installer name and URL path suffix (use '-dev' for default):",
-                                                            default="", size=40),
-                                       ],
-                        )
+    name=project_name + "_standalone",
+    label="Create standalone installer",
+    buttonName="Create standalone installer",
+    builderNames=[
+        project_name + "_win32",
+        project_name + "_win64",
+        project_name + "_mac",
+    ],
+    properties=[
+        util.StringParameter(
+            name="suffix",
+            label="Installer name and URL path suffix (use '-dev' for default):",
+            default="", 
+            size=40),
+    ],
+)
 
 forceScheduler_standalone_ex = schedulers.ForceScheduler(
-                            name=project_name + "_brand_standalone",
-                            label="Create branded standalone installer",
-                            buttonName="Create branded installer",
-                            builderNames=[
-                                            project_name + "_win32",
-                                            project_name + "_win64",
-                                            project_name + "_mac",
-                                        ],
-                            properties=[util.StringParameter(name="suffix",
-                                                            label="Installer name and URL path suffix (use '-dev' for default):",
-                                                            default="", size=40),
-                                        util.StringParameter(name="plugins",
-                                                            label="Plugins names separated by comma to include to installer:",
-                                                            default="", size=80),
-                                        util.StringParameter(name="valid_user",
-                                                            label="User name for supported dialog:",
-                                                            default="", size=80),
-                                        util.StringParameter(name="valid_date",
-                                                            label="Validity period for supported functions (YYYY-MM-DD):",
-                                                            default="2024-01-01", size=40),
-                                       ],
-                        )
+    name=project_name + "_brand_standalone",
+    label="Create branded standalone installer",
+    buttonName="Create branded installer",
+    builderNames=[
+        project_name + "_win32",
+        project_name + "_win64",
+        project_name + "_mac",
+    ],
+    properties=[
+        util.StringParameter(
+            name="suffix",
+            label="Installer name and URL path suffix (use '-dev' for default):",
+            default="", 
+            size=40),
+        util.StringParameter(
+            name="plugins",
+            label="Plugins names separated by comma to include to installer:",
+            default="", 
+            size=80),
+        util.StringParameter(
+            name="valid_user",
+            label="User name for supported dialog:",
+            default="", 
+            size=80),
+        util.StringParameter(
+            name="valid_date",
+            label="Validity period for supported functions (YYYY-MM-DD):",
+            default="2024-01-01", 
+            size=40),
+    ],
+)
 
 c['schedulers'].append(forceScheduler_create)
 c['schedulers'].append(forceScheduler_update)
@@ -139,9 +178,10 @@ def commandArgs(props):
     return command
 
 platforms = [
-    {'name' : 'win32', 'worker' : 'build-win'},
-    {'name' : 'win64', 'worker' : 'build-win'},
-    {'name' : 'mac', 'worker' : 'build-mac'} ]
+    {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
+    {'name' : 'win64', 'worker' : 'build-win', 'repo_id': 5},
+    {'name' : 'mac', 'worker' : 'build-mac', 'repo_id': 6} 
+]
 
 # Create triggerable shcedulers
 for platform in platforms:
@@ -160,8 +200,7 @@ for platform in platforms:
     factory = util.BuildFactory()
 
     # Radically clean all
-    factory.addStep(steps.RemoveDirectory(dir=code_dir,
-                                        name="Clean all"))
+    factory.addStep(steps.RemoveDirectory(dir=code_dir, name="Clean all"))
 
     factory.addStep(steps.Git(repourl=installer_git,
                                mode='full',
@@ -237,8 +276,10 @@ for platform in platforms:
         workdir=build_dir,
         env=env))
 
-    factory.addStep(steps.ShellSequence(commands=[
+    factory.addStep(steps.ShellSequence(
+        commands=[
             util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s'], logfile=logfile),
+            util.ShellArg(command=["curl", repka_script_src, '-o', repka_script_name, '-s'], logfile=logfile),
         ],
         name="Download scripts",
         haltOnFailure=True,
@@ -441,15 +482,27 @@ for platform in platforms:
                                            workdir=code_dir))
 
     # 8. Upload repository archive to site
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', siteftp_user, '-T',
-                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                                    basename=repo_name_base),
-                                                '-s', '--ftp-create-dirs', siteftp + '/'],
-                                       name="Upload repository archive to site",
-                                       doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
-                                       haltOnFailure=True,
-                                       workdir=build_dir,
-                                       env=env))
+    factory.addStep(steps.ShellCommand(
+        command=["curl", '-u', siteftp_user, '-T',
+            util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base),
+            '-s', '--ftp-create-dirs', siteftp + '/'],
+        name="Upload repository archive to site",
+        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
+        haltOnFailure=True,
+        workdir=build_dir,
+        env=env))
+
+    # 9. Create new release in repka
+    factory.addStep(steps.ShellCommand(
+        command=["python", repka_script_name, '--repo_id', platform['repo_id'],
+            '--description', util.Interpolate('%(prop:notes)s'),
+            '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base),
+            '--login', username, '--password', userkey],
+        name="Create release in repka",
+        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
+        haltOnFailure=True,
+        workdir=build_dir,
+        env=env))
 
     builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
                                  workernames = [platform['worker']],
