@@ -207,9 +207,13 @@ def do_work(repo_id, packet_name, release_file, description, login, password):
         for tag in release['tags']:
             version = parse_version(tag)
             if version is not None:
-                newVersion[0] = version[0]
-                newVersion[1] = version[1] + 1
-                newVersion[2] = version[2]
+                if version[1] > 999:
+                    newVersion[0] = version[0] + 1
+                    newVersion[1] = 0
+                else:
+                    newVersion[0] = version[0]
+                    newVersion[1] = version[1] + 1
+                newVersion[2] = 0 # version[2]
 
             
 
