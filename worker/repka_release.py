@@ -83,7 +83,7 @@ def color_print(text, bold, color):
 def parse_version(tag):
     if tag == 'latest':
         return None
-    parts = tag.splitext('.')
+    parts = tag.split('.')
     try:
         if len(parts) > 2:
             major = int(parts[0])
