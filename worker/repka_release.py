@@ -220,7 +220,8 @@ def do_work(repo_id, packet_name, release_file, description, login, password):
 
 # 4. If no release - create it, else - update    
     release_name = '{}.{}.{}'.format(newVersion[0], newVersion[1], newVersion[2])
-    release_desc = 'Version ' + release_name if description is None else description
+    description = description.strip()
+    release_desc = 'Version ' + release_name if description is None or description == '' else description
     
     create_release(packet_id, release_name, release_desc, release_name, file_uid, file_name, login, password)
 
