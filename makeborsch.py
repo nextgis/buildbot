@@ -366,6 +366,7 @@ for repository in repositories:
                                       waitForFinish=False,
                                       set_properties={
                                         'suffix' : '-dev',
+                                        'notes' : 'Update ' + project_name,
                                         'url' : 'http://nextgis.com/programs/desktop/repository-',
                                     }))
 
