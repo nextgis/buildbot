@@ -84,20 +84,23 @@ def parse_version(tag):
     if tag == 'latest':
         return None
     parts = tag.splitext('.')
-    if len(parts) > 2:
-        major = int(parts[0])
-        minor = int(parts[1])
-        rev = int(parts[2])
-        return [major, minor, rev]
-    elif len(parts) > 1:
-        major = int(parts[0])
-        minor = int(parts[1])
-        return [major, minor, 0]
-    elif len(parts) > 0:
-        major = int(parts[0])
-        return [major, 0, 0]
-    else:
-        return None
+    try:
+        if len(parts) > 2:
+            major = int(parts[0])
+            minor = int(parts[1])
+            rev = int(parts[2])
+            return [major, minor, rev]
+        elif len(parts) > 1:
+            major = int(parts[0])
+            minor = int(parts[1])
+            return [major, minor, 0]
+        elif len(parts) > 0:
+            major = int(parts[0])
+            return [major, 0, 0]
+        else:
+            return None
+    except:
+        return None        
 
 def get_repo_name(repo):
     p = subprocess.check_output(['git', 'config', '--get', 'remote.origin.url'], cwd=repo)
@@ -201,7 +204,7 @@ def do_work(repo_id, packet_name, release_file, description, login, password):
     release = get_release(packet_id, 'latest', login, password)
     newVersion = [1, 0, 0]
     if release is not None:
-        for tag in release.tags:
+        for tag in release['tags']:
             version = parse_version(tag)
             if version is not None:
                 newVersion[0] = version[0]
