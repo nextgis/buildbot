@@ -89,8 +89,9 @@ userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDB
 ngftp_base = 'ftp://192.168.245.227:8121'
 ngftp = ngftp_base + '/software/installer/src/'
 ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
-upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
-upload_script_name = 'ftp_upload.py'
+# upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
+# upload_script_name = 'ftp_upload.py'
+# TODO: Update install_script_src to use repka
 install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py'
 install_script_name = 'install_from_ftp.py'
 ci_project_name = 'create_installer'
@@ -292,7 +293,12 @@ for repository in repositories:
                 run_args_ex.append('-DBUILD_STATIC_LIBS=TRUE')
             else:
                 run_args_ex.append('-DOSX_FRAMEWORK=ON')
-            run_args_ex.extend(['-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version])
+            run_args_ex.extend(
+                [
+                    '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', 
+                    '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version
+                ]
+            )
             cmake_build_ex.append('-j' + str(vm_cpu_count))
             env = get_env('mac')
 
@@ -305,7 +311,7 @@ for repository in repositories:
 
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["curl", release_script_src, '-o', script_name, '-s', '-L'], logfile=logfile),
-                util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logfile=logfile),
+                # util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logfile=logfile),
             ],
             name="Download scripts",
             haltOnFailure=True,
@@ -364,23 +370,25 @@ for repository in repositories:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
+        # TODO: Remove
         # upload to ftp
-        factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
-                                                    '--ftp_user', ngftp_user, '--ftp',
-                                                    ngftp + project_name + '_' + platform['name'],
-                                                    '--build_path', build_subdir],
-                                           name="send package to ftp",
-                                           haltOnFailure=True,
-                                           workdir=code_dir))
+        # factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
+        #                                             '--ftp_user', ngftp_user, '--ftp',
+        #                                             ngftp + project_name + '_' + platform['name'],
+        #                                             '--build_path', build_subdir],
+        #                                    name="send package to ftp",
+        #                                    haltOnFailure=True,
+        #                                    workdir=code_dir))
 
         # create installer trigger
-        factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
-                                      waitForFinish=False,
-                                      set_properties={
-                                        'suffix' : '-dev',
-                                        'notes' : 'Update ' + project_name,
-                                        'url' : 'http://nextgis.com/programs/desktop/repository-',
-                                    }))
+        if platform['name'].endswith('-static') == False:
+            factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
+                                        waitForFinish=False,
+                                        set_properties={
+                                            'suffix' : '-dev',
+                                            'notes' : 'Update ' + project_name,
+                                            'url' : 'http://nextgis.com/programs/desktop/repository-',
+                                        }))
 
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
                                     workernames = [platform['worker']],
