@@ -24,13 +24,15 @@ c['builders'] = []
 
 project_name = 'inst_framework'
 forceScheduler = schedulers.ForceScheduler(
-                            name=project_name + "_force",
-                            label="Make installer framework",
-                            buttonName="Make installer framework",
-                            builderNames=[
-                                            project_name + "_win",
-                                            project_name + "_mac",
-                                        ])
+    name=project_name + "_force",
+    label="Make installer framework",
+    buttonName="Make installer framework",
+    builderNames=[
+        project_name + "_win",
+        project_name + "_mac",
+    ]
+)
+
 c['schedulers'].append(forceScheduler)
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
