@@ -269,9 +269,9 @@ for repository in repositories:
 
         if 'win' in platform['name']:
             if platform['name'].endswith('-static'):
-                run_args_ex.append('-DBUILD_STATIC_LIBS=TRUE')
+                run_args_ex.append('-DBUILD_STATIC_LIBS=ON')
             else:
-                run_args_ex.append('-DBUILD_SHARED_LIBS=TRUE')
+                run_args_ex.append('-DBUILD_SHARED_LIBS=ON')
 
             if '-DWITH_ICONV=ON' in repository['args']:
                 run_args_ex.append('-DWITH_ICONV_EXTERNAL=ON')
@@ -288,9 +288,9 @@ for repository in repositories:
                 env = get_env('win64')
                 env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release")
                 run_args_ex.extend(['-G', generator + ' Win64'])
-        elif 'mac' == platform['name']:
+        elif 'mac' in platform['name']:
             if platform['name'].endswith('-static'):
-                run_args_ex.append('-DBUILD_STATIC_LIBS=TRUE')
+                run_args_ex.append('-DBUILD_STATIC_LIBS=OM')
             else:
                 run_args_ex.append('-DOSX_FRAMEWORK=ON')
             run_args_ex.extend(
