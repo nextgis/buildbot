@@ -292,7 +292,7 @@ for repository in repositories:
                 run_args_ex.append('-DBUILD_STATIC_LIBS=TRUE')
             else:
                 run_args_ex.append('-DOSX_FRAMEWORK=ON')
-            run_args_ex.append('-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version)
+            run_args_ex.extend(['-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version])
             cmake_build_ex.append('-j' + str(vm_cpu_count))
             env = get_env('mac')
 
