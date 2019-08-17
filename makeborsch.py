@@ -280,7 +280,7 @@ for repository in repositories:
 
             cmake_build_ex.append('/m:' + str(vm_cpu_count))
             env = {}
-            if 'win32' == platform['name']:
+            if 'win32' in platform['name']:
                 env = get_env('win32')
                 env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release")
                 run_args_ex.extend(['-G', generator])
