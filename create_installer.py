@@ -88,15 +88,18 @@ forceScheduler_update = schedulers.ForceScheduler(
         project_name + "_mac",
     ],
     properties=[
-        util.StringParameter(name="url", 
+        util.StringParameter(
+            name="url", 
             label="Installer URL:",
             default=binary_repo_refix, 
             size=40),
-        util.StringParameter(name="suffix",
+        util.StringParameter(
+            name="suffix",
             label="Installer name and URL path suffix (use '-dev' for default):",
             default="", 
             size=40),
-        util.TextParameter(name="notes",
+        util.TextParameter(
+            name="notes",
             label="Release notes to be displayed in update available dialog",
             default="", 
             cols=80, 
@@ -181,6 +184,8 @@ def commandArgs(props):
 @util.renderer
 def repoUrl(props, platform):
     url = props.getProperty('url')
+    if url is None:
+        return ""
     suffix = props.getProperty('suffix')
     if url.startswith('https://rm.nextgis.com'):
         repo_id = platform['repo_id'] 
@@ -341,25 +346,27 @@ for platform in platforms:
     installer_name_base = 'nextgis-setup-' + platform['name']
 
     # 3. Get compiled libraries
-    factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
-                                                '-s', 'inst',
-                                                '-q', 'qt/bin',
-                                                '-t', build_dir_name,
-                                                '-n', '-r', repoUrl.withArgs(platform),
-                                                '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
-                                                create_opt,
-                                                'prepare', '--ftp_user', ngftp2_user,
-                                                '--ftp', ngftp2 + '/src/',
-                                                '-p', util.Interpolate('%(prop:plugins)s'),
-                                                '-vd', util.Interpolate('%(prop:valid_date)s'),
-                                                '-vu', util.Interpolate('%(prop:valid_user)s'),
-                                                ],
-                                           name="Prepare packages data",
-                                           maxTime=20 * 60,
-                                           timeout=5 * 60,
-                                           haltOnFailure=True,
-                                           workdir=code_dir,
-                                           env=env))
+    factory.addStep(
+        steps.ShellCommand(
+            command=[
+                "python", 'opt' + separator + 'create_installer.py',
+                '-s', 'inst', '-q', 'qt/bin', '-t', build_dir_name,
+                # '-n', '-r', repoUrl.withArgs(platform),
+                # '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s',  basename=installer_name_base),
+                create_opt, 'prepare', '--ftp_user', ngftp2_user,
+                '--ftp', ngftp2 + '/src/', 
+                '-p', util.Interpolate('%(prop:plugins)s'),
+                '-vd', util.Interpolate('%(prop:valid_date)s'),
+                '-vu', util.Interpolate('%(prop:valid_user)s'),
+            ],
+            name="Prepare packages data",
+            maxTime=20 * 60,
+            timeout=5 * 60,
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env
+        )
+    )
 
     # 4. Create or update repository
     # Install NextGIS sign sertificate
