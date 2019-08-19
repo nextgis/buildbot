@@ -41,7 +41,7 @@ qt_without_openssl = False
 
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
     '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
-    '-DSKIP_DEFAULTS=ON',  '-DQT_CONFIGURE_ARGS=-accessibility;-no-opengl;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtandroidextras;-skip;qtcharts;-skip;qtconnectivity;-skip;qtdatavis3d;-skip;qtdoc;-skip;qtgamepad;-skip;qtlocation;-skip;qtlottie;-skip;qtmultimedia;-skip;qtpurchasing;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qtremoteobjects;-skip;qtscript;-skip;qtsensors;-skip;qtserialbus;-skip;qtserialport;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebglplugin;-skip;qtwebsockets;-skip;qtwebview;-skip;qt3d;-skip;qtxmlpatterns;-no-feature-ftp;-no-feature-socks5',
+    '-DSKIP_DEFAULTS=ON',  '-DQT_CONFIGURE_ARGS=-accessibility;-no-opengl;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtandroidextras;-skip;qtcharts;-skip;qtconnectivity;-skip;qtdatavis3d;-skip;qtgamepad;-skip;qtlocation;-skip;qtmultimedia;-skip;qtpurchasing;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qtsensors;-skip;qtserialbus;-skip;qtserialport;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebsockets;-skip;qtwebview;-skip;qt3d;-skip;qtxmlpatterns;-no-feature-ftp;-no-feature-socks5',
     '-DWITH_ZLIB=OFF', '-DWITH_Freetype=OFF', '-DWITH_JPEG=OFF',
     '-DWITH_PNG=OFF', '-DWITH_TIFF=OFF','-DWITH_SQLite3=OFF', 
     '-DWITH_PostgreSQL=OFF','-DWITH_WEBPDEMUX=OFF','-DWITH_WEBPMUX=OFF',
