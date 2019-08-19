@@ -178,7 +178,7 @@ def commandArgs(props):
 
     return command
 
-@util.render
+@util.renderer
 def repoUrl(props, platform):
     url = props.getProperty('url')
     suffix = props.getProperty('suffix')
