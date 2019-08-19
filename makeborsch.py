@@ -310,7 +310,7 @@ for repository in repositories:
 
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["curl", release_script_src, '-o', script_name, '-s', '-L'], logfile=logfile),
-                # util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logfile=logfile),
+                util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logfile=logfile),
             ],
             name="Download scripts",
             haltOnFailure=True,
