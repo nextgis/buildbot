@@ -92,8 +92,8 @@ ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
 # upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 # upload_script_name = 'ftp_upload.py'
 # TODO: Update install_script_src to use repka
-install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py'
-install_script_name = 'install_from_ftp.py'
+install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_repka.py'
+install_script_name = 'install_from_repka.py'
 ci_project_name = 'create_installer'
 
 c['change_source'] = []
@@ -208,8 +208,7 @@ def install_dependencies(factory, requirements, os):
         elif requirement == 'PyQt4' and os == 'mac':
             factory.addStep(steps.ShellSequence(commands=[
                     util.ShellArg(command=["curl", install_script_src, '-o', install_script_name, '-s', '-L'], logfile=logfile),
-                    util.ShellArg(command=["python", install_script_name, '--ftp_user', ngftp_user,
-                        '--ftp', ngftp_base, '--build_path', 'install',
+                    util.ShellArg(command=["python", install_script_name, '--build_path', 'install',
                         '--platform', 'mac', '--create_pth', '--packages', 'lib_freetype', 'lib_gif', 'lib_jpeg', 'lib_png', 'lib_sqlite', 'lib_tiff', 'lib_z', 'py_sip', 'lib_qt4', 'py_qt4'], logfile=logfile),
                 ],
                 name="Install PyQt4",
@@ -324,8 +323,8 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=["cmake", run_args_ex, '..'],
                                            name="configure",
                                            haltOnFailure=True,
-                                           timeout=10 * 60,
-                                           maxTime=30 * 60,
+                                           timeout=25 * 60,
+                                           maxTime=60 * 60,
                                            workdir=build_dir,
                                            env=env))
 
@@ -333,7 +332,7 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=cmake_build_ex,
                                            name="make",
                                            haltOnFailure=True,
-                                           timeout=10 * 60,
+                                           timeout=25 * 60,
                                            maxTime=5 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))

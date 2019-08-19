@@ -215,9 +215,6 @@ def do_work(repo_id, packet_name, release_file, description, login, password):
                     newVersion[1] = version[1] + 1
                 newVersion[2] = 0 # version[2]
 
-            
-
-
 # 4. If no release - create it, else - update    
     release_name = '{}.{}.{}'.format(newVersion[0], newVersion[1], newVersion[2])
     description = description.strip()
