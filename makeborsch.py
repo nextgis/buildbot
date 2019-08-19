@@ -385,7 +385,7 @@ for repository in repositories:
                                         set_properties={
                                             'suffix' : '-dev',
                                             'notes' : 'Update ' + project_name,
-                                            'url' : 'http://nextgis.com/programs/desktop/repository-',
+                                            'url' : 'https://rm.nextgis.com/api/repo/',
                                         }))
 
         builder = util.BuilderConfig(name = project_name + '_' + platform['name'],

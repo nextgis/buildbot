@@ -10,7 +10,7 @@ c = {}
 
 vm_cpu_count = 8
 
-mac_os_min_version = '10.11'
+mac_os_min_version = '10.12'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 ngftp2 = 'ftp://192.168.245.227:8121/software/installer'
@@ -37,6 +37,7 @@ c['builders'] = []
 project_name = 'create_installer'
 generator = 'Visual Studio 15 2017'
 create_updater_package = False
+binary_repo_refix = "https://rm.nextgis.com/api/repo/" #"http://nextgis.com/programs/desktop/repository-" // https://rm.nextgis.com/api/repo/4/installer/devel/ https://rm.nextgis.com/api/repo/4/installer/stable/
 
 build_lock = util.WorkerLock("create_installer_worker_builds",
     maxCount=1,
@@ -61,11 +62,11 @@ forceScheduler_create = schedulers.ForceScheduler(
         util.StringParameter(
             name="url",
             label="Installer URL:",
-            default="http://nextgis.com/programs/desktop/repository-", 
+            default=binary_repo_refix, 
             size=40),
         util.StringParameter(
             name="suffix",
-            label="Installer name and URL path suffix (use '-dev' for default):",
+            label="Installer name and URL path suffix (use 'devel' for default):",
             default="", 
             size=40),
         util.TextParameter(
@@ -89,7 +90,7 @@ forceScheduler_update = schedulers.ForceScheduler(
     properties=[
         util.StringParameter(name="url", 
             label="Installer URL:",
-            default="http://nextgis.com/programs/desktop/repository-", 
+            default=binary_repo_refix, 
             size=40),
         util.StringParameter(name="suffix",
             label="Installer name and URL path suffix (use '-dev' for default):",
@@ -176,6 +177,17 @@ def commandArgs(props):
         command.append('update')
 
     return command
+
+@util.render
+def repoUrl(props, platform):
+    url = props.getProperty('url')
+    suffix = props.getProperty('suffix')
+    if url.startswith('https://rm.nextgis.com'):
+        repo_id = platform['repo_id'] 
+        suffix = 'devel' if suffix == '-dev' else 'stable'
+        return '{}/{}/installer/{}/'.format(url, repo_id, suffix)
+    else:
+        return '{}-{}{}'.format(url, platform['name'], suffix)
 
 platforms = [
     {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
@@ -333,7 +345,7 @@ for platform in platforms:
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
-                                                '-n', '-r', util.Interpolate('%(prop:url)s%(kw:platform)s%(prop:suffix)s', platform=platform['name']),
+                                                '-n', '-r', repoUrl.withArgs(platform),
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                                                 create_opt,
                                                 'prepare', '--ftp_user', ngftp2_user,
@@ -395,7 +407,7 @@ for platform in platforms:
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
-                                                '-n', '-r', util.Interpolate('%(prop:url)s%(kw:platform)s%(prop:suffix)s', platform=platform['name']),
+                                                '-n', '-r', repoUrl.withArgs(platform),
                                                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                                                 create_opt, commandArgs,
                                                 ],
