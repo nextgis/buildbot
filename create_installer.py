@@ -66,7 +66,7 @@ forceScheduler_create = schedulers.ForceScheduler(
             size=40),
         util.StringParameter(
             name="suffix",
-            label="Installer name and URL path suffix (use 'devel' for default):",
+            label="Installer name and URL path suffix (use '-dev' for default):",
             default="", 
             size=40),
         util.TextParameter(
