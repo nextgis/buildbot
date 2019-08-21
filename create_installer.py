@@ -37,7 +37,7 @@ c['builders'] = []
 project_name = 'create_installer'
 generator = 'Visual Studio 15 2017'
 create_updater_package = False
-binary_repo_refix = "https://rm.nextgis.com/api/repo/" #"http://nextgis.com/programs/desktop/repository-" // https://rm.nextgis.com/api/repo/4/installer/devel/ https://rm.nextgis.com/api/repo/4/installer/stable/
+binary_repo_refix = "https://rm.nextgis.com/api/repo" #"http://nextgis.com/programs/desktop/repository-" // https://rm.nextgis.com/api/repo/4/installer/devel/ https://rm.nextgis.com/api/repo/4/installer/stable/
 
 build_lock = util.WorkerLock("create_installer_worker_builds",
     maxCount=1,
@@ -189,8 +189,8 @@ def repoUrl(props, platform):
     suffix = props.getProperty('suffix')
     if url.startswith('https://rm.nextgis.com'):
         repo_id = platform['repo_id'] 
-        suffix = 'devel' if suffix == '-dev' else 'stable'
-        return '{}/{}/installer/{}/'.format(url, repo_id, suffix)
+        repka_suffix = 'devel' if suffix == '-dev' else 'stable'
+        return '{}/{}/installer/{}/repository-{}{}'.format(url, repo_id, repka_suffix, platform['name'], suffix)
     else:
         return '{}-{}{}'.format(url, platform['name'], suffix)
 
@@ -410,19 +410,22 @@ for platform in platforms:
             workdir=code_dir,
             env=env))
 
-    factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
-                                                '-s', 'inst',
-                                                '-q', 'qt/bin',
-                                                '-t', build_dir_name,
-                                                '-n', '-r', repoUrl.withArgs(platform),
-                                                '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
-                                                create_opt, commandArgs,
-                                                ],
-                                        name="Create/Update repository",
-                                        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
-                                        haltOnFailure=True,
-                                        workdir=code_dir,
-                                        env=env))
+    factory.addStep(
+        steps.ShellCommand(
+            command=[
+                "python", 'opt' + separator + 'create_installer.py', '-s', 'inst',
+                '-q', 'qt/bin', '-t', build_dir_name, '-n', 
+                '-r', repoUrl.withArgs(platform), '-i', 
+                util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
+                create_opt, commandArgs,
+            ],
+            name="Create/Update repository",
+            doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env
+        )
+    )
 
     factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',
@@ -469,15 +472,20 @@ for platform in platforms:
     )
 
     # 6. Create zip from repository
-    factory.addStep(steps.ShellCommand(command=["cmake", '-E', 'tar', 'cfv',
-                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                                    basename=repo_name_base), '--format=zip',
-                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s',
-                                                    basename=repo_name_base)],
-                                        name="Create zip from repository",
-                                        haltOnFailure=True,
-                                        workdir=build_dir,
-                                        env=env))
+    factory.addStep(
+        steps.ShellCommand(
+            command=[
+                "cmake", '-E', 'tar', 'cfv',
+                util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base), 
+                '--format=zip',
+                util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=repo_name_base)
+            ],
+            name="Create zip from repository",
+            haltOnFailure=True,
+            workdir=build_dir,
+            env=env
+        )
+    )
 
     # 7. Upload repository archive to ftp
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
