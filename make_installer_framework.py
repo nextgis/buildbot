@@ -37,17 +37,17 @@ c['schedulers'].append(forceScheduler)
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
-# qt_without_openssl = False
+qt_base_args = '-DQT_CONFIGURE_ARGS=-accessibility;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtandroidextras;-skip;qtcharts;-skip;qtconnectivity;-skip;qtdatavis3d;-skip;qtdoc;-skip;qtgamepad;-skip;qtgraphicaleffects;-skip;qtlocation;-skip;qtlottie;-skip;qtmultimedia;-skip;qtpurchasing;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qtremoteobjects;-skip;qtscript;-skip;qtscxml;-skip;qtsensors;-skip;qtserialbus;-skip;qtserialport;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebglplugin;-skip;qtwebsockets;-skip;qtwebview;-skip;qt3d;-skip;qtxmlpatterns;-no-feature-ftp;-no-feature-socks5;-nomake;examples;-nomake;tests;-skip;qtenginio;-skip;qtquick1;-skip;qtwebkit'
 
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
     '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
-    '-DSKIP_DEFAULTS=ON',  '-DQT_CONFIGURE_ARGS=-accessibility;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtandroidextras;-skip;qtcharts;-skip;qtconnectivity;-skip;qtdatavis3d;-skip;qtdoc;-skip;qtgamepad;-skip;qtgraphicaleffects;-skip;qtlocation;-skip;qtlottie;-skip;qtmultimedia;-skip;qtpurchasing;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qtremoteobjects;-skip;qtscript;-skip;qtscxml;-skip;qtsensors;-skip;qtserialbus;-skip;qtserialport;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebglplugin;-skip;qtwebsockets;-skip;qtwebview;-skip;qt3d;-skip;qtxmlpatterns;-no-feature-ftp;-no-feature-socks5',
+    '-DSKIP_DEFAULTS=ON',
     '-DWITH_ZLIB=OFF', '-DWITH_Freetype=OFF', '-DWITH_JPEG=OFF',
     '-DWITH_PNG=OFF', '-DWITH_TIFF=OFF','-DWITH_SQLite3=OFF', '-DWITH_PostgreSQL=OFF','-DWITH_WEBPDEMUX=OFF','-DWITH_WEBPMUX=OFF','-DWITH_WEBP=OFF','-DWITH_HarfBuzz=OFF',
     '-DCREATE_CPACK_LIGHT=ON',
 ]
-# -no-opengl; https://bugreports.qt.io/browse/QTBUG-75612
 
+# qt_without_openssl = False
 # if qt_without_openssl:
 #     qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL=OFF',
 #                 '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
@@ -68,6 +68,13 @@ for os_type in os_types:
     code_dir = os.path.join('build', code_dir_last)
     build_subdir = 'build'
     build_dir = os.path.join(code_dir, build_subdir)
+
+    if os_type == 'mac':
+        qt_base_args += ';-qt-zlib;-qt-libpng;-qt-libjpeg;-no-cups'
+    if os_type == 'win':
+        qt_base_args += ';-no-opengl'
+
+    qt_args.append(qt_base_args)
 
     run_args_ext = list(qt_args)
     cmake_build_ext = list(cmake_build)
