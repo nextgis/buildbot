@@ -351,8 +351,8 @@ for platform in platforms:
             command=[
                 "python", 'opt' + separator + 'create_installer.py',
                 '-s', 'inst', '-q', 'qt/bin', '-t', build_dir_name,
-                # '-n', '-r', repoUrl.withArgs(platform),
-                # '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s',  basename=installer_name_base),
+                '-n', '-r', repoUrl.withArgs(platform),
+                '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s',  basename=installer_name_base),
                 create_opt, 'prepare', '--ftp_user', ngftp2_user,
                 '--ftp', ngftp2 + '/src/', 
                 '-p', util.Interpolate('%(prop:plugins)s'),
