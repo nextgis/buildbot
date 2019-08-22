@@ -37,9 +37,9 @@ c['schedulers'].append(forceScheduler)
 
 qt_git = 'git://github.com/nextgis-borsch/lib_qt5.git'
 
-qt_base_args = '-DQT_CONFIGURE_ARGS=-accessibility;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtandroidextras;-skip;qtcharts;-skip;qtconnectivity;-skip;qtdatavis3d;-skip;qtdoc;-skip;qtgamepad;-skip;qtgraphicaleffects;-skip;qtlocation;-skip;qtmultimedia;-skip;qtpurchasing;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qtremoteobjects;-skip;qtscript;-skip;qtscxml;-skip;qtsensors;-skip;qtserialbus;-skip;qtserialport;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebglplugin;-skip;qtwebsockets;-skip;qtwebview;-skip;qt3d;-skip;qtxmlpatterns;-no-feature-ftp;-no-feature-socks5;-nomake;examples;-nomake;tests;-skip;qtenginio;-skip;qtquick1;-skip;qtwebkit'
+qt_base_args = '-DQT_CONFIGURE_ARGS=-accessibility;-no-icu;-no-sql-sqlite;-no-qml-debug;-skip;qtactiveqt;-skip;qtandroidextras;-skip;qtcharts;-skip;qtconnectivity;-skip;qtdatavis3d;-skip;qtdoc;-skip;qtgamepad;-skip;qtgraphicaleffects;-skip;qtlocation;-skip;qtmultimedia;-skip;qtpurchasing;-skip;qtquickcontrols;-skip;qtquickcontrols2;-skip;qtremoteobjects;-skip;qtscript;-skip;qtscxml;-skip;qtsensors;-skip;qtserialbus;-skip;qtserialport;-skip;qtspeech;-skip;qtvirtualkeyboard;-skip;qtwayland;-skip;qtwebchannel;-skip;qtwebengine;-skip;qtwebglplugin;-skip;qtwebsockets;-skip;qtwebview;-skip;qt3d;-skip;qtxmlpatterns;-no-feature-ftp;-no-feature-socks5;-nomake;examples;-nomake;tests'
 
-# 5.13 -skip;qtlottie;
+# old options -skip;qtlottie;-skip;qtenginio;-skip;qtquick1;;-skip;qtwebkit
 
 qt_args = [ '-DBUILD_STATIC_LIBS=TRUE', '-DWITH_OpenSSL_EXTERNAL=ON',
     '-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release',
