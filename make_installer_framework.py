@@ -12,7 +12,7 @@ vm_cpu_count = 8
 mac_os_min_version = '10.12'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
-ngftp = 'ftp://192.168.245.227:8121/software/installer'
+ngftp = 'ftp://192.168.245.227:8121/software/installer/src/'
 ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
@@ -124,14 +124,19 @@ for os_type in os_types:
                                         env=env))
 
     # Send package to ftp
-    factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
-                                                '--ftp_user', ngftp_user, '--ftp',
-                                                ngftp + project_name + '_' + os_type + '/qt',
-                                                '--build_path', build_subdir],
-                                        name="send package to ftp",
-                                        haltOnFailure=True,
-                                        workdir=code_dir,
-                                        env=env))
+    factory.addStep(
+        steps.ShellCommand(
+            command=[
+                'python', upload_script_name, '--ftp_user', ngftp_user, '--ftp',
+                ngftp + project_name + '_' + os_type + '/qt', '--build_path', 
+                build_subdir
+            ],
+            name="send package to ftp",
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env
+        )
+    )
 
     # 2. Build installer framework
     code_dir_last = '{}_code'.format('installer')
@@ -181,14 +186,18 @@ for os_type in os_types:
                                         workdir=code_dir,
                                         env=env))
 
-    factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
-                                                '--ftp_user', ngftp_user, '--ftp',
-                                                ngftp + project_name + '_' + os_type,
-                                                '--build_path', '.'],
-                                           name="send package to ftp",
-                                           haltOnFailure=True,
-                                           workdir=code_dir,
-                                           env=env))
+    factory.addStep(
+        steps.ShellCommand(
+            command=[
+                'python', upload_script_name, '--ftp_user', ngftp_user, '--ftp',
+                ngftp + project_name + '_' + os_type, '--build_path', '.'
+            ],
+            name="send package to ftp",
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env
+        )
+    )
 
     builder = util.BuilderConfig(name = project_name + '_' + os_type,
                                 workernames = ['build-' + os_type],
