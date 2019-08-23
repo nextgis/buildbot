@@ -76,9 +76,10 @@ for os_type in os_types:
     if os_type == 'win':
         qt_base_args += ';-no-opengl'
 
-    qt_args.append(qt_base_args)
+    qt_args_set = qt_args
+    qt_args_set.append(qt_base_args)
 
-    run_args_ext = list(qt_args)
+    run_args_ext = list(qt_args_set)
     cmake_build_ext = list(cmake_build)
     env = {}
     worker_name = ''
