@@ -71,10 +71,11 @@ for os_type in os_types:
     build_subdir = 'build'
     build_dir = os.path.join(code_dir, build_subdir)
 
-    if os_type == 'mac':
-        qt_base_args += ';-qt-zlib;-qt-libpng;-qt-libjpeg;-no-cups'
     if os_type == 'win':
-        qt_base_args += ';-no-opengl'
+        qt_base_args += ';-no-opengl'    
+    elif os_type == 'mac':
+        qt_base_args += ';-qt-zlib;-qt-libpng;-qt-libjpeg;-no-cups'
+
 
     qt_args_set = qt_args
     qt_args_set.append(qt_base_args)
@@ -92,10 +93,7 @@ for os_type in os_types:
         cmake_build_ext.append('--')
         cmake_build_ext.append('-j' + str(vm_cpu_count))
         env = {
-            'PATH': [
-                        "/usr/local/bin",
-                        "${PATH}"
-                    ],
+            'PATH': ["/usr/local/bin", "${PATH}"],
             'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
         }
 
