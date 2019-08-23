@@ -71,17 +71,14 @@ for os_type in os_types:
     build_subdir = 'build'
     build_dir = os.path.join(code_dir, build_subdir)
 
-    qt_base_args_set = qt_base_args
+    qt_args_set = list(qt_args)   
+    
     if os_type == 'win':
-        qt_base_args_set += ';-no-opengl'    
+        qt_args_set.append(qt_base_args + ';-no-opengl')    
     elif os_type == 'mac':
-        qt_base_args_set += ';-qt-zlib;-qt-libpng;-qt-libjpeg;-no-cups'
+        qt_args_set.append(qt_base_args + ';-qt-zlib;-qt-libpng;-qt-libjpeg;-no-cups')
 
-
-    qt_args_set = qt_args
-    qt_args_set.append(qt_base_args_set)
-
-    run_args_ext = list(qt_args_set)
+    run_args_ext = qt_args_set
     cmake_build_ext = list(cmake_build)
     env = {}
     worker_name = ''
