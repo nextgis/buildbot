@@ -63,7 +63,7 @@ repositories = [
     {'repo':'py_shapely', 'args':['-DWITH_GEOS_EXTERNAL=ON', '-DWITH_NUMPY_EXTERNAL=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_uriparser', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_kml', 'args':['-DWITH_ZLIB=ON', '-DWITH_Boost=ON', '-DWITH_Boost_EXTERNAL=ON', '-DWITH_UriParser=ON', '-DWITH_UriParser_EXTERNAL=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':['-E','engine_style_resolver|dom_round_trip|engine_feature_view|engine_kmz_file|engine_style_inliner|engine_update']},
-    {'repo':'py_proj', 'args':['-DWITH_PROJ_EXTERNAL=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_proj', 'args':['-DWITH_PROJ_EXTERNAL=ON'], 'requirements':['cython'], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_sci', 'args':[], 'requirements':['numpy'], 'skip':['mac','win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_littlecms', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
@@ -198,6 +198,15 @@ def install_dependencies(factory, requirements, os):
         elif requirement == 'six':
             factory.addStep(
                 steps.ShellCommand(command=['pip', 'install', '--user', 'six'],
+                                    name="install " + requirement,
+                                    description=[requirement, "install"],
+                                    descriptionDone=[requirement, "installed"],
+                                    haltOnFailure=True,
+                                    env=env)
+            )
+        elif requirement == 'cython':
+            factory.addStep(
+                steps.ShellCommand(command=['pip', 'install', '--user', 'cython'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
