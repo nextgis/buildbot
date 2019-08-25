@@ -333,7 +333,7 @@ for repository in repositories:
                                            name="configure",
                                            haltOnFailure=True,
                                            timeout=125 * 60,
-                                           maxTime=60 * 60,
+                                           maxTime=5 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
 
@@ -342,7 +342,7 @@ for repository in repositories:
                                            name="make",
                                            haltOnFailure=True,
                                            timeout=125 * 60,
-                                           maxTime=5 * 60 * 60,
+                                           maxTime=15 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
 
