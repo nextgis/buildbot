@@ -64,7 +64,9 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             filters=dict(name=service_name))
 
         service_name = "/{0}".format(service_name)
+        log.msg('service_name: {}'.format(service_name))
         for instance in instances:
+            log.msg('{}'.format(instance))
             if service_name not in instance['Names']:
                 continue
             try:
