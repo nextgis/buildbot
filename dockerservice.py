@@ -63,14 +63,11 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         instances = docker_client.services(
             filters=dict(name=service_name))
 
-        # service_name = "/{0}".format(service_name)
         for instance in instances:
-            if service_name not in instance['Spec']['Name']:
-                continue
             try:
                 docker_client.remove_service(instance['ID'])
             except NotFound:
-                pass  # that's a race condition
+                pass
 
         # found = self._image_exists(docker_client, image)
         # if ((not found) or self.alwaysPull) and self.autopull:
