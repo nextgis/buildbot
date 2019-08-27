@@ -65,7 +65,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
 
         # service_name = "/{0}".format(service_name)
         for instance in instances:
-            if service_name not in instance['Name']:
+            if service_name not in instance['Spec']['Name']:
                 continue
             try:
                 docker_client.remove_service(instance['ID'])
