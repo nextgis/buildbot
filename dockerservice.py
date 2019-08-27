@@ -28,7 +28,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                     masterFQDN=None, autopull=False, alwaysPull=False, registryAuth=None,
                     environment=None, networks=None,
                     placementConstraints=None, secrets=None, **kwargs):
-        super().checkConfig(name, password, docker_host, image, volumes, masterFQDN, **kwargs)
+        super().checkConfig(name, password, docker_host, image=image, volumes=volumes, masterFQDN=masterFQDN, **kwargs)
 
     @defer.inlineCallbacks
     def reconfigService(self, name, password, docker_host, image=None, command=None,
@@ -37,7 +37,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                         environment=None, networks=None,
                         placementConstraints=None, secrets=None, **kwargs):
 
-        yield super().reconfigService(name, password, docker_host, image, command, volumes, followStartupLogs, masterFQDN, autopull, alwaysPull, **kwargs)
+        yield super().reconfigService(name, password, docker_host, image=image, command=command, volumes=volumes, followStartupLogs=followStartupLogs, masterFQDN=masterFQDN, autopull=autopull, alwaysPull=alwaysPull, **kwargs)
 
         self.client_args = {'base_url': docker_host, 'tls': False}
         # Prepare the parameters for the Docker Client object.
@@ -47,7 +47,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.registryAuth = registryAuth or {}
         self.secrets = secrets or []
 
-    def _thd_start_instance(self, image, dockerfile, volumes):
+    def _thd_start_instance(self, image, dockerfile, volumes, custom_context, encoding, buildargs):
         docker_client = self._getDockerClient()
 
         if self.registryAuth:
