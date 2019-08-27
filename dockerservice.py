@@ -68,7 +68,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             if service_name not in instance['Names']:
                 continue
             try:
-                docker_client.remove_service(instance['ID'])
+                docker_client.remove_service(instance['Id'])
             except NotFound:
                 pass  # that's a race condition
 
@@ -120,30 +120,29 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             name=self.getContainerName(),
             networks=self.networks)
 
-        if instance.get('ID') is None:
+        if instance.get('Id') is None:
             log.msg('Failed to create the service')
             raise LatentWorkerFailedToSubstantiate(
                 'Failed to start service'
             )
-        shortid = instance['ID'][:6]
-        log.msg('Service created, ID: %s ...' % (shortid,))
+        shortid = instance['Id'][:6]
+        log.msg('Service created, Id: %s ...' % (shortid,))
         instance['image'] = image
         self.instance = instance
 
         if self.followStartupLogs:
-            logs = docker_client.service_logs(
-                container=instance, stdout=True, stderr=True, follow=True)
+            logs = docker_client.service_logs(instance, stdout=True, stderr=True, follow=True)
             for line in logs:
                 log.msg("docker VM %s: %s" % (shortid, line.strip()))
                 if self.conn:
                     break
             del logs
-        return [instance['ID'], image]
+        return [instance['Id'], image]
 
     def _thd_stop_instance(self, instance, fast):
         docker_client = self._getDockerClient()
-        log.msg('Stopping service %s ...' % instance['ID'][:6])
-        docker_client.remove_service(instance['ID'])
+        log.msg('Stopping service %s ...' % instance['Id'][:6])
+        docker_client.remove_service(instance['Id'])
         if self.image is None: # This is case where image create locally from Dockerfile.
             try:
                 docker_client.remove_image(image=instance['image'])
