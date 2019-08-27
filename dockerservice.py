@@ -63,14 +63,12 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         instances = docker_client.services(
             filters=dict(name=service_name))
 
-        service_name = "/{0}".format(service_name)
-        log.msg('service_name: {}'.format(service_name))
+        # service_name = "/{0}".format(service_name)
         for instance in instances:
-            log.msg('{}'.format(instance))
-            if service_name not in instance['Names']:
+            if service_name not in instance['Name']:
                 continue
             try:
-                docker_client.remove_service(instance['Id'])
+                docker_client.remove_service(instance['ID'])
             except NotFound:
                 pass  # that's a race condition
 
@@ -122,13 +120,13 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             name=self.getContainerName(),
             networks=self.networks)
 
-        if instance.get('Id') is None:
+        if instance.get('ID') is None:
             log.msg('Failed to create the service')
             raise LatentWorkerFailedToSubstantiate(
                 'Failed to start service'
             )
-        shortid = instance['Id'][:6]
-        log.msg('Service created, Id: %s ...' % (shortid,))
+        shortid = instance['ID'][:6]
+        log.msg('Service created, ID: %s ...' % (shortid,))
         instance['image'] = image
         self.instance = instance
 
@@ -139,12 +137,12 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                 if self.conn:
                     break
             del logs
-        return [instance['Id'], image]
+        return [instance['ID'], image]
 
     def _thd_stop_instance(self, instance, fast):
         docker_client = self._getDockerClient()
-        log.msg('Stopping service %s ...' % instance['Id'][:6])
-        docker_client.remove_service(instance['Id'])
+        log.msg('Stopping service %s ...' % instance['ID'][:6])
+        docker_client.remove_service(instance['ID'])
         if self.image is None: # This is case where image create locally from Dockerfile.
             try:
                 docker_client.remove_image(image=instance['image'])
