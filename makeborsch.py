@@ -20,7 +20,7 @@ repositories = [
     {'repo':'py_subprocess32', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_kiwisolver', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'lib_spatialindex', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_spatialindex', 'args':['-DBUILD_TESTS=ON', '-DWITH_GTest_EXTERNAL=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_gsl', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_yaml', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_yaml', 'args':['-DWITH_YAML_EXTERNAL=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
