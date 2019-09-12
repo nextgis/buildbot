@@ -108,7 +108,7 @@ for os_type in os_types:
     factory.addStep(steps.ShellCommand(command=["cmake", run_args_ext, '..'],
                                        name="configure",
                                        haltOnFailure=True,
-                                       timeout = 60 * 40,
+                                       timeout=125 * 60,
                                        workdir=build_dir,
                                        env=env))
 
