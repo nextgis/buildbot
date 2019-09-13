@@ -358,6 +358,7 @@ for platform in platforms:
                 '-p', util.Interpolate('%(prop:plugins)s'),
                 '-vd', util.Interpolate('%(prop:valid_date)s'),
                 '-vu', util.Interpolate('%(prop:valid_user)s'),
+                '--sign_pwd','{}:{}'.format(username, userkey),
             ],
             name="Prepare packages data",
             maxTime=260 * 60,
