@@ -360,8 +360,8 @@ for platform in platforms:
                 '-vu', util.Interpolate('%(prop:valid_user)s'),
             ],
             name="Prepare packages data",
-            maxTime=20 * 60,
-            timeout=5 * 60,
+            maxTime=200 * 60,
+            timeout=35 * 60,
             haltOnFailure=True,
             workdir=code_dir,
             env=env
