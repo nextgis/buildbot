@@ -422,6 +422,8 @@ for platform in platforms:
             name="Create/Update repository",
             doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
             haltOnFailure=True,
+            maxTime=200 * 60,
+            timeout=35 * 60,
             workdir=code_dir,
             env=env
         )
@@ -436,6 +438,8 @@ for platform in platforms:
                                                 ],
                                         name="Create/Update repository",
                                         doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
+                                        maxTime=200 * 60,
+                                        timeout=35 * 60,
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
