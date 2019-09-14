@@ -361,8 +361,8 @@ for platform in platforms:
                 '--sign_pwd','{}:{}'.format(username, userkey),
             ],
             name="Prepare packages data",
-            maxTime=260 * 60,
-            timeout=135 * 60,
+            maxTime=200 * 60,
+            timeout=120 * 60,
             haltOnFailure=True,
             workdir=code_dir,
             env=env
@@ -423,8 +423,8 @@ for platform in platforms:
             name="Create/Update repository",
             doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
             haltOnFailure=True,
-            maxTime=260 * 60,
-            timeout=135 * 60,
+            maxTime=200 * 60,
+            timeout=120 * 60,
             workdir=code_dir,
             env=env
         )
@@ -439,8 +439,8 @@ for platform in platforms:
                                                 ],
                                         name="Create/Update repository",
                                         doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
-                                        maxTime=260 * 60,
-                                        timeout=135 * 60,
+                                        maxTime=200 * 60,
+                                        timeout=120 * 60,
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
