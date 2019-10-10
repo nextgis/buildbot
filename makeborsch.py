@@ -71,6 +71,7 @@ repositories = [
     {'repo':'lib_bzip2', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_harfbuzz', 'args':['-DHB_HAVE_FREETYPE=ON','-DWITH_Freetype_EXTERNAL=ON','-DWITH_Freetype=ON', '-DHB_HAVE_CORETEXT=OFF', '-DHB_BUILD_SUBSET=OFF', '-DHB_BUILD_TESTS=OFF'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_pillow', 'args':['-DWITH_JPEG_EXTERNAL=ON','-DWITH_OpenJPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_Freetype_EXTERNAL=ON','-DWITH_LCMS_EXTERNAL=ON','-DWITH_WEBP_EXTERNAL=ON','-DWITH_WEBPMUX_EXTERNAL=ON','-DWITH_WEBPDEMUX_EXTERNAL=ON', '-DWITH_ZLIB=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'nextgis_datastore', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GDAL=ON', '-DWITH_GDAL_EXTERNAL=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis', 'test_regex':[]},
 ]
 
 skip_send2github = [
