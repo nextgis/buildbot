@@ -12,7 +12,7 @@ repositories = [
     {'repo':'py_sip', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_sqlite', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_gif', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'lib_geos', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_geos', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qhull', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_expat', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'numpy', 'args':[], 'requirements':[], 'skip':['win32-static','win64-static','mac-static'], 'org':'nextgis-borsch', 'test_regex':[]},

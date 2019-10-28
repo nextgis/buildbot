@@ -37,7 +37,9 @@ c['builders'] = []
 project_name = 'create_installer'
 generator = 'Visual Studio 15 2017'
 create_updater_package = False
-binary_repo_refix = "https://rm.nextgis.com/api/repo" #"http://nextgis.com/programs/desktop/repository-" // https://rm.nextgis.com/api/repo/4/installer/devel/ https://rm.nextgis.com/api/repo/4/installer/stable/
+binary_repo_refix = "https://rm.nextgis.com/api/repo" 
+#"http://nextgis.com/programs/desktop/repository-" // 
+# https://rm.nextgis.com/api/repo/4/installer/devel/repository-win32-dev/Updates.xml https://rm.nextgis.com/api/repo/4/installer/stable/repository-win32/Updates.xml
 
 build_lock = util.WorkerLock("create_installer_worker_builds",
     maxCount=1,
