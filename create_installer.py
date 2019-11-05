@@ -41,6 +41,7 @@ binary_repo_refix = "https://rm.nextgis.com/api/repo"
 #"http://nextgis.com/programs/desktop/repository-" // 
 # https://rm.nextgis.com/api/repo/4/installer/devel/repository-win32-dev/Updates.xml https://rm.nextgis.com/api/repo/4/installer/stable/repository-win32/Updates.xml
 
+
 build_lock = util.WorkerLock("create_installer_worker_builds",
     maxCount=1,
     maxCountForWorker={'build-win': 1, 'build-mac': 1}
@@ -160,10 +161,34 @@ forceScheduler_standalone_ex = schedulers.ForceScheduler(
     ],
 )
 
+forceScheduler_local = schedulers.ForceScheduler(
+    name=project_name + "_local",
+    label="Create intranet installer",
+    buttonName="Create intranet installer",
+    builderNames=[
+        project_name + "_win32",
+        project_name + "_win64",
+        project_name + "_mac",
+    ],
+    properties=[
+        util.StringParameter(
+            name="url", 
+            label="Installer URL:",
+            default=binary_repo_refix, 
+            size=40),
+        util.StringParameter(
+            name="suffix",
+            label="Installer name and URL path suffix (use '-dev' for default):",
+            default="-local", 
+            size=40),
+    ],
+)
+
 c['schedulers'].append(forceScheduler_create)
 c['schedulers'].append(forceScheduler_update)
 c['schedulers'].append(forceScheduler_standalone)
 c['schedulers'].append(forceScheduler_standalone_ex)
+c['schedulers'].append(forceScheduler_local)
 
 @util.renderer
 def now(props):
@@ -175,6 +200,8 @@ def commandArgs(props):
     if props.getProperty('scheduler') ==  project_name + "_create":
         command.append('create')
     elif props.getProperty('scheduler').endswith("_standalone"):
+        command.append('create')    
+    elif props.getProperty('scheduler').endswith("_local"):
         command.append('create')
     elif props.getProperty('scheduler') ==  project_name + "_update":
         command.extend(['update', '--force', props.getProperty('force'),])
@@ -323,7 +350,7 @@ for platform in platforms:
                                         haltOnFailure=False, warnOnWarnings=True,
                                         flunkOnFailure=False, warnOnFailure=True,
                                         # haltOnFailure=True, # The repository may not be exists
-                                        # doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_create"),
+                                        doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_local"),
                                         workdir=code_dir,
                                         env=env))
 
@@ -454,7 +481,7 @@ for platform in platforms:
                                                 '-s', '--ftp-create-dirs', ngftp + '/'],
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
-                                       doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
+                                       doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local"),
                                        workdir=build_dir,
                                        env=env))
 
@@ -530,7 +557,7 @@ for platform in platforms:
             util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base),
             '-s', '--ftp-create-dirs', siteftp + '/'],
         name="Upload repository archive to site",
-        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
+        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update")),
         haltOnFailure=True,
         workdir=build_dir,
         env=env))
@@ -542,7 +569,7 @@ for platform in platforms:
             '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
             '--login', username, '--password', userkey],
         name="Create release in repka",
-        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
+        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update")),
         haltOnFailure=True,
         workdir=code_dir,
         env=env))
