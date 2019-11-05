@@ -220,8 +220,10 @@ def repoUrl(props, platform):
         repo_id = platform['repo_id'] 
         repka_suffix = 'devel' if suffix == '-dev' else 'stable'
         return '{}/{}/installer/{}/repository-{}{}'.format(url, repo_id, repka_suffix, platform['name'], suffix)
+    elif repka_suffix == '-local':
+        return '{}/{}'.format(url, platform['name'])
     else:
-        return '{}-{}{}'.format(url, platform['name'], suffix)
+        return '{}/{}{}'.format(url, platform['name'], suffix)
 
 platforms = [
     {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
@@ -516,6 +518,7 @@ for platform in platforms:
             ],
             name="Create zip from repository",
             haltOnFailure=True,
+            doStepIf=(lambda step: step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update")),
             workdir=build_dir,
             env=env
         )
