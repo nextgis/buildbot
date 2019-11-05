@@ -220,7 +220,7 @@ def repoUrl(props, platform):
         repo_id = platform['repo_id'] 
         repka_suffix = 'devel' if suffix == '-dev' else 'stable'
         return '{}/{}/installer/{}/repository-{}{}'.format(url, repo_id, repka_suffix, platform['name'], suffix)
-    elif repka_suffix == '-local':
+    elif suffix == '-local':
         return '{}/{}'.format(url, platform['name'])
     else:
         return '{}/{}{}'.format(url, platform['name'], suffix)
