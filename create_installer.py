@@ -318,7 +318,7 @@ for platform in platforms:
         ],
         name="Download repository",
         haltOnFailure=True,
-        doStepIf=(lambda step: step.getProperty("scheduler") != project_name + "_create"),
+        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local")),
         workdir=build_dir,
         env=env))
 
