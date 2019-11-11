@@ -320,7 +320,7 @@ for platform in platforms:
         ],
         name="Download repository",
         haltOnFailure=True,
-        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local")),
+        doStepIf=(lambda step: False if (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local") else True ),
         workdir=build_dir,
         env=env))
 
@@ -483,7 +483,7 @@ for platform in platforms:
                                                 '-s', '--ftp-create-dirs', ngftp + '/'],
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
-                                       doStepIf=(lambda step: (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local")),
+                                       doStepIf=(lambda step: True if (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local") else False),
                                        workdir=build_dir,
                                        env=env))
 
@@ -518,7 +518,7 @@ for platform in platforms:
             ],
             name="Create zip from repository",
             haltOnFailure=True,
-            doStepIf=(lambda step: (step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update"))),
+            doStepIf=(lambda step: True if (step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update")) else False),
             workdir=build_dir,
             env=env
         )
@@ -561,7 +561,7 @@ for platform in platforms:
             util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base),
             '-s', '--ftp-create-dirs', siteftp + '/'],
         name="Upload repository archive to site",
-        doStepIf=(lambda step: (step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update"))),
+        doStepIf=(lambda step: True if (step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update")) else False),
         haltOnFailure=True,
         workdir=build_dir,
         env=env))
@@ -573,7 +573,7 @@ for platform in platforms:
             '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
             '--login', username, '--password', userkey],
         name="Create release in repka",
-        doStepIf=(lambda step: (step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update"))),
+        doStepIf=(lambda step: True if (step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_update")) else False),
         haltOnFailure=True,
         workdir=code_dir,
         env=env))
