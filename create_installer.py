@@ -571,7 +571,7 @@ for platform in platforms:
     # 9. Create new release in repka
     factory.addStep(steps.ShellCommand(
         command=["python", repka_script_name, '--repo_id', platform['repo_id'],
-            '--description', util.Interpolate('"%(prop:notes)s"'),
+            '--description', util.Interpolate('%(prop:notes)s'),
             '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
             '--login', username, '--password', userkey],
         name="Create release in repka",
