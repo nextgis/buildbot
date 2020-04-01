@@ -8,7 +8,7 @@ import os
 c = {}
 
 repositories = [
-    # {'repo':'lib_geos', 'deb':'geos', 'subdir': '', 'org':'nextgis-borsch', 'os': ['bionic', 'stretch','xenial', 'buster', ], 'repo_id': 11},
+    {'repo':'lib_geos', 'deb':'geos', 'subdir': '', 'org':'nextgis-borsch', 'os': ['bionic', 'stretch','xenial', 'buster', ], 'repo_id': 11},
     # {'repo':'lib_gdal', 'version':'2.4.0', 'deb':'gdal', 'subdir': 'master', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
@@ -51,6 +51,9 @@ logfile = 'stdio'
 username = 'buildbot'
 userkey = os.environ.get("BUILDBOT_PASSWORD")
 
+root_dir = 'build'
+ver_dir = root_dir + '/ver'
+
 # Create builders
 for repository in repositories:
 
@@ -67,9 +70,8 @@ for repository in repositories:
 
     builderNames = []
     for platform in platforms:
-        if platform['name'] not in repository['os']:
-            continue
-        builderNames.append(project_name + "_" + platform['name'])
+        if platform['name'] in repository['os']:
+            builderNames.append(project_name + "_" + platform['name'])
 
     scheduler = schedulers.SingleBranchScheduler(
                                 name=project_name + "_deb",
@@ -83,11 +85,8 @@ for repository in repositories:
                                 builderNames=builderNames,))
 
     deb_name = repository['deb']
-
-    root_dir = 'build'
     code_dir_last = deb_name + '_code'
     code_dir = root_dir + '/' + code_dir_last
-    ver_dir = root_dir + '/ver'
 
     for platform in platforms:
         if platform['name'] not in repository['os']:
