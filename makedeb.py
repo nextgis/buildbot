@@ -84,8 +84,9 @@ for repository in repositories:
 
     deb_name = repository['deb']
 
+    root_dir = 'build'
     code_dir_last = deb_name + '_code'
-    code_dir = 'build/' + code_dir_last
+    code_dir = root_dir + '/' + code_dir_last
 
     ## release build ###############################################################
     factory = util.BuildFactory()
@@ -95,22 +96,21 @@ for repository in repositories:
             continue
 
         # 1. checkout the source
-        deb_dir = 'build/' + deb_name + '_deb'
-
         factory.addStep(steps.Git(repourl=repourl,
-            mode='full', shallow=True, submodules=False, workdir=code_dir))
+            mode='full', shallow=True, submodules=False, 
+            workdir=code_dir))
         factory.addStep(steps.ShellSequence(commands=[
-                    util.ShellArg(command=["curl", script_src, '-o', script_name, '-s', '-L'], 
-                    logfile=logfile),
-                ],
-                name="Download scripts",
-                haltOnFailure=True,
-                workdir=code_dir))
+                util.ShellArg(command=["curl", script_src, '-o', script_name, '-s', '-L'], 
+                logfile=logfile),
+            ],
+            name="Download scripts",
+            haltOnFailure=True,
+            workdir=root_dir))
 
         # 2. Make configure to generate version.str 
-        ver_dir = code_dir + '/ver'
+        ver_dir = root_dir + '/ver'
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
-        factory.addStep(steps.ShellCommand(command=["cmake", '../' + project_name],
+        factory.addStep(steps.ShellCommand(command=["cmake", '../' + code_dir_last],
             name="Make configure to generate version.str",
             haltOnFailure=True, timeout=125 * 60, maxTime=5 * 60 * 60,
             workdir=ver_dir))
@@ -121,7 +121,7 @@ for repository in repositories:
                 '--password', userkey
             ],
             name="Create debian folder", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=code_dir))
+            maxTime=5 * 60 * 60, workdir=root_dir))
 
         # 4. Create packages
         factory.addStep(steps.ShellSequence(commands=[
@@ -132,7 +132,7 @@ for repository in repositories:
                     logfile=logfile),
             ],
             name="Create packages", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=code_dir + '/' + project_name
+            maxTime=5 * 60 * 60, workdir=code_dir
             ))
 
         # 5. Upload to repka
@@ -141,7 +141,7 @@ for repository in repositories:
                 '--password', userkey
             ],
             name="Upload to repka", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=code_dir))
+            maxTime=5 * 60 * 60, workdir=root_dir))
         
         builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
             workernames = [platform['worker']],
