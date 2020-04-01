@@ -10,7 +10,15 @@ import sys
 import argparse
 import shutil
 import site
-import urllib2, json
+import json
+
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
+
 
 repka_endpoint = 'https://rm.nextgis.com'
 repo_id = 2
@@ -24,8 +32,7 @@ compilers = {
 def get_packet_id(repo_id, packet_name):
     url =  repka_endpoint + '/api/packet?repository={}&filter={}'.format(repo_id, packet_name)
     color_print('Check packet url: ' + url, False, 'OKGRAY')
-    request = urllib2.Request(url)
-    response = urllib2.urlopen(request)
+    response = urlopen(url)
     packets = json.loads(response.read())
     for packet in packets:
         if packet['name'] == packet_name: 
@@ -35,8 +42,7 @@ def get_packet_id(repo_id, packet_name):
 def get_release(packet_id, tag):
     url =  repka_endpoint + '/api/release?packet={}'.format(packet_id)
     color_print('Check release url: ' + url, False, 'OKGRAY')
-    request = urllib2.Request(url)
-    response = urllib2.urlopen(request)
+    response = urlopen(url)
     releases = json.loads(response.read())
     if releases is None:
         color_print('Release ID not found', False, 'LCYAN')
@@ -80,7 +86,7 @@ class bcolors:
 
 def color_print(text, bold, color):
     if sys.platform == 'win32':
-        print text
+        print(text)
     else:
         out_text = ''
         if bold:
@@ -106,7 +112,7 @@ def color_print(text, bold, color):
         else:
             out_text += bcolors.OKGRAY
         out_text += text + bcolors.ENDC
-        print out_text
+        print(out_text)
 
 base_ftp_path = 'software/installer/src'
 package_path_suffix = '/package.zip'

@@ -64,7 +64,7 @@ forceScheduler_create = schedulers.ForceScheduler(
             size=280),
         util.StringParameter(
             name="url",
-            label="Installer URL:",
+            label="Installer URL (without ending slash):",
             default=binary_repo_refix, 
             size=40),
         util.StringParameter(
@@ -93,7 +93,7 @@ forceScheduler_update = schedulers.ForceScheduler(
     properties=[
         util.StringParameter(
             name="url", 
-            label="Installer URL:",
+            label="Installer URL (without ending slash):",
             default=binary_repo_refix, 
             size=40),
         util.StringParameter(
@@ -173,7 +173,7 @@ forceScheduler_local = schedulers.ForceScheduler(
     properties=[
         util.StringParameter(
             name="url", 
-            label="Installer URL:",
+            label="Installer URL (without ending slash):",
             default=binary_repo_refix, 
             size=40),
         util.StringParameter(
