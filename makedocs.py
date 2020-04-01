@@ -78,14 +78,14 @@ for lang in langs:
                                       description=["make", "pdf for NextGIS Web"],
                                       workdir="build/source/docs_ngweb",
                                       env=env,))
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+                              description=["make", "pdf for NextGIS FormBuilder"],
+                              workdir="build/source/docs_formbuilder",
+                              env=env,))
     if lang == 'ru':
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Manager"],
                                       workdir="build/source/docs_ngmanager",
-                                      env=env,))
-        factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                                      description=["make", "pdf for NextGIS FormBuilder"],
-                                      workdir="build/source/docs_formbuilder",
                                       env=env,))
         # Create PDF only on common products
         # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
