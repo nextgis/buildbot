@@ -102,6 +102,8 @@ for repository in repositories:
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["curl", script_src, '-o', script_name, '-s', '-L'], 
                 logfile=logfile),
+                util.ShellArg(command=["apt", 'update'], 
+                logfile=logfile),
             ],
             name="Download scripts",
             haltOnFailure=True,
@@ -126,7 +128,7 @@ for repository in repositories:
         # 4. Create packages
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=['mk-build-deps', '--install', 
-                    '--tool=apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes', 'debian/control'], 
+                    '--tool=apt -o Debug::pkgProblemResolver=yes --no-install-recommends --yes', 'debian/control'], 
                     logfile=logfile),
                 util.ShellArg(command=["dpkg-buildpackage", '-b', '-us', '-uc'], 
                     logfile=logfile),
