@@ -117,7 +117,7 @@ for repository in repositories:
 
         # 3. Create debian folder
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian', '-vf', 'ver/version.str', 
-                '-rp', project_name, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
+                '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
                 '--password', userkey
             ],
             name="Create debian folder", haltOnFailure=True, timeout=125 * 60,
@@ -137,7 +137,7 @@ for repository in repositories:
 
         # 5. Upload to repka
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'make_release', '-vf', 'ver/version.str', 
-                '-rp', project_name, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
+                '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
                 '--password', userkey
             ],
             name="Upload to repka", haltOnFailure=True, timeout=125 * 60,
