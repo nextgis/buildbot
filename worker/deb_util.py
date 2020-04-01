@@ -116,7 +116,7 @@ def get_packet_id(repo_id, packet_name, username, password):
     request = add_auth(request, username, password)
 
     response = urlopen(request)
-    packets = json.loads(response.read())
+    packets = response.json()
     for packet in packets:
         if packet['name'] == packet_name: 
             return packet['id']
@@ -128,7 +128,7 @@ def get_release_counter(packet_id, tag, distro_codename, username, password):
     request = Request(url)
     request = add_auth(request, username, password)
     response = urlopen(request)
-    releases = json.loads(response.read())
+    releases = response.json()
     counter = 0
     if releases is None:
         color_print('Release ID not found', False, 'LCYAN')
@@ -173,7 +173,7 @@ def create_release(packet_id, name, description, tag, distrib, distrib_version,
     except HTTPError as e:
         print(e.read())
         exit(1)
-    release = json.loads(response.read())
+    release = response.json()
 
     color_print('Release with ID {} created'.format(release['id']), False, 'LCYAN')
 
