@@ -126,7 +126,7 @@ for repository in repositories:
         # 4. Create packages
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=['mk-build-deps', '--install', 
-                    '--tool="apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes"', 'debian/control'], 
+                    "--tool='apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes'", 'debian/control'], 
                     logfile=logfile),
                 util.ShellArg(command=["dpkg-buildpackage", '-b', '-us', '-uc'], 
                     logfile=logfile),
