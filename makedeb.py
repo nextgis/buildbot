@@ -87,14 +87,13 @@ for repository in repositories:
     root_dir = 'build'
     code_dir_last = deb_name + '_code'
     code_dir = root_dir + '/' + code_dir_last
-
-    ## release build ###############################################################
-    factory = util.BuildFactory()
+    ver_dir = root_dir + '/ver'
 
     for platform in platforms:
         if platform['name'] not in repository['os']:
             continue
 
+        factory = util.BuildFactory()
         # 1. checkout the source
         factory.addStep(steps.Git(repourl=repourl,
             mode='full', shallow=True, submodules=False, 
@@ -110,7 +109,6 @@ for repository in repositories:
             workdir=root_dir))
 
         # 2. Make configure to generate version.str 
-        ver_dir = root_dir + '/ver'
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
         factory.addStep(steps.ShellCommand(command=["cmake", '../' + code_dir_last],
             name="Make configure to generate version.str",
