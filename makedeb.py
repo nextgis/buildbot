@@ -65,16 +65,22 @@ for repository in repositories:
                            pollinterval = 5400,)
     c['change_source'].append(git_poller)
 
+    builderNames = []
+    for platform in platforms:
+        if platform['name'] not in repository['os']:
+            continue
+        builderNames.append(project_name + "_" + platform['name'])
+
     scheduler = schedulers.SingleBranchScheduler(
                                 name=project_name + "_deb",
                                 change_filter=util.ChangeFilter(project = git_project_name, branch="master"),
                                 treeStableTimer=1*60,
-                                builderNames=[project_name + "_deb"])
+                                builderNames=builderNames,)
     c['schedulers'].append(scheduler)
 
     c['schedulers'].append(schedulers.ForceScheduler(
                                 name=project_name + "_force_deb",
-                                builderNames=[project_name + "_deb"]))
+                                builderNames=builderNames,))
 
     deb_name = repository['deb']
 
@@ -137,7 +143,7 @@ for repository in repositories:
             name="Upload to repka", haltOnFailure=True, timeout=125 * 60,
             maxTime=5 * 60 * 60, workdir=code_dir))
         
-        builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
+        builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
             workernames = [platform['worker']],
             factory = factory,
             locks = [build_lock.access('exclusive')], # counting

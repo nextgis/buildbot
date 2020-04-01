@@ -397,7 +397,7 @@ for repository in repositories:
                                             'url' : 'https://rm.nextgis.com/api/repo',
                                         }))
 
-        builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
+        builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
                                     workernames = [platform['worker']],
                                     factory = factory,
                                     locks = [build_lock.access('exclusive')], # counting
