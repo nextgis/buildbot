@@ -208,7 +208,7 @@ def get_distro():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Prepare debian package')
-    parser.add_argument('-vf', '--version_file', help='version.str path', required=True)
+    parser.add_argument('-vf', '--version_file', help='version.str path')
     parser.add_argument('-op', '--operation', help='operation to process', choices=['info', 'changelog', 'tar', 'make_release', 'create_debian', 'add_repo',], required=True)
     parser.add_argument('-rp', '--repo_path', help='repository path')
     parser.add_argument('-dp', '--deb_files_path', help='deb files path')

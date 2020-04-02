@@ -100,16 +100,17 @@ for repository in repositories:
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["curl", script_src, '-o', script_name, '-s', '-L'], 
                 logfile=logfile),
-                # util.ShellArg(command=["/bin/sh", "-c", "echo deb https://rm.nextgis.com/api/repo/{}/deb {} main | tee -a /etc/apt/sources.list".format(repository['repo_id'], platform['name'])], 
-                # logfile=logfile),
-                # util.ShellArg(command=["/bin/sh", "-c", "curl -s -L https://rm.nextgis.com/api/repo/{}/deb/key.gpg | apt-key add -".format(repository['repo_id']),], 
-                # logfile=logfile),
-                util.ShellArg(command=["apt", 'update'], 
-                logfile=logfile),
             ],
             name="Download scripts",
             haltOnFailure=True,
             workdir=root_dir))
+
+        factory.addStep(steps.ShellCommand(command=["python", script_name, '-op', 'add_repo', 
+                '--repo_id', repository['repo_id'], '--login', username, '--password', userkey
+            ],
+            name="Add apt repository", haltOnFailure=True, timeout=125 * 60,
+            maxTime=5 * 60 * 60, workdir=root_dir))
+        
 
         # 2. Make configure to generate version.str 
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
