@@ -212,7 +212,7 @@ if __name__ == "__main__":
     parser.add_argument('-op', '--operation', help='operation to process', choices=['info', 'changelog', 'tar', 'make_release', 'create_debian', 'add_repo',], required=True)
     parser.add_argument('-rp', '--repo_path', help='repository path')
     parser.add_argument('-dp', '--deb_files_path', help='deb files path')
-    parser.add_argument('-pn', '--package_name', help='package name', required=True)
+    parser.add_argument('-pn', '--package_name', help='package name')
     parser.add_argument('--repo_id', dest='repo_id', help='{} repository identifier'.format(repka_endpoint))  
     parser.add_argument('--repo_component', dest='repo_component', default='main', help='Repository component. Usually main, contfib and non-free')   
     parser.add_argument('--login', dest='login', help='login for {}'.format(repka_endpoint))
