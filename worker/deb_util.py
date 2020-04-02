@@ -34,7 +34,8 @@ from urllib.request import urlopen, Request, HTTPError
 
 format_simple = '--pretty=format:%h - %an : %s'
 format_debian = '--pretty=format:  * %h - %an : %s'
-repka_endpoint = 'https://rm.nextgis.com'
+repka_site = 'rm.nextgis.com'
+repka_endpoint = 'https://{}'.format(repka_site)
 
 class bcolors:
     HEADER = '\033[95m'
@@ -116,7 +117,7 @@ def get_packet_id(repo_id, packet_name, username, password):
     request = add_auth(request, username, password)
 
     response = urlopen(request)
-    packets = response.json()
+    packets = json.loads(response.read().decode('utf-8'))
     for packet in packets:
         if packet['name'] == packet_name: 
             return packet['id']
@@ -128,7 +129,7 @@ def get_release_counter(packet_id, tag, distro_codename, username, password):
     request = Request(url)
     request = add_auth(request, username, password)
     response = urlopen(request)
-    releases = response.json()
+    releases = json.loads(response.read().decode('utf-8'))
     counter = 0
     if releases is None:
         color_print('Release ID not found', False, 'LCYAN')
@@ -173,7 +174,7 @@ def create_release(packet_id, name, description, tag, distrib, distrib_version,
     except HTTPError as e:
         print(e.read())
         exit(1)
-    release = response.json()
+    release = json.loads(response.read().decode('utf-8'))
 
     color_print('Release with ID {} created'.format(release['id']), False, 'LCYAN')
 
@@ -208,7 +209,7 @@ def get_distro():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Prepare debian package')
     parser.add_argument('-vf', '--version_file', help='version.str path', required=True)
-    parser.add_argument('-op', '--operation', help='operation to process', choices=['info', 'changelog', 'tar', 'make_release', 'create_debian', ], required=True)
+    parser.add_argument('-op', '--operation', help='operation to process', choices=['info', 'changelog', 'tar', 'make_release', 'create_debian', 'add_repo',], required=True)
     parser.add_argument('-rp', '--repo_path', help='repository path')
     parser.add_argument('-dp', '--deb_files_path', help='deb files path')
     parser.add_argument('-pn', '--package_name', help='package name', required=True)
@@ -282,5 +283,23 @@ if __name__ == "__main__":
         counter = get_release_counter(packet_id, version, distro_codename, args.login, args.password)
         write_changelog(args.package_name, version, counter, distro_codename, args.repo_path)
         
+    elif args.operation == 'add_repo':
+        try:
+        # 1. Check exists
+        # https://rm.nextgis.com/api/repo/11/deb stretch Release
+            distro_version, distro_codename = get_distro()
+            url = repka_endpoint + 'api/repo/{}/deb/{}/Release'.format(args.repo_id, distro_codename)
+            request = Request(url)
+            request = add_auth(request, args.login, args.password)
+            response = urlopen(request)
+        # 2. Add repo
+            deb_url = repka_endpoint
+            if args.login is not None and args.password is not None:
+                deb_url = 'https://{}:{}@{}'.format(args.login, args.password, repka_site)
+            subprocess.call(["/bin/sh", "-c", "echo deb {}/api/repo/{}/deb {} {} | tee -a /etc/apt/sources.list".format(deb_url, args.repo_id, args.repo_component, distro_codename)])
+            subprocess.call(["/bin/sh", "-c", "curl -s -L {}/api/repo/{}/deb/key.gpg | apt-key add -".format(deb_url, args.repo_id)])
+        except:
+            pass
+        subprocess.call(["apt", 'update'])
     else:
         sys.exit('Unsupported operation {}'.format(args.operation))
