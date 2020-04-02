@@ -100,9 +100,9 @@ for repository in repositories:
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["curl", script_src, '-o', script_name, '-s', '-L'], 
                 logfile=logfile),
-                util.ShellArg(command=["echo", 'deb https://rm.nextgis.com/api/repo/{}/deb {} main'.format(repository['repo_id'], platform['name']), '>>', '/etc/apt/sources.list'], 
+                util.ShellArg(command=["/bin/sh", "-c", "echo deb https://rm.nextgis.com/api/repo/{}/deb {} main | tee -a /etc/apt/sources.list".format(repository['repo_id'], platform['name'])], 
                 logfile=logfile),
-                util.ShellArg(command=["apt-key", 'adv', '--fetch-keys', 'https://rm.nextgis.com/api/repo/{}/deb/key.gpg'.format(repository['repo_id'])], 
+                util.ShellArg(command=["/bin/sh", "-c", "curl -s -L https://rm.nextgis.com/api/repo/{}/deb/key.gpg | apt-key add -".format(repository['repo_id']),], 
                 logfile=logfile),
                 util.ShellArg(command=["apt", 'update'], 
                 logfile=logfile),
