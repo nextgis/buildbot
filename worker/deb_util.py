@@ -205,6 +205,14 @@ def get_distro():
         distro_codename = config.get('global', 'VERSION_CODENAME')
     return distro_version, distro_codename
 
+def get_package_version(file):
+    version = ''
+    with open(args.version_file) as f:
+        version = f.readline().rstrip()
+
+    if version is None or version == '':
+        sys.exit('Cannot find version')
+    return version
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Prepare debian package')
@@ -219,25 +227,21 @@ if __name__ == "__main__":
     parser.add_argument('--password', dest='password', help='password for {}'.format(repka_endpoint))
     args = parser.parse_args()
 
-    version = ''
-    with open(args.version_file) as f:
-        version = f.readline().rstrip()
-
-    if version is None or version == '':
-        sys.exit('Cannot find version')
-
     if args.operation == 'info':
         distro_version, distro_codename = get_distro()
+        version = get_package_version(args.version_file)
         print('Package: {}\nVersion: {}\nDistribution:\n  * version - {}\n  * codename - {}\n'.format(args.package_name, version, distro_version, distro_codename))
 
     elif args.operation == 'changelog':
         distro_version, distro_codename = get_distro()
+        version = get_package_version(args.version_file)
         packet_id = get_packet_id(args.repo_id, args.package_name, args.login, args.password)
         counter = get_release_counter(packet_id, version, distro_codename, args.login, args.password)
         write_changelog(args.package_name, version, counter, distro_codename, args.repo_path)
 
     elif args.operation == 'tar':
         distro_version, distro_codename = get_distro()
+        version = get_package_version(args.version_file)
         packet_id = get_packet_id(args.repo_id, args.package_name, args.login, args.password)
         counter = get_release_counter(packet_id, version, distro_codename, args.login, args.password)
         subprocess.call(["tar", '-caf', '{}_{}+{}.orig.tar.gz'.format(args.package, version, counter), args.repo_path, '--exclude-vcs'])
@@ -254,6 +258,7 @@ if __name__ == "__main__":
             file_uid, file_name = upload_file(deb_file, args.login, args.password)
             uploaded_files.append({"upload_name": file_uid, "name": file_name})
 
+        version = get_package_version(args.version_file)
         distro_version, distro_codename = get_distro()
         counter = get_release_counter(packet_id, version, distro_codename, args.login, args.password)
         tag_name = '{}+{}'.format(version, counter)
@@ -267,6 +272,7 @@ if __name__ == "__main__":
             subprocess.call(["git", 'clone', '--depth', '1', 'https://github.com/nextgis/ppa.git'])
         # 2 copy debian into repo
         distro_version, distro_codename = get_distro()
+        version = get_package_version(args.version_file)
         ppa_path = os.path.join('ppa', args.package_name)
         if os.path.exists(ppa_path) == False:
             sys.exit('No debian directory in path {}'.format(args.operation))
