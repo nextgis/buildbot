@@ -96,7 +96,7 @@ def upload_file(file_path, username, password):
     else:
         args = ['curl', '-F', 'file=@' + file_path, post_url]
     load_response = subprocess.check_output(args)
-    response = json.loads(load_response)
+    response = json.loads(load_response.decode())
 
     file_uid = response['file']
     file_name = response['name']
