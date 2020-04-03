@@ -110,9 +110,19 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=["python", script_name, '-op', 'add_repo', 
                 '--repo_id', repository['repo_id'], '--login', username, '--password', userkey
             ],
-            name="Add apt repository", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=root_dir))
-        
+            name="Add apt repository", haltOnFailure=True, workdir=root_dir))
+
+        factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian_changelog', '-vf', 'ver/version.str', 
+                '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
+                '--password', userkey
+            ],
+            name="Create debian directory", haltOnFailure=True, workdir=root_dir))
+
+        factory.addStep(steps.ShellCommand(command=['mk-build-deps', '--install', 
+                '--tool=apt -o Debug::pkgProblemResolver=yes --no-install-recommends --yes', 'debian/control'
+            ],
+            name="Install dependencies", haltOnFailure=True, timeout=25 * 60,
+            maxTime=2 * 60 * 60, workdir=code_dir))
 
         # 2. Make configure to generate version.str 
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
@@ -122,18 +132,14 @@ for repository in repositories:
             workdir=ver_dir))
 
         # 3. Create debian folder
-        factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian', '-vf', 'ver/version.str', 
+        factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'changelog', '-vf', 'ver/version.str', 
                 '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
                 '--password', userkey
             ],
-            name="Create debian folder", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=root_dir))
+            name="Create debian changelog", haltOnFailure=True, workdir=root_dir))
 
         # 4. Create packages
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=['mk-build-deps', '--install', 
-                    '--tool=apt -o Debug::pkgProblemResolver=yes --no-install-recommends --yes', 'debian/control'], 
-                    logfile=logfile),
                 util.ShellArg(command=["dpkg-buildpackage", '-b', '-us', '-uc'], 
                     logfile=logfile),
             ],

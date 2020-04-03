@@ -271,24 +271,25 @@ if __name__ == "__main__":
         if os.path.exists('ppa') == False:
             subprocess.call(["git", 'clone', '--depth', '1', 'https://github.com/nextgis/ppa.git'])
         # 2 copy debian into repo
-        distro_version, distro_codename = get_distro()
-        version = get_package_version(args.version_file)
         ppa_path = os.path.join('ppa', args.package_name)
         if os.path.exists(ppa_path) == False:
             sys.exit('No debian directory in path {}'.format(args.operation))
         
+        distro_version, distro_codename = get_distro()
         ppa_dist_path = os.path.join(ppa_path, distro_codename)
         out_path = os.path.join(args.repo_path, 'debian')
         shutil.rmtree(out_path, True)
         if os.path.exists(ppa_dist_path) == False:
             ppa_dist_path = os.path.join(ppa_path, 'debian')
         shutil.copytree(ppa_dist_path, out_path)
-
-        # 3 create changelog
+        
+    elif args.operation == 'create_debian_changelog':
+        distro_version, distro_codename = get_distro()
+        version = get_package_version(args.version_file)
         packet_id = get_packet_id(args.repo_id, args.package_name, args.login, args.password)
         counter = get_release_counter(packet_id, version, distro_codename, args.login, args.password)
         write_changelog(args.package_name, version, counter, distro_codename, args.repo_path)
-        
+
     elif args.operation == 'add_repo':
         try:
         # 1. Check exists
