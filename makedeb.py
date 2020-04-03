@@ -112,7 +112,7 @@ for repository in repositories:
             ],
             name="Add apt repository", haltOnFailure=True, workdir=root_dir))
 
-        factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian_changelog', '-vf', 'ver/version.str', 
+        factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian', '-vf', 'ver/version.str', 
                 '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
                 '--password', userkey
             ],
