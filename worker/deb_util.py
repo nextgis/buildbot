@@ -288,7 +288,8 @@ if __name__ == "__main__":
         try:
         # 1. Check exists
         # https://rm.nextgis.com/api/repo/11/deb stretch Release
-            url = repka_endpoint + 'api/repo/{}/deb/dists/{}/Release'.format(args.repo_id, distro_codename)
+            url = repka_endpoint + '/api/repo/{}/deb/dists/{}/Release'.format(args.repo_id, distro_codename)
+            print('Check {}'.format(url))
             request = Request(url)
             request = add_auth(request, args.login, args.password)
             response = urlopen(request)
@@ -301,7 +302,7 @@ if __name__ == "__main__":
             subprocess.call(["/bin/sh", "-c", "echo deb {}/api/repo/{}/deb {} {} | tee -a /etc/apt/sources.list".format(repka_endpoint, args.repo_id, distro_codename, args.repo_component)])
             subprocess.call(["/bin/sh", "-c", "curl -s -L {}/api/repo/{}/deb/key.gpg | apt-key add -".format(repka_endpoint, args.repo_id)])
         except:
-            print('Skip add repo: {}/api/repo/{}/deb {} {}'.format(repka_endpoint, args.repo_id, args.repo_component, distro_codename))
+            print('Skip add repo: {}/api/repo/{}/deb {} {}'.format(repka_endpoint, args.repo_id, distro_codename, args.repo_component))
             pass
         subprocess.call(["apt", 'update'])
     else:
