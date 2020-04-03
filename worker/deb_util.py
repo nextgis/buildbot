@@ -284,11 +284,11 @@ if __name__ == "__main__":
         shutil.copytree(ppa_dist_path, out_path)
         
     elif args.operation == 'add_repo':
+        distro_version, distro_codename = get_distro()
         try:
         # 1. Check exists
         # https://rm.nextgis.com/api/repo/11/deb stretch Release
-            distro_version, distro_codename = get_distro()
-            url = repka_endpoint + 'api/repo/{}/deb/{}/Release'.format(args.repo_id, distro_codename)
+            url = repka_endpoint + 'api/repo/{}/deb/dists/{}/Release'.format(args.repo_id, distro_codename)
             request = Request(url)
             request = add_auth(request, args.login, args.password)
             response = urlopen(request)
@@ -299,6 +299,7 @@ if __name__ == "__main__":
             subprocess.call(["/bin/sh", "-c", "echo deb {}/api/repo/{}/deb {} {} | tee -a /etc/apt/sources.list".format(deb_url, args.repo_id, args.repo_component, distro_codename)])
             subprocess.call(["/bin/sh", "-c", "curl -s -L {}/api/repo/{}/deb/key.gpg | apt-key add -".format(deb_url, args.repo_id)])
         except:
+            print('Skip add repo: {}/api/repo/{}/deb {} {}'.format(repka_endpoint, args.repo_id, args.repo_component, distro_codename))
             pass
         subprocess.call(["apt", 'update'])
     else:
