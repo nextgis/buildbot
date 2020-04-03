@@ -262,7 +262,7 @@ if __name__ == "__main__":
         distro_version, distro_codename = get_distro()
         counter = get_release_counter(packet_id, version, distro_codename, args.login, args.password)
         tag_name = '{}+{}'.format(version, counter)
-        create_release(packet_id, 'v' + tag_name, 'Version ' + tag_name, tag_name,
+        create_release(packet_id, 'v{} [{}]'.format(tag_name, distro_codename), 'Version ' + tag_name + ' on ' + distro_codename, tag_name,
                         distro_codename, distro_version, args.repo_component, 
                         uploaded_files, args.login, args.password)
 
@@ -283,13 +283,6 @@ if __name__ == "__main__":
             ppa_dist_path = os.path.join(ppa_path, 'debian')
         shutil.copytree(ppa_dist_path, out_path)
         
-    elif args.operation == 'create_debian_changelog':
-        distro_version, distro_codename = get_distro()
-        version = get_package_version(args.version_file)
-        packet_id = get_packet_id(args.repo_id, args.package_name, args.login, args.password)
-        counter = get_release_counter(packet_id, version, distro_codename, args.login, args.password)
-        write_changelog(args.package_name, version, counter, distro_codename, args.repo_path)
-
     elif args.operation == 'add_repo':
         try:
         # 1. Check exists
