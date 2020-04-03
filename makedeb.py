@@ -126,9 +126,8 @@ for repository in repositories:
 
         # 2. Make configure to generate version.str 
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
-        factory.addStep(steps.ShellCommand(command=["cmake", '../' + code_dir_last],
+        factory.addStep(steps.ShellCommand(command=["cmake", '-DBUILD_TESTING=OFF' ,'../' + code_dir_last],
             name="Make configure to generate version.str",
-            haltOnFailure=True, timeout=125 * 60, maxTime=5 * 60 * 60,
             workdir=ver_dir))
 
         # 3. Create debian folder
