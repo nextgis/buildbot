@@ -293,11 +293,13 @@ if __name__ == "__main__":
             request = add_auth(request, args.login, args.password)
             response = urlopen(request)
         # 2. Add repo
-            deb_url = repka_endpoint
             if args.login is not None and args.password is not None:
-                deb_url = 'https://{}:{}@{}'.format(args.login, args.password, repka_site)
-            subprocess.call(["/bin/sh", "-c", "echo deb {}/api/repo/{}/deb {} {} | tee -a /etc/apt/sources.list".format(deb_url, args.repo_id, args.repo_component, distro_codename)])
-            subprocess.call(["/bin/sh", "-c", "curl -s -L {}/api/repo/{}/deb/key.gpg | apt-key add -".format(deb_url, args.repo_id)])
+                with open('/etc/apt/auth.conf.d/rm.conf', 'w') as repka_file:
+                    repka_file.write("""machine {}
+  login {}
+  password {}""".format(repka_site, args.login, args.password))
+            subprocess.call(["/bin/sh", "-c", "echo deb {}/api/repo/{}/deb {} {} | tee -a /etc/apt/sources.list".format(repka_endpoint, args.repo_id, distro_codename, args.repo_component)])
+            subprocess.call(["/bin/sh", "-c", "curl -s -L {}/api/repo/{}/deb/key.gpg | apt-key add -".format(repka_endpoint, args.repo_id)])
         except:
             print('Skip add repo: {}/api/repo/{}/deb {} {}'.format(repka_endpoint, args.repo_id, args.repo_component, distro_codename))
             pass
