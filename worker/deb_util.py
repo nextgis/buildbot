@@ -285,16 +285,18 @@ if __name__ == "__main__":
         
     elif args.operation == 'add_repo':
         distro_version, distro_codename = get_distro()
+        # https://rm.nextgis.com/api/repo/11/deb stretch Release
+        url = repka_endpoint + '/api/repo/{}/deb/dists/{}/Release'.format(args.repo_id, distro_codename)
+        print('Check {}'.format(url))
         try:
         # 1. Check exists
-        # https://rm.nextgis.com/api/repo/11/deb stretch Release
-            url = repka_endpoint + '/api/repo/{}/deb/dists/{}/Release'.format(args.repo_id, distro_codename)
-            print('Check {}'.format(url))
             request = Request(url)
             request = add_auth(request, args.login, args.password)
             response = urlopen(request)
         # 2. Add repo
             if args.login is not None and args.password is not None:
+                if sys.path.exists('/etc/apt/auth.conf.d') == False:
+                    os.makedirs('/etc/apt/auth.conf.d')
                 with open('/etc/apt/auth.conf.d/rm.conf', 'w') as repka_file:
                     repka_file.write("""machine {}
   login {}
