@@ -295,10 +295,7 @@ if __name__ == "__main__":
             response = urlopen(request)
         # 2. Add repo
             if args.login is not None and args.password is not None:
-                auth_dir = '/etc/apt/auth.conf.d'
-                if sys.path.exists(auth_dir) == False:
-                    os.mkdir(auth_dir)
-                with open(os.path.join(auth_dir, 'rm.conf'), 'w') as repka_file:
+                with open('/etc/apt/auth.conf.d/rm.conf', 'w') as repka_file:
                     repka_file.write("""machine {}
   login {}
   password {}""".format(repka_site, args.login, args.password))
