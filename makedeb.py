@@ -16,7 +16,7 @@ repositories = [
     {'repo':'lib_gdal', 'deb':'gdal', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
     {'repo':'lib_spatialite', 'deb':'spatialite', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
     {'repo':'mapserver', 'deb':'mapserver', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'org':'nextgis', 'os': ['bionic', 'buster', ], 'repo_id':12},
+    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'org':'nextgis', 'os': ['bionic', 'buster', ], 'repo_id':12, 'apt_repos':[11,]},
     # {'repo':'lib_ngstd', 'deb':'ngstd', 'org':'nextgis', 'os':['bionic',]},
     # {'repo':'formbuilder', 'deb':'formbuilder', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
     # {'repo':'manuscript', 'deb':'manuscript', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
@@ -112,6 +112,12 @@ for repository in repositories:
                 '--repo_id', repository['repo_id'], '--login', username, '--password', userkey
             ],
             name="Add apt repository", haltOnFailure=True, workdir=root_dir))
+        if 'apt_repos' in repository:
+            for apt_repo_id in repository['apt_repos']:
+                factory.addStep(steps.ShellCommand(command=["python", script_name, '-op', 'add_repo', 
+                    '--repo_id', apt_repo_id, '--login', username, '--password', userkey
+                ],
+                name="Add additional apt repository", haltOnFailure=True, workdir=root_dir))
 
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian', '-vf', 'ver/version.str', 
                 '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
