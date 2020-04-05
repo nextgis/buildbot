@@ -294,13 +294,15 @@ if __name__ == "__main__":
             request = add_auth(request, args.login, args.password)
             response = urlopen(request)
         # 2. Add repo
+            curl_user_key = ''
             if args.login is not None and args.password is not None:
+                curl_user_key = '--user "{}:{}" '.format(args.login, args.password)
                 with open('/etc/apt/auth.conf.d/rm.conf', 'w') as repka_file:
                     repka_file.write("""machine {}
   login {}
   password {}""".format(repka_site, args.login, args.password))
             subprocess.call(["/bin/sh", "-c", "echo deb {}/api/repo/{}/deb {} {} | tee -a /etc/apt/sources.list".format(repka_endpoint, args.repo_id, distro_codename, args.repo_component)])
-            subprocess.call(["/bin/sh", "-c", "curl -s -L {}/api/repo/{}/deb/key.gpg | apt-key add -".format(repka_endpoint, args.repo_id)])
+            subprocess.call(["/bin/sh", "-c", "curl {}-s -L {}/api/repo/{}/deb/key.gpg | apt-key add -".format(curl_user_key, repka_endpoint, args.repo_id)])
         except:
             print('Skip add repo: {}/api/repo/{}/deb {} {}'.format(repka_endpoint, args.repo_id, distro_codename, args.repo_component))
             pass
