@@ -8,13 +8,14 @@ import os
 c = {}
 
 repositories = [
-    {'repo':'lib_geos', 'deb':'geos', 'org':'nextgis-borsch', 'os':['bionic', 'stretch','xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_proj', 'deb':'proj', 'org':'nextgis-borsch', 'os':['bionic', 'stretch','xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'org':'nextgis-borsch', 'os':['bionic', 'stretch','xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_opencad', 'deb':'opencad', 'org':'nextgis-borsch', 'os':['bionic', 'stretch','xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_oci', 'deb':'oci', 'org':'nextgis-borsch', 'os':['bionic', 'stretch','xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_gdal', 'deb':'gdal', 'org':'nextgis-borsch', 'os':['bionic', 'stretch','xenial', 'buster', ], 'repo_id':11},
-    {'repo':'mapserver', 'deb':'mapserver', 'org':'nextgis-borsch', 'os':['bionic', 'stretch','xenial', 'buster', ], 'repo_id':11},
+    {'repo':'lib_geos', 'deb':'geos', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
+    {'repo':'lib_proj', 'deb':'proj', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
+    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
+    {'repo':'lib_opencad', 'deb':'opencad', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
+    {'repo':'lib_oci', 'deb':'oci', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
+    {'repo':'lib_gdal', 'deb':'gdal', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
+    {'repo':'lib_spatialite', 'deb':'spatialite', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
+    {'repo':'mapserver', 'deb':'mapserver', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
     # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'py_raven', 'version':'6.10.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47/raven-6.10.0.tar.gz', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
