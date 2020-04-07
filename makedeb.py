@@ -55,6 +55,7 @@ c['schedulers'] = []
 c['builders'] = []
 
 platforms = [
+    {'name' : 'focal', 'worker' : 'deb-build-focal'},
     {'name' : 'bionic', 'worker' : 'deb-build-bionic'},
     {'name' : 'xenial', 'worker' : 'deb-build-xenial'},
     {'name' : 'trusty', 'worker' : 'deb-build-trusty'},
