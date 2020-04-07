@@ -162,7 +162,7 @@ for repository in repositories:
 
         # 2. Make configure to generate version.str 
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
-        factory.addStep(steps.ShellCommand(command=["cmake", '-DBUILD_TESTING=OFF' ,'../' + code_dir_last],
+        factory.addStep(steps.ShellCommand(command=["cmake", '-DBUILD_TESTING=OFF', '-DBUILD_NEXTGIS_PACKAGE=ON' ,'../' + code_dir_last],
             name="Make configure to generate version.str",
             workdir=ver_dir, env=get_env(repository['os'])
         ))
