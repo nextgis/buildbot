@@ -32,7 +32,7 @@ repositories = [
             'type':'repka',
         },]
     },
-    # {'repo':'lib_ngstd', 'deb':'ngstd', 'org':'nextgis', 'os':['bionic',]},
+    {'repo':'lib_ngstd', 'deb':'ngstd', 'org':'nextgis', 'os': ['bionic', 'buster', ], 'repo_id':11},
     # {'repo':'formbuilder', 'deb':'formbuilder', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
     # {'repo':'manuscript', 'deb':'manuscript', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
     # {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
@@ -164,7 +164,7 @@ for repository in repositories:
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
         factory.addStep(steps.ShellCommand(command=["cmake", '-DBUILD_TESTING=OFF' ,'../' + code_dir_last],
             name="Make configure to generate version.str",
-            workdir=ver_dir))
+            workdir=ver_dir, env=get_env(repository['os']))
 
         # 3. Create debian folder
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'changelog', '-vf', 'ver/version.str', 
