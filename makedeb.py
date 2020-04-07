@@ -164,7 +164,7 @@ for repository in repositories:
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
         factory.addStep(steps.ShellCommand(command=["cmake", '-DBUILD_TESTING=OFF', '-DBUILD_NEXTGIS_PACKAGE=ON' ,'../' + code_dir_last],
             name="Make configure to generate version.str",
-            workdir=ver_dir, env=get_env(repository['os'])
+            workdir=ver_dir, warnOnFailure=True, env=get_env(repository['os'])
         ))
 
         # 3. Create debian folder
