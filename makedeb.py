@@ -145,7 +145,7 @@ for repository in repositories:
                         name="Add additional repka apt repository", haltOnFailure=True, workdir=root_dir))
                 elif apt_repo_info['type'] == 'deb':
                     factory.addStep(steps.ShellCommand(command=["python", script_name, 
-                            '-op', 'add_deb_repo', '--deb', apt_repo_info['deb'].format(repository['os']), 
+                            '-op', 'add_deb_repo', '--deb', apt_repo_info['deb'].format(platform['name']), 
                             '--deb_key', apt_repo_info['key'], 
                             '--deb_keyserver', apt_repo_info['keyserver']
                         ],
@@ -167,7 +167,7 @@ for repository in repositories:
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
         factory.addStep(steps.ShellCommand(command=["cmake", '-DBUILD_TESTING=OFF', '-DBUILD_NEXTGIS_PACKAGE=ON' ,'../' + code_dir_last],
             name="Make configure to generate version.str",
-            workdir=ver_dir, warnOnFailure=True, env=get_env(repository['os'])
+            workdir=ver_dir, warnOnFailure=True, env=get_env(platform['name'])
         ))
 
         # 3. Create debian folder
@@ -183,7 +183,7 @@ for repository in repositories:
                     logfile=logfile),
             ],
             name="Create packages", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=code_dir, env=get_env(repository['os']),
+            maxTime=5 * 60 * 60, workdir=code_dir, env=get_env(platform['name']),
         ))
 
         # 5. Upload to repka
