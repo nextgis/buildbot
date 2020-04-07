@@ -164,7 +164,8 @@ for repository in repositories:
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
         factory.addStep(steps.ShellCommand(command=["cmake", '-DBUILD_TESTING=OFF' ,'../' + code_dir_last],
             name="Make configure to generate version.str",
-            workdir=ver_dir, env=get_env(repository['os']))
+            workdir=ver_dir, env=get_env(repository['os'])
+        ))
 
         # 3. Create debian folder
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'changelog', '-vf', 'ver/version.str', 
@@ -180,7 +181,7 @@ for repository in repositories:
             ],
             name="Create packages", haltOnFailure=True, timeout=125 * 60,
             maxTime=5 * 60 * 60, workdir=code_dir, env=get_env(repository['os']),
-            ))
+        ))
 
         # 5. Upload to repka
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'make_release', '-vf', 'ver/version.str', 
