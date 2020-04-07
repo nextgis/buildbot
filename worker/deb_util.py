@@ -222,7 +222,10 @@ if __name__ == "__main__":
     parser.add_argument('-dp', '--deb_files_path', help='deb files path')
     parser.add_argument('-pn', '--package_name', help='package name')
     parser.add_argument('--repo_id', dest='repo_id', help='{} repository identifier'.format(repka_endpoint))  
-    parser.add_argument('--repo_component', dest='repo_component', default='main', help='Repository component. Usually main, contfib and non-free')   
+    parser.add_argument('--repo_component', dest='repo_component', default='main', help='Repository component. Usually main, contfib and non-free')
+    parser.add_argument('--deb', dest='deb', help='deb line to add to sources.list')
+    parser.add_argument('--deb_key', dest='deb_key', help='deb key to check packages sign')
+    parser.add_argument('--deb_keyserver', dest='deb_keyserver', help='deb keyserver to verify sign')
     parser.add_argument('--login', dest='login', help='login for {}'.format(repka_endpoint))
     parser.add_argument('--password', dest='password', help='password for {}'.format(repka_endpoint))
     args = parser.parse_args()
@@ -283,7 +286,7 @@ if __name__ == "__main__":
             ppa_dist_path = os.path.join(ppa_path, 'debian')
         shutil.copytree(ppa_dist_path, out_path)
         
-    elif args.operation == 'add_repo':
+    elif args.operation == 'add_repka_repo':
         distro_version, distro_codename = get_distro()
         # https://rm.nextgis.com/api/repo/11/deb stretch Release
         url = repka_endpoint + '/api/repo/{}/deb/dists/{}/Release'.format(args.repo_id, distro_codename)
@@ -307,5 +310,8 @@ if __name__ == "__main__":
             print('Skip add repo: {}/api/repo/{}/deb {} {}'.format(repka_endpoint, args.repo_id, distro_codename, args.repo_component))
             pass
         subprocess.call(["apt", 'update'])
+    elif args.operation == 'add_deb_repo':
+        subprocess.call(["/bin/sh", "-c", "echo {} | tee -a /etc/apt/sources.list".format(args.deb)])
+        subprocess.call(["/bin/sh", "-c", "apt-key adv --keyserver {} --recv-keys {}".format(args.deb_keyserver, args.deb_key)])
     else:
         sys.exit('Unsupported operation {}'.format(args.operation))

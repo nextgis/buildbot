@@ -16,18 +16,32 @@ repositories = [
     {'repo':'lib_gdal', 'deb':'gdal', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
     {'repo':'lib_spatialite', 'deb':'spatialite', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
     {'repo':'mapserver', 'deb':'mapserver', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'org':'nextgis', 'os': ['bionic', 'buster', ], 'repo_id':12, 'apt_repos':[11,]},
+    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'org':'nextgis', 'os': ['bionic', 'buster', ], 'repo_id':12, 'apt_repos':[{
+            'repka_id':11
+            'type':'repka'
+        },]
+    },
+    {'repo':'postgis', 'deb':'postgis', 'org':'nextgis-borsch', 'os': ['bionic', 'buster', ], 'repo_id':11, 'apt_repos':[{
+            'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
+            'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
+            'keyserver':'keyserver.ubuntu.com',
+            'type':'deb'
+        },
+        {
+            'repka_id':11
+            'type':'repka'
+        },]
+    },
     # {'repo':'lib_ngstd', 'deb':'ngstd', 'org':'nextgis', 'os':['bionic',]},
     # {'repo':'formbuilder', 'deb':'formbuilder', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
     # {'repo':'manuscript', 'deb':'manuscript', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
+    # {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
     # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'py_raven', 'version':'6.10.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47/raven-6.10.0.tar.gz', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'py_setuptools', 'version':'40.6.3', 'deb':'python-setuptools', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b/setuptools-40.6.3.zip', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'postgis','version':'2.4.4', 'deb':'postgis', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'nextgisqgis','version':'19.1.0', 'deb':'nextgisqgis', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'osrm-backend','version':'0.1', 'deb':'osrm-backend', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['bionic']},
@@ -56,6 +70,12 @@ userkey = os.environ.get("BUILDBOT_PASSWORD")
 
 root_dir = 'build'
 ver_dir = root_dir + '/ver'
+
+def get_env(os):
+    env = {
+            'BUILDBOT_USERPWD': '{}:{}'.format(username, userkey),
+        }
+    return env
 
 # Create builders
 for repository in repositories:
@@ -108,16 +128,25 @@ for repository in repositories:
             haltOnFailure=True,
             workdir=root_dir))
 
-        factory.addStep(steps.ShellCommand(command=["python", script_name, '-op', 'add_repo', 
+        factory.addStep(steps.ShellCommand(command=["python", script_name, '-op', 'add_repka_repo', 
                 '--repo_id', repository['repo_id'], '--login', username, '--password', userkey
             ],
             name="Add apt repository", haltOnFailure=True, workdir=root_dir))
         if 'apt_repos' in repository:
-            for apt_repo_id in repository['apt_repos']:
-                factory.addStep(steps.ShellCommand(command=["python", script_name, '-op', 'add_repo', 
-                    '--repo_id', apt_repo_id, '--login', username, '--password', userkey
-                ],
-                name="Add additional apt repository", haltOnFailure=True, workdir=root_dir))
+            for apt_repo_info in repository['apt_repos']:
+                if apt_repo_info['type'] == 'repka':
+                    factory.addStep(steps.ShellCommand(command=["python", script_name, 
+                            '-op', 'add_repka_repo', '--repo_id', apt_repo_info['repka_id'], 
+                            '--login', username, '--password', userkey
+                        ],
+                        name="Add additional repka apt repository", haltOnFailure=True, workdir=root_dir))
+                elif apt_repo_info['type'] == 'deb':
+                    factory.addStep(steps.ShellCommand(command=["python", script_name, 
+                            '-op', 'add_deb_repo', '--deb', apt_repo_info['deb'].format(repository['os']), 
+                            '--deb_key', apt_repo_info['key'], 
+                            '--deb_keyserver', apt_repo_info['keyserver']
+                        ],
+                        name="Add additional deb apt repository", haltOnFailure=True, workdir=root_dir))
 
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian', '-vf', 'ver/version.str', 
                 '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
@@ -150,7 +179,7 @@ for repository in repositories:
                     logfile=logfile),
             ],
             name="Create packages", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=code_dir
+            maxTime=5 * 60 * 60, workdir=code_dir, env=get_env(repository['os']),
             ))
 
         # 5. Upload to repka

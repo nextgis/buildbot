@@ -144,6 +144,7 @@ def get_env(os):
         env['TARGET_VS'] = '2017'
         env['TARGET_VS_ARCH'] = 'x86'
         env['LANG'] = 'en_US'
+        env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
     elif 'win64' == os:
         env['PYTHONPATH'] = 'C:\\Python27'
         env['PATH'] = [
@@ -161,6 +162,7 @@ def get_env(os):
             "C:\\Python27\\lib\\site-packages\\pywin32_system32",
             "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
         ]
+        env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
     elif 'mac' == os:
         env = {
             'PATH': [
@@ -168,6 +170,7 @@ def get_env(os):
                         "${PATH}"
                     ],
             'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
+            'BUILDBOT_USERPWD': '{}:{}'.format(username, userkey),
         }
     return env
 
