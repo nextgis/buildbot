@@ -35,6 +35,7 @@ repositories = [
     {'repo':'lib_ngstd', 'deb':'ngstd', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
     {'repo':'formbuilder', 'deb':'formbuilder', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
     {'repo':'manuscript', 'deb':'manuscript', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
+    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'org':'nextgis', 'os': ['bionic', 'buster', ], 'repo_id':11},
     {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
     # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
     # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
