@@ -17,19 +17,19 @@ repositories = [
     {'repo':'lib_spatialite', 'deb':'spatialite', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
     {'repo':'mapserver', 'deb':'mapserver', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
     {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'org':'nextgis', 'os': ['bionic', 'buster', ], 'repo_id':12, 'apt_repos':[{
-            'repka_id':11
-            'type':'repka'
+            'repka_id':11,
+            'type':'repka',
         },]
     },
     {'repo':'postgis', 'deb':'postgis', 'org':'nextgis-borsch', 'os': ['bionic', 'buster', ], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
-            'type':'deb'
+            'type':'deb',
         },
         {
-            'repka_id':11
-            'type':'repka'
+            'repka_id':11,
+            'type':'repka',
         },]
     },
     # {'repo':'lib_ngstd', 'deb':'ngstd', 'org':'nextgis', 'os':['bionic',]},
