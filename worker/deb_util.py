@@ -217,7 +217,7 @@ def get_package_version(file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Prepare debian package')
     parser.add_argument('-vf', '--version_file', help='version.str path')
-    parser.add_argument('-op', '--operation', help='operation to process', choices=['info', 'changelog', 'tar', 'make_release', 'create_debian', 'add_repo',], required=True)
+    parser.add_argument('-op', '--operation', help='operation to process', choices=['info', 'changelog', 'tar', 'make_release', 'create_debian', 'add_repka_repo', 'add_deb_repo',], required=True)
     parser.add_argument('-rp', '--repo_path', help='repository path')
     parser.add_argument('-dp', '--deb_files_path', help='deb files path')
     parser.add_argument('-pn', '--package_name', help='package name')
@@ -313,5 +313,6 @@ if __name__ == "__main__":
     elif args.operation == 'add_deb_repo':
         subprocess.call(["/bin/sh", "-c", "echo {} | tee -a /etc/apt/sources.list".format(args.deb)])
         subprocess.call(["/bin/sh", "-c", "apt-key adv --keyserver {} --recv-keys {}".format(args.deb_keyserver, args.deb_key)])
+        subprocess.call(["apt", 'update'])
     else:
         sys.exit('Unsupported operation {}'.format(args.operation))
