@@ -8,14 +8,14 @@ import os
 c = {}
 
 repositories = [
-    {'repo':'lib_geos', 'deb':'geos', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_proj', 'deb':'proj', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_opencad', 'deb':'opencad', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_oci', 'deb':'oci', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_gdal', 'deb':'gdal', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'lib_spatialite', 'deb':'spatialite', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
-    {'repo':'mapserver', 'deb':'mapserver', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'xenial', 'buster', ], 'repo_id':11},
+    {'repo':'lib_geos', 'deb':'geos', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_proj', 'deb':'proj', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_opencad', 'deb':'opencad', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_oci', 'deb':'oci', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_gdal', 'deb':'gdal', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_spatialite', 'deb':'spatialite', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'mapserver', 'deb':'mapserver', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
     {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'org':'nextgis', 'os': ['bionic', 'buster', ], 'repo_id':12, 'apt_repos':[{
             'repka_id':11,
             'type':'repka',
@@ -39,14 +39,14 @@ repositories = [
         },]
     },
     {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'org':'nextgis', 'os': ['bionic',], 'repo_id':11},
-    # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'py_raven', 'version':'6.10.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47/raven-6.10.0.tar.gz', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'py_setuptools', 'version':'40.6.3', 'deb':'python-setuptools', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b/setuptools-40.6.3.zip', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
-    # {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'xenial', 'bionic']},
+    # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'py_raven', 'version':'6.10.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47/raven-6.10.0.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'py_setuptools', 'version':'40.6.3', 'deb':'python-setuptools', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b/setuptools-40.6.3.zip', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
     # {'repo':'osrm-backend','version':'0.1', 'deb':'osrm-backend', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['bionic']},
 ]
 
