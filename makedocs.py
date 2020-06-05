@@ -71,17 +71,23 @@ for lang in langs:
 
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                                      description=["make", "pdf for NextGIS Mobile"],
-                                      workdir="build/source/docs_ngmobile", warnOnFailure=True, 
-                                      env=env,))
+                            description=["make", "pdf for NextGIS Mobile"],
+                            workdir="build/source/docs_ngmobile", warnOnFailure=True, 
+                            env=env,))
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                                      description=["make", "pdf for NextGIS Web"],
-                                      workdir="build/source/docs_ngweb", warnOnFailure=True,
-                                      env=env,))
+                            description=["make", "pdf for NextGIS Web"],
+                            workdir="build/source/docs_ngweb", warnOnFailure=True,
+                            env=env,))
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                              description=["make", "pdf for NextGIS FormBuilder"],
-                              workdir="build/source/docs_formbuilder", warnOnFailure=True,
-                              env=env,))
+                            description=["make", "pdf for NextGIS FormBuilder"],
+                            workdir="build/source/docs_formbuilder", warnOnFailure=True,
+                            env=env,))
+    factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+                            description=["make", "pdf for NextGIS QGIS"],
+                            workdir="build/source/docs_ngqgis", warnOnFailure=True,
+                            env=env,))
+
+
     if lang == 'ru':
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                                       description=["make", "pdf for NextGIS Manager"],
@@ -91,10 +97,7 @@ for lang in langs:
         # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
         #                               description=["make", "pdf for NextGIS Bio"],
         #                               workdir="build/source/docs_ngbio"))
-        factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                                      description=["make", "pdf for NextGIS QGIS"],
-                                      workdir="build/source/docs_ngqgis", warnOnFailure=True,
-                                      env=env,))
+
         # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
         #                               description=["make", "pdf for NextGIS open geodata portal"],
         #                               workdir="build/source/docs_ogportal"))
