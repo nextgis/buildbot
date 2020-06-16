@@ -72,6 +72,7 @@ repositories = [
     {'repo':'py_pillow', 'args':['-DWITH_JPEG_EXTERNAL=ON','-DWITH_OpenJPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_Freetype_EXTERNAL=ON','-DWITH_LCMS_EXTERNAL=ON','-DWITH_WEBP_EXTERNAL=ON','-DWITH_WEBPMUX_EXTERNAL=ON','-DWITH_WEBPDEMUX_EXTERNAL=ON', '-DWITH_ZLIB=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'nextgis_datastore', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GDAL=ON', '-DWITH_GDAL_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'org':'nextgis', 'test_regex':[]},
     {'repo':'lib_sentrynative', 'args':['-DWITH_CRASHPAD_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_qtkeychain', 'args':['-DWITH_Qt5_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
