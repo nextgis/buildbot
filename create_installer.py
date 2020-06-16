@@ -15,10 +15,8 @@ mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.
 
 ngftp2 = 'ftp://192.168.245.1:8121/software/installer'
 ngftp = 'ftp://192.168.255.51/software/installer'
-siteftp = 'ftp://192.168.255.1/desktop'
 ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
 ngftp2_user = os.environ.get("BUILDBOT_FTP_USER")
-siteftp_user = os.environ.get("BUILDBOT_SITEFTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
 repka_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/repka_release.py'
@@ -557,18 +555,7 @@ for platform in platforms:
                                            haltOnFailure=True,
                                            workdir=code_dir))
 
-    # 8. Upload repository archive to site
-    factory.addStep(steps.ShellCommand(
-        command=["curl", '-u', siteftp_user, '-T',
-            util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base),
-            '-s', '--ftp-create-dirs', siteftp + '/'],
-        name="Upload repository archive to site",
-        doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
-        haltOnFailure=True,
-        workdir=build_dir,
-        env=env))
-
-    # 9. Create new release in repka
+    # 8. Create new release in repka
     factory.addStep(steps.ShellCommand(
         command=["python", repka_script_name, '--repo_id', platform['repo_id'],
             '--description', util.Interpolate('%(prop:notes)s'),
