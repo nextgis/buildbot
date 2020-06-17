@@ -73,6 +73,7 @@ repositories = [
     {'repo':'nextgis_datastore', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GDAL=ON', '-DWITH_GDAL_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'org':'nextgis', 'test_regex':[]},
     {'repo':'lib_sentrynative', 'args':['-DWITH_CRASHPAD_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qtkeychain', 'args':['-DWITH_Qt5_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_zip', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DENABLE_GNUTLS=OFF', '-DENABLE_BZIP2=OFF', '-DENABLE_LZMA=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
