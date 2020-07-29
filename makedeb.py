@@ -8,46 +8,46 @@ import os
 c = {}
 
 repositories = [
-    {'repo':'lib_geos', 'deb':'geos', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'lib_proj', 'deb':'proj', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'lib_opencad', 'deb':'opencad', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'lib_oci', 'deb':'oci', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'lib_gdal', 'deb':'gdal', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'lib_spatialite', 'deb':'spatialite', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'mapserver', 'deb':'mapserver', 'org':'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'org':'nextgis', 'os': ['bionic', 'buster', 'focal',], 'repo_id':12, 'apt_repos':[{
+    {'repo':'lib_geos', 'deb':'geos', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_proj', 'deb':'proj', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'stretch', 'focal', 'buster', ], 'repo_id':11},
+    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'git://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal',], 'repo_id':12, 'apt_repos':[{
             'repka_id':11,
             'type':'repka',
         },]
     },
-    {'repo':'postgis', 'deb':'postgis', 'org':'nextgis-borsch', 'os': ['bionic', 'buster', 'focal',], 'repo_id':11, 'apt_repos':[{
+    {'repo':'postgis', 'deb':'postgis', 'repo_root':'git://github.com', 'org': 'nextgis-borsch', 'os': ['bionic', 'buster', 'focal',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
             'type':'deb',
         },]
     },
-    {'repo':'lib_ngstd', 'deb':'ngstd', 'org':'nextgis', 'os': ['bionic', 'focal',], 'repo_id':11},
-    {'repo':'formbuilder', 'deb':'formbuilder', 'org':'nextgis', 'os': ['bionic', 'focal',], 'repo_id':11},
-    {'repo':'manuscript', 'deb':'manuscript', 'org':'nextgis', 'os': ['bionic','focal', ], 'repo_id':11},
-    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'org':'nextgis', 'os': ['bionic', 'buster', 'focal',], 'repo_id':11, 'apt_repos':[{
+    {'repo':'lib_ngstd', 'deb':'ngstd', 'repo_root':'git://github.com', 'org': 'nextgis', 'os': ['bionic', 'focal',], 'repo_id':11},
+    {'repo':'formbuilder', 'deb':'formbuilder', 'repo_root':'git://github.com', 'org': 'nextgis', 'os': ['bionic', 'focal',], 'repo_id':11},
+    {'repo':'manuscript', 'deb':'manuscript', 'repo_root':'git://github.com', 'org': 'nextgis', 'os': ['bionic','focal', ], 'repo_id':11},
+    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'git://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
             'type':'deb',
         },]
     },
-    {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'org':'nextgis', 'os': ['bionic', 'focal',], 'repo_id':11},
-    # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
-    # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
-    # {'repo':'py_raven', 'version':'6.10.0', 'deb':'python-raven', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47/raven-6.10.0.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
-    # {'repo':'py_setuptools', 'version':'40.6.3', 'deb':'python-setuptools', 'subdir': '', 'org':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b/setuptools-40.6.3.zip', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
-    # {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
-    # {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'org':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
-    # {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
-    # {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
-    # {'repo':'osrm-backend','version':'0.1', 'deb':'osrm-backend', 'subdir': '', 'org':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['bionic']},
+    {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'git://github.com', 'org': 'nextgis', 'os': ['bionic', 'focal', 'buster'], 'repo_id':11, 'branch': 'dev/up_to_3'},
+    # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'py_raven', 'version':'6.10.0', 'deb':'python-raven', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47/raven-6.10.0.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'py_setuptools', 'version':'40.6.3', 'deb':'python-setuptools', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b/setuptools-40.6.3.zip', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'dante','version':'1.4.2', 'deb':'dante', 'subdir': '', 'repo_root':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'pam-pgsql','version':'0.7.3.3', 'deb':'pam-pgsql', 'subdir': '', 'repo_root':'nextgis', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'protobuf-c','version':'1.3.0', 'deb':'protobuf-c', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
+    # {'repo':'osrm-backend','version':'0.1', 'deb':'osrm-backend', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['bionic']},
 ]
 
 c['change_source'] = []
@@ -86,12 +86,15 @@ for repository in repositories:
 
     project_name = repository['repo']
     org = repository['org']
-    repourl = 'git://github.com/{}/{}.git'.format(org, project_name)
+    repourl = '{}/{}/{}.git'.format(repository['repo_root'], org, project_name)
+    branch = 'master'
+    if repository['branch']:
+        branch = repository['branch']
     git_project_name = '{}/{}'.format(org, project_name)
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
                            workdir = project_name + '-workdir',
-                           branches = ['master'],
+                           branches = [branch],
                            pollinterval = 5400,)
     c['change_source'].append(git_poller)
 
