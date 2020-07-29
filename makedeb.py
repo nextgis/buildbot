@@ -88,7 +88,7 @@ for repository in repositories:
     org = repository['org']
     repourl = '{}/{}/{}.git'.format(repository['repo_root'], org, project_name)
     branch = 'master'
-    if repository['branch']:
+    if 'branch' in repository:
         branch = repository['branch']
     git_project_name = '{}/{}'.format(org, project_name)
     git_poller = changes.GitPoller(project = git_project_name,
