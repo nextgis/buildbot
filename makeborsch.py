@@ -364,6 +364,8 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=test_cmd,
                                            name="test",
                                            haltOnFailure=True,
+                                           timeout=125 * 60,
+                                           maxTime=5 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
 
