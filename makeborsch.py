@@ -71,11 +71,11 @@ repositories = [
     {'repo':'lib_harfbuzz', 'args':['-DHB_HAVE_FREETYPE=ON','-DWITH_Freetype_EXTERNAL=ON','-DWITH_Freetype=ON', '-DHB_HAVE_CORETEXT=OFF', '-DHB_BUILD_SUBSET=OFF', '-DHB_BUILD_TESTS=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_pillow', 'args':['-DWITH_JPEG_EXTERNAL=ON','-DWITH_OpenJPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_Freetype_EXTERNAL=ON','-DWITH_LCMS_EXTERNAL=ON','-DWITH_WEBP_EXTERNAL=ON','-DWITH_WEBPMUX_EXTERNAL=ON','-DWITH_WEBPDEMUX_EXTERNAL=ON', '-DWITH_ZLIB=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'nextgis_datastore', 'args':['-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GDAL=ON', '-DWITH_GDAL_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis', 'test_regex':[]},
-    {'repo':'lib_sentrynative', 'args':['-DWITH_CRASHPAD_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_sentrynative', 'args':['-DWITH_CRASHPAD_EXTERNAL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_MINICHROMIUM_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qtkeychain', 'args':['-DWITH_Qt5_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_zip', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DENABLE_GNUTLS=OFF', '-DENABLE_BZIP2=OFF', '-DENABLE_LZMA=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_xslt', 'args':['-DWITH_LIBXML2=ON', '-DWITH_LIBXML2_EXTERNAL=ON', '-DWITH_ICONV=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'py_lxml', 'args':['-DWITH_LIBXML2=ON', '-DWITH_LIBXML2_EXTERNAL=ON', '-DWITH_LIBXSLT_EXTERNAL=ON', '-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_ICONV_EXTERNAL=ON'], 'requirements':[''], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_lxml', 'args':['-DWITH_LIBXML2=ON', '-DWITH_LIBXML2_EXTERNAL=ON', '-DWITH_LIBXSLT_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ICONV=ON'], 'requirements':[''], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 skip_send2github = [
@@ -364,6 +364,8 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=test_cmd,
                                            name="test",
                                            haltOnFailure=True,
+                                           timeout=125 * 60,
+                                           maxTime=5 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
 
