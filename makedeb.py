@@ -123,7 +123,7 @@ for repository in repositories:
         if platform['name'] not in repository['os']:
             continue
 
-        factory = util.BuildFactory()
+        factory = util.BuildFactory()        
         # 1. checkout the source
         factory.addStep(steps.Git(repourl=repourl,
             mode='full', shallow=True, submodules=False, 
@@ -155,6 +155,10 @@ for repository in repositories:
                             '--deb_keyserver', apt_repo_info['keyserver']
                         ],
                         name="Add additional deb apt repository", haltOnFailure=True, workdir=root_dir))
+
+        factory.addStep(steps.ShellCommand(command=["apt-get", "-y", "upgrade"],
+                             env={'DEBIAN_FRONTEND': 'noninteractive'},
+                             name="Upgrade packaets"))
 
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian', '-vf', 'ver/version.str', 
                 '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
