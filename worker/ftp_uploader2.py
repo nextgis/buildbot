@@ -79,5 +79,5 @@ if __name__ == "__main__":
             cargs = ['curl']
             if args.ftp_user is not None:
                 cargs.extend(['-u', args.ftp_user])
-            cargs.extend['-T', '{' + fname + '}', '--ftp-create-dirs', ftp_url]
+            cargs.extend['-T', fname, '--ftp-create-dirs', ftp_url]
             subprocess.check_output(cargs)
