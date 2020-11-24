@@ -22,6 +22,8 @@ c['change_source'].append(git_poller)
 
 builderNames = []
 logfile = 'stdio'
+upload_script_name = 'ftp_uploader2.py'
+upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/' + upload_script_name
 
 for lang in langs:
     project_name = poller_name + '_' + lang
@@ -58,17 +60,6 @@ for lang in langs:
         )
     )
 
-    # Install NGW
-    # factory.addStep(steps.ShellSequence(commands=[
-    #     util.ShellArg(command=['2to3', '--output-dir=nextgisweb3', '--write-unchanged-files', '-n', 'docs_ng/source/docs_ngweb_dev',]),
-    #     util.ShellArg(command=['pip3', 'install', '-e', 'nextgisweb3',]),
-    #     ],
-    #     name="Install NextGIS Web",
-    #     haltOnFailure=True,
-    #     workdir="build",
-    #     )
-    # )
-
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
                             name="Generate pdf for NextGIS Mobile",
@@ -92,9 +83,8 @@ for lang in langs:
                             env=env,))
 
     factory.addStep(steps.ShellSequence(commands=[
-                    util.ShellArg(command=['make', 'json'], logfile=logfile),
-                    util.ShellArg(command=['curl', '-T', '{$(echo build/json/*.json) | tr \' \' \',\'}', 'ftp://192.168.255.61/data_docs/' + lang], logfile=logfile),
-                    util.ShellArg(command=['curl', '-T', '{$(echo build/json/_static/*) | tr \' \' \',\'}', 'ftp://192.168.255.61/data_docs/' + lang + '/_static'], logfile=logfile),
+                    util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logfile=logfile),
+                    util.ShellArg(command=['python', upload_script_name, '--build_path', 'build/json', '--ftp', 'ftp://192.168.255.61/data_docs/' + lang], logfile=logfile),
                 ],
                 name="Generate json for NextGIS Data",
                 description=["make", "json for NextGIS Data"],
