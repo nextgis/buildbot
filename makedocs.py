@@ -87,10 +87,13 @@ for lang in langs:
                             workdir="build/source/docs_ngqgis", warnOnFailure=True,
                             env=env,))
 
-    factory.addStep(steps.ShellCommand(command=['make', 'json'],
-                            description=["make", "json for NextGIS Data"],
-                            workdir="build/source/docs_data", warnOnFailure=True,
-                            env=env,))
+    factory.addStep(steps.ShellSequence(commands=[
+                    util.ShellArg(command=['make', 'json'], logfile=logfile),
+                    util.ShellArg(command=['curl', '-T', "{$(echo build/json/*.json | tr ' ' ',')}", 'ftp://192.168.255.61/data_docs/' + lang], logfile=logfile),
+                ],
+                description=["make", "json for NextGIS Data"],
+                workdir="build/source/docs_data", warnOnFailure=True,
+                env=env,))
 
     if lang == 'ru':
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
