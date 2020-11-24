@@ -71,26 +71,31 @@ for lang in langs:
 
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+                            name="Generate pdf for NextGIS Mobile",
                             description=["make", "pdf for NextGIS Mobile"],
                             workdir="build/source/docs_ngmobile", warnOnFailure=True, 
                             env=env,))
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+                            name="Generate pdf for NextGIS Web",
                             description=["make", "pdf for NextGIS Web"],
                             workdir="build/source/docs_ngweb", warnOnFailure=True,
                             env=env,))
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+                            name="Generate pdf for NextGIS FormBuilder",
                             description=["make", "pdf for NextGIS FormBuilder"],
                             workdir="build/source/docs_formbuilder", warnOnFailure=True,
                             env=env,))
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
+                            name="Generate pdf for NextGIS QGIS",
                             description=["make", "pdf for NextGIS QGIS"],
                             workdir="build/source/docs_ngqgis", warnOnFailure=True,
                             env=env,))
 
     factory.addStep(steps.ShellSequence(commands=[
                     util.ShellArg(command=['make', 'json'], logfile=logfile),
-                    util.ShellArg(command=['curl', '-T', "{$(echo build/json/*.json | tr ' ' ',')}", 'ftp://192.168.255.61/data_docs/' + lang], logfile=logfile),
+                    util.ShellArg(command=['curl', '-T', "{$(echo build/json/*.json) | tr ' ' ',')}", 'ftp://192.168.255.61/data_docs/' + lang], logfile=logfile),
                 ],
+                name="Generate json for NextGIS Data",
                 description=["make", "json for NextGIS Data"],
                 workdir="build/source/docs_data", warnOnFailure=True,
                 env=env,))
