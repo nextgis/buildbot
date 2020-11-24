@@ -72,12 +72,13 @@ if __name__ == "__main__":
     if ftp_url[-1:] != '/':
         ftp_url += '/'
 
-    for dirpath, dirs, files in os.walk(build_path):  
+    for dirpath, dirs, files in os.walk(build_path):
+        ftp_dir = dirpath.replace('build_path', '')
         for filename in files: 
             fname = os.path.join(dirpath,filename) 
             color_print('Upload file {} to ftp'.format(fname), True, 'LGREEN')
             cargs = ['curl', '-s']
             if args.ftp_user is not None:
                 cargs.extend(['-u', args.ftp_user])
-            cargs.extend(['-T', fname, '--ftp-create-dirs', ftp_url + '/' + dirpath])
+            cargs.extend(['-T', fname, '--ftp-create-dirs', ftp_url + ftp_dir])
             subprocess.check_output(cargs)
