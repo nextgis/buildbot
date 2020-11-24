@@ -76,8 +76,8 @@ if __name__ == "__main__":
         for filename in files: 
             fname = os.path.join(dirpath,filename) 
             color_print('Upload file {} to ftp'.format(fname), True, 'LGREEN')
-            cargs = ['curl']
+            cargs = ['curl', '-s']
             if args.ftp_user is not None:
                 cargs.extend(['-u', args.ftp_user])
-            cargs.extend(['-T', fname, '--ftp-create-dirs', ftp_url])
+            cargs.extend(['-T', fname, '--ftp-create-dirs', ftp_url + '/' + dirpath])
             subprocess.check_output(cargs)
