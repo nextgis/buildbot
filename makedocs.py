@@ -83,6 +83,7 @@ for lang in langs:
                             env=env,))
 
     factory.addStep(steps.ShellSequence(commands=[
+                    util.ShellArg(command=['make', 'json'], logfile=logfile),
                     util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logfile=logfile),
                     util.ShellArg(command=['python', upload_script_name, '--build_path', 'build/json', '--ftp', 'ftp://192.168.255.61/data_docs/' + lang], logfile=logfile),
                 ],
