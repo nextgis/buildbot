@@ -87,6 +87,10 @@ for lang in langs:
                             workdir="build/source/docs_ngqgis", warnOnFailure=True,
                             env=env,))
 
+    factory.addStep(steps.ShellCommand(command=['make', 'json'],
+                            description=["make", "json for NextGIS Data"],
+                            workdir="build/source/docs_data", warnOnFailure=True,
+                            env=env,))
 
     if lang == 'ru':
         factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
@@ -122,7 +126,7 @@ for lang in langs:
 
     # 3. build html
     factory.addStep(steps.Sphinx(sphinx_builddir="_build/html", sphinx_sourcedir="source", sphinx_builder="html"))
-    # 4. upload to ftp
+    # 4. upload to data ftp
     # TODO:
     # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
     #                                    description=["sync", "to web server"]))

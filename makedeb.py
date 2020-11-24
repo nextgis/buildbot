@@ -158,7 +158,7 @@ for repository in repositories:
 
         factory.addStep(steps.ShellCommand(command=["apt-get", "-y", "upgrade"],
                              env={'DEBIAN_FRONTEND': 'noninteractive'},
-                             name="Upgrade packaets"))
+                             name="Upgrade packages"))
 
         factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian', '-vf', 'ver/version.str', 
                 '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
