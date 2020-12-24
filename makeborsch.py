@@ -77,7 +77,7 @@ repositories = [
     {'repo':'lib_xslt', 'args':['-DWITH_LIBXML2=ON', '-DWITH_LIBXML2_EXTERNAL=ON', '-DWITH_ICONV=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_lxml', 'args':['-DWITH_LIBXML2=ON', '-DWITH_LIBXML2_EXTERNAL=ON', '-DWITH_LIBXSLT_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ICONV=ON'], 'requirements':[''], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_exiv', 'args':['-DWITH_ZLIB_EXTERNAL=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_ICONV=ON','-DWITH_ICONV_EXTERNAL=ON'], 'requirements':[''], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'nextgisutilities', 'args':[], 'requirements':['-DWITH_GDAL=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_PROJ=ON', '-DWITH_PROJ_EXTERNAL=ON'], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis', 'test_regex':[]},
+    {'repo':'nextgisutilities', 'args':['-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis', 'test_regex':[]},
 ]
 
 skip_send2github = [
