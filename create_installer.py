@@ -347,8 +347,8 @@ for platform in platforms:
                                                     basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
                                                 ],
                                         name="Download versions.pkl",
-                                        haltOnFailure=False, warnOnWarnings=True,
-                                        flunkOnFailure=False, warnOnFailure=True,
+                                        # haltOnFailure=False, warnOnWarnings=True,
+                                        # flunkOnFailure=False, warnOnFailure=True,
                                         # haltOnFailure=True, # The repository may not be exists
                                         doStepIf=(lambda step: not step.getProperty("scheduler") == project_name + "_local"),
                                         workdir=code_dir,
@@ -540,7 +540,6 @@ for platform in platforms:
                                                     basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
                                                 ],
                                        name="Upload versions.pkl to ftp",
-                                       haltOnFailure=True,
                                        doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
                                        workdir=code_dir,
                                        env=env))
