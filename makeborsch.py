@@ -93,7 +93,7 @@ release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/ma
 script_name = 'repka_release.py' # 'github_release.py'
 username = 'buildbot' # username = 'bishopgis'
 userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
-ngftp_base = 'ftp://192.168.245.1:8121'
+ngftp_base = 'ftp://192.168.245.229:8121'
 ngftp = ngftp_base + '/software/installer/src/'
 ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
