@@ -13,7 +13,7 @@ vm_cpu_count = 8
 mac_os_min_version = '10.12'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
-ngftp2 = 'ftp://192.168.245.229:8121/software/installer'
+ngftp2 = 'ftp://192.168.6.7:8121/software/installer'
 ngftp = 'ftp://192.168.255.51/software/installer'
 ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
 ngftp2_user = os.environ.get("BUILDBOT_FTP_USER")
