@@ -28,6 +28,9 @@ userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDB
 
 installer_git = 'git://github.com/nextgis/nextgis_installer.git'
 
+timeout = 240
+max_time = 400
+
 c['change_source'] = []
 c['schedulers'] = []
 c['builders'] = []
@@ -390,8 +393,8 @@ for platform in platforms:
                 '--sign_pwd','{}:{}'.format(username, userkey),
             ],
             name="Prepare packages data",
-            maxTime=200 * 60,
-            timeout=120 * 60,
+            maxTime=max_time * 60,
+            timeout=timeout * 60,
             haltOnFailure=True,
             workdir=code_dir,
             env=env
@@ -452,8 +455,8 @@ for platform in platforms:
             name="Create/Update repository",
             doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
             haltOnFailure=True,
-            maxTime=200 * 60,
-            timeout=120 * 60,
+            maxTime=max_time * 60,
+            timeout=timeout * 60,
             workdir=code_dir,
             env=env
         )
@@ -468,8 +471,8 @@ for platform in platforms:
                                                 ],
                                         name="Create/Update repository",
                                         doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
-                                        maxTime=200 * 60,
-                                        timeout=120 * 60,
+                                        maxTime=max_time * 60,
+                                        timeout=timeout * 60,
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
