@@ -101,6 +101,7 @@ upload_script_name = 'ftp_upload.py'
 install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py'
 install_script_name = 'install_from_ftp.py'
 ci_project_name = 'create_installer'
+sentry_url = 'https://sentry.nextgis.com'
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -151,7 +152,10 @@ def get_env(os):
         env['TARGET_VS'] = '2017'
         env['TARGET_VS_ARCH'] = 'x86'
         env['LANG'] = 'en_US'
-        env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
+        env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)       
+        env['SENTRY_URL'] = sentry_url
+        env['SENTRY_ORG'] = 'nextgis'
+        env['SENTRY_AUTH_TOKEN'] = os.environ.get("SENTRY_AUTH_TOKEN")
     elif 'win64' == os:
         env['PYTHONPATH'] = 'C:\\Python27'
         env['PATH'] = [
@@ -170,6 +174,9 @@ def get_env(os):
             "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
         ]
         env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
+        env['SENTRY_URL'] = sentry_url
+        env['SENTRY_ORG'] = 'nextgis'
+        env['SENTRY_AUTH_TOKEN'] = os.environ.get("SENTRY_AUTH_TOKEN")
     elif 'mac' == os:
         env = {
             'PATH': [
@@ -178,6 +185,9 @@ def get_env(os):
                     ],
             'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
             'BUILDBOT_USERPWD': '{}:{}'.format(username, userkey),
+            'SENTRY_URL': sentry_url,
+            'SENTRY_ORG': 'nextgis', 
+            'SENTRY_AUTH_TOKEN': os.environ.get("SENTRY_AUTH_TOKEN")
         }
     return env
 
