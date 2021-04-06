@@ -317,11 +317,11 @@ for repository in repositories:
             env = {}
             if 'win32' in platform['name']:
                 env = get_env('win32')
-                env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release")
+                env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
                 run_args_ex.extend(['-G', generator])
             else:
                 env = get_env('win64')
-                env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\release")
+                env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
                 run_args_ex.extend(['-G', generator + ' Win64'])
         elif 'mac' in platform['name']:
             if platform['name'].endswith('-static'):
@@ -374,7 +374,7 @@ for repository in repositories:
                                            env=env))
 
         # make tests
-        test_cmd = ['ctest', '-C', 'Release', '--output-on-failure']
+        test_cmd = ['ctest', '-C', build_type, '--output-on-failure']
         if repository['test_regex']:
             test_cmd.extend(repository['test_regex'])
         factory.addStep(steps.ShellCommand(command=test_cmd,
@@ -386,7 +386,7 @@ for repository in repositories:
                                            env=env))
 
         # make package
-        factory.addStep(steps.ShellCommand(command=['cpack', '-C', 'Release', '-V', '.'],
+        factory.addStep(steps.ShellCommand(command=['cpack', '-C', build_type, '-V', '.'],
                                            name="pack",
                                            haltOnFailure=True,
                                            workdir=build_dir,
