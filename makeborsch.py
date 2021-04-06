@@ -420,7 +420,8 @@ for repository in repositories:
             factory.addStep(steps.ShellCommand(command=['sentry-cli', 'upload-dif', '-o', 'nextgis', '-p', repository['sentry_project'], '.'],
                                                name="send debug symbols to sentry",
                                                haltOnFailure=True,
-                                               workdir=build_dir))
+                                               workdir=build_dir,
+                                               env=env))
 
         # create installer trigger
         if platform['name'].endswith('-static') == False:
