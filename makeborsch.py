@@ -272,8 +272,11 @@ for repository in repositories:
     c['schedulers'].append(forceScheduler)
 
     run_args = repository['args']
-    run_args.extend(['-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE=Release', '-DSKIP_DEFAULTS=ON'])
-    cmake_build = ['cmake', '--build', '.', '--config', 'Release', '--']
+    build_type = 'Release'
+    if project_name in ['nextgisqgis', 'formbuilder',]:
+        build_type = 'RelWithDebInfo'
+    run_args.extend(['-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE={}'.format(build_type), '-DSKIP_DEFAULTS=ON'])
+    cmake_build = ['cmake', '--build', '.', '--config', build_type, '--']
 
     for platform in platforms:
         if platform['name'] not in repository['os']:
