@@ -102,6 +102,7 @@ install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/
 install_script_name = 'install_from_ftp.py'
 ci_project_name = 'create_installer'
 sentry_url = 'https://sentry.nextgis.com'
+sentry_auth_token = os.environ.get("SENTRY_AUTH_TOKEN")
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -155,7 +156,7 @@ def get_env(os):
         env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)       
         env['SENTRY_URL'] = sentry_url
         env['SENTRY_ORG'] = 'nextgis'
-        env['SENTRY_AUTH_TOKEN'] = os.environ.get("SENTRY_AUTH_TOKEN")
+        env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
     elif 'win64' == os:
         env['PYTHONPATH'] = 'C:\\Python27'
         env['PATH'] = [
@@ -176,7 +177,7 @@ def get_env(os):
         env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
         env['SENTRY_URL'] = sentry_url
         env['SENTRY_ORG'] = 'nextgis'
-        env['SENTRY_AUTH_TOKEN'] = os.environ.get("SENTRY_AUTH_TOKEN")
+        env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
     elif 'mac' == os:
         env = {
             'PATH': [
@@ -187,7 +188,7 @@ def get_env(os):
             'BUILDBOT_USERPWD': '{}:{}'.format(username, userkey),
             'SENTRY_URL': sentry_url,
             'SENTRY_ORG': 'nextgis', 
-            'SENTRY_AUTH_TOKEN': os.environ.get("SENTRY_AUTH_TOKEN")
+            'SENTRY_AUTH_TOKEN': sentry_auth_token,
         }
     return env
 
