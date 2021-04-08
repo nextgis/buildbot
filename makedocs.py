@@ -47,10 +47,14 @@ for lang in langs:
     if lang == 'ru':
         env = {
             'LANG': 'ru_RU.UTF-8',
+            'LANGUAGE': 'ru_RU:ru',
+            'LC_ALL':'ru_RU.UTF-8',
         }
     else:
         env = {
             'LANG': 'en_US.UTF-8',
+            'LANGUAGE': 'en_US:en',
+            'LC_ALL':'en_US.UTF-8',
         }
     factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
         name="Check spelling",
@@ -131,7 +135,7 @@ for lang in langs:
     # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
     #                                    description=["sync", "to web server"]))
     factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=['cp', 'build/spelling/output.txt', '_build/html/',], logfile=logfile),
+        util.ShellArg(command=['cp', 'spelling/output.txt', '_build/html/',], logfile=logfile),
         util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logfile=logfile),
         util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p 2322 -i /root/.ssh/www', '_build/html/', 'ngw_admin@192.168.6.1:/home/docker/data/www/docs/' + lang,], logfile=logfile),
         ],
