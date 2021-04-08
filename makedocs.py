@@ -63,6 +63,19 @@ for lang in langs:
         env=env,
         )
     )
+    # debug
+    factory.addStep(steps.ShellSequence(commands=[
+        util.ShellArg(command=['ls', '-1', '.', ], logfile=logfile),
+        util.ShellArg(command=['ls', '-1', 'build', ], logfile=logfile),
+        util.ShellArg(command=['ls', '-1', 'build/spelling', ], logfile=logfile),
+        util.ShellArg(command=['ls', '-1', 'spelling', ], logfile=logfile),
+        util.ShellArg(command=['find', '.', '-name', 'output.txt', ], logfile=logfile),
+        ],
+        name="Copy documentation to web server",
+        haltOnFailure=True,
+        workdir="build",
+        )
+    )
 
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
