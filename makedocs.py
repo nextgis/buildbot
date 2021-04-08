@@ -135,7 +135,7 @@ for lang in langs:
     # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
     #                                    description=["sync", "to web server"]))
     factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=['cp', 'build/spelling', '_build/html/',], logfile=logfile),
+        util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logfile=logfile),
         util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logfile=logfile),
         util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p 2322 -i /root/.ssh/www', '_build/html/', 'ngw_admin@192.168.6.1:/home/docker/data/www/docs/' + lang,], logfile=logfile),
         ],
