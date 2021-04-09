@@ -417,7 +417,7 @@ for repository in repositories:
                                            workdir=code_dir))
 
         if 'sentry_project' in repository and len(repository['sentry_project']):
-            factory.addStep(steps.ShellCommand(command=['sentry-cli', 'upload-dif', '-o', 'nextgis', '-p', repository['sentry_project'], '.'],
+            factory.addStep(steps.ShellCommand(command=['sentry-cli', 'upload-dif', '--include-sources', '-o', 'nextgis', '-p', repository['sentry_project'], '.'],
                                                name="send debug symbols to sentry",
                                                haltOnFailure=True,
                                                workdir=build_dir,
