@@ -342,7 +342,9 @@ for repository in repositories:
         install_dependencies(factory, repository['requirements'], platform['name'])
 
         factory.addStep(steps.Git(repourl=repourl, mode='full', shallow=True,
-                                method='clobber', submodules=False, workdir=code_dir))
+                                method='clobber', submodules=False, 
+                                timeout=65 * 60, maxTime=1 * 60 * 60, 
+                                workdir=code_dir))
 
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["curl", release_script_src, '-o', script_name, '-s', '-L'], logname=logname),
