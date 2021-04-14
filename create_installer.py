@@ -281,11 +281,11 @@ for platform in platforms:
             env = { 'PYTHONPATH': 'C:\\Python27_32' }
 
     repo_name_base = 'repository-' + platform['name']
-    logfile = 'stdio'
+    logname = 'stdio'
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'], logfile=logfile),
-            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logfile=logfile),
+            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download installer package",
         haltOnFailure=True,
@@ -295,8 +295,8 @@ for platform in platforms:
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'], logfile=logfile),
-            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logfile=logfile),
+            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download qt package",
         haltOnFailure=True,
@@ -313,11 +313,11 @@ for platform in platforms:
                                     '-s', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
                                         basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/' + repo_name_base),
                                     ],
-                            logfile=logfile),
+                            logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
                                     util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
                                         basename=repo_name_base)],
-                            logfile=logfile),
+                            logname=logname),
         ],
         name="Download repository",
         haltOnFailure=True,
@@ -327,7 +327,7 @@ for platform in platforms:
 
     factory.addStep(steps.ShellSequence(
         commands=[
-            util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s'], logfile=logfile),
+            util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s'], logname=logname),
         ],
         name="Download scripts",
         haltOnFailure=True,
@@ -337,7 +337,7 @@ for platform in platforms:
 
     factory.addStep(steps.ShellSequence(
         commands=[
-            util.ShellArg(command=["curl", repka_script_src, '-o', repka_script_name, '-s'], logfile=logfile),
+            util.ShellArg(command=["curl", repka_script_src, '-o', repka_script_name, '-s'], logname=logname),
         ],
         name="Download scripts",
         haltOnFailure=True,
@@ -359,7 +359,7 @@ for platform in platforms:
 
     # if 'win' in platform['name']:
     #     factory.addStep(steps.ShellSequence(commands=[
-    #                                         util.ShellArg(command=['pip', 'install', '--user', 'pytz'], logfile=logfile),
+    #                                         util.ShellArg(command=['pip', 'install', '--user', 'pytz'], logname=logname),
     #                                     ],
     #                                     name="Install pytz python package",
     #                                     haltOnFailure=True,
@@ -411,9 +411,9 @@ for platform in platforms:
                                 haltOnFailure=False, flunkOnWarnings=False, # Don't fail here
                                 flunkOnFailure=False, warnOnWarnings=False,
                                 warnOnFailure=False,
-                                logfile=logfile),
+                                logname=logname),
                 util.ShellArg(command=['pip', 'install', '--user', 'dmgbuild'],
-                                logfile=logfile),
+                                logname=logname),
             ],
             name="Install dmgbuild python package",
             haltOnFailure=True,
@@ -425,18 +425,18 @@ for platform in platforms:
         #                                     ))
         keychain_name = 'cs.keychain'
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/dev.p12', '-o', 'dev.p12', '-s'], logfile=logfile),
+                util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/dev.p12', '-o', 'dev.p12', '-s'], logname=logname),
                 # For use in separate keychain
                 util.ShellArg(command=['security', 'create-keychain', '-p', login_keychain, keychain_name],
-                              logfile=logfile,
+                              logname=logname,
                               haltOnFailure=False, flunkOnWarnings=False, flunkOnFailure=False,
                               warnOnWarnings=False, warnOnFailure=False),
-                util.ShellArg(command=['security', 'default-keychain', '-s', keychain_name], logfile=logfile),
-                util.ShellArg(command=['security', 'unlock-keychain', '-p', login_keychain, keychain_name], logfile=logfile),
-                util.ShellArg(command=['security', 'import', './dev.p12', '-k', keychain_name, '-P', '', '-A'], logfile=logfile),
-                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', login_keychain, '-s',  keychain_name,], logfile=logfile),
-                util.ShellArg(command=['security', 'list-keychains', '-s', keychain_name], logfile=logfile),
-                util.ShellArg(command=['security', 'list-keychains'], logfile=logfile),
+                util.ShellArg(command=['security', 'default-keychain', '-s', keychain_name], logname=logname),
+                util.ShellArg(command=['security', 'unlock-keychain', '-p', login_keychain, keychain_name], logname=logname),
+                util.ShellArg(command=['security', 'import', './dev.p12', '-k', keychain_name, '-P', '', '-A'], logname=logname),
+                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', login_keychain, '-s',  keychain_name,], logname=logname),
+                util.ShellArg(command=['security', 'list-keychains', '-s', keychain_name], logname=logname),
+                util.ShellArg(command=['security', 'list-keychains'], logname=logname),
             ],
             name="Install NextGIS sign sertificate",
             haltOnFailure=True,
@@ -494,12 +494,12 @@ for platform in platforms:
                 util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext, basename=installer_name_base + '-standalone', now=now),
                                 '-s', '--ftp-create-dirs', ngftp + '/'
             ],
-            logfile=logfile),
+            logname=logname),
             util.ShellArg(command=["echo",
                 util.Interpolate('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,
                     basename=installer_name_base + '-standalone', now=now)
             ],
-            logfile=logfile),
+            logname=logname),
         ],
         name="Upload standalone installer to ftp",
         haltOnFailure=True,

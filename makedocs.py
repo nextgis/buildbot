@@ -21,7 +21,7 @@ git_poller = changes.GitPoller(project = git_project_name,
 c['change_source'].append(git_poller)
 
 builderNames = []
-logfile = 'stdio'
+logname = 'stdio'
 upload_script_name = 'ftp_uploader2.py'
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/' + upload_script_name
 
@@ -87,9 +87,9 @@ for lang in langs:
                             env=env,))
 
     factory.addStep(steps.ShellSequence(commands=[
-                    util.ShellArg(command=['make', 'json'], logfile=logfile),
-                    util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logfile=logfile),
-                    util.ShellArg(command=['python', upload_script_name, '--build_path', 'build/json', '--ftp', 'ftp://192.168.255.61/data_docs/' + lang], logfile=logfile),
+                    util.ShellArg(command=['make', 'json'], logname=logname),
+                    util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logname=logname),
+                    util.ShellArg(command=['python', upload_script_name, '--build_path', 'build/json', '--ftp', 'ftp://192.168.255.61/data_docs/' + lang], logname=logname),
                 ],
                 name="Generate json for NextGIS Data",
                 description=["make", "json for NextGIS Data"],
@@ -135,9 +135,9 @@ for lang in langs:
     # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
     #                                    description=["sync", "to web server"]))
     factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logfile=logfile),
-        util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logfile=logfile),
-        util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p 2322 -i /root/.ssh/www', '_build/html/', 'ngw_admin@192.168.6.1:/home/docker/data/www/docs/' + lang,], logfile=logfile),
+        util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logname=logname),
+        util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logname=logname),
+        util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p 2322 -i /root/.ssh/www', '_build/html/', 'ngw_admin@192.168.6.1:/home/docker/data/www/docs/' + lang,], logname=logname),
         ],
         name="Copy documentation to web server",
         haltOnFailure=True,

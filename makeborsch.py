@@ -123,7 +123,7 @@ build_lock = util.MasterLock("borsch_worker_builds")
 #                              maxCountForWorker={'build-win': 1, 'build-mac': 1}
 #                              )
 
-logfile = 'stdio'
+logname = 'stdio'
 generator = 'Visual Studio 15 2017'
 
 def get_env(os):
@@ -236,10 +236,10 @@ def install_dependencies(factory, requirements, os):
             )
         elif requirement == 'PyQt4' and os == 'mac':
             factory.addStep(steps.ShellSequence(commands=[
-                    util.ShellArg(command=["curl", install_script_src, '-o', install_script_name, '-s', '-L'], logfile=logfile),
+                    util.ShellArg(command=["curl", install_script_src, '-o', install_script_name, '-s', '-L'], logname=logname),
                     util.ShellArg(command=["python", install_script_name, '--ftp_user', ngftp_user,
                         '--ftp', ngftp_base, '--build_path', 'install',
-                        '--platform', 'mac', '--create_pth', '--packages', 'lib_freetype', 'lib_gif', 'lib_jpeg', 'lib_png', 'lib_sqlite', 'lib_tiff', 'lib_z', 'py_sip', 'lib_qt4', 'py_qt4'], logfile=logfile),
+                        '--platform', 'mac', '--create_pth', '--packages', 'lib_freetype', 'lib_gif', 'lib_jpeg', 'lib_png', 'lib_sqlite', 'lib_tiff', 'lib_z', 'py_sip', 'lib_qt4', 'py_qt4'], logname=logname),
                 ],
                 name="Install PyQt4",
                 haltOnFailure=True,
@@ -345,8 +345,8 @@ for repository in repositories:
                                 method='clobber', submodules=False, workdir=code_dir))
 
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["curl", release_script_src, '-o', script_name, '-s', '-L'], logfile=logfile),
-                util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logfile=logfile),
+                util.ShellArg(command=["curl", release_script_src, '-o', script_name, '-s', '-L'], logname=logname),
+                util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logname=logname),
             ],
             name="Download scripts",
             haltOnFailure=True,

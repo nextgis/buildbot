@@ -70,7 +70,7 @@ build_lock = util.MasterLock("deb_worker_builds")
 
 script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/deb_util.py'
 script_name = 'deb_util.py'
-logfile = 'stdio'
+logname = 'stdio'
 username = 'buildbot'
 userkey = os.environ.get("BUILDBOT_PASSWORD")
 
@@ -131,7 +131,7 @@ for repository in repositories:
             workdir=code_dir))
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["curl", script_src, '-o', script_name, '-s', '-L'], 
-                logfile=logfile),
+                logname=logname),
             ],
             name="Download scripts",
             haltOnFailure=True,
@@ -190,7 +190,7 @@ for repository in repositories:
         # 4. Create packages
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["dpkg-buildpackage", '-b', '-us', '-uc'], 
-                    logfile=logfile),
+                    logname=logname),
             ],
             name="Create packages", haltOnFailure=True, timeout=125 * 60,
             maxTime=5 * 60 * 60, workdir=code_dir, env=get_env(platform['name']),
