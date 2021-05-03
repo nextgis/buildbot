@@ -360,7 +360,7 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=["cmake", run_args_ex, '..'],
                                            name="configure",
                                            haltOnFailure=True,
-                                           timeout=125 * 60,
+                                           timeout=180 * 60,
                                            maxTime=5 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
@@ -369,7 +369,7 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=cmake_build_ex,
                                            name="make",
                                            haltOnFailure=True,
-                                           timeout=125 * 60,
+                                           timeout=180 * 60,
                                            maxTime=15 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
@@ -381,7 +381,7 @@ for repository in repositories:
         factory.addStep(steps.ShellCommand(command=test_cmd,
                                            name="test",
                                            haltOnFailure=True,
-                                           timeout=125 * 60,
+                                           timeout=180 * 60,
                                            maxTime=5 * 60 * 60,
                                            workdir=build_dir,
                                            env=env))
