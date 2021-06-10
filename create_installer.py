@@ -28,8 +28,8 @@ userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDB
 
 installer_git = 'git://github.com/nextgis/nextgis_installer.git'
 
-timeout = 240
-max_time = 400
+timeout = 180
+max_time = 240
 
 c['change_source'] = []
 c['schedulers'] = []
