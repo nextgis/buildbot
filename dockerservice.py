@@ -47,7 +47,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.registryAuth = registryAuth or {}
         self.secrets = secrets or []
 
-    def _thd_start_instance(self, image, dockerfile, volumes, custom_context, encoding, buildargs):
+    def _thd_start_instance(self, image, dockerfile, volumes, custom_context, encoding, buildargs, hostname):
         docker_client = self._getDockerClient()
 
         if self.registryAuth:
@@ -55,7 +55,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                 docker_client.login(username=self.registryAuth['username'],
                                     password=self.registryAuth['password'],
                                     registry=self.registryAuth['host'])
-            except docker.errors.APIError:
+            except docker.errors.APIError as e:
                 log.msg('Error while login to registry host: %s', e)
 
         service_name = self.getContainerName()
