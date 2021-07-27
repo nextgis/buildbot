@@ -89,7 +89,7 @@ for lang in langs:
     factory.addStep(steps.ShellSequence(commands=[
                     util.ShellArg(command=['make', 'json'], logname=logname),
                     util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logname=logname),
-                    util.ShellArg(command=['python', upload_script_name, '--build_path', 'build/json', '--ftp', 'ftp://192.168.255.61/data_docs/' + lang], logname=logname),
+                    util.ShellArg(command=['python', upload_script_name, '--build_path', 'build/json', '--ftp', 'ftp://ngid_ftp_admin:efolsec190@192.168.6.4:10511/' + lang], logname=logname),
                 ],
                 name="Generate json for NextGIS Data",
                 description=["make", "json for NextGIS Data"],
