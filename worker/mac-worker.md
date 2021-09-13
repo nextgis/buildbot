@@ -1,8 +1,10 @@
-# Intro
+# macOS in qemu KVM
 
-Mac OS X qemu/kvm worker on Ubuntu 16.04 LTS Server.
+## Intro
 
-# Prepare
+Mac OS X qemu/kvm worker on Ubuntu 16.04 LTS Server or higher.
+
+## Prepare
 
 For Ubuntu 16.04 LTS server
 
@@ -12,7 +14,7 @@ get qemu 2.10 here: https://launchpad.net/~alindt/+archive/ubuntu/xenial-backpor
 
 Need at least qemu 2.9+
 
-# Config
+## Config
 
 NOTE: To work properly need to execute following command:
    > sudo su
@@ -21,13 +23,6 @@ NOTE: To work properly need to execute following command:
 Success config looks like
 
 ```xml
-<!--
-WARNING: THIS IS AN AUTO-GENERATED FILE. CHANGES TO IT ARE LIKELY TO BE
-OVERWRITTEN AND LOST. Changes to this xml configuration should be made using:
-  virsh edit build-mac
-or other application using the libvirt API.
--->
-
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>build-mac</name>
   <uuid>dbd4ca8a-1c90-4019-a423-151f6b9ed519</uuid>
@@ -131,3 +126,8 @@ or other application using the libvirt API.
   </qemu:commandline>
 </domain>
 ```
+
+## macOS Mojave
+
+See <https://github.com/foxlet/macOS-Simple-KVM>.
+Success install in virt manafger followin instructions from this repo.
