@@ -14,6 +14,12 @@ repos = [
     'docs_ngqgis',
     'docs_ngweb',
     'docs_toolbox',
+    'docs_data',
+    'docs_collector',
+    'docs_ngid',
+    'docs_formbuilder',
+    'docs_ngcourses',
+    'docs_ngmanager',
 ]
 
 repos_m = [
@@ -64,10 +70,10 @@ scheduler = schedulers.SingleBranchScheduler(
                     builderNames=[project_name])
 
 c['schedulers'].append(scheduler)
-c['schedulers'].append(schedulers.ForceScheduler(
-                            name=project_name + "_force",
-                            builderNames=[project_name],
-))
+# c['schedulers'].append(schedulers.ForceScheduler(
+#                             name=project_name + "_force",
+#                             builderNames=[project_name],
+# ))
 
 #### update docs
 git_user_name = "NextGIS BuildBot"
