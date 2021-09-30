@@ -65,7 +65,9 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
 
         for instance in instances:
             try:
-                docker_client.remove_service(instance['ID'])
+                id = instance['ID']
+                log.msg('Remove instance {}'.format(id))
+                docker_client.remove_service(id)
             except NotFound:
                 pass
 
@@ -138,10 +140,14 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
 
     def _thd_stop_instance(self, instance, fast):
         docker_client = self._getDockerClient()
-        log.msg('Stopping service %s ...' % instance['ID'][:6])
-        docker_client.remove_service(instance['ID'])
-        if self.image is None: # This is case where image create locally from Dockerfile.
-            try:
-                docker_client.remove_image(image=instance['image'])
-            except docker.errors.APIError as e:
-                log.msg('Error while removing the image: %s', e)
+        id = instance['ID']
+        log.msg('Stopping service %s ...' % id[:6])
+        docker_client.remove_service(id)
+        
+        # Skip remove image
+
+        # if self.image is None: # This is case where image create locally from Dockerfile.
+        #     try:
+        #         docker_client.remove_image(image=instance['image'])
+        #     except docker.errors.APIError as e:
+        #         log.msg('Error while removing the image: %s', e)
