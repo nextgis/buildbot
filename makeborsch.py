@@ -158,7 +158,7 @@ def get_env(os):
         env['SENTRY_URL'] = sentry_url
         env['SENTRY_ORG'] = 'nextgis'
         env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
-        env['PYTHONHTTPSVERIFY'] = 0
+        env['PYTHONHTTPSVERIFY'] = '0'
     elif 'win64' == os:
         env['PYTHONPATH'] = 'C:\\Python27'
         env['PATH'] = [
@@ -180,7 +180,7 @@ def get_env(os):
         env['SENTRY_URL'] = sentry_url
         env['SENTRY_ORG'] = 'nextgis'
         env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
-        env['PYTHONHTTPSVERIFY'] = 0
+        env['PYTHONHTTPSVERIFY'] = '0'
     elif 'mac' == os:
         env = {
             'PATH': [
