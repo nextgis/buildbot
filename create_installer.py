@@ -275,11 +275,13 @@ for platform in platforms:
     if 'win' in platform['name']:
         if_prefix = '_win'
         separator = '\\'
-        env = {}
-        env['PYTHONHTTPSVERIFY'] = '0'
+        env = {'PYTHONHTTPSVERIFY': '0'}
         installer_ext = '.exe'
         if 'win32' == platform['name']:
-            env = { 'PYTHONPATH': 'C:\\Python27_32' }
+            env = { 
+                'PYTHONPATH': 'C:\\Python27_32',
+                'PYTHONHTTPSVERIFY': '0'
+            }
 
     repo_name_base = 'repository-' + platform['name']
     logname = 'stdio'
