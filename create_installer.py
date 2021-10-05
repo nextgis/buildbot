@@ -276,6 +276,7 @@ for platform in platforms:
         if_prefix = '_win'
         separator = '\\'
         env = {}
+        env['PYTHONHTTPSVERIFY'] = '0'
         installer_ext = '.exe'
         if 'win32' == platform['name']:
             env = { 'PYTHONPATH': 'C:\\Python27_32' }
@@ -555,7 +556,8 @@ for platform in platforms:
                                            name="send package to ftp",
                                            doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
                                            haltOnFailure=True,
-                                           workdir=code_dir))
+                                           workdir=code_dir,
+                                           env=env))
 
     # 8. Create new release in repka
     factory.addStep(steps.ShellCommand(
