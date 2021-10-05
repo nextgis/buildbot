@@ -409,7 +409,8 @@ for repository in repositories:
                                                     ],
                                            name="send package to rm.nextgis.com",
                                            haltOnFailure=True,
-                                           workdir=code_dir))
+                                           workdir=code_dir,
+                                           env=env))
 
         # upload to ftp
         factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
@@ -418,7 +419,8 @@ for repository in repositories:
                                                     '--build_path', build_subdir],
                                            name="send package to ftp",
                                            haltOnFailure=True,
-                                           workdir=code_dir))
+                                           workdir=code_dir,
+                                           env=env))
 
         if 'sentry_project' in repository and len(repository['sentry_project']):
             factory.addStep(steps.ShellCommand(command=['sentry-cli', 'upload-dif', '--include-sources', '-o', 'nextgis', '-p', repository['sentry_project'], '.'],
