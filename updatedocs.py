@@ -70,10 +70,10 @@ scheduler = schedulers.SingleBranchScheduler(
                     builderNames=[project_name])
 
 c['schedulers'].append(scheduler)
-# c['schedulers'].append(schedulers.ForceScheduler(
-#                             name=project_name + "_force",
-#                             builderNames=[project_name],
-# ))
+c['schedulers'].append(schedulers.ForceScheduler(
+                            name=project_name + "_force",
+                            builderNames=[project_name],
+))
 
 #### update docs
 git_user_name = "NextGIS BuildBot"
