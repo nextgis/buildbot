@@ -7,9 +7,9 @@ import os
 
 c = {}
 
-vm_cpu_count = 8
+vm_cpu_count = 6
 
-mac_os_min_version = '10.12'
+mac_os_min_version = '10.14'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 ngftp = 'ftp://192.168.6.7:8121/software/installer/src/'
@@ -206,7 +206,7 @@ for os_type in os_types:
     )
 
     builder = util.BuilderConfig(name = project_name + '_' + os_type,
-                                workernames = ['build-' + os_type],
+                                workernames = ['build-' + os_type + '-py3'],
                                 factory = factory,
                                 description="Create installer framework [" + os_type + "]")
 
