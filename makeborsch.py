@@ -199,6 +199,7 @@ def get_env(os):
             'SENTRY_URL': sentry_url,
             'SENTRY_ORG': 'nextgis', 
             'SENTRY_AUTH_TOKEN': sentry_auth_token,
+            'PYTHONHTTPSVERIFY': False,
         }
     return env
 
