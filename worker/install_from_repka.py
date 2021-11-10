@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Script to upload pack to ftp
 
@@ -15,6 +15,7 @@ import json
 try:
     # For Python 3.0 and later
     from urllib.request import urlopen
+    import stat
 except ImportError:
     # Fall back to Python 2's urllib2
     from urllib2 import urlopen
