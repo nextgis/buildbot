@@ -177,6 +177,12 @@ def get_env(os):
     #         "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
     #     ]
     if 'win' in os:
+        env['PATH'] = [
+            "C:\\Windows",
+            "C:\\Program Files\\Git\\cmd",
+            "C:\\Program Files\\CMake\\bin",
+            "${PATH}"
+        ]
         env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
         env['SENTRY_URL'] = sentry_url
         env['SENTRY_ORG'] = 'nextgis'
