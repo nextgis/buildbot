@@ -411,7 +411,7 @@ for repository in repositories:
             #                                name="send package to github",
             #                                haltOnFailure=True,
             #                                workdir=code_dir))
-            factory.addStep(steps.ShellCommand(command=['python', script_name, '--login',
+            factory.addStep(steps.ShellCommand(command=['python3', script_name, '--login',
                                                     username, '--password', userkey, '--build_path', build_subdir
                                                     ],
                                            name="send package to rm.nextgis.com",
@@ -420,7 +420,7 @@ for repository in repositories:
                                            env=env))
 
         # upload to ftp
-        factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
+        factory.addStep(steps.ShellCommand(command=['python3', upload_script_name,
                                                     '--ftp_user', ngftp_user, '--ftp',
                                                     ngftp + project_name + '_' + platform['name'],
                                                     '--build_path', build_subdir],
