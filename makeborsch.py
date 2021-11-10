@@ -87,7 +87,7 @@ skip_send2github = [
 
 vm_cpu_count = 6
 
-mac_os_min_version = '10.12'
+mac_os_min_version = '10.14'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/repka_release.py' # 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/github_release.py'
@@ -110,12 +110,12 @@ c['schedulers'] = []
 c['builders'] = []
 
 platforms = [
-    {'name' : 'win32', 'worker' : 'build-win'},
-    {'name' : 'win64', 'worker' : 'build-win'},
-    {'name' : 'mac', 'worker' : 'build-mac'},
-    {'name' : 'win32-static', 'worker' : 'build-win'},
-    {'name' : 'win64-static', 'worker' : 'build-win'},
-    {'name' : 'mac-static', 'worker' : 'build-mac'},
+    # {'name' : 'win32', 'worker' : 'build-win'},
+    {'name' : 'win64', 'worker' : 'build-win-py3'},
+    {'name' : 'mac', 'worker' : 'build-mac-py3'},
+    # {'name' : 'win32-static', 'worker' : 'build-win'},
+    {'name' : 'win64-static', 'worker' : 'build-win-py3'},
+    {'name' : 'mac-static', 'worker' : 'build-mac-py3'},
 ]
 
 build_lock = util.MasterLock("borsch_worker_builds")
@@ -125,57 +125,58 @@ build_lock = util.MasterLock("borsch_worker_builds")
 #                              )
 
 logname = 'stdio'
-generator = 'Visual Studio 15 2017'
+generator = 'Visual Studio 17 2019' # 'Visual Studio 15 2017'
 
 def get_env(os):
     env = {}
-    if 'win32' == os:
-        env['PYTHONPATH'] = 'C:\\Python27_32'
-        env['PATH'] = [
-            "C:\\Perl64\\site\\bin",
-            "C:\\Perl64\\bin",
-            "C:\\Python27_32",
-            "C:\\Python27_32\\Scripts",
-            "C:\\Windows\\system32",
-            "C:\\Windows",
-            "C:\\Windows\\System32\\Wbem",
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
-            "C:\\Program Files\\Git\\cmd",
-            "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
-            "C:\\Program Files\\CMake\\bin",
-            "C:\\Python27_32\\lib\\site-packages\\pywin32_system32",
-            "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64", # _ia32
-        ]
-        env['ARCH_PATH'] = 'ia32'
-        env['C_TARGET_ARCH'] = 'ia32'
-        env['INTEL_TARGET_ARCH_IA32'] = 'ia32'
-        env['NDK_ARCH'] = 'x86'
-        env['TARGET_ARCH'] = 'ia32'
-        env['TARGET_VS'] = '2017'
-        env['TARGET_VS_ARCH'] = 'x86'
-        env['LANG'] = 'en_US'
-        env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)       
-        env['SENTRY_URL'] = sentry_url
-        env['SENTRY_ORG'] = 'nextgis'
-        env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
-        env['PYTHONHTTPSVERIFY'] = '0'
-    elif 'win64' == os:
-        env['PYTHONPATH'] = 'C:\\Python27'
-        env['PATH'] = [
-            "C:\\Perl64\\site\\bin",
-            "C:\\Perl64\\bin",
-            "C:\\Python27",
-            "C:\\Python27\\Scripts",
-            "C:\\Windows\\system32",
-            "C:\\Windows",
-            "C:\\Windows\\System32\\Wbem",
-            "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
-            "C:\\Program Files\\Git\\cmd",
-            "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
-            "C:\\Program Files\\CMake\\bin",
-            "C:\\Python27\\lib\\site-packages\\pywin32_system32",
-            "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
-        ]
+    # if 'win32' == os:
+    #     env['PYTHONPATH'] = 'C:\\Python27_32'
+    #     env['PATH'] = [
+    #         "C:\\Perl64\\site\\bin",
+    #         "C:\\Perl64\\bin",
+    #         "C:\\Python27_32",
+    #         "C:\\Python27_32\\Scripts",
+    #         "C:\\Windows\\system32",
+    #         "C:\\Windows",
+    #         "C:\\Windows\\System32\\Wbem",
+    #         "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+    #         "C:\\Program Files\\Git\\cmd",
+    #         "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
+    #         "C:\\Program Files\\CMake\\bin",
+    #         "C:\\Python27_32\\lib\\site-packages\\pywin32_system32",
+    #         "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64", # _ia32
+    #     ]
+    #     env['ARCH_PATH'] = 'ia32'
+    #     env['C_TARGET_ARCH'] = 'ia32'
+    #     env['INTEL_TARGET_ARCH_IA32'] = 'ia32'
+    #     env['NDK_ARCH'] = 'x86'
+    #     env['TARGET_ARCH'] = 'ia32'
+    #     env['TARGET_VS'] = '2017'
+    #     env['TARGET_VS_ARCH'] = 'x86'
+    #     env['LANG'] = 'en_US'
+    #     env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)       
+    #     env['SENTRY_URL'] = sentry_url
+    #     env['SENTRY_ORG'] = 'nextgis'
+    #     env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
+    #     env['PYTHONHTTPSVERIFY'] = '0'
+    # elif 'win64' == os:
+    #     env['PYTHONPATH'] = 'C:\\Python27'
+    #     env['PATH'] = [
+    #         "C:\\Perl64\\site\\bin",
+    #         "C:\\Perl64\\bin",
+    #         "C:\\Python27",
+    #         "C:\\Python27\\Scripts",
+    #         "C:\\Windows\\system32",
+    #         "C:\\Windows",
+    #         "C:\\Windows\\System32\\Wbem",
+    #         "C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+    #         "C:\\Program Files\\Git\\cmd",
+    #         "C:\\Program Files (x86)\\Xoreax\\IncrediBuild",
+    #         "C:\\Program Files\\CMake\\bin",
+    #         "C:\\Python27\\lib\\site-packages\\pywin32_system32",
+    #         "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
+    #     ]
+    if 'win' in os:
         env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
         env['SENTRY_URL'] = sentry_url
         env['SENTRY_ORG'] = 'nextgis'
