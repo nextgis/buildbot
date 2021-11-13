@@ -10,7 +10,7 @@ c = {}
 
 vm_cpu_count = 8
 
-mac_os_min_version = '10.12'
+mac_os_min_version = '10.14'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 ngftp2 = 'ftp://192.168.6.7:8121/software/installer'
@@ -36,7 +36,7 @@ c['schedulers'] = []
 c['builders'] = []
 
 project_name = 'create_installer'
-generator = 'Visual Studio 15 2017'
+generator = 'Visual Studio 16 2019'
 create_updater_package = False
 binary_repo_refix = "https://rm.nextgis.com/api/repo" 
 #"http://nextgis.com/programs/desktop/repository-" // 
@@ -277,11 +277,11 @@ for platform in platforms:
         separator = '\\'
         env = {'PYTHONHTTPSVERIFY': '0'}
         installer_ext = '.exe'
-        if 'win32' == platform['name']:
-            env = { 
-                'PYTHONPATH': 'C:\\Python27_32',
-                'PYTHONHTTPSVERIFY': '0'
-            }
+        # if 'win32' == platform['name']:
+        #     env = { 
+        #         'PYTHONPATH': 'C:\\Python27_32',
+        #         'PYTHONHTTPSVERIFY': '0'
+        #     }
 
     repo_name_base = 'repository-' + platform['name']
     logname = 'stdio'
@@ -371,8 +371,10 @@ for platform in platforms:
 
     create_opt = []
     if 'win64' == platform['name']:
-        create_opt.append('-g')
-        create_opt.append(generator + ' Win64')
+        create_opt.append('-G')
+        create_opt.append(generator)
+        create_opt.append('-A')
+        create_opt.append('Win64')
         create_opt.append('-w64')
     elif 'win32' == platform['name']:
         create_opt.append('-g')
@@ -384,7 +386,7 @@ for platform in platforms:
     factory.addStep(
         steps.ShellCommand(
             command=[
-                "python", 'opt' + separator + 'create_installer.py',
+                "python3", 'opt' + separator + 'create_installer.py',
                 '-s', 'inst', '-q', 'qt/bin', '-t', build_dir_name,
                 '-n', '-r', repoUrl.withArgs(platform),
                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s',  basename=installer_name_base),
@@ -449,7 +451,7 @@ for platform in platforms:
     factory.addStep(
         steps.ShellCommand(
             command=[
-                "python", 'opt' + separator + 'create_installer.py', '-s', 'inst',
+                "python3", 'opt' + separator + 'create_installer.py', '-s', 'inst',
                 '-q', 'qt/bin', '-t', build_dir_name, '-n', 
                 '-r', repoUrl.withArgs(platform), '-i', 
                 util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
@@ -465,7 +467,7 @@ for platform in platforms:
         )
     )
 
-    factory.addStep(steps.ShellCommand(command=["python", 'opt' + separator + 'create_installer.py',
+    factory.addStep(steps.ShellCommand(command=["python3", 'opt' + separator + 'create_installer.py',
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
@@ -551,7 +553,7 @@ for platform in platforms:
                                        env=env))
     if create_updater_package:
         # If create installer - upload updater.zip + version.str to ftp
-        factory.addStep(steps.ShellCommand(command=['python', upload_script_name,
+        factory.addStep(steps.ShellCommand(command=['python3', upload_script_name,
                                                     '--ftp_user', ngftp2_user, '--ftp',
                                                     ngftp2 + '/src/nextgis_updater_' + platform['name'],
                                                     '--build_path', build_dir_name],
@@ -563,7 +565,7 @@ for platform in platforms:
 
     # 8. Create new release in repka
     factory.addStep(steps.ShellCommand(
-        command=["python", repka_script_name, '--repo_id', platform['repo_id'],
+        command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
             '--description', util.Interpolate('%(prop:notes)s'),
             '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
             '--login', username, '--password', userkey],

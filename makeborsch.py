@@ -125,7 +125,7 @@ build_lock = util.MasterLock("borsch_worker_builds")
 #                              )
 
 logname = 'stdio'
-generator = 'Visual Studio 17 2019' # 'Visual Studio 15 2017'
+generator = 'Visual Studio 16 2019' # 'Visual Studio 15 2017'
 
 def get_env(os):
     env = {}
@@ -333,7 +333,7 @@ for repository in repositories:
             else:
                 env = get_env('win64')
                 env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
-                run_args_ex.extend(['-G', generator + ' Win64'])
+                run_args_ex.extend(['-G', generator, '-A', 'Win64'])
         elif 'mac' in platform['name']:
             if platform['name'].endswith('-static'):
                 run_args_ex.append('-DBUILD_STATIC_LIBS=OM')
