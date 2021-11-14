@@ -374,11 +374,13 @@ for platform in platforms:
         create_opt.append('-G')
         create_opt.append(generator)
         create_opt.append('-A')
-        create_opt.append('Win64')
-        create_opt.append('-w64')
+        create_opt.append('x64')
+        # create_opt.append('-w64')
     elif 'win32' == platform['name']:
         create_opt.append('-g')
         create_opt.append(generator)
+        create_opt.append('-A')
+        create_opt.append('Win32')
 
     installer_name_base = 'nextgis-setup-' + platform['name']
 

@@ -329,11 +329,11 @@ for repository in repositories:
             if 'win32' in platform['name']:
                 env = get_env('win32')
                 env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
-                run_args_ex.extend(['-G', generator])
+                run_args_ex.extend(['-G', generator, '-A', 'Win32'])
             else:
                 env = get_env('win64')
                 env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
-                run_args_ex.extend(['-G', generator, '-A', 'Win64'])
+                run_args_ex.extend(['-G', generator, '-A', 'x64'])
         elif 'mac' in platform['name']:
             if platform['name'].endswith('-static'):
                 run_args_ex.append('-DBUILD_STATIC_LIBS=OM')
