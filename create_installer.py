@@ -45,7 +45,7 @@ binary_repo_refix = "https://rm.nextgis.com/api/repo"
 
 build_lock = util.WorkerLock("create_installer_worker_builds",
     maxCount=1,
-    maxCountForWorker={'build-win': 1, 'build-mac': 1}
+    maxCountForWorker={'build-win-py3': 1, 'build-mac-py3': 1}
 )
 
 forceScheduler_create = schedulers.ForceScheduler(
@@ -227,9 +227,9 @@ def repoUrl(props, platform):
         return '{}/{}{}'.format(url, platform['name'], suffix)
 
 platforms = [
-    {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
-    {'name' : 'win64', 'worker' : 'build-win', 'repo_id': 5},
-    {'name' : 'mac', 'worker' : 'build-mac', 'repo_id': 6} 
+    # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
+    {'name' : 'win64', 'worker' : 'build-win-py3', 'repo_id': 5},
+    {'name' : 'mac', 'worker' : 'build-mac-py3', 'repo_id': 6} 
 ]
 
 # Create triggerable shcedulers
