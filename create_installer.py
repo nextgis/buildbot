@@ -48,15 +48,17 @@ build_lock = util.WorkerLock("create_installer_worker_builds",
     maxCountForWorker={'build-win-py3': 1, 'build-mac-py3': 1}
 )
 
+builder_names=[
+        # project_name + "_win32",
+        project_name + "_win64",
+        project_name + "_mac",
+    ]
+
 forceScheduler_create = schedulers.ForceScheduler(
     name=project_name + "_update",
     label="Update installer",
     buttonName="Update installer",
-    builderNames=[
-        project_name + "_win32",
-        project_name + "_win64",
-        project_name + "_mac",
-    ],
+    builderNames=builder_names,
     properties=[
         util.StringParameter(
             name="force",
@@ -86,11 +88,7 @@ forceScheduler_update = schedulers.ForceScheduler(
     name=project_name + "_create",
     label="Create installer", 
     buttonName="Create installer",
-    builderNames=[
-        project_name + "_win32",
-        project_name + "_win64",
-        project_name + "_mac",
-    ],
+    builderNames=builder_names,
     properties=[
         util.StringParameter(
             name="url", 
@@ -115,11 +113,7 @@ forceScheduler_standalone = schedulers.ForceScheduler(
     name=project_name + "_standalone",
     label="Create standalone installer",
     buttonName="Create standalone installer",
-    builderNames=[
-        project_name + "_win32",
-        project_name + "_win64",
-        project_name + "_mac",
-    ],
+    builderNames=builder_names,
     properties=[
         util.StringParameter(
             name="suffix",
@@ -133,11 +127,7 @@ forceScheduler_standalone_ex = schedulers.ForceScheduler(
     name=project_name + "_brand_standalone",
     label="Create branded standalone installer",
     buttonName="Create branded installer",
-    builderNames=[
-        project_name + "_win32",
-        project_name + "_win64",
-        project_name + "_mac",
-    ],
+    builderNames=builder_names,
     properties=[
         util.StringParameter(
             name="suffix",
@@ -166,11 +156,7 @@ forceScheduler_local = schedulers.ForceScheduler(
     name=project_name + "_local",
     label="Create intranet installer",
     buttonName="Create intranet installer",
-    builderNames=[
-        project_name + "_win32",
-        project_name + "_win64",
-        project_name + "_mac",
-    ],
+    builderNames=builder_names,
     properties=[
         util.StringParameter(
             name="url", 
