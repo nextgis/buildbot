@@ -400,7 +400,7 @@ for platform in platforms:
         # Try to pip2 and pip install
 
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=['pip2', 'install', '--user', 'dmgbuild'],
+                util.ShellArg(command=['pip3', 'install', '--user', 'dmgbuild'],
                                 haltOnFailure=False, flunkOnWarnings=False, # Don't fail here
                                 flunkOnFailure=False, warnOnWarnings=False,
                                 warnOnFailure=False,
