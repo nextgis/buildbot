@@ -153,7 +153,7 @@ def get_release(packet_id, tag, username, password):
 
 def upload_file(file_path, username, password):
     post_url = repka_endpoint + '/api/upload'
-    args = ['curl', '-u', username + ':' + password, '-F', 'file=@' + file_path, 
+    args = ['curl', '-u', username + ':' + password, '-k', '-F', 'file=@' + file_path, 
         post_url
     ]
     load_response = subprocess.check_output(args)
