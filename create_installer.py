@@ -401,12 +401,12 @@ for platform in platforms:
 
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=['pip3', 'install', '--user', 'dmgbuild'],
-                                haltOnFailure=False, flunkOnWarnings=False, # Don't fail here
-                                flunkOnFailure=False, warnOnWarnings=False,
-                                warnOnFailure=False,
+                                # haltOnFailure=False, flunkOnWarnings=False, # Don't fail here
+                                # flunkOnFailure=False, warnOnWarnings=False,
+                                # warnOnFailure=False,
                                 logname=logname),
-                util.ShellArg(command=['pip', 'install', '--user', 'dmgbuild'],
-                                logname=logname),
+                # util.ShellArg(command=['pip', 'install', '--user', 'dmgbuild'],
+                #                 logname=logname),
             ],
             name="Install dmgbuild python package",
             haltOnFailure=True,
