@@ -110,14 +110,18 @@ def get_repo_name(repo):
     base=os.path.basename(p)
     return os.path.splitext(base)[0]
 
+def add_auth_header(request, username, password):
+    if username is not None and password is not None:
+        auth = '{}:{}'.format(username, password)
+        base64string = base64.b64encode(auth.encode())
+        request.add_header('Authorization', 'Basic {}'.format(base64string.decode()))
+
 def get_packet_id(repo_id, packet_name, username, password):
     url =  repka_endpoint + '/api/packet?repository={}&filter={}'.format(repo_id, packet_name)
     color_print('Check packet url: ' + url, False, 'OKGRAY')
     request = urllib2.Request(url)
     
-    if username is not None and password is not None:
-        base64string = base64.b64encode('%s:%s' % (username, password))
-        request.add_header("Authorization", "Basic %s" % base64string)   
+    add_auth_header(request, username, password)
 
     response = urllib2.urlopen(request)
     packets = json.loads(response.read())
@@ -131,9 +135,7 @@ def get_release(packet_id, tag, username, password):
     color_print('Check release url: ' + url, False, 'OKGRAY')
     request = urllib2.Request(url)
     
-    if username is not None and password is not None:
-        base64string = base64.b64encode('%s:%s' % (username, password))
-        request.add_header("Authorization", "Basic %s" % base64string)   
+    add_auth_header(request, username, password)
 
     response = urllib2.urlopen(request)
     releases = json.loads(response.read())
@@ -181,9 +183,7 @@ def create_release(packet_id, name, description, tag, file_uid, file_name, usern
 
     request = urllib2.Request(url, data=data, headers={'Content-Type': 'application/json', 'Content-Length': clen})
     
-    if username is not None and password is not None:
-        base64string = base64.b64encode('%s:%s' % (username, password))
-        request.add_header("Authorization", "Basic %s" % base64string)   
+    add_auth_header(request, username, password)
 
     response = urllib2.urlopen(request)
     release = json.loads(response.read())
