@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 ################################################################################
 ##
@@ -14,9 +13,13 @@ import os
 import subprocess, shlex
 import sys
 import argparse
-import urllib2, json
+import json
 import base64
-
+try:
+    import urllib.request as urllib2
+except ImportError:
+    import urllib2
+    
 repka_endpoint = 'https://rm.nextgis.com'
 # Debug
 # repka_endpoint = 'http://localhost:8088'
@@ -52,7 +55,7 @@ class bcolors:
 
 def color_print(text, bold, color):
     if sys.platform == 'win32':
-        print text
+        print(text)
     else:
         out_text = ''
         if bold:
@@ -78,7 +81,7 @@ def color_print(text, bold, color):
         else:
             out_text += bcolors.OKGRAY
         out_text += text + bcolors.ENDC
-        print out_text
+        print(out_text)
 
 def parse_version(tag):
     if tag == 'latest':
@@ -154,7 +157,7 @@ def upload_file(file_path, username, password):
     load_response = subprocess.check_output(args)
     response = json.loads(load_response)
 
-    print response
+    print(response)
 
     file_uid = response['file']
     file_name = response['name']
