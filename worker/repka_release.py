@@ -179,6 +179,7 @@ def create_release(packet_id, name, description, tag, file_uid, file_name, usern
             {"upload_name": file_uid, "name": file_name},
         ]
     })
+    data = data.encode()
     clen = len(data)
 
     request = urllib2.Request(url, data=data, headers={'Content-Type': 'application/json', 'Content-Length': clen})
