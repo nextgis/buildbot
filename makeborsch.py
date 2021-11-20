@@ -220,7 +220,7 @@ def install_dependencies(factory, requirements, os):
                                                 haltOnFailure=True))
         elif requirement == 'numpy':
             factory.addStep(
-                steps.ShellCommand(command=['pip', 'install', '--user', 'numpy'],
+                steps.ShellCommand(command=['pip3', 'install', '--user', 'numpy'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
@@ -229,7 +229,7 @@ def install_dependencies(factory, requirements, os):
             )
         elif requirement == 'six':
             factory.addStep(
-                steps.ShellCommand(command=['pip', 'install', '--user', 'six'],
+                steps.ShellCommand(command=['pip3', 'install', '--user', 'six'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
@@ -238,7 +238,7 @@ def install_dependencies(factory, requirements, os):
             )
         elif requirement == 'cython':
             factory.addStep(
-                steps.ShellCommand(command=['pip', 'install', '--user', 'cython'],
+                steps.ShellCommand(command=['pip3', 'install', '--user', 'cython'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
