@@ -192,6 +192,7 @@ def get_env(os):
         env = {
             'PATH': [
                         "/usr/local/bin",
+                        "/Users/admin/Library/Python/3.9/bin",
                         "${PATH}"
                     ],
             'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
