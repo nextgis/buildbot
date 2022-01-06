@@ -62,7 +62,7 @@ repositories = [
     {'repo':'py_shapely', 'args':['-DWITH_GEOS_EXTERNAL=ON', '-DWITH_NUMPY_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_uriparser', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_kml', 'args':['-DWITH_ZLIB=ON', '-DWITH_Boost=ON', '-DWITH_Boost_EXTERNAL=ON', '-DWITH_UriParser=ON', '-DWITH_UriParser_EXTERNAL=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':['-E','engine_style_resolver|dom_round_trip|engine_feature_view|engine_kmz_file|engine_style_inliner|engine_update']},
-    {'repo':'py_proj', 'args':['-DWITH_PROJ_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':['cython'], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_proj', 'args':['-DWITH_PROJ_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_sci', 'args':['-DWITH_PYTHON3=ON'], 'requirements':['numpy'], 'os':['win32','win64'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_littlecms', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'git://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
@@ -237,7 +237,7 @@ def install_dependencies(factory, requirements, os):
                                     haltOnFailure=True,
                                     env=env)
             )
-        elif requirement == 'cython':
+        elif requirement == 'cython': # Already installed on vm
             factory.addStep(
                 steps.ShellCommand(command=['pip3', 'install', '--user', 'cython'],
                                     name="install " + requirement,
