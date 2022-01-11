@@ -34,7 +34,7 @@ poller_name = 'updatedocs'
 
 for repo in repos:
     git_poller = changes.GitPoller(project = poller_name + '/' + repo,
-                       repourl = 'git://github.com/nextgis/' + repo + '.git',
+                       repourl = 'git@github.com:nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
                        branches = langs,
                        pollinterval = 900,)
@@ -42,7 +42,7 @@ for repo in repos:
 
 for repo in repos_m:
     git_poller = changes.GitPoller(project = poller_name + '/' + repo,
-                       repourl = 'git://github.com/nextgis/' + repo + '.git',
+                       repourl = 'git@github.com:nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
                        branches = ['master'],
                        pollinterval = 900,)

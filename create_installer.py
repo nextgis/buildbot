@@ -26,7 +26,7 @@ login_keychain = os.environ.get("BUILDBOT_MACOSX_LOGIN_KEYCHAIN")
 username = 'buildbot' # username = 'bishopgis'
 userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
 
-installer_git = 'git://github.com/nextgis/nextgis_installer.git'
+installer_git = 'https://github.com/nextgis/nextgis_installer.git'
 
 timeout = 180
 max_time = 240

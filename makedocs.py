@@ -8,7 +8,7 @@ c['change_source'] = []
 c['schedulers'] = []
 c['builders'] = []
 
-repourl = 'git://github.com/nextgis/docs_ng.git'
+repourl = 'https://github.com/nextgis/docs_ng.git'
 langs = ['ru', 'en']
 
 poller_name = 'docs'
