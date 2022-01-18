@@ -201,6 +201,10 @@ def get_env(os):
 def install_dependencies(factory, requirements, os):
     env = get_env(os)
 
+    pip_cmd = 'pip3'
+    if os.endswith('-old'):
+        pip_cmd = 'pip'
+
     for requirement in requirements:
         if requirement == 'perl' and 'win' in os: # This is example. Perl already installed in VM.
             # Upload distro to worker
@@ -215,7 +219,7 @@ def install_dependencies(factory, requirements, os):
                                                 haltOnFailure=True))
         elif requirement == 'numpy':
             factory.addStep(
-                steps.ShellCommand(command=['pip3', 'install', '--user', 'numpy'],
+                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'numpy'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
@@ -224,7 +228,7 @@ def install_dependencies(factory, requirements, os):
             )
         elif requirement == 'six':
             factory.addStep(
-                steps.ShellCommand(command=['pip3', 'install', '--user', 'six'],
+                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'six'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
@@ -233,7 +237,7 @@ def install_dependencies(factory, requirements, os):
             )
         elif requirement == 'cython': # Already installed on vm
             factory.addStep(
-                steps.ShellCommand(command=['pip3', 'install', '--user', 'cython'],
+                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'cython'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
