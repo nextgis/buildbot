@@ -181,14 +181,14 @@ def get_env(os):
             "C:\\Windows",
             "C:\\Program Files\\Git\\cmd",
             "C:\\Program Files\\CMake\\bin",
-            "${PATH}"
+            "${PATH}",
         ]
         env['PYTHONPATH'] = 'C:\\Python27'
-    elif 'mac' == os:
+    elif 'mac' in os:
         env['PATH'] = [
             "/usr/local/bin",
             "/Users/admin/Library/Python/3.9/bin",
-            "${PATH}"
+            "${PATH}",
         ],
         env['MACOSX_DEPLOYMENT_TARGET'] = mac_os_min_version
     env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
