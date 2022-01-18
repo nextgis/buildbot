@@ -45,7 +45,7 @@ repositories = [
     {'repo':'lib_spatialite', 'args':['-DWITH_ZLIB=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_ICONV=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_SQLite3=ON', '-DWITH_GEOS=ON', '-DWITH_PROJ=ON', '-DOMIT_FREEXL=ON', '-DENABLE_LWGEOM=FALSE','-DBUILD_TESTING=OFF', '-DBUILD_QT5=ON', '-DWITH_Qt5_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]}, # TODO: FreeXL, LWGEOM
     {'repo':'lib_geotiff', 'args':['-DWITH_ZLIB=ON', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_PROJ=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON', '-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_UTILITIES=ON', '-DBUILD_TESTING=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_hdf4', 'args':['-DWITH_ZLIB=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_SZIP=ON', '-DWITH_SZIP_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':['-R','MFHDF_TEST-clearall|HDF_TEST-testhdf_thf']},
-    {'repo':'lib_gdal', 'args':['-DWITH_ZLIB=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_CURL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=OFF', '-DWITH_JPEG12_EXTERNAL=OFF', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON','-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_GIF=ON', '-DWITH_GIF_EXTERNAL=ON', '-DWITH_OpenCAD=ON', '-DWITH_OpenCAD_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PROJ=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_OpenJPEG=ON', '-DWITH_OpenJPEG_EXTERNAL=ON', '-DENABLE_OPENJPEG=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON','-DWITH_PYTHON=ON', '-DWITH_PYTHON2=OFF', '-DWITH_PYTHON3=ON', '-DENABLE_OZI=ON', '-DENABLE_NITF_RPFTOC_ECRGTOC=ON', '-DGDAL_ENABLE_GNM=ON', '-DWITH_OCI=ON','-DWITH_OCI_EXTERNAL=ON', '-DENABLE_OCI=ON', '-DENABLE_GEORASTER=ON','-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON','-WITH_Boost=ON', '-DWITH_Boost_EXTERNAL=ON', '-DWITH_KML=ON', '-DWITH_KML_EXTERNAL=ON', '-DGDAL_BUILD_APPS=ON', '-DWITH_HDF4=ON','-DWITH_HDF4_EXTERNAL=ON','-DENABLE_HDF4=ON', '-DWITH_QHULL=ON', '-DWITH_QHULL_EXTERNAL=ON', '-DWITH_Spatialite=ON','-DWITH_Spatialite_EXTERNAL=ON','-DWITH_SZIP=ON','-DWITH_SZIP_EXTERNAL=ON','-DWITH_UriParser=ON', '-DWITH_UriParser_EXTERNAL=ON','-DENABLE_WEBP=ON','-DWITH_WEBP=ON','-DWITH_WEBP_EXTERNAL=ON','-DBUILD_TESTING=ON', '-DSKIP_PYTHON_TESTS=ON'], 'requirements':['numpy'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_gdal', 'args':['-DWITH_ZLIB=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_JSONC=ON', '-DWITH_JSONC_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_CURL=ON', '-DWITH_CURL_EXTERNAL=ON', '-DWITH_LibXml2=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_GEOS=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_JPEG=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_JPEG12=OFF', '-DWITH_JPEG12_EXTERNAL=OFF', '-DWITH_TIFF=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_GeoTIFF=ON', '-DWITH_GeoTIFF_EXTERNAL=ON','-DWITH_JBIG=ON', '-DWITH_JBIG_EXTERNAL=ON', '-DWITH_GIF=ON', '-DWITH_GIF_EXTERNAL=ON', '-DWITH_OpenCAD=ON', '-DWITH_OpenCAD_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PROJ=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_OpenJPEG=ON', '-DWITH_OpenJPEG_EXTERNAL=ON', '-DENABLE_OPENJPEG=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_LibLZMA=ON', '-DWITH_LibLZMA_EXTERNAL=ON','-DWITH_PYTHON=ON', '-DWITH_PYTHON2=OFF', '-DWITH_PYTHON3=ON', '-DENABLE_OZI=ON', '-DENABLE_NITF_RPFTOC_ECRGTOC=ON', '-DGDAL_ENABLE_GNM=ON', '-DWITH_OCI=ON','-DWITH_OCI_EXTERNAL=ON', '-DENABLE_OCI=ON', '-DENABLE_GEORASTER=ON','-DWITH_SQLite3=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON','-WITH_Boost=ON', '-DWITH_Boost_EXTERNAL=ON', '-DWITH_KML=ON', '-DWITH_KML_EXTERNAL=ON', '-DGDAL_BUILD_APPS=ON', '-DWITH_HDF4=ON','-DWITH_HDF4_EXTERNAL=ON','-DENABLE_HDF4=ON', '-DWITH_QHULL=ON', '-DWITH_QHULL_EXTERNAL=ON', '-DWITH_Spatialite=ON','-DWITH_Spatialite_EXTERNAL=ON','-DWITH_SZIP=ON','-DWITH_SZIP_EXTERNAL=ON','-DWITH_UriParser=ON', '-DWITH_UriParser_EXTERNAL=ON','-DENABLE_WEBP=ON','-DWITH_WEBP=ON','-DWITH_WEBP_EXTERNAL=ON','-DBUILD_TESTING=ON', '-DSKIP_PYTHON_TESTS=ON'], 'requirements':['numpy'], 'os':['mac-old', 'win64-old', 'win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'python', 'args':['-DBUILD_LIBPYTHON_SHARED=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DUSE_SYSTEM_ZLIB=ON', '-DWITH_ZLIB=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_SQlite3_EXTERNAL=ON', '-DUSE_SYSTEM_BZip2=ON', '-DWITH_BZip2_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     # {'repo':'lib_qt4', 'args':['-DWITH_ZLIB=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DQT_CONFIGURE_ARGS=-webkit'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qt5', 'args':['-DWITH_ZLIB=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_JPEG_EXTERNAL=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_TIFF_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_WEBPDEMUX_EXTERNAL=ON', '-DWITH_WEBPMUX_EXTERNAL=ON','-DWITH_WEBP_EXTERNAL=ON','-DWITH_HarfBuzz_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
@@ -86,13 +86,12 @@ skip_send2github = [
 ]
 
 vm_cpu_count = 6
-
 mac_os_min_version = '10.14'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
-release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/repka_release.py' # 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/github_release.py'
 script_name = 'repka_release.py' # 'github_release.py'
-username = 'buildbot' # username = 'bishopgis'
+release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/' + script_name
+username = 'buildbot'
 userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
 ngftp_base = 'ftp://192.168.6.7:8121'
 ngftp = ngftp_base + '/software/installer/src/'
@@ -111,11 +110,13 @@ c['builders'] = []
 
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win'},
-    {'name' : 'win64', 'worker' : 'build-win-py3'},
-    {'name' : 'mac', 'worker' : 'build-mac-py3'},
+    {'name': 'win64-old', 'worker': 'build-win', 'generator': 'Visual Studio 15 2017'},
+    {'name': 'win64', 'worker': 'build-win-py3', 'generator': 'Visual Studio 16 2019'},
+    {'name': 'mac-old', 'worker': 'build-mac', 'generator': ''},
+    {'name': 'mac', 'worker': 'build-mac-py3', 'generator': ''},
     # {'name' : 'win32-static', 'worker' : 'build-win'},
-    {'name' : 'win64-static', 'worker' : 'build-win-py3'},
-    {'name' : 'mac-static', 'worker' : 'build-mac-py3'},
+    {'name': 'win64-static', 'worker': 'build-win-py3', 'generator': 'Visual Studio 16 2019'},
+    {'name': 'mac-static', 'worker': 'build-mac-py3', 'generator': ''},
 ]
 
 build_lock = util.MasterLock("borsch_worker_builds")
@@ -125,7 +126,6 @@ build_lock = util.MasterLock("borsch_worker_builds")
 #                              )
 
 logname = 'stdio'
-generator = 'Visual Studio 16 2019' # 'Visual Studio 15 2017'
 
 def get_env(os):
     env = {}
@@ -183,25 +183,19 @@ def get_env(os):
             "C:\\Program Files\\CMake\\bin",
             "${PATH}"
         ]
-        env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
-        env['SENTRY_URL'] = sentry_url
-        env['SENTRY_ORG'] = 'nextgis'
-        env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
-        env['PYTHONHTTPSVERIFY'] = '0'
+        env['PYTHONPATH'] = 'C:\\Python27'
     elif 'mac' == os:
-        env = {
-            'PATH': [
-                        "/usr/local/bin",
-                        "/Users/admin/Library/Python/3.9/bin",
-                        "${PATH}"
-                    ],
-            'MACOSX_DEPLOYMENT_TARGET': mac_os_min_version,
-            'BUILDBOT_USERPWD': '{}:{}'.format(username, userkey),
-            'SENTRY_URL': sentry_url,
-            'SENTRY_ORG': 'nextgis', 
-            'SENTRY_AUTH_TOKEN': sentry_auth_token,
-            'PYTHONHTTPSVERIFY': '0',
-        }
+        env['PATH'] = [
+            "/usr/local/bin",
+            "/Users/admin/Library/Python/3.9/bin",
+            "${PATH}"
+        ],
+        env['MACOSX_DEPLOYMENT_TARGET'] = mac_os_min_version
+    env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
+    env['SENTRY_URL'] = sentry_url
+    env['SENTRY_ORG'] = 'nextgis'
+    env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
+    env['PYTHONHTTPSVERIFY'] = '0'
     return env
 
 def install_dependencies(factory, requirements, os):
@@ -326,15 +320,12 @@ for repository in repositories:
                 run_args_ex.append('-DWITH_ZLIB_EXTERNAL=ON')
 
             cmake_build_ex.append('/m:' + str(vm_cpu_count))
-            env = {}
-            if 'win32' in platform['name']:
-                env = get_env('win32')
-                env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
-                run_args_ex.extend(['-G', generator, '-A', 'Win32'])
+            env = get_env('win64')
+            env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
+            if platform['name'].endswith('-old'):
+                run_args_ex.extend(['-G', platform['generator'] + ' Win64'])
             else:
-                env = get_env('win64')
-                env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
-                run_args_ex.extend(['-G', generator, '-A', 'x64'])
+                run_args_ex.extend(['-G', platform['generator'], '-A', 'x64'])
         elif 'mac' in platform['name']:
             if platform['name'].endswith('-static'):
                 run_args_ex.append('-DBUILD_STATIC_LIBS=OM')
