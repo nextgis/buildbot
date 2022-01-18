@@ -189,7 +189,7 @@ def get_env(os):
             "/usr/local/bin",
             "/Users/admin/Library/Python/3.9/bin",
             "${PATH}",
-        ],
+        ]
         env['MACOSX_DEPLOYMENT_TARGET'] = mac_os_min_version
     env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
     env['SENTRY_URL'] = sentry_url
