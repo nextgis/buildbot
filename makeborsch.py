@@ -303,6 +303,10 @@ for repository in repositories:
         if platform['name'] not in repository['os']:
             continue
 
+        python_cmd = 'python3'
+        if platform['name'].endswith('-old'):
+            python_cmd = 'python'
+
         code_dir_last = 'src'
         code_dir = os.path.join('build', code_dir_last)
         build_subdir = 'bld'
@@ -402,13 +406,13 @@ for repository in repositories:
 
         # send package to github
         if project_name not in skip_send2github:
-            # factory.addStep(steps.ShellCommand(command=['python3', script_name, '--login',
+            # factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
             #                                         username, '--key', userkey, '--build_path', build_subdir
             #                                         ],
             #                                name="send package to github",
             #                                haltOnFailure=True,
             #                                workdir=code_dir))
-            factory.addStep(steps.ShellCommand(command=['python3', script_name, '--login',
+            factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
                                                     username, '--password', userkey, '--build_path', build_subdir
                                                     ],
                                            name="send package to rm.nextgis.com",
@@ -417,7 +421,7 @@ for repository in repositories:
                                            env=env))
 
         # upload to ftp
-        factory.addStep(steps.ShellCommand(command=['python3', upload_script_name,
+        factory.addStep(steps.ShellCommand(command=[python_cmd, upload_script_name,
                                                     '--ftp_user', ngftp_user, '--ftp',
                                                     ngftp + project_name + '_' + platform['name'],
                                                     '--build_path', build_subdir],
