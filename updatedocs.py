@@ -9,49 +9,43 @@ c['schedulers'] = []
 c['builders'] = []
 
 repos = [
-    'docs_ngcom',
-    'docs_ngmobile',
-    'docs_ngqgis',
-    'docs_ngweb',
-    'docs_toolbox',
-    'docs_data',
-    'docs_collector',
-    'docs_ngid',
-    'docs_formbuilder',
-    'docs_ngcourses',
-]
-
-repos_m = [
-    'docs_howto',
+    {'repo':'docs_ngcom', 'langs': ['ru', 'en']},
+    {'repo':'docs_ngmobile', 'langs': ['ru', 'en']},
+    {'repo':'docs_ngqgis', 'langs': ['ru', 'en']},
+    {'repo':'docs_ngweb', 'langs': ['ru', 'en']},
+    {'repo':'docs_toolbox', 'langs': ['ru', 'en']},
+    {'repo':'docs_data', 'langs': ['ru', 'en']},
+    {'repo':'docs_collector', 'langs': ['ru', 'en']},
+    {'repo':'docs_ngid', 'langs': ['ru', 'en']},
+    {'repo':'docs_formbuilder', 'langs': ['ru', 'en']},
+    {'repo':'docs_ngcourses', 'langs': ['ru', 'en']},
+    {'repo':'docs_howto', 'langs': ['master']},
 ]
 
 repourl = 'https://github.com/nextgis/docs_ng.git'
-
-langs = ['ru', 'en']
-
 poller_name = 'updatedocs'
 
 for repo in repos:
-    git_poller = changes.GitPoller(project = poller_name + '/' + repo,
-                       repourl = 'https://github.com/nextgis/' + repo + '.git',
-                       workdir = poller_name + '-' + repo + '-workdir',
-                       branches = langs,
+    git_poller = changes.GitPoller(project = poller_name + '/' + repo['repo'],
+                       repourl = 'https://github.com/nextgis/' + repo['repo'] + '.git',
+                       workdir = poller_name + '-' + repo['repo'] + '-workdir',
+                       branches = repo['langs'],
                        pollinterval = 750,)
     c['change_source'].append(git_poller)
 
-for repo in repos_m:
-    git_poller = changes.GitPoller(project = poller_name + '/' + repo,
-                       repourl = 'https://github.com/nextgis/' + repo + '.git',
-                       workdir = poller_name + '-' + repo + '-workdir',
-                       branches = ['master'],
-                       pollinterval = 900,)
-    c['change_source'].append(git_poller)
-
-
 project_name = 'updatedocs'
 
-# RU, EN
-for lang in langs:
+langs = ['ru', 'en']
+
+# scheduler = schedulers.AnyBranchScheduler(
+#                         name=project_name,
+#                         change_filter=util.ChangeFilter(project_re = poller_name + '/*'),
+#                         treeStableTimer=2*60,
+#                         builderNames=[project_name])
+# c['schedulers'].append(scheduler)
+
+branches = langs + ['master']
+for lang in branches:
     scheduler = schedulers.SingleBranchScheduler(
                         name=project_name + '_' + lang,
                         change_filter=util.ChangeFilter(project_re = poller_name + '/*',
@@ -60,15 +54,6 @@ for lang in langs:
                         builderNames=[project_name])
     c['schedulers'].append(scheduler)
 
-# Master
-scheduler = schedulers.SingleBranchScheduler(
-                    name=project_name + '_master',
-                    change_filter=util.ChangeFilter(project_re = poller_name + '/*',
-                                                    branch='master'),
-                    treeStableTimer=2*60,
-                    builderNames=[project_name])
-
-c['schedulers'].append(scheduler)
 c['schedulers'].append(schedulers.ForceScheduler(
                             name=project_name + "_force",
                             builderNames=[project_name],
