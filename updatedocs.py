@@ -30,7 +30,7 @@ for repo in repos:
                        repourl = 'https://github.com/nextgis/' + repo['repo'] + '.git',
                        workdir = poller_name + '-' + repo['repo'] + '-workdir',
                        branches = repo['langs'],
-                       pollinterval = 750,)
+                       pollinterval = 1 * 60 * 60,) # Poll hourly
     c['change_source'].append(git_poller)
 
 project_name = 'updatedocs'
