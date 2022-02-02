@@ -19,14 +19,13 @@ repos = [
     'docs_ngid',
     'docs_formbuilder',
     'docs_ngcourses',
-    'docs_ngmanager',
 ]
 
 repos_m = [
     'docs_howto',
 ]
 
-repourl = 'git@github.com:nextgis/docs_ng.git'
+repourl = 'https://github.com/nextgis/docs_ng.git'
 
 langs = ['ru', 'en']
 
@@ -34,15 +33,15 @@ poller_name = 'updatedocs'
 
 for repo in repos:
     git_poller = changes.GitPoller(project = poller_name + '/' + repo,
-                       repourl = 'git@github.com:nextgis/' + repo + '.git',
+                       repourl = 'https://github.com/nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
                        branches = langs,
-                       pollinterval = 900,)
+                       pollinterval = 750,)
     c['change_source'].append(git_poller)
 
 for repo in repos_m:
     git_poller = changes.GitPoller(project = poller_name + '/' + repo,
-                       repourl = 'git@github.com:nextgis/' + repo + '.git',
+                       repourl = 'https://github.com/nextgis/' + repo + '.git',
                        workdir = poller_name + '-' + repo + '-workdir',
                        branches = ['master'],
                        pollinterval = 900,)
