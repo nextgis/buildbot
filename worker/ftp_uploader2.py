@@ -74,8 +74,12 @@ if __name__ == "__main__":
 
     for dirpath, dirs, files in os.walk(build_path):
         ftp_dir = dirpath.replace(build_path, '')
-        if ftp_dir is not None and ftp_dir[-1:] != '/':
-            ftp_dir += '/'
+        if ftp_dir is not None:
+            if ftp_dir[-1:] != '/':
+                ftp_dir += '/'
+            if ftp_dir[0] == '/':
+                ftp_dir = ftp_dir[1:]
+
         for filename in files: 
             fname = os.path.join(dirpath,filename) 
             color_print('Upload file {} to ftp'.format(fname), True, 'LGREEN')
