@@ -14,7 +14,7 @@ repositories = [
     {'repo':'lib_geos', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qhull', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_expat', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'numpy', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'numpy', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_markupsafe', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_subprocess32', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_kiwisolver', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
