@@ -183,7 +183,7 @@ def get_env(os):
             "C:\\Program Files\\CMake\\bin",
             "${PATH}",
         ]
-        env['PYTHONPATH'] = 'C:\\Program Files\\Python38'
+        env['PYTHONPATH'] = 'C:\\Python38'
     elif 'mac' in os:
         env['PATH'] = [
             "/usr/local/bin",
