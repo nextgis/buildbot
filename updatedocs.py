@@ -22,12 +22,13 @@ repos = [
     {'repo':'docs_howto', 'langs': ['master']},
 ]
 
-repourl = 'https://github.com/nextgis/docs_ng.git'
+base_repourl = 'git@github.com:nextgis/'
+repourl = base_repourl + 'docs_ng.git'
 poller_name = 'updatedocs'
 
 for repo in repos:
     git_poller = changes.GitPoller(project = poller_name + '/' + repo['repo'],
-                       repourl = 'https://github.com/nextgis/' + repo['repo'] + '.git',
+                       repourl = base_repourl + repo['repo'] + '.git',
                        workdir = poller_name + '-' + repo['repo'] + '-workdir',
                        branches = repo['langs'],
                        pollinterval = 1 * 60 * 60,) # Poll hourly
