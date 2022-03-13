@@ -52,10 +52,10 @@ repositories = [
     {'repo':'lib_qca', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_PLUGINS=auto', '-DUSE_RELATIVE_PATHS=OFF', '-DCMAKE_INSTALL_PREFIX=/usr/', '-DBUILD_TESTS=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qwt', 'args':['-DWITH_Qt5_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     # {'repo':'py_qt4', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_ZLIB=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'py_qt5', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_PYTHON3=ON'], 'requirements':['sip',], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'lib_qscintilla', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt5_EXTERNAL=ON', '-DWITH_ZLIB=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'nextgisqgis', 'args':['-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GSL_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_Qca_EXTERNAL=ON', '-DWITH_Qscintilla_EXTERNAL=ON', '-DWITH_Qwt_EXTERNAL=ON', '-DWITH_SpatialIndex_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt5_EXTERNAL=ON', '-DWITH_Qsci_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_NGSTD_EXTERNAL=ON', '-DWITH_OpenCV_EXTERNAL=ON', '-DWITH_OCI_EXTERNAL=ON'], 'requirements':['PyQt5', 'six'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[], 'sentry_project': 'production-nextgis-qgis'},
-    {'repo':'lib_ngstd', 'args':['-DBUILD_QT5=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_SENTRYNATIVE_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DBUILD_QT5=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_PyQt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DBUILDBOT_PASSWORD=' + os.environ.get("BUILDBOT_PASSWORD", "0000"),'-DBUILDBOT_USER=' + os.environ.get("BUILDBOT_USER", "buildbot"),], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
+    {'repo':'py_qt5', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_PYTHON3=ON'], 'requirements':['sip',], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_qscintilla', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_ZLIB=ON'], 'requirements':['sip', 'PyQt5'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'nextgisqgis', 'args':['-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GSL_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_Qca_EXTERNAL=ON', '-DWITH_Qscintilla_EXTERNAL=ON', '-DWITH_Qwt_EXTERNAL=ON', '-DWITH_SpatialIndex_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_Qsci_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_NGSTD_EXTERNAL=ON', '-DWITH_OpenCV_EXTERNAL=ON', '-DWITH_OCI_EXTERNAL=ON'], 'requirements':['PyQt5', 'six', 'sip'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[], 'sentry_project': 'production-nextgis-qgis'},
+    {'repo':'lib_ngstd', 'args':['-DBUILD_QT5=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_SENTRYNATIVE_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DBUILD_QT5=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DBUILDBOT_PASSWORD=' + os.environ.get("BUILDBOT_PASSWORD", "0000"),'-DBUILDBOT_USER=' + os.environ.get("BUILDBOT_USER", "buildbot"),], 'requirements':['sip','PyQt5',], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
     {'repo':'formbuilder', 'args':['-DBUILD_NEXTGIS_PACKAGE=ON', '-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_NGSTD_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[], 'sentry_project': 'production-fb'},
     {'repo':'lib_opencv', 'args':['-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB=ON','-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_WEBP_EXTERNAL=ON', '-DWITH_OpenJPEG_EXTERNAL=ON', '-DBUILD_opencv_ts=OFF','-DBUILD_opencv_apps=ON','-DBUILD_TESTS=OFF','-DBUILD_PERF_TESTS=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':['-R','opencv_test_(fl|co)']},
     {'repo':'manuscript', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_NGSTD_EXTERNAL=ON',], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
@@ -218,36 +218,45 @@ def install_dependencies(factory, requirements, os):
                                                 description=[requirement, "install"],
                                                 descriptionDone=[requirement, "installed"],
                                                 haltOnFailure=True))
-        elif requirement == 'numpy':
+        # elif requirement == 'numpy':
+        #     factory.addStep(
+        #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'numpy'],
+        #                             name="install " + requirement,
+        #                             description=[requirement, "install"],
+        #                             descriptionDone=[requirement, "installed"],
+        #                             haltOnFailure=True,
+        #                             env=env)
+        #     )
+        # elif requirement == 'six':
+        #     factory.addStep(
+        #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'six'],
+        #                             name="install " + requirement,
+        #                             description=[requirement, "install"],
+        #                             descriptionDone=[requirement, "installed"],
+        #                             haltOnFailure=True,
+        #                             env=env)
+        #     )
+        # elif requirement == 'sip':
+        #     factory.addStep(
+        #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'sip'],
+        #                             name="install " + requirement,
+        #                             description=[requirement, "install"],
+        #                             descriptionDone=[requirement, "installed"],
+        #                             haltOnFailure=True,
+        #                             env=env)
+        #     )
+        # elif requirement == 'cython': # Already installed on vm
+        #     factory.addStep(
+        #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'cython'],
+        #                             name="install " + requirement,
+        #                             description=[requirement, "install"],
+        #                             descriptionDone=[requirement, "installed"],
+        #                             haltOnFailure=True,
+        #                             env=env)
+        #     )
+        else:
             factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'numpy'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
-            )
-        elif requirement == 'six':
-            factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'six'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
-            )
-        elif requirement == 'sip':
-            factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'sip'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
-            )
-        elif requirement == 'cython': # Already installed on vm
-            factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'cython'],
+                steps.ShellCommand(command=[pip_cmd, 'install', '--user', requirement],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
