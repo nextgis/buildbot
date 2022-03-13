@@ -8,7 +8,7 @@ c = {}
 
 repositories = [
     {'repo':'lib_z', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'py_sip', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    # Install via pip3 install sip {'repo':'py_sip', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_sqlite', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_gif', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_geos', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
@@ -52,7 +52,7 @@ repositories = [
     {'repo':'lib_qca', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_PLUGINS=auto', '-DUSE_RELATIVE_PATHS=OFF', '-DCMAKE_INSTALL_PREFIX=/usr/', '-DBUILD_TESTS=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qwt', 'args':['-DWITH_Qt5_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     # {'repo':'py_qt4', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt4_EXTERNAL=ON', '-DWITH_ZLIB=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'py_qt5', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_qt5', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_PYTHON3=ON'], 'requirements':['sip',], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qscintilla', 'args':['-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt5_EXTERNAL=ON', '-DWITH_ZLIB=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'nextgisqgis', 'args':['-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GSL_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_Qca_EXTERNAL=ON', '-DWITH_Qscintilla_EXTERNAL=ON', '-DWITH_Qwt_EXTERNAL=ON', '-DWITH_SpatialIndex_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt5_EXTERNAL=ON', '-DWITH_Qsci_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_NGSTD_EXTERNAL=ON', '-DWITH_OpenCV_EXTERNAL=ON', '-DWITH_OCI_EXTERNAL=ON'], 'requirements':['PyQt5', 'six'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[], 'sentry_project': 'production-nextgis-qgis'},
     {'repo':'lib_ngstd', 'args':['-DBUILD_QT5=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_SENTRYNATIVE_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DBUILD_QT5=ON', '-DWITH_SIP_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_PyQt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DBUILDBOT_PASSWORD=' + os.environ.get("BUILDBOT_PASSWORD", "0000"),'-DBUILDBOT_USER=' + os.environ.get("BUILDBOT_USER", "buildbot"),], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
@@ -236,6 +236,15 @@ def install_dependencies(factory, requirements, os):
                                     haltOnFailure=True,
                                     env=env)
             )
+        elif requirement == 'sip':
+            factory.addStep(
+                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'sip'],
+                                    name="install " + requirement,
+                                    description=[requirement, "install"],
+                                    descriptionDone=[requirement, "installed"],
+                                    haltOnFailure=True,
+                                    env=env)
+            )
         elif requirement == 'cython': # Already installed on vm
             factory.addStep(
                 steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'cython'],
@@ -245,20 +254,19 @@ def install_dependencies(factory, requirements, os):
                                     haltOnFailure=True,
                                     env=env)
             )
-        elif requirement == 'PyQt4' and os == 'mac':
-            factory.addStep(steps.ShellSequence(commands=[
-                    util.ShellArg(command=["curl", install_script_src, '-o', install_script_name, '-s', '-L'], logname=logname),
-                    util.ShellArg(command=["python", install_script_name, '--ftp_user', ngftp_user,
-                        '--ftp', ngftp_base, '--build_path', 'install',
-                        '--platform', 'mac', '--create_pth', '--packages', 'lib_freetype', 'lib_gif', 'lib_jpeg', 'lib_png', 'lib_sqlite', 'lib_tiff', 'lib_z', 'py_sip', 'lib_qt4', 'py_qt4'], logname=logname),
-                ],
-                name="Install PyQt4",
-                haltOnFailure=True,
-                env=env))
+        # elif requirement == 'PyQt4' and os == 'mac':
+        #     factory.addStep(steps.ShellSequence(commands=[
+        #             util.ShellArg(command=["curl", install_script_src, '-o', install_script_name, '-s', '-L'], logname=logname),
+        #             util.ShellArg(command=["python", install_script_name, '--ftp_user', ngftp_user,
+        #                 '--ftp', ngftp_base, '--build_path', 'install',
+        #                 '--platform', 'mac', '--create_pth', '--packages', 'lib_freetype', 'lib_gif', 'lib_jpeg', 'lib_png', 'lib_sqlite', 'lib_tiff', 'lib_z', 'py_sip', 'lib_qt4', 'py_qt4'], logname=logname),
+        #         ],
+        #         name="Install PyQt4",
+        #         haltOnFailure=True,
+        #         env=env))
 
 # Create builders
 for repository in repositories:
-
     project_name = repository['repo']
     org = repository['org']
     repourl = '{}/{}/{}.git'.format(repository['repo_root'], org, project_name)
