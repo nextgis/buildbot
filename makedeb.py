@@ -16,12 +16,12 @@ repositories = [
     {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', ], 'repo_id':11},
     {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', ], 'repo_id':11},
     {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', ], 'repo_id':11},
-    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal',], 'repo_id':12, 'apt_repos':[{
+    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal','bullseye',], 'repo_id':12, 'apt_repos':[{
             'repka_id':11,
             'type':'repka',
         },]
     },
-    {'repo':'postgis', 'deb':'postgis', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os': ['bionic', 'buster', 'focal',], 'repo_id':11, 'apt_repos':[{
+    {'repo':'postgis', 'deb':'postgis', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os': ['bionic', 'buster', 'focal','bullseye',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
@@ -31,15 +31,15 @@ repositories = [
     {'repo':'lib_ngstd', 'deb':'ngstd', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'focal',], 'repo_id':11},
     {'repo':'formbuilder', 'deb':'formbuilder', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'focal',], 'repo_id':11},
     {'repo':'manuscript', 'deb':'manuscript', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic','focal', ], 'repo_id':11},
-    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal',], 'repo_id':11, 'apt_repos':[{
+    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal','bullseye',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
             'type':'deb',
         },]
     },
-    {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'focal', 'buster'], 'repo_id':11, 'branch': 'dev/up_to_3'},
-    {'repo':'qgis_headless', 'deb':'qgis-headless', 'repo_root':'https://gitlab.com:' + os.environ.get("BUILDBOT_APITOKEN_GITLAB_FULL") + '@gitlab.com', 'org': 'nextgis_private', 'os': ['bionic', 'focal', 'buster'], 'repo_id':11, 'branch': 'master'},
+    {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'focal', 'buster','bullseye',], 'repo_id':11, 'branch': 'dev/up_to_3'},
+    {'repo':'qgis_headless', 'deb':'qgis-headless', 'repo_root':'https://gitlab.com:' + os.environ.get("BUILDBOT_APITOKEN_GITLAB_FULL") + '@gitlab.com', 'org': 'nextgis_private', 'os': ['bionic', 'focal', 'buster','bullseye',], 'repo_id':11, 'branch': 'master'},
     {'repo':'terratile', 'deb':'python-terratile', 'repo_root':'https://github.com', 'org': 'nextgis', 'os':['bionic', 'bullseye', 'focal', 'buster'], 'repo_id':11, 'branch': 'gdal3'},
     # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
     # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
