@@ -59,12 +59,12 @@ c['builders'] = []
 platforms = [
     {'name' : 'focal', 'worker' : 'deb-build-focal'},
     {'name' : 'bionic', 'worker' : 'deb-build-bionic'},
-    {'name' : 'xenial', 'worker' : 'deb-build-xenial'},
-    {'name' : 'trusty', 'worker' : 'deb-build-trusty'},
+    # {'name' : 'xenial', 'worker' : 'deb-build-xenial'},
+    # {'name' : 'trusty', 'worker' : 'deb-build-trusty'},
     {'name' : 'stretch', 'worker' : 'deb-build-stretch'},
     {'name' : 'buster', 'worker' : 'deb-build-buster'},
     {'name' : 'bullseye', 'worker' : 'deb-build-bullseye'},
-    {'name' : 'sid', 'worker' : 'deb-build-sid'},
+    # {'name' : 'sid', 'worker' : 'deb-build-sid'},
 ]
 
 build_lock = util.MasterLock("deb_worker_builds")

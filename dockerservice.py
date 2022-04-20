@@ -47,7 +47,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.registryAuth = registryAuth or {}
         self.secrets = secrets or []
 
-    def _thd_start_instance(self, image, dockerfile, volumes, custom_context, encoding, buildargs, hostname):
+    def _thd_start_instance(self, image, *_):
         docker_client = self._getDockerClient()
 
         if self.registryAuth:
@@ -138,7 +138,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             del logs
         return [instance['ID'], image]
 
-    def _thd_stop_instance(self, instance, fast):
+    def _thd_stop_instance(self, instance, _):
         docker_client = self._getDockerClient()
         id = instance['ID']
         log.msg('Stopping service %s ...' % id[:6])
