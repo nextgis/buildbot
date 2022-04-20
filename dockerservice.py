@@ -48,7 +48,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.secrets = secrets or []
 
     def _thd_start_instance(self, image, *_):
-        docker_client = self._getDockerClient()
+        docker_client = self._getDockerClient(self.client_args)
 
         if self.registryAuth:
             try:
