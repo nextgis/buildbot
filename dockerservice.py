@@ -47,7 +47,9 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.registryAuth = registryAuth or {}
         self.secrets = secrets or []
 
-    def _thd_start_instance(self, image, *_):
+    def _thd_start_instance(self, docker_host, image, dockerfile,
+       volumes, host_config, custom_context, encoding, target, 
+       buildargs, hostname):
         docker_client = self._getDockerClient(self.client_args)
 
         if self.registryAuth:
@@ -56,7 +58,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                                     password=self.registryAuth['password'],
                                     registry=self.registryAuth['host'])
             except docker.errors.APIError as e:
-                log.msg('Error while login to registry host: %s', e)
+                log.msg(f'Error while login to registry host: {str(e)}')
 
         service_name = self.getContainerName()
         # cleanup the old instances
@@ -66,7 +68,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         for instance in instances:
             try:
                 id = instance['ID']
-                log.msg('Remove instance {}'.format(id))
+                log.msg(f'Remove instance {id}')
                 docker_client.remove_service(id)
             except NotFound:
                 pass
@@ -88,8 +90,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             try:
                 bind, volume = volume_string.split(":", 1)
             except ValueError:
-                config.error("Invalid volume definition for docker "
-                             "%s. Skipping..." % volume_string)
+                config.error(f"Invalid volume definition for docker {volume_string}. Skipping...")
                 continue
 
             ro = False
@@ -125,14 +126,14 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                 'Failed to start service'
             )
         shortid = instance['ID'][:6]
-        log.msg('Service created, ID: %s ...' % (shortid,))
+        log.msg(f'Service created, ID: {shortid} ...')
         instance['image'] = image
         self.instance = instance
 
         if self.followStartupLogs:
             logs = docker_client.service_logs(instance, stdout=True, stderr=True, follow=True)
             for line in logs:
-                log.msg("docker VM %s: %s" % (shortid, line.strip()))
+                log.msg(f"docker VM {shortid}: {line.strip()}")
                 if self.conn:
                     break
             del logs
