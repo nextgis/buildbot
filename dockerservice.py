@@ -67,7 +67,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
 
         for instance in instances:
             try:
-                id = instance['Id']
+                id = instance['ID']
                 log.msg(f'Remove instance {id}')
                 docker_client.remove_service(id)
             except NotFound:
@@ -120,12 +120,13 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             name=self.getContainerName(),
             networks=self.networks)
 
-        if instance.get('Id') is None:
+        if instance.get('ID') is None:
             log.msg('Failed to create the service')
             raise LatentWorkerFailedToSubstantiate(
                 'Failed to start service'
             )
-        shortid = instance['Id'][:6]
+        id = instance['ID']
+        shortid = id[:6]
         log.msg(f'Service created, ID: {shortid} ...')
         instance['image'] = image
         self.instance = instance
@@ -137,11 +138,11 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                 if self.conn:
                     break
             del logs
-        return [instance['Id'], image]
+        return [id, image]
 
     def _thd_stop_instance(self, instance, curr_client_args, fast):
         docker_client = self._getDockerClient()
-        id = instance['Id']
+        id = instance['ID']
         log.msg('Stopping service %s ...' % id[:6])
         # docker_client.stop(id)
         # if not fast:
