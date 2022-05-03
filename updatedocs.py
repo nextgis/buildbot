@@ -22,7 +22,7 @@ repos = [
     {'repo':'docs_howto', 'langs': ['master']},
 ]
 
-base_repourl = 'git@github.com:nextgis/'
+base_repourl = 'https://github.com/nextgis/'
 repourl = base_repourl + 'docs_ng.git'
 poller_name = 'updatedocs'
 

@@ -147,7 +147,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         # docker_client.stop(id)
         # if not fast:
         #     docker_client.wait(id)
-        if docker_client.remove_service(id) == True:
+        if docker_client.remove_service(id):
             log.msg('Stopped service {} ...'.format(id[:6]))
         else:
             log.msg('Stopped service {} failed'.format(id[:6]))
