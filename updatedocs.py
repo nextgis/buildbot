@@ -68,6 +68,9 @@ logname = 'stdio'
 factory = util.BuildFactory()
 factory.addStep(steps.ShellSequence(commands=[
         util.ShellArg(command=["git", "config", "--global", "--add", "safe.directory", "*"], logname=logname),
+        util.ShellArg(command=["git", "config", "--global", "--add", "safe.directory", "/var/lib/buildbot/docs-workdir"], logname=logname),
+
+        
     ],
     name="Set git config global defaults",
     haltOnFailure=True,
