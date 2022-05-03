@@ -8,6 +8,7 @@ from buildbot.interfaces import LatentWorkerCannotSubstantiate
 from buildbot.interfaces import LatentWorkerFailedToSubstantiate
 
 from buildbot.worker.docker import DockerLatentWorker
+from time import sleep
 
 try:
     import docker
@@ -141,6 +142,11 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             del logs
         return [id, image]
 
+
+    def stop_instance(self, fast=False):
+        log.msg('stop_instance executed ...')
+        super().stop_instance(fast)
+
     def _thd_stop_instance(self, instance, curr_client_args, fast):
         docker_client = self._getDockerClient(curr_client_args)
         # log.msg(docker_client.version())
@@ -164,3 +170,4 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         #         docker_client.remove_image(image=instance['image'])
         #     except docker.errors.APIError as e:
         #         log.msg('Error while removing the image: %s', e)
+        sleep(1.1)
