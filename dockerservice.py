@@ -8,7 +8,6 @@ from buildbot.interfaces import LatentWorkerCannotSubstantiate
 from buildbot.interfaces import LatentWorkerFailedToSubstantiate
 
 from buildbot.worker.docker import DockerLatentWorker
-from time import sleep
 
 try:
     import docker
@@ -51,7 +50,10 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
     def _thd_start_instance(self, docker_host, image, dockerfile,
        volumes, host_config, custom_context, encoding, target, 
        buildargs, hostname):
-        docker_client = self._getDockerClient(self.client_args)
+        curr_client_args = self.client_args.copy()
+        curr_client_args['base_url'] = docker_host
+
+        docker_client = self._getDockerClient(curr_client_args)
         # log.msg(docker_client.version())
 
         if self.registryAuth:
@@ -132,6 +134,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         log.msg(f'Service created, ID: {shortid} ...')
         instance['image'] = image
         self.instance = instance
+        self._curr_client_args = curr_client_args
 
         if self.followStartupLogs:
             logs = docker_client.service_logs(instance, stdout=True, stderr=True, follow=True)
@@ -143,9 +146,9 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         return [id, image]
 
 
-    def stop_instance(self, fast=False):
-        log.msg('stop_instance executed ...')
-        super().stop_instance(fast)
+    # def stop_instance(self, fast=False):
+    #     log.msg('stop_instance executed ...')
+    #     super().stop_instance(fast)
 
     def _thd_stop_instance(self, instance, curr_client_args, fast):
         docker_client = self._getDockerClient(curr_client_args)
@@ -170,4 +173,3 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         #         docker_client.remove_image(image=instance['image'])
         #     except docker.errors.APIError as e:
         #         log.msg('Error while removing the image: %s', e)
-        sleep(1.1)
