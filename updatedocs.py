@@ -70,6 +70,7 @@ factory.addStep(steps.Git(repourl=repourl, mode='full', method='clobber', submod
 factory.addStep(steps.ShellSequence(commands=[
         util.ShellArg(command=["git", "config", "user.name", git_user_name], logname=logname),
         util.ShellArg(command=["git", "config", "user.email", git_user_email], logname=logname),
+        util.ShellArg(command=["git", "config", "--global", "--add", "safe.directory", "*"], logname=logname),
     ],
     name="Set git config defaults",
     haltOnFailure=True,
