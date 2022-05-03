@@ -51,6 +51,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
        volumes, host_config, custom_context, encoding, target, 
        buildargs, hostname):
         docker_client = self._getDockerClient(self.client_args)
+        # log.msg(docker_client.version())
 
         if self.registryAuth:
             try:
@@ -142,16 +143,20 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
 
     def _thd_stop_instance(self, instance, curr_client_args, fast):
         docker_client = self._getDockerClient(curr_client_args)
+        # log.msg(docker_client.version())
         id = instance['ID']
         log.msg('Stopping service {} ...'.format(id[:6]))
         # docker_client.stop(id)
         # if not fast:
         #     docker_client.wait(id)
-        if docker_client.remove_service(id):
-            log.msg('Stopped service {} ...'.format(id[:6]))
-        else:
-            log.msg('Stopped service {} failed'.format(id[:6]))
-        
+        try:
+            if docker_client.remove_service(id):
+                log.msg('Stopped service {} ...'.format(id[:6]))
+            else:
+                log.msg('Stopped service {} failed'.format(id[:6]))
+        except NotFound:
+            pass
+
         # Skip remove image
 
         # if self.image is None: # This is case where image create locally from Dockerfile.
