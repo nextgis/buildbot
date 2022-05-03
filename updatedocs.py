@@ -29,7 +29,7 @@ poller_name = 'updatedocs'
 for repo in repos:
     git_poller = changes.GitPoller(project = poller_name + '/' + repo['repo'],
                        repourl = base_repourl + repo['repo'] + '.git',
-                       workdir = poller_name + '-' + repo['repo'] + '-workdir',
+                    #    workdir = poller_name + '-' + repo['repo'] + '-workdir',
                        branches = repo['langs'],
                        pollinterval = 1 * 60 * 60,) # Poll hourly
     c['change_source'].append(git_poller)

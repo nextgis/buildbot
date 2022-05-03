@@ -15,7 +15,7 @@ poller_name = 'docs'
 git_project_name = 'nextgis/docs_ng'
 git_poller = changes.GitPoller(project = git_project_name,
                    repourl = repourl,
-                   workdir = poller_name + '-workdir',
+                #    workdir = poller_name + '-workdir',
                    branches = langs,
                    pollinterval = 600,)
 c['change_source'].append(git_poller)
