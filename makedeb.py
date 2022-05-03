@@ -97,7 +97,7 @@ for repository in repositories:
     git_project_name = '{}/{}'.format(org, project_name)
     git_poller = changes.GitPoller(project = git_project_name,
                            repourl = repourl,
-                           workdir = project_name + '-workdir',
+                        #    workdir = project_name + '-workdir',
                            branches = [branch],
                            pollinterval = 5400,)
     c['change_source'].append(git_poller)

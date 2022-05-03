@@ -141,9 +141,9 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         return [id, image]
 
     def _thd_stop_instance(self, instance, curr_client_args, fast):
-        docker_client = self._getDockerClient()
+        docker_client = self._getDockerClient(curr_client_args)
         id = instance['ID']
-        log.msg('Stopping service %s ...' % id[:6])
+        log.msg('Stopping service {} ...'.format(id[:6]))
         # docker_client.stop(id)
         # if not fast:
         #     docker_client.wait(id)
