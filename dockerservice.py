@@ -50,7 +50,11 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
     def _thd_start_instance(self, docker_host, image, dockerfile,
        volumes, host_config, custom_context, encoding, target, 
        buildargs, hostname):
-        docker_client = self._getDockerClient(self.client_args)
+        curr_client_args = self.client_args.copy()
+        curr_client_args['base_url'] = docker_host
+
+        docker_client = self._getDockerClient(curr_client_args)
+        # log.msg(docker_client.version())
 
         if self.registryAuth:
             try:
@@ -130,6 +134,7 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         log.msg(f'Service created, ID: {shortid} ...')
         instance['image'] = image
         self.instance = instance
+        self._curr_client_args = curr_client_args
 
         if self.followStartupLogs:
             logs = docker_client.service_logs(instance, stdout=True, stderr=True, follow=True)
@@ -140,18 +145,27 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
             del logs
         return [id, image]
 
+
+    # def stop_instance(self, fast=False):
+    #     log.msg('stop_instance executed ...')
+    #     super().stop_instance(fast)
+
     def _thd_stop_instance(self, instance, curr_client_args, fast):
-        docker_client = self._getDockerClient()
+        docker_client = self._getDockerClient(curr_client_args)
+        # log.msg(docker_client.version())
         id = instance['ID']
-        log.msg('Stopping service %s ...' % id[:6])
+        log.msg('Stopping service {} ...'.format(id[:6]))
         # docker_client.stop(id)
         # if not fast:
         #     docker_client.wait(id)
-        if docker_client.remove_service(id) == True:
-            log.msg('Stopped service {} ...'.format(id[:6]))
-        else:
-            log.msg('Stopped service {} failed'.format(id[:6]))
-        
+        try:
+            if docker_client.remove_service(id):
+                log.msg('Stopped service {} ...'.format(id[:6]))
+            else:
+                log.msg('Stopped service {} failed'.format(id[:6]))
+        except NotFound:
+            pass
+
         # Skip remove image
 
         # if self.image is None: # This is case where image create locally from Dockerfile.

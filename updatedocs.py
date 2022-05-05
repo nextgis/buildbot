@@ -22,14 +22,14 @@ repos = [
     {'repo':'docs_howto', 'langs': ['master']},
 ]
 
-base_repourl = 'git@github.com:nextgis/'
-repourl = base_repourl + 'docs_ng.git'
+base_repourl = 'https://github.com/nextgis/'
+repourl = 'git@github.com:nextgis/docs_ng.git' # base_repourl + 'docs_ng.git'
 poller_name = 'updatedocs'
 
 for repo in repos:
     git_poller = changes.GitPoller(project = poller_name + '/' + repo['repo'],
                        repourl = base_repourl + repo['repo'] + '.git',
-                       workdir = poller_name + '-' + repo['repo'] + '-workdir',
+                    #    workdir = poller_name + '-' + repo['repo'] + '-workdir',
                        branches = repo['langs'],
                        pollinterval = 1 * 60 * 60,) # Poll hourly
     c['change_source'].append(git_poller)
@@ -68,8 +68,8 @@ logname = 'stdio'
 factory = util.BuildFactory()
 factory.addStep(steps.Git(repourl=repourl, mode='full', method='clobber', submodules=True))
 factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=["git", "config", "user.name", git_user_name], logname=logname),
-        util.ShellArg(command=["git", "config", "user.email", git_user_email], logname=logname),
+        util.ShellArg(command=["git", "config", "--global", "user.name", git_user_name], logname=logname),
+        util.ShellArg(command=["git", "config", "--global", "user.email", git_user_email], logname=logname),
     ],
     name="Set git config defaults",
     haltOnFailure=True,
