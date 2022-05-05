@@ -66,19 +66,10 @@ git_user_email = "buildbot@nextgis.com"
 logname = 'stdio'
 
 factory = util.BuildFactory()
-factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=["git", "config", "--global", "--add", "safe.directory", "*"], logname=logname),
-        util.ShellArg(command=["git", "config", "--global", "--add", "safe.directory", "/var/lib/buildbot/docs-workdir"], logname=logname),
-
-        
-    ],
-    name="Set git config global defaults",
-    haltOnFailure=True,
-    workdir="build",))
 factory.addStep(steps.Git(repourl=repourl, mode='full', method='clobber', submodules=True))
 factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=["git", "config", "user.name", git_user_name], logname=logname),
-        util.ShellArg(command=["git", "config", "user.email", git_user_email], logname=logname),
+        util.ShellArg(command=["git", "config", "--global", "user.name", git_user_name], logname=logname),
+        util.ShellArg(command=["git", "config", "--global", "user.email", git_user_email], logname=logname),
     ],
     name="Set git config defaults",
     haltOnFailure=True,
