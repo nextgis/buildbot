@@ -23,7 +23,7 @@ repos = [
 ]
 
 base_repourl = 'https://github.com/nextgis/'
-repourl = base_repourl + 'docs_ng.git'
+repourl = 'git@github.com:nextgis/docs_ng.git' # base_repourl + 'docs_ng.git'
 poller_name = 'updatedocs'
 
 for repo in repos:
