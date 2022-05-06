@@ -238,15 +238,15 @@ def install_dependencies(factory, requirements, os):
         #                             haltOnFailure=True,
         #                             env=env)
         #     )
-        # elif requirement == 'sip':
-        #     factory.addStep(
-        #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'sip'],
-        #                             name="install " + requirement,
-        #                             description=[requirement, "install"],
-        #                             descriptionDone=[requirement, "installed"],
-        #                             haltOnFailure=True,
-        #                             env=env)
-        #     )
+        elif requirement == 'sip':
+            factory.addStep(
+                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'sip==6.5.0'],
+                                    name="install " + requirement,
+                                    description=[requirement, "install"],
+                                    descriptionDone=[requirement, "installed"],
+                                    haltOnFailure=True,
+                                    env=env)
+            )
         # elif requirement == 'cython': # Already installed on vm
         #     factory.addStep(
         #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'cython'],
