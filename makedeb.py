@@ -191,7 +191,7 @@ for repository in repositories:
 
         # 4. Create packages
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["dpkg-buildpackage", '-b', '-us', '-uc', '-Z', 'xz'], 
+                util.ShellArg(command=["dpkg-buildpackage", '-b', '-us', '-uc', '--compression=xz'], 
                     logname=logname),
             ],
             name="Create packages", haltOnFailure=True, timeout=125 * 60,
