@@ -81,7 +81,7 @@ repositories = [
     {'repo':'py_lxml', 'args':['-DWITH_LIBXML2=ON', '-DWITH_LIBXML2_EXTERNAL=ON', '-DWITH_LIBXSLT_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_ICONV=ON', '-DWITH_PYTHON3=ON'], 'requirements':[''], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_exiv', 'args':['-DWITH_ZLIB=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_ICONV=ON'], 'requirements':[''], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'nextgisutilities', 'args':['-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
-    {'repo':'spatialite', 'args':['-DWITH_SPATIALITE_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_LIBXML2_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'spatialite', 'args':['-DWITH_SPATIALITE_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_LIBXML2_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac','win64-old'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_qt5sip', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
