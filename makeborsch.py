@@ -89,7 +89,7 @@ skip_send2github = [
     "nextgisqgis", "formbuilder", "manuscript",
 ]
 
-vm_cpu_count = 6
+vm_cpu_count = 8
 mac_os_min_version = '10.14'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
@@ -123,16 +123,16 @@ platforms = [
     {'name': 'mac-static', 'worker': 'build-mac-py3', 'generator': ''},
 ]
 
-# build_lock = util.MasterLock("borsch_worker_builds")
-build_lock = util.WorkerLock("borsch_worker_builds",
-                             maxCount=1,
-                             maxCountForWorker={
-                                'build-win-py3': 1, 
-                                'build-win': 1, 
-                                'build-mac': 1,
-                                'build-mac-py3': 1,
-                                }
-                             )
+build_lock = util.MasterLock("borsch_worker_builds")
+# build_lock = util.WorkerLock("borsch_worker_builds",
+#                              maxCount=1,
+#                              maxCountForWorker={
+#                                 'build-win-py3': 1, 
+#                                 'build-win': 1, 
+#                                 'build-mac': 1,
+#                                 'build-mac-py3': 1,
+#                                 }
+#                              )
 
 logname = 'stdio'
 
@@ -476,7 +476,7 @@ for repository in repositories:
         builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
                                     workernames = [platform['worker']],
                                     factory = factory,
-                                    locks = [build_lock.access('counting')], # exclusive
+                                    locks = [build_lock.access('exclusive')], # counting
                                     description="Make {} on {}".format(project_name, platform['name']),)
 
         c['builders'].append(builder)
