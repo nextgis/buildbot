@@ -123,11 +123,16 @@ platforms = [
     {'name': 'mac-static', 'worker': 'build-mac-py3', 'generator': ''},
 ]
 
-build_lock = util.MasterLock("borsch_worker_builds")
-# build_lock = util.WorkerLock("borsch_worker_builds",
-#                              maxCount=1,
-#                              maxCountForWorker={'build-win': 1, 'build-mac': 1}
-#                              )
+# build_lock = util.MasterLock("borsch_worker_builds")
+build_lock = util.WorkerLock("borsch_worker_builds",
+                             maxCount=1,
+                             maxCountForWorker={
+                                'build-win-py3': 1, 
+                                'build-win': 1, 
+                                'build-mac': 1,
+                                'build-mac-py3': 1,
+                                }
+                             )
 
 logname = 'stdio'
 
@@ -471,7 +476,7 @@ for repository in repositories:
         builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
                                     workernames = [platform['worker']],
                                     factory = factory,
-                                    locks = [build_lock.access('exclusive')], # counting
+                                    locks = [build_lock.access('counting')], # exclusive
                                     description="Make {} on {}".format(project_name, platform['name']),)
 
         c['builders'].append(builder)
