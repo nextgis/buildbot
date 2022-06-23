@@ -12,7 +12,7 @@ c['builders'] = []
 repourl = 'https://github.com/nextgis/docs_ng.git'
 langs = ['ru', 'en']
 ssh_user = os.environ.get("DOCS_UPLOADER", "user")
-ssh_port = os.environ.get("DOCS_UPLOAD_SERVER_PORT", "user")
+ssh_port = os.environ.get("DOCS_UPLOAD_SERVER_PORT", "11425")
 
 poller_name = 'docs'
 git_project_name = 'nextgis/docs_ng'
