@@ -142,7 +142,7 @@ for lang in langs:
         util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logname=logname),
         util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logname=logname),
         util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p {} -i /root/.ssh/www'.format(ssh_port), '_build/html/', 
-            '{}@docs-{}.staging.nextgis.com:{}/'.format(ssh_user, lang, lang),], 
+            '{}@docs.nextgis.net:{}/'.format(ssh_user, lang),], 
             logname=logname),
         ],
         name="Copy documentation to web server",
