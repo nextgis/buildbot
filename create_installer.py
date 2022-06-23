@@ -14,7 +14,7 @@ mac_os_min_version = '10.14'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
 ngftp2 = 'ftp://192.168.6.7:8121/software/installer'
-ngftp = 'ftp://192.168.6.1:10411/software/installer'
+ngftp = 'ftp://my-ftp-storage.vpn.nextgis.net:10411/software/installer'
 ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
 ngftp2_user = os.environ.get("BUILDBOT_FTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'

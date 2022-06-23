@@ -1,6 +1,7 @@
 # -*- python -*-
 # ex: set syntax=python:
 
+import os
 from buildbot.plugins import *
 
 c = {}
@@ -10,6 +11,8 @@ c['builders'] = []
 
 repourl = 'https://github.com/nextgis/docs_ng.git'
 langs = ['ru', 'en']
+ssh_user = os.environ.get("DOCS_UPLOADER", "user")
+ssh_port = os.environ.get("DOCS_UPLOAD_SERVER_PORT", "user")
 
 poller_name = 'docs'
 git_project_name = 'nextgis/docs_ng'
@@ -134,10 +137,13 @@ for lang in langs:
     # TODO:
     # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
     #                                    description=["sync", "to web server"]))
+
     factory.addStep(steps.ShellSequence(commands=[
         util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logname=logname),
         util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logname=logname),
-        util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p 2322 -i /root/.ssh/www', '_build/html/', 'ngw_admin@192.168.6.1:/home/docker/data/www/docs/' + lang,], logname=logname),
+        util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p 2322 -i /root/.ssh/www', '_build/html/', 
+            '{}@docs-{}.staging.nextgis.com:{}:/home/docker/data/www/docs/{}'.format(ssh_user, lang, ssh_port, lang),], 
+            logname=logname),
         ],
         name="Copy documentation to web server",
         haltOnFailure=True,
