@@ -5,6 +5,14 @@ from buildbot.plugins import *
 import sys
 import os
 import time
+import json
+
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
 
 c = {}
 
@@ -42,6 +50,7 @@ binary_repo_refix = "https://rm.nextgis.com/api/repo"
 #"http://nextgis.com/programs/desktop/repository-" // 
 # https://rm.nextgis.com/api/repo/4/installer/devel/repository-win32-dev/Updates.xml https://rm.nextgis.com/api/repo/4/installer/stable/repository-win32/Updates.xml
 
+repka_endpoint = 'https://rm.nextgis.com'
 
 build_lock = util.WorkerLock("create_installer_worker_builds",
     maxCount=1,
@@ -212,6 +221,44 @@ def repoUrl(props, platform):
     else:
         return '{}/{}{}'.format(url, platform['name'], suffix)
 
+def get_packet_id(repo_id, packet_name):
+    url =  repka_endpoint + '/api/packet?repository={}&filter={}'.format(repo_id, packet_name)
+    response = urlopen(url)
+    packets = json.loads(response.read())
+    for packet in packets:
+        if packet['name'] == packet_name:
+            return packet['id']
+    return -1
+
+def get_release(packet_id, tag):
+    url =  repka_endpoint + '/api/release?packet={}'.format(packet_id)
+    response = urlopen(url)
+    releases = json.loads(response.read())
+    if releases is None:
+        return None
+    
+    for release in releases:
+        if tag in release['tags']:
+            return release
+    return None
+
+def get_file_id(release, platform):
+    for file in release['files']:
+        if file['name'].endswith('{}.zip'.format(platform)):
+            return file['id']
+    return -1
+    
+def get_repository_http_url(platform, suffix):
+    repka_suffix = 'devel' if suffix == '-dev' else 'stable'
+    
+    packet_id = get_packet_id(platform['repo_id'], repka_suffix)
+    release = get_release(packet_id, 'latest')
+    file_id = get_file_id(release, platform['name'] + suffix)
+    
+    url = repka_endpoint + '/api/asset/{}/download'.format(file_id)
+    
+    return url
+
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
     {'name' : 'win64', 'worker' : 'build-win-py3', 'repo_id': 5},
@@ -294,7 +341,7 @@ for platform in platforms:
     factory.addStep(steps.CopyDirectory(src=build_dir + "/inst", dest=code_dir + "/qt"))
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/inst"))
 
-    # 2. Get repository from ftp
+    # 2. Get repository from ftp or http
     factory.addStep(steps.ShellSequence(commands=[
             util.ShellArg(command=["curl", '-u', ngftp2_user,
                                     '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
@@ -308,9 +355,27 @@ for platform in platforms:
                                         basename=repo_name_base)],
                             logname=logname),
         ],
-        name="Download repository",
+        name="Download repository from ftp",
         haltOnFailure=True,
-        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local")),
+        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local") and not step.getProperty("scheduler").endswith("_standalone")),
+        workdir=build_dir,
+        env=env))
+
+    factory.addStep(steps.ShellSequence(commands=[
+            util.ShellArg(command=["curl",
+                                    '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+                                        basename=repo_name_base),
+                                    '-s', get_repository_http_url(platform, lambda step: step.getProperty("suffix")),
+                                    ],
+                            logname=logname),
+            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
+                                    util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+                                        basename=repo_name_base)],
+                            logname=logname),
+        ],
+        name="Download repository from http",
+        haltOnFailure=True,
+        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local") and step.getProperty("scheduler").endswith("_standalone")),
         workdir=build_dir,
         env=env))
 
