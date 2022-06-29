@@ -359,7 +359,7 @@ for platform in platforms:
         ],
         name="Download repository from ftp",
         haltOnFailure=True,
-        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local") and not step.getProperty("scheduler").endswith("_standalone")),
+        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local" or step.getProperty("scheduler").endswith("_standalone"))),
         workdir=build_dir,
         env=env))
 
@@ -377,7 +377,7 @@ for platform in platforms:
         ],
         name="Download repository from http",
         haltOnFailure=True,
-        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local") and step.getProperty("scheduler").endswith("_standalone")),
+        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
         workdir=build_dir,
         env=env))
 
