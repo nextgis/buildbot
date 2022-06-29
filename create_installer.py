@@ -247,8 +247,10 @@ def get_file_id(release, platform):
         if file['name'].endswith('{}.zip'.format(platform)):
             return file['id']
     return -1
-    
-def get_repository_http_url(platform, suffix):
+
+@util.renderer
+def get_repository_http_url(props, platform):
+    suffix = props.getProperty('suffix')
     repka_suffix = 'devel' if suffix == '-dev' else 'stable'
     
     packet_id = get_packet_id(platform['repo_id'], repka_suffix)
@@ -365,7 +367,7 @@ for platform in platforms:
             util.ShellArg(command=["curl",
                                     '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
                                         basename=repo_name_base),
-                                    '-s', get_repository_http_url(platform, util.Interpolate('%(prop:suffix)s')),
+                                    '-s', get_repository_http_url.withArgs(platform),
                                     ],
                             logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
