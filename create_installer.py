@@ -365,7 +365,7 @@ for platform in platforms:
             util.ShellArg(command=["curl",
                                     '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
                                         basename=repo_name_base),
-                                    '-s', get_repository_http_url(platform, lambda step: step.getProperty("suffix")),
+                                    '-s', get_repository_http_url(platform, util.Interpolate('%(prop:suffix)')),
                                     ],
                             logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
