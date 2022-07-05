@@ -456,7 +456,8 @@ for platform in platforms:
             timeout=timeout * 60,
             haltOnFailure=True,
             workdir=code_dir,
-            env=env
+            env=env,
+            doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone"))
         )
     )
 
