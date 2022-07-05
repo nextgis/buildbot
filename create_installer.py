@@ -196,7 +196,8 @@ def commandArgs(props):
     if props.getProperty('scheduler') == project_name + "_create":
         command.append('create')
     elif props.getProperty('scheduler').endswith("_standalone"):
-        command.append('create')    
+        #command.append('create')
+        command.append('create_from_repository')
     elif props.getProperty('scheduler').endswith("_local"):
         command.append('create')
     elif props.getProperty('scheduler') == project_name + "_update":
