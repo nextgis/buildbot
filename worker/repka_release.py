@@ -236,6 +236,6 @@ if __name__ == "__main__":
     parser.add_argument('--description', dest='description', help='release description')
     args = parser.parse_args()
 
-    packet_name = 'devel' if '-dev' in args.path else 'stable'
+    packet_name = 'devel' if '-dev' in args.path else 'stable_new'
 
     do_work(args.repo_id, packet_name, args.path, args.description, args.login, args.password)

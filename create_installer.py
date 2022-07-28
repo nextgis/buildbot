@@ -215,7 +215,7 @@ def repoUrl(props, platform):
     suffix = props.getProperty('suffix')
     if url.startswith('https://rm.nextgis.com'):
         repo_id = platform['repo_id'] 
-        repka_suffix = 'devel' if suffix == '-dev' else 'stable'
+        repka_suffix = 'devel' if suffix == '-dev' else 'stable_new'
         return '{}/{}/installer/{}/repository-{}{}'.format(url, repo_id, repka_suffix, platform['name'], suffix)
     elif suffix == '-local':
         return '{}/{}'.format(url, platform['name'])
@@ -252,7 +252,7 @@ def get_file_id(release, platform):
 @util.renderer
 def get_repository_http_url(props, platform):
     suffix = props.getProperty('suffix')
-    repka_suffix = 'devel' if suffix == '-dev' else 'stable'
+    repka_suffix = 'devel' if suffix == '-dev' else 'stable_new'
     
     packet_id = get_packet_id(platform['repo_id'], repka_suffix)
     release = get_release(packet_id, 'latest')
