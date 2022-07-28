@@ -254,8 +254,15 @@ def get_repository_http_url(props, platform):
     suffix = props.getProperty('suffix')
     repka_suffix = 'devel' if suffix == '-dev' else 'stable_new'
     
+    url = ''
     packet_id = get_packet_id(platform['repo_id'], repka_suffix)
+    if packet_id == -1:
+        return url
+    
     release = get_release(packet_id, 'latest')
+    if release == None:
+        return url
+    
     file_id = get_file_id(release, platform['name'] + suffix)
     
     url = repka_endpoint + '/api/asset/{}/download'.format(file_id)
