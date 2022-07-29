@@ -249,26 +249,32 @@ def get_file_id(release, platform):
             return file['id']
     return -1
 
+def get_packet_url(platform, suffix):
+    packet_id = get_packet_id(platform['repo_id'], suffix)
+    if packet_id == -1:
+        return ''
+    
+    release = get_release(packet_id, 'latest')
+    if release == None:
+        return ''
+    
+    file_id = get_file_id(release, platform['name'] + suffix)
+    
+    return repka_endpoint + '/api/asset/{}/download'.format(file_id)
+
 @util.renderer
 def get_repository_http_url(props, platform):
     suffix = props.getProperty('suffix')
     repka_suffix = 'devel' if suffix == '-dev' else 'stable_new'
     
-    url = ''
-    packet_id = get_packet_id(platform['repo_id'], repka_suffix)
-    if packet_id == -1:
-        return url
-    
-    release = get_release(packet_id, 'latest')
-    if release == None:
-        return url
-    
-    file_id = get_file_id(release, platform['name'] + suffix)
-    
-    url = repka_endpoint + '/api/asset/{}/download'.format(file_id)
-    
-    return url
+    return get_packet_url(platform, repka_suffix)
 
+def get_installer_package_url(props, platform):
+    return get_packet_url(platform, 'inst_framework')
+
+def get_qt_package_url(props, platform):
+    return get_packet_url(platform, 'inst_framework_qt')
+    
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
     {'name' : 'win64', 'worker' : 'build-win-py3', 'repo_id': 5},
@@ -330,7 +336,7 @@ for platform in platforms:
     logname = 'stdio'
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["curl", get_installer_package_url(), '-o', 'package.zip', '-s'], logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download installer package",
@@ -341,7 +347,7 @@ for platform in platforms:
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["curl", get_qt_package_url(), '-o', 'package.zip', '-s'], logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download qt package",
