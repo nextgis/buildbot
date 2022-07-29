@@ -636,19 +636,9 @@ for platform in platforms:
         command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
             '--description', util.Interpolate('%(prop:notes)s'),
             '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
-            '--login', username, '--password', userkey],
-        name="Create release in repka",
-        doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
-        haltOnFailure=True,
-        workdir=code_dir,
-        env=env))
-    
-    factory.addStep(steps.ShellCommand(
-        command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
-            '--description', "Upload versions.pkl",
             '--asset_path', 'versions.pkl',
             '--login', username, '--password', userkey],
-        name="Upload versions.pkl to repka",
+        name="Create release in repka",
         doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
         haltOnFailure=True,
         workdir=code_dir,
