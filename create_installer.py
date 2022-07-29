@@ -186,6 +186,9 @@ c['schedulers'].append(forceScheduler_standalone)
 c['schedulers'].append(forceScheduler_standalone_ex)
 c['schedulers'].append(forceScheduler_local)
 
+def get_repka_suffix(suffix):
+    return 'devel' if suffix == '-dev' else 'stable_new'
+
 @util.renderer
 def now(props):
     return time.strftime('%Y%m%d')
@@ -215,7 +218,7 @@ def repoUrl(props, platform):
     suffix = props.getProperty('suffix')
     if url.startswith('https://rm.nextgis.com'):
         repo_id = platform['repo_id'] 
-        repka_suffix = 'devel' if suffix == '-dev' else 'stable_new'
+        repka_suffix = get_repka_suffix(suffix)
         return '{}/{}/installer/{}/repository-{}{}'.format(url, repo_id, repka_suffix, platform['name'], suffix)
     elif suffix == '-local':
         return '{}/{}'.format(url, platform['name'])
@@ -245,7 +248,7 @@ def get_release(packet_id, tag):
 
 def get_file_id(release, name):
     for file in release['files']:
-        if file['name'].endswith('{}.zip'.format(name)):
+        if file['name'].endswith(name):
             return file['id']
     return -1
 
@@ -265,16 +268,22 @@ def get_packet_url(platform, suffix, filename):
 @util.renderer
 def get_repository_http_url(props, platform):
     suffix = props.getProperty('suffix')
-    repka_suffix = 'devel' if suffix == '-dev' else 'stable_new'
+    repka_suffix = get_repka_suffix(suffix)
     
-    return get_packet_url(platform, repka_suffix, platform['name'] + repka_suffix)
+    return get_packet_url(platform, repka_suffix, platform['name'] + repka_suffix + '.zip')
+
+@util.renderer
+def get_versions_url(props, platform):
+    suffix = props.getProperty('suffix')
+    repka_suffix = get_repka_suffix(suffix)
+    return get_packet_url(platform, repka_suffix, 'versions.pkl')
 
 def get_installer_package_url(platform):
-    return get_packet_url(platform, 'inst_framework', 'package')
+    return get_packet_url(platform, 'inst_framework', 'package.zip')
 
 def get_qt_package_url(platform):
-    return get_packet_url(platform, 'inst_framework_qt', 'package')
-    
+    return get_packet_url(platform, 'inst_framework_qt', 'package.zip')
+
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
     {'name' : 'win64', 'worker' : 'build-win-py3', 'repo_id': 5},
@@ -415,14 +424,12 @@ for platform in platforms:
         workdir=code_dir,
         env=env))
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-o', 'versions.pkl', '-s',
-                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
-                                                    basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
+    factory.addStep(steps.ShellCommand(command=["curl",
+                                                '-o', 'versions.pkl',
+                                                '-s', get_versions_url(platform),
                                                 ],
                                         name="Download versions.pkl",
-                                        # haltOnFailure=False, warnOnWarnings=True,
-                                        # flunkOnFailure=False, warnOnFailure=True,
-                                        # haltOnFailure=True, # The repository may not be exists
+                                        haltOnFailure=True,
                                         doStepIf=(lambda step: not step.getProperty("scheduler") == project_name + "_local"),
                                         workdir=code_dir,
                                         env=env))
