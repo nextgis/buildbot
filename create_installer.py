@@ -269,10 +269,10 @@ def get_repository_http_url(props, platform):
     
     return get_packet_url(platform, repka_suffix)
 
-def get_installer_package_url(props, platform):
+def get_installer_package_url(platform):
     return get_packet_url(platform, 'inst_framework')
 
-def get_qt_package_url(props, platform):
+def get_qt_package_url(platform):
     return get_packet_url(platform, 'inst_framework_qt')
     
 platforms = [
@@ -336,7 +336,7 @@ for platform in platforms:
     logname = 'stdio'
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", get_installer_package_url(), '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["curl", get_installer_package_url(platform), '-o', 'package.zip', '-s'], logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download installer package",
@@ -347,7 +347,7 @@ for platform in platforms:
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", get_qt_package_url(), '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["curl", get_qt_package_url(platform), '-o', 'package.zip', '-s'], logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download qt package",
