@@ -599,26 +599,26 @@ for platform in platforms:
     )
 
     # 7. Upload repository archive to ftp
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
-                                        util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                            basename=repo_name_base),
-                                        '-s', '--ftp-create-dirs',
-                                        ngftp2 + '/src/' + 'repo_' + platform['name'] + '/',],
-                                       name="Upload repository archive to ftp",
-                                       haltOnFailure=True,
-                                       doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
-                                       workdir=build_dir,
-                                       env=env))
-                                       
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
-                                                'versions.pkl', '-s', '--ftp-create-dirs',
-                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
-                                                    basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
-                                                ],
-                                       name="Upload versions.pkl to ftp",
-                                       doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
-                                       workdir=code_dir,
-                                       env=env))
+    #factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
+    #                                    util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
+    #                                        basename=repo_name_base),
+    #                                    '-s', '--ftp-create-dirs',
+    #                                    ngftp2 + '/src/' + 'repo_' + platform['name'] + '/',],
+    #                                   name="Upload repository archive to ftp",
+    #                                   haltOnFailure=True,
+    #                                   doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
+    #                                   workdir=build_dir,
+    #                                   env=env))
+    #                                   
+    #factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
+    #                                            'versions.pkl', '-s', '--ftp-create-dirs',
+    #                                            util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
+    #                                                basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
+    #                                            ],
+    #                                   name="Upload versions.pkl to ftp",
+    #                                   doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
+    #                                   workdir=code_dir,
+    #                                   env=env))
     if create_updater_package:
         # If create installer - upload updater.zip + version.str to ftp
         factory.addStep(steps.ShellCommand(command=['python3', upload_script_name,
@@ -638,6 +638,17 @@ for platform in platforms:
             '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
             '--login', username, '--password', userkey],
         name="Create release in repka",
+        doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
+        haltOnFailure=True,
+        workdir=code_dir,
+        env=env))
+    
+    factory.addStep(steps.ShellCommand(
+        command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
+            '--description', "Upload versions.pkl",
+            '--asset_path', build_dir_name + separator + 'versions.pkl',
+            '--login', username, '--password', userkey],
+        name="Upload versions.pkl to repka",
         doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
         haltOnFailure=True,
         workdir=code_dir,
