@@ -646,7 +646,7 @@ for platform in platforms:
     factory.addStep(steps.ShellCommand(
         command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
             '--description', "Upload versions.pkl",
-            '--asset_path', build_dir_name + separator + 'versions.pkl',
+            '--asset_path', 'versions.pkl',
             '--login', username, '--password', userkey],
         name="Upload versions.pkl to repka",
         doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
