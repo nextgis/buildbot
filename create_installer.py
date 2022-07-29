@@ -426,7 +426,7 @@ for platform in platforms:
 
     factory.addStep(steps.ShellCommand(command=["curl",
                                                 '-o', 'versions.pkl',
-                                                '-s', get_versions_url(platform),
+                                                '-s', get_versions_url.withArgs(platform),
                                                 ],
                                         name="Download versions.pkl",
                                         haltOnFailure=True,
