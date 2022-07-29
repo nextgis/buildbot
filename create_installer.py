@@ -243,13 +243,13 @@ def get_release(packet_id, tag):
             return release
     return None
 
-def get_file_id(release, platform):
+def get_file_id(release, name):
     for file in release['files']:
-        if file['name'].endswith('{}.zip'.format(platform)):
+        if file['name'].endswith('{}.zip'.format(name)):
             return file['id']
     return -1
 
-def get_packet_url(platform, suffix):
+def get_packet_url(platform, suffix, filename):
     packet_id = get_packet_id(platform['repo_id'], suffix)
     if packet_id == -1:
         return ''
@@ -258,7 +258,7 @@ def get_packet_url(platform, suffix):
     if release == None:
         return ''
     
-    file_id = get_file_id(release, platform['name'] + suffix)
+    file_id = get_file_id(release, filename)
     
     return repka_endpoint + '/api/asset/{}/download'.format(file_id)
 
@@ -267,13 +267,13 @@ def get_repository_http_url(props, platform):
     suffix = props.getProperty('suffix')
     repka_suffix = 'devel' if suffix == '-dev' else 'stable_new'
     
-    return get_packet_url(platform, repka_suffix)
+    return get_packet_url(platform, repka_suffix, platform['name'] + repka_suffix)
 
 def get_installer_package_url(platform):
-    return get_packet_url(platform, 'inst_framework')
+    return get_packet_url(platform, 'inst_framework', 'package')
 
 def get_qt_package_url(platform):
-    return get_packet_url(platform, 'inst_framework_qt')
+    return get_packet_url(platform, 'inst_framework_qt', 'package')
     
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
