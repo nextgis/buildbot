@@ -284,6 +284,19 @@ def get_installer_package_url(platform):
 def get_qt_package_url(platform):
     return get_packet_url(platform, 'inst_framework_qt', 'package.zip')
 
+@util.renderer
+def get_updater_package_path(props, platform):
+    version_file = os.path.join(build_dir_name, 'version.str')
+    with open(version_file) as f:
+        content = f.readlines()
+    # you may also want to remove whitespace characters like `\n` at the end of each line
+    content = [x.strip() for x in content]
+    
+    release_file = os.path.join(build_dir_name, content[2]) + '.zip'
+    package_file = os.path.join(build_dir_name, 'package.zip')
+    os.rename(release_file, package_file)
+    return package_file
+
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
     {'name' : 'win64', 'worker' : 'build-win-py3', 'repo_id': 5},
@@ -589,19 +602,9 @@ for platform in platforms:
     if create_updater_package:
         # If create installer - upload updater.zip + version.str to repka
         
-        version_file = os.path.join(build_dir_name, 'version.str')
-        with open(version_file) as f:
-            content = f.readlines()
-        # you may also want to remove whitespace characters like `\n` at the end of each line
-        content = [x.strip() for x in content]
-        
-        release_file = os.path.join(build_dir_name, content[2]) + '.zip'
-        package_file = os.path.join(build_dir_name, 'package.zip')
-        os.rename(release_file, package_file)
-    
         factory.addStep(steps.ShellCommand(
             command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
-                '--asset_path', build_dir_name + separator + 'package.zip',
+                '--asset_path', get_updater_package_path.withArgs(platform),
                 '--asset_path', build_dir_name + separator + 'version.str',
                 '--packet_name', 'updater',
                 '--login', username, '--password', userkey],
