@@ -588,6 +588,17 @@ for platform in platforms:
 
     if create_updater_package:
         # If create installer - upload updater.zip + version.str to repka
+        
+        version_file = os.path.join(build_dir_name, 'version.str')
+        with open(version_file) as f:
+            content = f.readlines()
+        # you may also want to remove whitespace characters like `\n` at the end of each line
+        content = [x.strip() for x in content]
+        
+        release_file = os.path.join(build_dir_name, content[2]) + '.zip'
+        package_file = os.path.join(build_dir_name, 'package.zip')
+        os.rename(release_file, package_file)
+    
         factory.addStep(steps.ShellCommand(
             command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
                 '--asset_path', build_dir_name + separator + 'package.zip',
