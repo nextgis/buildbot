@@ -236,9 +236,13 @@ if __name__ == "__main__":
     parser.add_argument('--password', dest='password', help='password for {}'.format(repka_endpoint))
     parser.add_argument('--repo_id', dest='repo_id', required=True, help='{} repository identifier'.format(repka_endpoint))
     parser.add_argument('--asset_path', action='append', dest='path', required=True, help='path to upload asset')
+    parser.add_argument('--packet_name', dest='packet_name', required=False, help='packet name')
     parser.add_argument('--description', dest='description', help='release description')
     args = parser.parse_args()
 
-    packet_name = 'devel' if '-dev' in args.path else 'stable_new'
+    if not args.packet_name:
+        packet_name = 'devel' if '-dev' in args.path else 'stable_new'
+    else:
+        packet_name = args.packet_name
 
     do_work(args.repo_id, packet_name, args.path, args.description, args.login, args.password)
