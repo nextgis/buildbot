@@ -366,26 +366,7 @@ for platform in platforms:
     factory.addStep(steps.CopyDirectory(src=build_dir + "/inst", dest=code_dir + "/qt"))
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/inst"))
 
-    # 2. Get repository from ftp or http
-    factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp2_user,
-                                    '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                        basename=repo_name_base),
-                                    '-s', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                        basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/' + repo_name_base),
-                                    ],
-                            logname=logname),
-            util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
-                                    util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                        basename=repo_name_base)],
-                            logname=logname),
-        ],
-        name="Download repository from ftp",
-        haltOnFailure=True,
-        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local" or step.getProperty("scheduler").endswith("_standalone"))),
-        workdir=build_dir,
-        env=env))
-
+    # 2. Get repository from
     factory.addStep(steps.ShellSequence(commands=[
             util.ShellArg(command=["curl",
                                     '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
@@ -398,9 +379,9 @@ for platform in platforms:
                                         basename=repo_name_base)],
                             logname=logname),
         ],
-        name="Download repository from http",
+        name="Download repository",
         haltOnFailure=True,
-        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
+        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler").endswith("_update")),
         workdir=build_dir,
         env=env))
 
@@ -605,27 +586,6 @@ for platform in platforms:
         )
     )
 
-    # 7. Upload repository archive to ftp
-    #factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
-    #                                    util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-    #                                        basename=repo_name_base),
-    #                                    '-s', '--ftp-create-dirs',
-    #                                    ngftp2 + '/src/' + 'repo_' + platform['name'] + '/',],
-    #                                   name="Upload repository archive to ftp",
-    #                                   haltOnFailure=True,
-    #                                   doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
-    #                                   workdir=build_dir,
-    #                                   env=env))
-    #                                   
-    #factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
-    #                                            'versions.pkl', '-s', '--ftp-create-dirs',
-    #                                            util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
-    #                                                basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
-    #                                            ],
-    #                                   name="Upload versions.pkl to ftp",
-    #                                   doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
-    #                                   workdir=code_dir,
-    #                                   env=env))
     if create_updater_package:
         # If create installer - upload updater.zip + version.str to ftp
         factory.addStep(steps.ShellCommand(command=['python3', upload_script_name,

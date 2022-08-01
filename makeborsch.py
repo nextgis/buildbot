@@ -97,9 +97,6 @@ script_name = 'repka_release.py' # 'github_release.py'
 release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/' + script_name
 username = 'buildbot'
 userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
-ngftp_base = 'ftp://192.168.6.7:8121'
-ngftp = ngftp_base + '/software/installer/src/'
-ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
 install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py'
@@ -478,16 +475,6 @@ for repository in repositories:
                                                     username, '--password', userkey, '--build_path', build_subdir
                                                     ],
                                            name="send package to rm.nextgis.com",
-                                           haltOnFailure=True,
-                                           workdir=code_dir,
-                                           env=env))
-
-        # upload to ftp
-        factory.addStep(steps.ShellCommand(command=[python_cmd, upload_script_name,
-                                                    '--ftp_user', ngftp_user, '--ftp',
-                                                    ngftp + project_name + '_' + platform['name'],
-                                                    '--build_path', build_subdir],
-                                           name="send package to ftp",
                                            haltOnFailure=True,
                                            workdir=code_dir,
                                            env=env))
