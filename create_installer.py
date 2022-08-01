@@ -45,7 +45,7 @@ c['builders'] = []
 
 project_name = 'create_installer'
 generator = 'Visual Studio 16 2019'
-create_updater_package = False
+create_updater_package = True
 binary_repo_refix = "https://rm.nextgis.com/api/repo" 
 #"http://nextgis.com/programs/desktop/repository-" // 
 # https://rm.nextgis.com/api/repo/4/installer/devel/repository-win32-dev/Updates.xml https://rm.nextgis.com/api/repo/4/installer/stable/repository-win32/Updates.xml
@@ -587,16 +587,17 @@ for platform in platforms:
     )
 
     if create_updater_package:
-        # If create installer - upload updater.zip + version.str to ftp
-        factory.addStep(steps.ShellCommand(command=['python3', upload_script_name,
-                                                    '--ftp_user', ngftp2_user, '--ftp',
-                                                    ngftp2 + '/src/nextgis_updater_' + platform['name'],
-                                                    '--build_path', build_dir_name],
-                                           name="send package to ftp",
-                                           doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
-                                           haltOnFailure=True,
-                                           workdir=code_dir,
-                                           env=env))
+        # If create installer - upload updater.zip + version.str to repka
+        factory.addStep(steps.ShellCommand(
+            command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
+                '--asset_path', build_dir_name + separator + 'package.zip',
+                '--asset_path', build_dir_name + separator + 'version.str',
+                '--login', username, '--password', userkey],
+            name="Send package to repka",
+            doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env))
 
     # 8. Create new release in repka
     factory.addStep(steps.ShellCommand(
