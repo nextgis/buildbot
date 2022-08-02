@@ -190,6 +190,11 @@ def get_repka_suffix(suffix):
     return 'devel' if suffix == '-dev' else 'stable_new'
 
 @util.renderer
+def get_packet_name(props):
+    suffix = props.getProperty('suffix')
+    return get_repka_suffix(suffix)
+
+@util.renderer
 def now(props):
     return time.strftime('%Y%m%d')
 
@@ -620,6 +625,7 @@ for platform in platforms:
             '--description', util.Interpolate('%(prop:notes)s'),
             '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
             '--asset_path', 'versions.pkl',
+            '--packet_name', get_packet_name,
             '--login', username, '--password', userkey],
         name="Create release in repka",
         doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
