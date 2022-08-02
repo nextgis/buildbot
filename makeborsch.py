@@ -85,9 +85,9 @@ repositories = [
     {'repo':'py_qt5sip', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
-skip_send2github = [
-    "nextgisqgis", "formbuilder", "manuscript",
-]
+#skip_send2github = [
+#    "nextgisqgis", "formbuilder", "manuscript",
+#]
 
 vm_cpu_count = 8
 mac_os_min_version = '10.14'
@@ -464,20 +464,20 @@ for repository in repositories:
                                            env=env))
 
         # send package to github
-        if project_name not in skip_send2github:
+        #if project_name not in skip_send2github:
             # factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
             #                                         username, '--key', userkey, '--build_path', build_subdir
             #                                         ],
             #                                name="send package to github",
             #                                haltOnFailure=True,
             #                                workdir=code_dir))
-            factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
-                                                    username, '--password', userkey, '--build_path', build_subdir
-                                                    ],
-                                           name="send package to rm.nextgis.com",
-                                           haltOnFailure=True,
-                                           workdir=code_dir,
-                                           env=env))
+        factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
+                                                username, '--password', userkey, '--build_path', build_subdir
+                                                ],
+                                       name="send package to rm.nextgis.com",
+                                       haltOnFailure=True,
+                                       workdir=code_dir,
+                                       env=env))
 
         if 'sentry_project' in repository and len(repository['sentry_project']):
             factory.addStep(steps.ShellCommand(command=['sentry-cli', 'upload-dif', '--include-sources', '-o', 'nextgis', '-p', repository['sentry_project'], '.'],
