@@ -506,7 +506,7 @@ for platform in platforms:
         #                                     ))
         keychain_name = 'cs.keychain'
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/dev.p12', '-o', 'dev.p12', '-s'], logname=logname),
+                util.ShellArg(command=["curl", '-u', 'https://rm.nextgis.com/api/apple_cert/dev.p12', '-o', 'dev.p12', '-s'], logname=logname),
                 # For use in separate keychain
                 util.ShellArg(command=['security', 'create-keychain', '-p', login_keychain, keychain_name],
                               logname=logname,
