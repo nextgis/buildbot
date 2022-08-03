@@ -340,6 +340,47 @@ for platform in platforms:
     factory.addStep(steps.MakeDirectory(dir=build_dir,
                                         name="Make build directory"))
 
+    # Install NextGIS sign sertificate
+    if 'mac' == platform['name']:
+        # Try to pip2 and pip install
+
+        factory.addStep(steps.ShellSequence(commands=[
+                util.ShellArg(command=['pip3', 'install', '--user', 'dmgbuild'],
+                                # haltOnFailure=False, flunkOnWarnings=False, # Don't fail here
+                                # flunkOnFailure=False, warnOnWarnings=False,
+                                # warnOnFailure=False,
+                                logname=logname),
+                # util.ShellArg(command=['pip', 'install', '--user', 'dmgbuild'],
+                #                 logname=logname),
+            ],
+            name="Install dmgbuild python package",
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env))
+
+        # factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
+        #                                     workerdest=code_dir_last + "/dev.p12",
+        #                                     ))
+        keychain_name = 'cs.keychain'
+        factory.addStep(steps.ShellSequence(commands=[
+                util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/dev.p12', '-o', 'dev.p12', '-s'], logname=logname),
+                # For use in separate keychain
+                util.ShellArg(command=['security', 'create-keychain', '-p', login_keychain, keychain_name],
+                              logname=logname,
+                              haltOnFailure=False, flunkOnWarnings=False, flunkOnFailure=False,
+                              warnOnWarnings=False, warnOnFailure=False),
+                util.ShellArg(command=['security', 'default-keychain', '-s', keychain_name], logname=logname),
+                util.ShellArg(command=['security', 'unlock-keychain', '-p', login_keychain, keychain_name], logname=logname),
+                util.ShellArg(command=['security', 'import', './dev.p12', '-k', keychain_name, '-P', '', '-A'], logname=logname),
+                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', login_keychain, '-s',  keychain_name,], logname=logname),
+                util.ShellArg(command=['security', 'list-keychains', '-s', keychain_name], logname=logname),
+                util.ShellArg(command=['security', 'list-keychains'], logname=logname),
+            ],
+            name="Install NextGIS sign sertificate",
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env))
+
     # 1. Get and unpack installer and qt5 static from ftp
     if_prefix = '_mac'
     separator = '/'
@@ -481,49 +522,8 @@ for platform in platforms:
             doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone"))
         )
     )
-
+    
     # 4. Create or update repository
-    # Install NextGIS sign sertificate
-    if 'mac' == platform['name']:
-        # Try to pip2 and pip install
-
-        factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=['pip3', 'install', '--user', 'dmgbuild'],
-                                # haltOnFailure=False, flunkOnWarnings=False, # Don't fail here
-                                # flunkOnFailure=False, warnOnWarnings=False,
-                                # warnOnFailure=False,
-                                logname=logname),
-                # util.ShellArg(command=['pip', 'install', '--user', 'dmgbuild'],
-                #                 logname=logname),
-            ],
-            name="Install dmgbuild python package",
-            haltOnFailure=True,
-            workdir=code_dir,
-            env=env))
-
-        # factory.addStep(steps.FileDownload(mastersrc="/opt/buildbot/dev.p12",
-        #                                     workerdest=code_dir_last + "/dev.p12",
-        #                                     ))
-        keychain_name = 'cs.keychain'
-        factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/dev.p12', '-o', 'dev.p12', '-s'], logname=logname),
-                # For use in separate keychain
-                util.ShellArg(command=['security', 'create-keychain', '-p', login_keychain, keychain_name],
-                              logname=logname,
-                              haltOnFailure=False, flunkOnWarnings=False, flunkOnFailure=False,
-                              warnOnWarnings=False, warnOnFailure=False),
-                util.ShellArg(command=['security', 'default-keychain', '-s', keychain_name], logname=logname),
-                util.ShellArg(command=['security', 'unlock-keychain', '-p', login_keychain, keychain_name], logname=logname),
-                util.ShellArg(command=['security', 'import', './dev.p12', '-k', keychain_name, '-P', '', '-A'], logname=logname),
-                util.ShellArg(command=['security', 'set-key-partition-list', '-S', 'apple-tool:,apple:,codesign:', '-k', login_keychain, '-s',  keychain_name,], logname=logname),
-                util.ShellArg(command=['security', 'list-keychains', '-s', keychain_name], logname=logname),
-                util.ShellArg(command=['security', 'list-keychains'], logname=logname),
-            ],
-            name="Install NextGIS sign sertificate",
-            haltOnFailure=True,
-            workdir=code_dir,
-            env=env))
-
     factory.addStep(
         steps.ShellCommand(
             command=[
