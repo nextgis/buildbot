@@ -257,8 +257,8 @@ def get_file_id(release, name):
             return file['id']
     return -1
 
-def get_packet_url(platform, suffix, filename):
-    packet_id = get_packet_id(platform['repo_id'], suffix)
+def get_packet_url(platform, packet_name, filename):
+    packet_id = get_packet_id(platform['repo_id'], packet_name)
     if packet_id == -1:
         return ''
     
@@ -283,10 +283,12 @@ def get_versions_url(props, platform):
     repka_suffix = get_repka_suffix(suffix)
     return get_packet_url(platform, repka_suffix, 'versions.pkl')
 
-def get_installer_package_url(platform):
+@util.renderer
+def get_installer_package_url(props, platform):
     return get_packet_url(platform, 'inst_framework', 'package.zip')
 
-def get_qt_package_url(platform):
+@util.renderer
+def get_qt_package_url(props, platform):
     return get_packet_url(platform, 'inst_framework_qt', 'package.zip')
 
 @util.renderer
@@ -363,7 +365,7 @@ for platform in platforms:
     logname = 'stdio'
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", get_installer_package_url(platform), '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["curl", get_installer_package_url.withArgs(platform), '-o', 'package.zip', '-s'], logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download installer package",
@@ -374,7 +376,7 @@ for platform in platforms:
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", get_qt_package_url(platform), '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["curl", get_qt_package_url.withArgs(platform), '-o', 'package.zip', '-s'], logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download qt package",
