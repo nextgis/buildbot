@@ -273,7 +273,7 @@ def get_repository_http_url(props, platform):
     suffix = props.getProperty('suffix')
     repka_suffix = get_repka_suffix(suffix)
     
-    return get_packet_url(platform, repka_suffix, platform['name'] + repka_suffix + '.zip')
+    return get_packet_url(platform, repka_suffix, platform['name'] + suffix + '.zip')
 
 @util.renderer
 def get_versions_url(props, platform):
