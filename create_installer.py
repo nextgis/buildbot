@@ -5,6 +5,14 @@ from buildbot.plugins import *
 import sys
 import os
 import time
+import json
+
+try:
+    # For Python 3.0 and later
+    from urllib.request import urlopen
+except ImportError:
+    # Fall back to Python 2's urllib2
+    from urllib2 import urlopen
 
 c = {}
 
@@ -13,10 +21,8 @@ vm_cpu_count = 8
 mac_os_min_version = '10.14'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
-ngftp2 = 'ftp://192.168.6.7:8121/software/installer'
 ngftp = 'ftp://my-ftp-storage.vpn.nextgis.net:10411/software/installer'
 ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
-ngftp2_user = os.environ.get("BUILDBOT_FTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
 repka_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/repka_release.py'
@@ -42,6 +48,7 @@ binary_repo_refix = "https://rm.nextgis.com/api/repo"
 #"http://nextgis.com/programs/desktop/repository-" // 
 # https://rm.nextgis.com/api/repo/4/installer/devel/repository-win32-dev/Updates.xml https://rm.nextgis.com/api/repo/4/installer/stable/repository-win32/Updates.xml
 
+repka_endpoint = 'https://rm.nextgis.com'
 
 build_lock = util.WorkerLock("create_installer_worker_builds",
     maxCount=1,
@@ -177,6 +184,14 @@ c['schedulers'].append(forceScheduler_standalone)
 c['schedulers'].append(forceScheduler_standalone_ex)
 c['schedulers'].append(forceScheduler_local)
 
+def get_repka_suffix(suffix):
+    return 'devel' if suffix == '-dev' else 'stable_new'
+
+@util.renderer
+def get_packet_name(props):
+    suffix = props.getProperty('suffix')
+    return get_repka_suffix(suffix)
+
 @util.renderer
 def now(props):
     return time.strftime('%Y%m%d')
@@ -187,7 +202,8 @@ def commandArgs(props):
     if props.getProperty('scheduler') == project_name + "_create":
         command.append('create')
     elif props.getProperty('scheduler').endswith("_standalone"):
-        command.append('create')    
+        #command.append('create')
+        command.append('create_from_repository')
     elif props.getProperty('scheduler').endswith("_local"):
         command.append('create')
     elif props.getProperty('scheduler') == project_name + "_update":
@@ -205,12 +221,86 @@ def repoUrl(props, platform):
     suffix = props.getProperty('suffix')
     if url.startswith('https://rm.nextgis.com'):
         repo_id = platform['repo_id'] 
-        repka_suffix = 'devel' if suffix == '-dev' else 'stable'
+        repka_suffix = get_repka_suffix(suffix)
         return '{}/{}/installer/{}/repository-{}{}'.format(url, repo_id, repka_suffix, platform['name'], suffix)
     elif suffix == '-local':
         return '{}/{}'.format(url, platform['name'])
     else:
         return '{}/{}{}'.format(url, platform['name'], suffix)
+
+def get_packet_id(repo_id, packet_name):
+    url =  repka_endpoint + '/api/packet?repository={}&filter={}'.format(repo_id, packet_name)
+    response = urlopen(url)
+    packets = json.loads(response.read())
+    for packet in packets:
+        if packet['name'] == packet_name:
+            return packet['id']
+    return -1
+
+def get_release(packet_id, tag):
+    url =  repka_endpoint + '/api/release?packet={}'.format(packet_id)
+    response = urlopen(url)
+    releases = json.loads(response.read())
+    if releases is None:
+        return None
+    
+    for release in releases:
+        if tag in release['tags']:
+            return release
+    return None
+
+def get_file_id(release, name):
+    for file in release['files']:
+        if file['name'].endswith(name):
+            return file['id']
+    return -1
+
+def get_packet_url(platform, packet_name, filename):
+    packet_id = get_packet_id(platform['repo_id'], packet_name)
+    if packet_id == -1:
+        return ''
+    
+    release = get_release(packet_id, 'latest')
+    if release == None:
+        return ''
+    
+    file_id = get_file_id(release, filename)
+    
+    return repka_endpoint + '/api/asset/{}/download'.format(file_id)
+
+@util.renderer
+def get_repository_http_url(props, platform):
+    suffix = props.getProperty('suffix')
+    repka_suffix = get_repka_suffix(suffix)
+    
+    return get_packet_url(platform, repka_suffix, platform['name'] + suffix + '.zip')
+
+@util.renderer
+def get_versions_url(props, platform):
+    suffix = props.getProperty('suffix')
+    repka_suffix = get_repka_suffix(suffix)
+    return get_packet_url(platform, repka_suffix, 'versions.pkl')
+
+@util.renderer
+def get_installer_package_url(props, platform):
+    return get_packet_url(platform, 'inst_framework', 'package.zip')
+
+@util.renderer
+def get_qt_package_url(props, platform):
+    return get_packet_url(platform, 'inst_framework_qt', 'package.zip')
+
+@util.renderer
+def get_updater_package_path(props, platform):
+    version_file = os.path.join(build_dir_name, 'version.str')
+    with open(version_file) as f:
+        content = f.readlines()
+    # you may also want to remove whitespace characters like `\n` at the end of each line
+    content = [x.strip() for x in content]
+    
+    release_file = os.path.join(build_dir_name, content[2]) + '.zip'
+    package_file = os.path.join(build_dir_name, 'package.zip')
+    os.rename(release_file, package_file)
+    return package_file
 
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
@@ -248,7 +338,7 @@ for platform in platforms:
     factory.addStep(steps.MakeDirectory(dir=build_dir,
                                         name="Make build directory"))
 
-    # 1. Get and unpack installer and qt5 static from ftp
+    # 1. Get and unpack installer and qt5 static from repka
     if_prefix = '_mac'
     separator = '/'
     env = {
@@ -273,7 +363,7 @@ for platform in platforms:
     logname = 'stdio'
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/package.zip', '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["curl", get_installer_package_url.withArgs(platform), '-o', 'package.zip', '-s'], logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download installer package",
@@ -284,7 +374,7 @@ for platform in platforms:
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/qtifw_build"))
 
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/src/' + if_project_name + if_prefix + '/qt/package.zip', '-o', 'package.zip', '-s'], logname=logname),
+            util.ShellArg(command=["curl", get_qt_package_url.withArgs(platform), '-o', 'package.zip', '-s'], logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf', 'package.zip'], logname=logname),
         ],
         name="Download qt package",
@@ -294,13 +384,12 @@ for platform in platforms:
     factory.addStep(steps.CopyDirectory(src=build_dir + "/inst", dest=code_dir + "/qt"))
     factory.addStep(steps.RemoveDirectory(dir=build_dir + "/inst"))
 
-    # 2. Get repository from ftp
+    # 2. Get repository from
     factory.addStep(steps.ShellSequence(commands=[
-            util.ShellArg(command=["curl", '-u', ngftp2_user,
+            util.ShellArg(command=["curl",
                                     '-o', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
                                         basename=repo_name_base),
-                                    '-s', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                        basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/' + repo_name_base),
+                                    '-s', get_repository_http_url.withArgs(platform),
                                     ],
                             logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
@@ -310,7 +399,7 @@ for platform in platforms:
         ],
         name="Download repository",
         haltOnFailure=True,
-        doStepIf=(lambda step: not (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local")),
+        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler").endswith("_update")),
         workdir=build_dir,
         env=env))
 
@@ -334,14 +423,12 @@ for platform in platforms:
         workdir=code_dir,
         env=env))
 
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-o', 'versions.pkl', '-s',
-                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
-                                                    basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
+    factory.addStep(steps.ShellCommand(command=["curl",
+                                                '-o', 'versions.pkl',
+                                                '-s', get_versions_url.withArgs(platform),
                                                 ],
                                         name="Download versions.pkl",
-                                        # haltOnFailure=False, warnOnWarnings=True,
-                                        # flunkOnFailure=False, warnOnFailure=True,
-                                        # haltOnFailure=True, # The repository may not be exists
+                                        haltOnFailure=True,
                                         doStepIf=(lambda step: not step.getProperty("scheduler") == project_name + "_local"),
                                         workdir=code_dir,
                                         env=env))
@@ -376,8 +463,7 @@ for platform in platforms:
                 '-s', 'inst', '-q', 'qt/bin', '-t', build_dir_name,
                 '-n', '-r', repoUrl.withArgs(platform),
                 '-i', util.Interpolate('%(kw:basename)s%(prop:suffix)s',  basename=installer_name_base),
-                create_opt, 'prepare', '--ftp_user', ngftp2_user,
-                '--ftp', ngftp2 + '/src/', 
+                create_opt, 'prepare',
                 '-p', util.Interpolate('%(prop:plugins)s'),
                 '-vd', util.Interpolate('%(prop:valid_date)s'),
                 '-vu', util.Interpolate('%(prop:valid_user)s'),
@@ -388,7 +474,8 @@ for platform in platforms:
             timeout=timeout * 60,
             haltOnFailure=True,
             workdir=code_dir,
-            env=env
+            env=env,
+            doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone"))
         )
     )
 
@@ -416,7 +503,7 @@ for platform in platforms:
         #                                     ))
         keychain_name = 'cs.keychain'
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["curl", '-u', ngftp2_user, ngftp2 + '/dev.p12', '-o', 'dev.p12', '-s'], logname=logname),
+                util.ShellArg(command=["curl", '-u', 'https://rm.nextgis.com/api/apple_cert/dev.p12', '-o', 'dev.p12', '-s'], logname=logname),
                 # For use in separate keychain
                 util.ShellArg(command=['security', 'create-keychain', '-p', login_keychain, keychain_name],
                               logname=logname,
@@ -516,44 +603,28 @@ for platform in platforms:
         )
     )
 
-    # 7. Upload repository archive to ftp
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
-                                        util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip',
-                                            basename=repo_name_base),
-                                        '-s', '--ftp-create-dirs',
-                                        ngftp2 + '/src/' + 'repo_' + platform['name'] + '/',],
-                                       name="Upload repository archive to ftp",
-                                       haltOnFailure=True,
-                                       doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
-                                       workdir=build_dir,
-                                       env=env))
-                                       
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp2_user, '-T',
-                                                'versions.pkl', '-s', '--ftp-create-dirs',
-                                                util.Interpolate('%(kw:basename)s%(prop:suffix)s.pkl',
-                                                    basename=ngftp2 + '/src/' + 'repo_' + platform['name'] + '/versions'),
-                                                ],
-                                       name="Upload versions.pkl to ftp",
-                                       doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
-                                       workdir=code_dir,
-                                       env=env))
     if create_updater_package:
-        # If create installer - upload updater.zip + version.str to ftp
-        factory.addStep(steps.ShellCommand(command=['python3', upload_script_name,
-                                                    '--ftp_user', ngftp2_user, '--ftp',
-                                                    ngftp2 + '/src/nextgis_updater_' + platform['name'],
-                                                    '--build_path', build_dir_name],
-                                           name="send package to ftp",
-                                           doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
-                                           haltOnFailure=True,
-                                           workdir=code_dir,
-                                           env=env))
+        # If create installer - upload updater.zip + version.str to repka
+        
+        factory.addStep(steps.ShellCommand(
+            command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
+                '--asset_path', get_updater_package_path.withArgs(platform),
+                '--asset_path', build_dir_name + separator + 'version.str',
+                '--packet_name', 'updater',
+                '--login', username, '--password', userkey],
+            name="Send updater package to repka",
+            doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
+            haltOnFailure=True,
+            workdir=code_dir,
+            env=env))
 
     # 8. Create new release in repka
     factory.addStep(steps.ShellCommand(
         command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
             '--description', util.Interpolate('%(prop:notes)s'),
             '--asset_path', util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
+            '--asset_path', 'versions.pkl',
+            '--packet_name', get_packet_name,
             '--login', username, '--password', userkey],
         name="Create release in repka",
         doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),

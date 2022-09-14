@@ -151,23 +151,28 @@ def get_release(packet_id, tag, username, password):
     color_print('Release ID not found', False, 'LCYAN')
     return None
 
-def upload_file(file_path, username, password):
+def upload_file(files, username, password):
     post_url = repka_endpoint + '/api/upload'
-    args = ['curl', '-u', username + ':' + password, '-k', '-F', 'file=@' + file_path, 
-        post_url
-    ]
-    load_response = subprocess.check_output(args)
-    response = json.loads(load_response)
+    
+    result = []
+    for file_path in files:
+        args = ['curl', '-u', username + ':' + password, '-k', '-F', 'file=@' + file_path, 
+            post_url
+        ]
+        load_response = subprocess.check_output(args)
+        response = json.loads(load_response)
 
-    print(response)
+        print(response)
 
-    file_uid = response['file']
-    file_name = response['name']
-    color_print('Uploaded: {} / {}'.format(file_uid, file_name), True, 'LGREEN')
+        file_uid = response['file']
+        file_name = response['name']
+        color_print('Uploaded: {} / {}'.format(file_uid, file_name), True, 'LGREEN')
+        
+        result.append({ 'upload_name': file_uid, 'name': file_name })
 
-    return file_uid, file_name
+    return result
 
-def create_release(packet_id, name, description, tag, file_uid, file_name, username, password):
+def create_release(packet_id, name, description, tag, files, username, password):
     url = repka_endpoint + '/api/release'
 
     data = json.dumps({
@@ -175,9 +180,7 @@ def create_release(packet_id, name, description, tag, file_uid, file_name, usern
         "description": description,
         "tags": [tag, 'latest',],
         "packet": packet_id,
-        "files": [
-            {"upload_name": file_uid, "name": file_name},
-        ]
+        "files": files
     })
     data = data.encode()
     clen = len(data)
@@ -193,8 +196,8 @@ def create_release(packet_id, name, description, tag, file_uid, file_name, usern
 
     return release['id']
 
-def do_work(repo_id, packet_name, release_file, description, login, password):
-
+def do_work(repo_id, packet_name, release_files, description, login, password):
+    
 # 1. Get packet ID
     packet_id = get_packet_id(repo_id, packet_name, login, password)
     if packet_id == -1:
@@ -202,7 +205,7 @@ def do_work(repo_id, packet_name, release_file, description, login, password):
         exit(1)
 
 # 2. Upload file
-    file_uid,file_name = upload_file(release_file, login, password)
+    uploaded_files = upload_file(release_files, login, password)
 
 # 3. Get release by tag
     release = get_release(packet_id, 'latest', login, password)
@@ -224,7 +227,7 @@ def do_work(repo_id, packet_name, release_file, description, login, password):
     description = description.strip()
     release_desc = 'Version ' + release_name if description is None or description == '' else description
     
-    create_release(packet_id, release_name, release_desc, release_name, file_uid, file_name, login, password)
+    create_release(packet_id, release_name, release_desc, release_name, uploaded_files, login, password)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='NextGIS Borsch tools. Utility to create new installer release')
@@ -232,10 +235,9 @@ if __name__ == "__main__":
     parser.add_argument('--login', dest='login', help='login for {}'.format(repka_endpoint))
     parser.add_argument('--password', dest='password', help='password for {}'.format(repka_endpoint))
     parser.add_argument('--repo_id', dest='repo_id', required=True, help='{} repository identifier'.format(repka_endpoint))
-    parser.add_argument('--asset_path', dest='path', required=True, help='path to upload asset')
+    parser.add_argument('--asset_path', action='append', dest='path', required=True, help='path to upload asset')
+    parser.add_argument('--packet_name', dest='packet_name', required=False, help='packet name')
     parser.add_argument('--description', dest='description', help='release description')
     args = parser.parse_args()
 
-    packet_name = 'devel' if '-dev' in args.path else 'stable'
-
-    do_work(args.repo_id, packet_name, args.path, args.description, args.login, args.password)
+    do_work(args.repo_id, args.packet_name, args.path, args.description, args.login, args.password)

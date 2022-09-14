@@ -17,7 +17,7 @@ repositories = [
     {'repo':'numpy', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac',], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_markupsafe', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_subprocess32', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'py_kiwisolver', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_kiwisolver', 'args':['-DWITH_PYTHON3=ON'], 'requirements':['cppy'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_jsonc', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_spatialindex', 'args':['-DBUILD_TESTS=ON', '-DWITH_GTest_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_gsl', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
@@ -25,7 +25,7 @@ repositories = [
     {'repo':'py_yaml', 'args':['-DWITH_YAML_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_psycopg', 'args':['-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     # {'repo':'py_spatialite', 'args':['-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]}, # TODO: FreeXL,
-    {'repo':'py_matplotlib', 'args':['-DWITH_PNG_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_AGG_EXTERNAL=ON', '-DWITH_QHULL_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':['numpy'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_matplotlib', 'args':['-DWITH_PNG_EXTERNAL=ON', '-DWITH_Freetype_EXTERNAL=ON', '-DWITH_AGG_EXTERNAL=ON', '-DWITH_QHULL_EXTERNAL=ON', '-DWITH_NUMPY_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':['numpy'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_jbig', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_szip', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_opencad', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
@@ -57,7 +57,7 @@ repositories = [
     {'repo':'py_qt5', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':['sip','PyQt-builder',], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_qscintilla', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_PyQt5_EXTERNAL=ON',], 'requirements':['sip', 'PyQt-builder'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'nextgisqgis', 'args':['-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_GSL_EXTERNAL=ON', '-DWITH_LibXml2_EXTERNAL=ON', '-DWITH_PostgreSQL_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON', '-DWITH_Qca_EXTERNAL=ON', '-DWITH_QScintilla_EXTERNAL=ON', '-DWITH_Qwt_EXTERNAL=ON', '-DWITH_SpatialIndex_EXTERNAL=ON', '-DWITH_Spatialite_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DWITH_Qsci_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_NGSTD_EXTERNAL=ON', '-DWITH_OpenCV_EXTERNAL=ON', '-DWITH_OCI_EXTERNAL=ON', '-DWITH_QtKeychain_EXTERNAL=ON', '-DWITH_LIBZIP_EXTERNAL=ON', '-DWITH_QGIS_PROCESS=OFF', '-DENABLE_TESTS=ON', '-DWITH_OAUTH2_PLUGIN=OFF'], 'requirements':['PyQt5-sip', 'PyQt5-Qt5', 'PyQt5', 'six', 'sip', 'PyQt-builder'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[], 'sentry_project': 'production-nextgis-qgis'},
-    {'repo':'lib_ngstd', 'args':['-DWITH_GDAL_EXTERNAL=ON', '-DWITH_SENTRYNATIVE_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DBUILDBOT_PASSWORD=' + os.environ.get("BUILDBOT_PASSWORD", "0000"),'-DBUILDBOT_USER=' + os.environ.get("BUILDBOT_USER", "buildbot"),], 'requirements':['sip','PyQt5',], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
+    {'repo':'lib_ngstd', 'args':['-DWITH_GDAL_EXTERNAL=ON', '-DWITH_SENTRYNATIVE_EXTERNAL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_BINDINGS=ON', '-DBUILDBOT_PASSWORD=' + os.environ.get("BUILDBOT_PASSWORD", "0000"),'-DBUILDBOT_USER=' + os.environ.get("BUILDBOT_USER", "buildbot"),], 'requirements':['sip','PyQt5', 'PyQt5-Qt5', 'PyQt5-sip', 'PyQt-builder'], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
     {'repo':'formbuilder', 'args':['-DBUILD_NEXTGIS_PACKAGE=ON', '-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB=ON', '-DWITH_Qt5_EXTERNAL=ON', '-DWITH_NGSTD_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[], 'sentry_project': 'production-fb'},
     {'repo':'lib_opencv', 'args':['-DWITH_GDAL_EXTERNAL=ON','-DWITH_ZLIB=ON','-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_WEBP_EXTERNAL=ON', '-DWITH_OpenJPEG_EXTERNAL=ON', '-DBUILD_opencv_ts=OFF','-DBUILD_opencv_apps=ON','-DBUILD_TESTS=OFF','-DBUILD_PERF_TESTS=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':['-R','opencv_test_(fl|co)']},
     {'repo':'manuscript', 'args':['-DWITH_Qt5_EXTERNAL=ON', '-DWITH_ZLIB=ON', '-DWITH_NGSTD_EXTERNAL=ON',], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
@@ -66,7 +66,7 @@ repositories = [
     {'repo':'lib_uriparser', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_kml', 'args':['-DWITH_ZLIB=ON', '-DWITH_Boost=ON', '-DWITH_Boost_EXTERNAL=ON', '-DWITH_UriParser=ON', '-DWITH_UriParser_EXTERNAL=ON', '-DWITH_EXPAT=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':['-E','engine_style_resolver|dom_round_trip|engine_feature_view|engine_kmz_file|engine_style_inliner|engine_update']},
     {'repo':'py_proj', 'args':['-DWITH_PROJ_EXTERNAL=ON', '-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    # {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_openblas', 'args':['-DBUILD_TESTING=OFF', '-DC_LAPACK=ON', '-DNOFORTRAN=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_sci', 'args':['-DWITH_PYTHON3=ON'], 'requirements':['numpy'], 'os':['win32','win64'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_littlecms', 'args':['-DBUILD_TESTS=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_webp', 'args':['-DWITH_PNG_EXTERNAL=ON','-DWITH_JPEG_EXTERNAL=ON','-DWITH_TIFF_EXTERNAL=ON','-DWITH_GIF_EXTERNAL=ON','-DBUILD_TESTING=ON','-DWEBP_BUILD_VWEBP=OFF', '-DWEBP_BUILD_CWEBP=OFF', '-DWEBP_BUILD_DWEBP=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
@@ -85,9 +85,9 @@ repositories = [
     {'repo':'py_qt5sip', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
-skip_send2github = [
-    "nextgisqgis", "formbuilder", "manuscript",
-]
+#skip_send2github = [
+#    "nextgisqgis", "formbuilder", "manuscript",
+#]
 
 vm_cpu_count = 8
 mac_os_min_version = '10.14'
@@ -97,9 +97,6 @@ script_name = 'repka_release.py' # 'github_release.py'
 release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/' + script_name
 username = 'buildbot'
 userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
-ngftp_base = 'ftp://192.168.6.7:8121'
-ngftp = ngftp_base + '/software/installer/src/'
-ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
 install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py'
@@ -274,6 +271,15 @@ def install_dependencies(factory, requirements, os):
         elif requirement == 'PyQt5':
             factory.addStep(
                 steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'PyQt5==5.15.6', '--no-dependencies'],
+                                    name="install " + requirement,
+                                    description=[requirement, "install"],
+                                    descriptionDone=[requirement, "installed"],
+                                    haltOnFailure=True,
+                                    env=env)
+            )
+        elif requirement == 'PyQt-builder':
+            factory.addStep(
+                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'PyQt-builder==1.12.2'],
                                     name="install " + requirement,
                                     description=[requirement, "install"],
                                     descriptionDone=[requirement, "installed"],
@@ -458,30 +464,20 @@ for repository in repositories:
                                            env=env))
 
         # send package to github
-        if project_name not in skip_send2github:
+        #if project_name not in skip_send2github:
             # factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
             #                                         username, '--key', userkey, '--build_path', build_subdir
             #                                         ],
             #                                name="send package to github",
             #                                haltOnFailure=True,
             #                                workdir=code_dir))
-            factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
-                                                    username, '--password', userkey, '--build_path', build_subdir
-                                                    ],
-                                           name="send package to rm.nextgis.com",
-                                           haltOnFailure=True,
-                                           workdir=code_dir,
-                                           env=env))
-
-        # upload to ftp
-        factory.addStep(steps.ShellCommand(command=[python_cmd, upload_script_name,
-                                                    '--ftp_user', ngftp_user, '--ftp',
-                                                    ngftp + project_name + '_' + platform['name'],
-                                                    '--build_path', build_subdir],
-                                           name="send package to ftp",
-                                           haltOnFailure=True,
-                                           workdir=code_dir,
-                                           env=env))
+        factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
+                                                username, '--password', userkey, '--build_path', build_subdir
+                                                ],
+                                       name="send package to rm.nextgis.com",
+                                       haltOnFailure=True,
+                                       workdir=code_dir,
+                                       env=env))
 
         if 'sentry_project' in repository and len(repository['sentry_project']):
             factory.addStep(steps.ShellCommand(command=['sentry-cli', 'upload-dif', '--include-sources', '-o', 'nextgis', '-p', repository['sentry_project'], '.'],
