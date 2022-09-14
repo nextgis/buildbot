@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import time
 from twisted.internet import defer
 from twisted.python import log
 
@@ -168,6 +169,8 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                 log.msg('Stopped service {} failed'.format(id[:6]))
         except NotFound:
             pass
+
+        time.sleep(30)
 
         # Skip remove image
 
