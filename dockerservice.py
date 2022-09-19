@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import time
 from twisted.internet import defer
 from twisted.python import log
 
@@ -46,6 +47,9 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
         self.placementConstraints = placementConstraints or []
         self.registryAuth = registryAuth or {}
         self.secrets = secrets or []
+
+    def _getDockerClient(self, client_args):
+        return client.APIClient(**client_args)
 
     def _thd_start_instance(self, docker_host, image, dockerfile,
        volumes, host_config, custom_context, encoding, target, 
@@ -165,6 +169,8 @@ class DockerSwarmLatentWorker(DockerLatentWorker):
                 log.msg('Stopped service {} failed'.format(id[:6]))
         except NotFound:
             pass
+
+        time.sleep(30)
 
         # Skip remove image
 
