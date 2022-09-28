@@ -83,6 +83,7 @@ repositories = [
     {'repo':'nextgisutilities', 'args':['-DWITH_GDAL_EXTERNAL=ON', '-DWITH_GEOS_EXTERNAL=ON', '-DWITH_PROJ_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
     {'repo':'spatialite', 'args':['-DWITH_SPATIALITE_EXTERNAL=ON', '-DWITH_SQLite3_EXTERNAL=ON', '-DWITH_ICONV=ON', '-DWITH_EXPAT_EXTERNAL=ON', '-DWITH_LIBXML2_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_qt5sip', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'lib_ffi', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 #skip_send2github = [
