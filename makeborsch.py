@@ -224,15 +224,15 @@ def install_dependencies(factory, requirements, os):
                                                 description=[requirement, "install"],
                                                 descriptionDone=[requirement, "installed"],
                                                 haltOnFailure=True))
-        # elif requirement == 'numpy':
-        #     factory.addStep(
-        #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'numpy'],
-        #                             name="install " + requirement,
-        #                             description=[requirement, "install"],
-        #                             descriptionDone=[requirement, "installed"],
-        #                             haltOnFailure=True,
-        #                             env=env)
-        #     )
+        elif requirement == 'numpy':
+            factory.addStep(
+                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'numpy==1.22.2'],
+                                    name="install " + requirement,
+                                    description=[requirement, "install"],
+                                    descriptionDone=[requirement, "installed"],
+                                    haltOnFailure=True,
+                                    env=env)
+            )
         # elif requirement == 'six':
         #     factory.addStep(
         #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'six'],
