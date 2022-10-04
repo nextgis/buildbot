@@ -191,6 +191,7 @@ def get_env(os):
             "${PATH}",
         ]
         env['PYTHONPATH'] = 'C:\\Python38'
+        env['FLANG_HOME'] = 'C:\\Users\\root\\conda\\Library'
     elif 'mac' in os:
         env['PATH'] = [
             "/usr/local/bin",
