@@ -83,7 +83,7 @@ for os_type in os_types:
     env = {}
     worker_name = ''
     if os_type == 'win':
-        run_args_ext.extend(['-G', 'Visual Studio 16 2019', '-A', 'Win32'])
+        run_args_ext.extend(['-G', 'Visual Studio 16 2019', '-A', 'x64'])
         cmake_build_ext.append('--')
         cmake_build_ext.append('/m:' + str(vm_cpu_count))
     elif os_type == 'mac':
