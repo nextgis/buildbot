@@ -71,6 +71,19 @@ platforms = [
     {'name' : 'mac', 'worker' : 'build-mac-py3', 'repo_id': 6} 
 ]
 
+@util.renderer
+def get_package_file(props, build_path):
+    version_file = os.path.join(build_path, 'version.str')
+    with open(version_file) as f:
+        content = f.readlines()
+    # you may also want to remove whitespace characters like `\n` at the end of each line
+    content = [x.strip() for x in content]
+
+    release_file = os.path.join(build_path, content[2]) + '.zip'
+    package_file = os.path.join(build_path, 'package.zip')
+    os.rename(release_file, package_file)
+    return package_file
+
 for platform in platforms:
 
     code_dir_last = '{}_code'.format('qt')
@@ -142,7 +155,7 @@ for platform in platforms:
     # Send package to rm.nextgis
     factory.addStep(steps.ShellCommand(
         command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
-            '--asset_path', os.path.join(build_subdir, 'package.zip'),
+            '--asset_path', get_package_file.withArgs(build_subdir),
             '--packet_name', 'inst_framework_qt',
             '--login', username, '--password', userkey],
         name="Send inst_framework_qt to repka",
@@ -204,7 +217,7 @@ for platform in platforms:
     # Send inst_framework to rm.nextgis
     factory.addStep(steps.ShellCommand(
         command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
-            '--asset_path', './package.zip',
+            '--asset_path', get_package_file.withArgs('.'),
             '--packet_name', 'inst_framework',
             '--login', username, '--password', userkey],
         name="Send inst_framework to repka",
