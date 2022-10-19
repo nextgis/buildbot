@@ -67,7 +67,7 @@ installer_git = 'https://github.com/nextgis/nextgis_installer.git'
 logname = 'stdio'
 
 platforms = [
-    {'name' : 'win64', 'worker' : 'build-win-py3', 'repo_id': 5},
+    {'name' : 'win', 'worker' : 'build-win-py3', 'repo_id': 5},
     {'name' : 'mac', 'worker' : 'build-mac-py3', 'repo_id': 6} 
 ]
 
@@ -80,7 +80,7 @@ for platform in platforms:
 
     qt_args_set = list(qt_args)   
     
-    if platform['name'] == 'win64':
+    if platform['name'] == 'win':
         qt_args_set.append(qt_base_args + ';-no-opengl')    
     elif platform['name'] == 'mac':
         qt_args_set.append(qt_base_args + ';-qt-zlib;-qt-libpng;-qt-libjpeg;-no-cups')
@@ -89,7 +89,7 @@ for platform in platforms:
     cmake_build_ext = list(cmake_build)
     env = {}
     worker_name = ''
-    if platform['name'] == 'win64':
+    if platform['name'] == 'win':
         run_args_ext.extend(['-G', 'Visual Studio 16 2019', '-A', 'x64'])
         cmake_build_ext.append('--')
         cmake_build_ext.append('/m:' + str(vm_cpu_count))
@@ -167,7 +167,7 @@ for platform in platforms:
     build_installer_cmd = ['python', 'build_installer_bb.py', '--qtdir',
                             qt_build_dir, '--make']
     separator = '/'
-    if platform['name'] == 'win64':
+    if platform['name'] == 'win':
         separator = '\\'
         build_installer_cmd.append('nmake')
     elif platform['name'] == 'mac':
