@@ -12,11 +12,12 @@ vm_cpu_count = 6
 mac_os_min_version = '10.14'
 mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
 
-ngftp = 'ftp://192.168.6.7:8121/software/installer/src/'
-ngftp_user = os.environ.get("BUILDBOT_FTP_USER")
-upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
-upload_script_name = 'ftp_upload.py'
+repka_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/repka_release.py'
+repka_script_name = 'repka_release.py'
 ci_project_name = 'create_installer'
+
+username = 'buildbot'
+userkey = os.environ.get("BUILDBOT_PASSWORD")
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -63,8 +64,14 @@ cmake_build = ['cmake', '--build', '.', '--config', 'release']
 
 installer_git = 'https://github.com/nextgis/nextgis_installer.git'
 
-os_types = ['win', 'mac']
-for os_type in os_types:
+logname = 'stdio'
+
+platforms = [
+    {'name' : 'win64', 'worker' : 'build-win-py3', 'repo_id': 5},
+    {'name' : 'mac', 'worker' : 'build-mac-py3', 'repo_id': 6} 
+]
+
+for platform in platforms:
 
     code_dir_last = '{}_code'.format('qt')
     code_dir = os.path.join('build', code_dir_last)
@@ -73,20 +80,20 @@ for os_type in os_types:
 
     qt_args_set = list(qt_args)   
     
-    if os_type == 'win':
+    if platform['name'] == 'win64':
         qt_args_set.append(qt_base_args + ';-no-opengl')    
-    elif os_type == 'mac':
+    elif platform['name'] == 'mac':
         qt_args_set.append(qt_base_args + ';-qt-zlib;-qt-libpng;-qt-libjpeg;-no-cups')
 
     run_args_ext = qt_args_set
     cmake_build_ext = list(cmake_build)
     env = {}
     worker_name = ''
-    if os_type == 'win':
+    if platform['name'] == 'win64':
         run_args_ext.extend(['-G', 'Visual Studio 16 2019', '-A', 'x64'])
         cmake_build_ext.append('--')
         cmake_build_ext.append('/m:' + str(vm_cpu_count))
-    elif os_type == 'mac':
+    elif platform['name'] == 'mac':
         run_args_ext.extend(['-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version])
         cmake_build_ext.append('--')
         cmake_build_ext.append('-j' + str(vm_cpu_count))
@@ -123,26 +130,25 @@ for os_type in os_types:
     qt_build_dir = build_dir
 
     # Get uploader
-    factory.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
-                                        name="download upload script",
-                                        haltOnFailure=True,
-                                        workdir=code_dir,
-                                        env=env))
+    factory.addStep(steps.ShellSequence(
+        commands=[
+            util.ShellArg(command=["curl", repka_script_src, '-o', repka_script_name, '-s'], logname=logname),
+        ],
+        name="Download repka script",
+        haltOnFailure=True,
+        workdir=code_dir,
+        env=env))
 
-    # Send package to ftp
-    factory.addStep(
-        steps.ShellCommand(
-            command=[
-                'python', upload_script_name, '--ftp_user', ngftp_user, '--ftp',
-                ngftp + project_name + '_' + os_type + '/qt', '--build_path', 
-                build_subdir
-            ],
-            name="send package to ftp",
-            haltOnFailure=True,
-            workdir=code_dir,
-            env=env
-        )
-    )
+    # Send package to rm.nextgis
+    factory.addStep(steps.ShellCommand(
+        command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
+            '--asset_path', os.path.join(build_subdir, 'package.zip'),
+            '--packet_name', 'inst_framework_qt',
+            '--login', username, '--password', userkey],
+        name="Send inst_framework_qt to repka",
+        haltOnFailure=True,
+        workdir=code_dir,
+        env=env))
 
     # 2. Build installer framework
     code_dir_last = '{}_code'.format('installer')
@@ -161,10 +167,10 @@ for os_type in os_types:
     build_installer_cmd = ['python', 'build_installer_bb.py', '--qtdir',
                             qt_build_dir, '--make']
     separator = '/'
-    if os_type == 'win':
+    if platform['name'] == 'win64':
         separator = '\\'
         build_installer_cmd.append('nmake')
-    elif os_type == 'mac':
+    elif platform['name'] == 'mac':
         build_installer_cmd.append('make')
 
 
@@ -185,29 +191,30 @@ for os_type in os_types:
                                         workerdest="version.str",
                                         workdir=code_dir))
 
-    # 3. Upload installer framework to ftp
-    factory.addStep(steps.ShellCommand(command=["curl", upload_script_src, '-o', upload_script_name, '-s'],
-                                        name="download upload script",
-                                        haltOnFailure=True,
-                                        workdir=code_dir,
-                                        env=env))
+    # 3. Upload installer framework to rm.nextgis
+    factory.addStep(steps.ShellSequence(
+        commands=[
+            util.ShellArg(command=["curl", repka_script_src, '-o', repka_script_name, '-s'], logname=logname),
+        ],
+        name="Download repka script",
+        haltOnFailure=True,
+        workdir=code_dir,
+        env=env))
+    
+    # Send inst_framework to rm.nextgis
+    factory.addStep(steps.ShellCommand(
+        command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
+            '--asset_path', './package.zip',
+            '--packet_name', 'inst_framework',
+            '--login', username, '--password', userkey],
+        name="Send inst_framework to repka",
+        haltOnFailure=True,
+        workdir=code_dir,
+        env=env))
 
-    factory.addStep(
-        steps.ShellCommand(
-            command=[
-                'python', upload_script_name, '--ftp_user', ngftp_user, '--ftp',
-                ngftp + project_name + '_' + os_type, '--build_path', '.'
-            ],
-            name="send package to ftp",
-            haltOnFailure=True,
-            workdir=code_dir,
-            env=env
-        )
-    )
-
-    builder = util.BuilderConfig(name = project_name + '_' + os_type,
-                                workernames = ['build-' + os_type + '-py3'],
+    builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
+                                workernames = ['build-' + platform['name'] + '-py3'],
                                 factory = factory,
-                                description="Create installer framework [" + os_type + "]")
+                                description="Create installer framework [" + platform['name'] + "]")
 
     c['builders'].append(builder)
