@@ -217,7 +217,7 @@ for platform in platforms:
     # Send inst_framework to rm.nextgis
     factory.addStep(steps.ShellCommand(
         command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
-            '--asset_path', get_package_file.withArgs('.'),
+            '--asset_path', get_package_file.withArgs(code_dir),
             '--packet_name', 'inst_framework',
             '--login', username, '--password', userkey],
         name="Send inst_framework to repka",
