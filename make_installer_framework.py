@@ -213,7 +213,7 @@ for platform in platforms:
         env=env))
 
     builder = util.BuilderConfig(name = project_name + '_' + platform['name'],
-                                workernames = ['build-' + platform['name'] + '-py3'],
+                                workernames = [platform['worker']],
                                 factory = factory,
                                 description="Create installer framework [" + platform['name'] + "]")
 
