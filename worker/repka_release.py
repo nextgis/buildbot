@@ -83,6 +83,17 @@ def color_print(text, bold, color):
         out_text += text + bcolors.ENDC
         print(out_text)
 
+def get_package_file_path(build_path):
+    version_file = os.path.join(build_path, 'version.str')
+    with open(version_file) as f:
+        content = f.readlines()
+    content = [x.strip() for x in content]
+
+    release_file = os.path.join(build_path, content[2]) + '.zip'
+    package_file = os.path.join(build_path, 'package.zip')
+    os.rename(release_file, package_file)
+    return package_file
+
 def parse_version(tag):
     if tag == 'latest':
         return None
@@ -235,9 +246,18 @@ if __name__ == "__main__":
     parser.add_argument('--login', dest='login', help='login for {}'.format(repka_endpoint))
     parser.add_argument('--password', dest='password', help='password for {}'.format(repka_endpoint))
     parser.add_argument('--repo_id', dest='repo_id', required=True, help='{} repository identifier'.format(repka_endpoint))
-    parser.add_argument('--asset_path', action='append', dest='path', required=True, help='path to upload asset')
+    parser.add_argument('--asset_path', action='append', dest='path', required=False, help='path to upload asset')
+    parser.add_argument('--asset_build_path', dest='asset_build_path', required=False, help='build path to upload asset')
     parser.add_argument('--packet_name', dest='packet_name', required=False, help='packet name')
     parser.add_argument('--description', dest='description', help='release description')
     args = parser.parse_args()
+    
+    if not args.path and not args.asset_build_path:
+        color_print('No assets to upload. Use --asset_path or --asset_build_path to upload asset', True, 'LRED')
+        exit(1)
+    
+    files = args.path
+    if args.asset_build_path:
+        files.append(get_package_file_path(args.asset_build_path))
 
-    do_work(args.repo_id, args.packet_name, args.path, args.description, args.login, args.password)
+    do_work(args.repo_id, args.packet_name, files, args.description, args.login, args.password)
