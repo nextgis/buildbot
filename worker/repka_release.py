@@ -235,7 +235,8 @@ def do_work(repo_id, packet_name, release_files, description, login, password):
 
 # 4. If no release - create it, else - update    
     release_name = '{}.{}.{}'.format(newVersion[0], newVersion[1], newVersion[2])
-    description = description.strip()
+    if description:
+        description = description.strip()
     release_desc = 'Version ' + release_name if description is None or description == '' else description
     
     create_release(packet_id, release_name, release_desc, release_name, uploaded_files, login, password)
@@ -256,7 +257,9 @@ if __name__ == "__main__":
         color_print('No assets to upload. Use --asset_path or --asset_build_path to upload asset', True, 'LRED')
         exit(1)
     
-    files = args.path
+    files = []
+    if args.path:
+        files.extend(args.path)
     if args.asset_build_path:
         files.append(get_package_file_path(args.asset_build_path))
 
