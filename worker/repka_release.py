@@ -256,7 +256,9 @@ if __name__ == "__main__":
         color_print('No assets to upload. Use --asset_path or --asset_build_path to upload asset', True, 'LRED')
         exit(1)
     
-    files = args.path
+    files = []
+    if args.path:
+        files.extend(args.path)
     if args.asset_build_path:
         files.append(get_package_file_path(args.asset_build_path))
 
