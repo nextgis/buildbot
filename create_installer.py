@@ -429,7 +429,7 @@ for platform in platforms:
                                                 ],
                                         name="Download versions.pkl",
                                         haltOnFailure=True,
-                                        doStepIf=(lambda step: not step.getProperty("scheduler") == project_name + "_local"),
+                                        doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
                                         workdir=code_dir,
                                         env=env))
 
