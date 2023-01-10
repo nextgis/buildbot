@@ -41,6 +41,7 @@ repositories = [
     {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'bullseye', 'jammy',], 'repo_id':11, 'branch': 'dev/up_to_3'},
     {'repo':'qgis_headless', 'deb':'qgis-headless', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'bullseye', 'jammy',], 'repo_id':11, 'branch': 'master'},
     {'repo':'terratile', 'deb':'python-terratile', 'repo_root':'https://github.com', 'org': 'nextgis', 'os':['focal', 'bullseye', 'jammy'], 'repo_id':11, 'branch': 'gdal3'},
+    {'repo':'lib_sentrynative', 'deb':'sentry-native', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'bullseye', 'jammy'], 'repo_id':11, 'branch': 'master'},
     # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
     # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
     # {'repo':'py_raven', 'version':'6.10.0', 'deb':'python-raven', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47/raven-6.10.0.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
