@@ -123,15 +123,17 @@ for lang in langs:
     #                                   description=["make", "javadoc for mobile (android)"],
     #                                   descriptionDone=["made", "javadoc for mobile (android)"],
     #                                   workdir="build/source/ngmobile_dev"))
-    factory.addStep(steps.ShellCommand(command=["sh", "make_kotlindoc.sh"],
-                                      description=["make", "kotlindoc for mobile (android)"],
-                                      workdir="build/source/ngmobile_dev", warnOnFailure=True,
-                                      env=env,))
 
-    factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
-                                      description=["make", "swiftdoc for mobile (ios)"],
-                                      workdir="build/source/ngmobile_dev", warnOnFailure=True,
-                                      env=env,))
+    # Disable NGM API
+    # factory.addStep(steps.ShellCommand(command=["sh", "make_kotlindoc.sh"],
+    #                                   description=["make", "kotlindoc for mobile (android)"],
+    #                                   workdir="build/source/ngmobile_dev", warnOnFailure=True,
+    #                                   env=env,))
+
+    # factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
+    #                                   description=["make", "swiftdoc for mobile (ios)"],
+    #                                   workdir="build/source/ngmobile_dev", warnOnFailure=True,
+    #                                   env=env,))
 
     # 3. build html
     factory.addStep(steps.Sphinx(sphinx_builddir="_build/html", sphinx_sourcedir="source", sphinx_builder="html"))
@@ -141,7 +143,7 @@ for lang in langs:
     #                                    description=["sync", "to web server"]))
 
     factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logname=logname),
+        # util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logname=logname),
         util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logname=logname),
         util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p {} -i /root/.ssh/www'.format(ssh_port), '_build/html/', 
             '{}@docs.nextgis.net:{}/'.format(ssh_user, lang),], 
