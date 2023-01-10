@@ -59,13 +59,15 @@ for lang in langs:
             'LANGUAGE': 'en_US:en',
             'LC_ALL':'en_US.UTF-8',
         }
-    factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
-        name="Check spelling",
-        haltOnFailure=True,
-        workdir="build",
-        env=env,
-        )
-    )
+    # Extension error:
+    # Could not import extension swift_domain (exception: cannot import name '__' from 'sphinx.locale' (/usr/local/lib/python3.10/dist-packages/sphinx/locale/__init__.py))
+    # factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
+    #     name="Check spelling",
+    #     haltOnFailure=True,
+    #     workdir="build",
+    #     env=env,
+    #     )
+    # )
 
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
