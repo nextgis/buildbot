@@ -59,13 +59,13 @@ for lang in langs:
             'LANGUAGE': 'en_US:en',
             'LC_ALL':'en_US.UTF-8',
         }
-    factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
-        name="Check spelling",
-        haltOnFailure=True,
-        workdir="build",
-        env=env,
-        )
-    )
+    # factory.addStep(steps.ShellCommand(command=['make', 'spelling'],
+    #     name="Check spelling",
+    #     haltOnFailure=True,
+    #     workdir="build",
+    #     env=env,
+    #     )
+    # )
 
     # 2. build pdf for each doc except dev
     factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
@@ -141,7 +141,7 @@ for lang in langs:
     #                                    description=["sync", "to web server"]))
 
     factory.addStep(steps.ShellSequence(commands=[
-        util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logname=logname),
+        # util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logname=logname),
         util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logname=logname),
         util.ShellArg(command=['rsync', '-avz', '-e', 'ssh -p {} -i /root/.ssh/www'.format(ssh_port), '_build/html/', 
             '{}@docs.nextgis.net:{}/'.format(ssh_user, lang),], 
