@@ -122,12 +122,12 @@ for lang in langs:
     #                                   descriptionDone=["made", "javadoc for mobile (android)"],
     #                                   workdir="build/source/ngmobile_dev"))
 
-    # Disable NGM API
-    # factory.addStep(steps.ShellCommand(command=["sh", "make_kotlindoc.sh"],
-    #                                   description=["make", "kotlindoc for mobile (android)"],
-    #                                   workdir="build/source/ngmobile_dev", warnOnFailure=True,
-    #                                   env=env,))
+    factory.addStep(steps.ShellCommand(command=["sh", "make_kotlindoc.sh"],
+                                      description=["make", "kotlindoc for mobile (android)"],
+                                      workdir="build/source/ngmobile_dev", warnOnFailure=True,
+                                      env=env,))
 
+    # Disable NGM API
     # factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
     #                                   description=["make", "swiftdoc for mobile (ios)"],
     #                                   workdir="build/source/ngmobile_dev", warnOnFailure=True,
@@ -135,11 +135,8 @@ for lang in langs:
 
     # 3. build html
     factory.addStep(steps.Sphinx(sphinx_builddir="_build/html", sphinx_sourcedir="source", sphinx_builder="html"))
-    # 4. upload to data ftp
-    # TODO:
-    # factory.addStep(steps.ShellCommand(command=["sync.sh", lang],
-    #                                    description=["sync", "to web server"]))
 
+    # 4. upload to web server
     factory.addStep(steps.ShellSequence(commands=[
         # util.ShellArg(command=['cp', '-r', 'build/spelling', '_build/html/',], logname=logname),
         util.ShellArg(command=['chmod', '-R', '0755', '_build/html/',], logname=logname),
