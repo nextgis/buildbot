@@ -226,7 +226,8 @@ def repoUrl(props, platform):
     elif suffix == '-local':
         return '{}/repository-{}'.format(url, platform['name'])
     else:
-        return '{}/{}{}'.format(url, platform['name'], suffix)
+        return '{}/{}'.format(url, get_installer_name(props, platform['name'], suffix))
+
 
 def get_packet_id(repo_id, packet_name):
     url =  repka_endpoint + '/api/packet?repository={}&filter={}'.format(repo_id, packet_name)
@@ -580,7 +581,7 @@ for platform in platforms:
                             '-s', '--ftp-create-dirs', ngftp + '/'],
             logname=logname),
             util.ShellArg(command=["echo",
-                get_installer_name.withArgs('Download installer from this url: https://my.nextgis.com/downloads/software/installer/{}'.format(installer_name_base + installer_ext))],
+                get_installer_name.withArgs('Download installer from this url: https://my.nextgis.com/downloads/software/installer/{}'.format(installer_name_base),  installer_ext)],
             logname=logname),
         ],
         name="Upload installer to ftp",
