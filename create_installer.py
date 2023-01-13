@@ -2,7 +2,6 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-import sys
 import os
 import time
 import json
@@ -269,6 +268,14 @@ def get_packet_url(platform, packet_name, filename):
     
     return repka_endpoint + '/api/asset/{}/download'.format(file_id)
 
+def skip_step(step, which):
+    if which == 'standalone+local':
+        return not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler").endswith("_local"))
+    if which == 'standalone+update':
+        return not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler").endswith("_update"))
+    if which == 'create+local':
+        return not (step.getProperty("scheduler").endswith("_create") or step.getProperty("scheduler").endswith("_local"))
+
 @util.renderer
 def get_repository_http_url(props, platform):
     suffix = props.getProperty('suffix')
@@ -400,7 +407,7 @@ for platform in platforms:
         ],
         name="Download repository",
         haltOnFailure=True,
-        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler").endswith("_update")),
+        doStepIf=(lambda step: not skip_step(step, 'standalone+update')),
         workdir=build_dir,
         env=env))
 
@@ -410,7 +417,7 @@ for platform in platforms:
         ],
         name="Download scripts",
         haltOnFailure=True,
-        doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
+        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_create")),
         workdir=code_dir,
         env=env))
 
@@ -420,7 +427,7 @@ for platform in platforms:
         ],
         name="Download scripts",
         haltOnFailure=True,
-        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
+        doStepIf=(lambda step: skip_step(step, 'standalone+local')),
         workdir=code_dir,
         env=env))
 
@@ -430,7 +437,7 @@ for platform in platforms:
                                                 ],
                                         name="Download versions.pkl",
                                         haltOnFailure=True,
-                                        doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
+                                        doStepIf=(lambda step: skip_step(step, 'standalone+local')),
                                         workdir=code_dir,
                                         env=env))
 
@@ -476,7 +483,7 @@ for platform in platforms:
             haltOnFailure=True,
             workdir=code_dir,
             env=env,
-            doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone"))
+            doStepIf=(lambda step: skip_step(step, 'standalone+local'))
         )
     )
 
@@ -563,7 +570,7 @@ for platform in platforms:
                                                 '-s', '--ftp-create-dirs', ngftp + '/'],
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
-                                       doStepIf=(lambda step: (step.getProperty("scheduler") == project_name + "_create" or step.getProperty("scheduler") == project_name + "_local")),
+                                       doStepIf=(lambda step: not skip_step(step, 'create+local')),
                                        workdir=build_dir,
                                        env=env))
 
@@ -598,7 +605,7 @@ for platform in platforms:
             ],
             name="Create zip from repository",
             haltOnFailure=True,
-            doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
+            doStepIf=(lambda step: skip_step(step, 'standalone+local')),
             workdir=build_dir,
             env=env
         )
@@ -614,7 +621,7 @@ for platform in platforms:
                 '--packet_name', 'updater',
                 '--login', username, '--password', userkey],
             name="Send updater package to repka",
-            doStepIf=(lambda step: step.getProperty("scheduler") == project_name + "_create"),
+            doStepIf=(lambda step: step.getProperty("scheduler").endswith("_create")),
             haltOnFailure=True,
             workdir=code_dir,
             env=env))
@@ -628,7 +635,7 @@ for platform in platforms:
             '--packet_name', get_packet_name,
             '--login', username, '--password', userkey],
         name="Create release in repka",
-        doStepIf=(lambda step: not (step.getProperty("scheduler").endswith("_standalone") or step.getProperty("scheduler") == project_name + "_local")),
+        doStepIf=(lambda step: skip_step(step, 'standalone+local')),
         haltOnFailure=True,
         workdir=code_dir,
         env=env))
