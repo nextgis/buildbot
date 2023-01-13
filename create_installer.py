@@ -187,9 +187,6 @@ c['schedulers'].append(forceScheduler_local)
 def get_repka_suffix(suffix):
     return 'devel' if suffix == '-dev' else 'stable_new'
 
-def get_repka_suffix2(suffix):
-    return 'devel' if suffix == '-dev' else ''
-
 @util.renderer
 def get_packet_name(props):
     suffix = props.getProperty('suffix')
@@ -291,9 +288,9 @@ def get_repository_http_url(props, platform):
 @util.renderer
 def get_installer_name(props, basename, suffix = ''):
     suffix_tmp = props.getProperty('suffix')
-    repka_suffix = get_repka_suffix(suffix_tmp)
+    # repka_suffix = get_repka_suffix(suffix_tmp)
 
-    return basename + '-' + repka_suffix + suffix
+    return basename + suffix_tmp + suffix
 
 @util.renderer
 def get_versions_url(props, platform):
@@ -576,14 +573,22 @@ for platform in platforms:
 
     # 5. Upload installer to ftp
     # TODO: upload to repka
-    factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
-                                                get_installer_name.withArgs(installer_name_base, installer_ext), #util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext, basename=installer_name_base),
-                                                '-s', '--ftp-create-dirs', ngftp + '/'],
-                                       name="Upload installer to ftp",
-                                       haltOnFailure=True,
-                                       doStepIf=(lambda step: not skip_step(step, 'create+local')),
-                                       workdir=build_dir,
-                                       env=env))
+    factory.addStep(
+        steps.ShellSequence(commands=[
+            util.ShellArg(command=["curl", '-u', ngftp_user, '-T',
+                get_installer_name.withArgs(installer_name_base, installer_ext), #util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext, basename=installer_name_base),
+                            '-s', '--ftp-create-dirs', ngftp + '/'],
+            logname=logname),
+            util.ShellArg(command=["echo",
+                get_installer_name.withArgs('Download installer from this url: https://my.nextgis.com/downloads/software/installer/{}'.format(installer_name_base + installer_ext))],
+            logname=logname),
+        ],
+        name="Upload installer to ftp",
+        haltOnFailure=True,
+        doStepIf=(lambda step: not skip_step(step, 'create+local')),
+        workdir=build_dir,
+        env=env)
+    )
 
     factory.addStep(
         steps.ShellSequence(commands=[
