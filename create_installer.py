@@ -218,16 +218,15 @@ def repoUrl(props, platform):
     url = props.getProperty('url')
     if url is None:
         return ""
-    suffix = props.getProperty('suffix')
+    suffix_tmp = props.getProperty('suffix')
     if url.startswith('https://rm.nextgis.com'):
         repo_id = platform['repo_id'] 
-        repka_suffix = get_repka_suffix(suffix)
-        return '{}/{}/installer/{}/repository-{}{}'.format(url, repo_id, repka_suffix, platform['name'], suffix)
-    elif suffix == '-local':
+        repka_suffix = get_repka_suffix(suffix_tmp)
+        return '{}/{}/installer/{}/repository-{}{}'.format(url, repo_id, repka_suffix, platform['name'], suffix_tmp)
+    elif suffix_tmp == '-local':
         return '{}/repository-{}'.format(url, platform['name'])
     else:
-        return '{}/{}'.format(url, get_installer_name(props, platform['name'], suffix))
-
+        return '{}/{}'.format(url, platform['name'] + suffix_tmp)
 
 def get_packet_id(repo_id, packet_name):
     url =  repka_endpoint + '/api/packet?repository={}&filter={}'.format(repo_id, packet_name)
