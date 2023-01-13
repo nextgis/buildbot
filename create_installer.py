@@ -284,11 +284,11 @@ def get_repository_http_url(props, platform):
     return get_packet_url(platform, repka_suffix, platform['name'] + suffix + '.zip')
 
 @util.renderer
-def get_installer_name(props, basename):
-    suffix = props.getProperty('suffix')
-    repka_suffix = get_repka_suffix(suffix)
+def get_installer_name(props, basename, suffix = ''):
+    suffix_tmp = props.getProperty('suffix')
+    repka_suffix = get_repka_suffix(suffix_tmp)
 
-    return basename + repka_suffix
+    return basename + repka_suffix + suffix
 
 @util.renderer
 def get_versions_url(props, platform):
@@ -402,12 +402,12 @@ for platform in platforms:
     # 2. Get repository from
     factory.addStep(steps.ShellSequence(commands=[
             util.ShellArg(command=["curl",
-                                    '-o', get_installer_name.withArgs(repo_name_base) + '.zip', #  util.Interpolate('%(kw:basename)s%prop:suffix)s.zip', basename=repo_name_base),
+                                    '-o', get_installer_name.withArgs(repo_name_base, '.zip'), #  util.Interpolate('%(kw:basename)s%prop:suffix)s.zip', basename=repo_name_base),
                                     '-s', get_repository_http_url.withArgs(platform),
                                     ],
                             logname=logname),
             util.ShellArg(command=["cmake", '-E', 'tar', 'xzf',
-                                    get_installer_name.withArgs(repo_name_base) + '.zip', # util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base)],
+                                    get_installer_name.withArgs(repo_name_base, '.zip'), # util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base)],
                                   ],
                             logname=logname),
         ],
@@ -558,7 +558,7 @@ for platform in platforms:
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
-                                                '-i', get_installer_name.withArgs(installer_name_base + '-standalone') + '-{}'.format(now), # util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s', basename=installer_name_base + '-standalone', now=now),
+                                                '-i', get_installer_name.withArgs(installer_name_base + '-standalone', '-{}'.format(now)), # util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s', basename=installer_name_base + '-standalone', now=now),
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
@@ -572,7 +572,7 @@ for platform in platforms:
     # 5. Upload installer to ftp
     # TODO: upload to repka
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
-                                                get_installer_name.withArgs(installer_name_base) + installer_ext, #util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext, basename=installer_name_base),
+                                                get_installer_name.withArgs(installer_name_base, installer_ext), #util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext, basename=installer_name_base),
                                                 '-s', '--ftp-create-dirs', ngftp + '/'],
                                        name="Upload installer to ftp",
                                        haltOnFailure=True,
@@ -583,13 +583,13 @@ for platform in platforms:
     factory.addStep(
         steps.ShellSequence(commands=[
             util.ShellArg(command=["curl", '-u', ngftp_user, '-T',
-                get_installer_name.withArgs(installer_name_base + '-standalone') + '-{}'.format(now) + installer_ext,
+                get_installer_name.withArgs(installer_name_base + '-standalone', '-{}'.format(now) + installer_ext),
                 # util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext, basename=installer_name_base + '-standalone', now=now),
                                 '-s', '--ftp-create-dirs', ngftp + '/'
             ],
             logname=logname),
             util.ShellArg(command=["echo",
-                get_installer_name.withArgs('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/{}-standalone'.format(installer_name_base)) + '-{}'.format(now) + installer_ext
+                get_installer_name.withArgs('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/{}-standalone'.format(installer_name_base), '-{}'.format(now) + installer_ext),
                 #util.Interpolate('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,  basename=installer_name_base + '-standalone', now=now)
             ],
             logname=logname),
@@ -606,7 +606,7 @@ for platform in platforms:
         steps.ShellCommand(
             command=[
                 "cmake", '-E', 'tar', 'cfv',
-                get_installer_name.withArgs(repo_name_base) + '.zip',
+                get_installer_name.withArgs(repo_name_base, '.zip'),
                 # util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=repo_name_base), 
                 '--format=zip',
                 get_installer_name.withArgs(repo_name_base),
@@ -639,7 +639,7 @@ for platform in platforms:
     factory.addStep(steps.ShellCommand(
         command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
             '--description', util.Interpolate('%(prop:notes)s'),
-            '--asset_path', get_installer_name.withArgs(build_dir_name + separator + repo_name_base) + '.zip', # util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
+            '--asset_path', get_installer_name.withArgs(build_dir_name + separator + repo_name_base, '.zip'), # util.Interpolate('%(kw:basename)s%(prop:suffix)s.zip', basename=build_dir_name + separator + repo_name_base),
             '--asset_path', 'versions.pkl',
             '--packet_name', get_packet_name,
             '--login', username, '--password', userkey],
