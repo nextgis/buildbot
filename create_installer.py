@@ -187,6 +187,9 @@ c['schedulers'].append(forceScheduler_local)
 def get_repka_suffix(suffix):
     return 'devel' if suffix == '-dev' else 'stable_new'
 
+def get_repka_suffix2(suffix):
+    return 'devel' if suffix == '-dev' else ''
+
 @util.renderer
 def get_packet_name(props):
     suffix = props.getProperty('suffix')
@@ -281,7 +284,9 @@ def get_repository_http_url(props, platform):
     suffix = props.getProperty('suffix')
     repka_suffix = get_repka_suffix(suffix)
     
-    return get_packet_url(platform, repka_suffix, platform['name'] + suffix + '.zip')
+    suffix_tmp = '-dev' if suffix == '-dev' else '' 
+    
+    return get_packet_url(platform, repka_suffix, platform['name'] + suffix_tmp + '.zip')
 
 @util.renderer
 def get_installer_name(props, basename, suffix = ''):
