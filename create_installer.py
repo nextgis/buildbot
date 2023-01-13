@@ -288,7 +288,7 @@ def get_installer_name(props, basename, suffix = ''):
     suffix_tmp = props.getProperty('suffix')
     repka_suffix = get_repka_suffix(suffix_tmp)
 
-    return basename + repka_suffix + suffix
+    return basename + '-' + repka_suffix + suffix
 
 @util.renderer
 def get_versions_url(props, platform):
