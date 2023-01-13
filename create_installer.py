@@ -22,8 +22,8 @@ mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.
 
 ngftp = 'ftp://my-ftp-storage.vpn.nextgis.net:10411/software/installer'
 ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
-upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
-upload_script_name = 'ftp_upload.py'
+# upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
+# upload_script_name = 'ftp_upload.py'
 repka_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/repka_release.py'
 repka_script_name = 'repka_release.py'
 if_project_name = 'inst_framework'
@@ -407,25 +407,25 @@ for platform in platforms:
         ],
         name="Download repository",
         haltOnFailure=True,
-        doStepIf=(lambda step: not skip_step(step, 'standalone+update')),
+        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
         workdir=build_dir,
         env=env))
 
-    factory.addStep(steps.ShellSequence(
-        commands=[
-            util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s'], logname=logname),
-        ],
-        name="Download scripts",
-        haltOnFailure=True,
-        doStepIf=(lambda step: step.getProperty("scheduler").endswith("_create")),
-        workdir=code_dir,
-        env=env))
+    # factory.addStep(steps.ShellSequence(
+    #     commands=[
+    #         util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s'], logname=logname),
+    #     ],
+    #     name="Download upload script",
+    #     haltOnFailure=True,
+    #     doStepIf=(lambda step: step.getProperty("scheduler").endswith("_create")),
+    #     workdir=code_dir,
+    #     env=env))
 
     factory.addStep(steps.ShellSequence(
         commands=[
             util.ShellArg(command=["curl", repka_script_src, '-o', repka_script_name, '-s'], logname=logname),
         ],
-        name="Download scripts",
+        name="Download repka script",
         haltOnFailure=True,
         doStepIf=(lambda step: skip_step(step, 'standalone+local')),
         workdir=code_dir,
@@ -437,7 +437,7 @@ for platform in platforms:
                                                 ],
                                         name="Download versions.pkl",
                                         haltOnFailure=True,
-                                        doStepIf=(lambda step: skip_step(step, 'standalone+local')),
+                                        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
                                         workdir=code_dir,
                                         env=env))
 
@@ -483,7 +483,7 @@ for platform in platforms:
             haltOnFailure=True,
             workdir=code_dir,
             env=env,
-            doStepIf=(lambda step: skip_step(step, 'standalone+local'))
+            doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone"))
         )
     )
 
@@ -564,6 +564,7 @@ for platform in platforms:
                                         env=env))
 
     # 5. Upload installer to ftp
+    # TODO: upload to repka
     factory.addStep(steps.ShellCommand(command=["curl", '-u', ngftp_user, '-T',
                                                 util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext,
                                                     basename=installer_name_base),
