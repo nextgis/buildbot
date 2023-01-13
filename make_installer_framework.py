@@ -2,7 +2,6 @@
 # ex: set syntax=python:
 
 from buildbot.plugins import *
-import sys
 import os
 
 c = {}
