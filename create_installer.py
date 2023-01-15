@@ -631,12 +631,24 @@ for platform in platforms:
     )
 
     if create_updater_package:
-        # If create installer - upload updater.zip + version.str to repka
+        # Create zip
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "cmake", '-E', 'tar', 'cfv', 'package.zip', '--format=zip',
+                    'packages/com.nextgis.nextgis_updater',
+                ],
+                name="Create updater package",
+                haltOnFailure=True,
+                doStepIf=(lambda step: step.getProperty("scheduler").endswith("_create")),
+                workdir=build_dir,
+                env=env
+            )
+        )
         
         factory.addStep(steps.ShellCommand(
             command=["python3", repka_script_name, '--repo_id', platform['repo_id'],
-                '--asset_path', get_updater_package_path.withArgs(platform),
-                '--asset_path', build_dir_name + separator + 'version.str',
+                '--asset_path', build_dir + '/package.zip',
                 '--packet_name', 'updater',
                 '--login', username, '--password', userkey],
             name="Send updater package to repka",
