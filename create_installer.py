@@ -415,7 +415,7 @@ for platform in platforms:
         ],
         name="Download repository",
         haltOnFailure=True,
-        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
+        # doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
         workdir=build_dir,
         env=env))
 
@@ -445,7 +445,7 @@ for platform in platforms:
                                                 ],
                                         name="Download versions.pkl",
                                         haltOnFailure=True,
-                                        doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
+                                        # doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
                                         workdir=code_dir,
                                         env=env))
 
@@ -546,7 +546,7 @@ for platform in platforms:
                 get_installer_name.withArgs(installer_name_base), # util.Interpolate('%(kw:basename)s%(prop:suffix)s', basename=installer_name_base),
                 create_opt, commandArgs,
             ],
-            name="Create/Update repository",
+            name="Create/Update repository network",
             doStepIf=(lambda step: not step.getProperty("scheduler").endswith("_standalone")),
             haltOnFailure=True,
             maxTime=max_time * 60,
@@ -563,7 +563,7 @@ for platform in platforms:
                                                 '-i', get_installer_name.withArgs(installer_name_base + '-standalone', util.Interpolate('-%(kw:now)s', now=now)), # util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s', basename=installer_name_base + '-standalone', now=now),
                                                 create_opt, commandArgs,
                                                 ],
-                                        name="Create/Update repository",
+                                        name="Create/Update repository standalone",
                                         doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
                                         maxTime=max_time * 60,
                                         timeout=timeout * 60,
