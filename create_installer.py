@@ -560,7 +560,7 @@ for platform in platforms:
                                                 '-s', 'inst',
                                                 '-q', 'qt/bin',
                                                 '-t', build_dir_name,
-                                                '-i', get_installer_name.withArgs(installer_name_base + '-standalone', '-{}'.format(now)), # util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s', basename=installer_name_base + '-standalone', now=now),
+                                                '-i', get_installer_name.withArgs(installer_name_base + '-standalone', '-' + now), # util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s', basename=installer_name_base + '-standalone', now=now),
                                                 create_opt, commandArgs,
                                                 ],
                                         name="Create/Update repository",
@@ -593,13 +593,13 @@ for platform in platforms:
     factory.addStep(
         steps.ShellSequence(commands=[
             util.ShellArg(command=["curl", '-u', ngftp_user, '-T',
-                get_installer_name.withArgs(installer_name_base + '-standalone', '-{}'.format(now) + installer_ext),
+                get_installer_name.withArgs(installer_name_base + '-standalone', '-' + now + installer_ext),
                 # util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext, basename=installer_name_base + '-standalone', now=now),
                                 '-s', '--ftp-create-dirs', ngftp + '/'
             ],
             logname=logname),
             util.ShellArg(command=["echo",
-                get_installer_name.withArgs('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/{}-standalone'.format(installer_name_base), '-{}'.format(now) + installer_ext),
+                get_installer_name.withArgs('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/{}-standalone'.format(installer_name_base), '-' + now + installer_ext),
                 #util.Interpolate('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,  basename=installer_name_base + '-standalone', now=now)
             ],
             logname=logname),
