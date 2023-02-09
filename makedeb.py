@@ -12,7 +12,7 @@ repositories = [
     {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
     {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
     {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
-    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
+    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra',], 'repo_id':11},
     {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
     {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'buster', ], 'repo_id':11},
     {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
@@ -28,7 +28,7 @@ repositories = [
             'type':'deb',
         },]
     },
-    {'repo':'lib_ngstd', 'deb':'ngstd', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy',], 'repo_id':11},
+    {'repo':'lib_ngstd', 'deb':'ngstd', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'astra',], 'repo_id':11},
     {'repo':'formbuilder', 'deb':'formbuilder', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy',], 'repo_id':11},
     {'repo':'manuscript', 'deb':'manuscript', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', ], 'repo_id':11},
     {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal','bullseye', 'jammy',], 'repo_id':11, 'apt_repos':[{
