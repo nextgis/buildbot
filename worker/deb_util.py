@@ -202,7 +202,13 @@ def get_distro():
     with open('/etc/os-release') as fp:
         config.read_file(itertools.chain(['[global]'], fp))
         distro_version = config.get('global', 'VERSION_ID').replace('"', '')
-        distro_codename = config.get('global', 'VERSION_CODENAME')
+
+        distro_id = config.get('global', 'ID')
+        if distro_id == 'astra':
+            distro_codename = distro_id
+        else:
+            distro_codename = config.get('global', 'VERSION_CODENAME')
+
     return distro_version, distro_codename
 
 def get_package_version(file):
