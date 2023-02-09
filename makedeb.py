@@ -8,13 +8,13 @@ import os
 c = {}
 
 repositories = [
-    {'repo':'lib_geos', 'deb':'geos', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
-    {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
-    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
-    {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
+    {'repo':'lib_geos', 'deb':'geos', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra', ], 'repo_id':11},
     {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra',], 'repo_id':11},
     {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'buster', 'jammy', 'astra',], 'repo_id':11},
-    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'buster', ], 'repo_id':11},
+    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'buster', 'astra', ], 'repo_id':11},
     {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
     {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal','bullseye', 'jammy',], 'repo_id':12, 'apt_repos':[{
             'repka_id':11,
