@@ -38,7 +38,7 @@ repositories = [
             'type':'deb',
         },]
     },
-    {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'bullseye', 'jammy',], 'repo_id':11, 'branch': 'dev/up_to_3'},
+    {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'bullseye', 'jammy', 'astra',], 'repo_id':11, 'branch': 'dev/up_to_3'},
     {'repo':'qgis_headless', 'deb':'qgis-headless', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'bullseye', 'jammy',], 'repo_id':11, 'branch': 'master'},
     {'repo':'terratile', 'deb':'python-terratile', 'repo_root':'https://github.com', 'org': 'nextgis', 'os':['focal', 'bullseye', 'jammy'], 'repo_id':11, 'branch': 'gdal3'},
     {'repo':'lib_sentrynative', 'deb':'sentry-native', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'bullseye', 'jammy'], 'repo_id':11, 'branch': 'master'},
@@ -67,6 +67,7 @@ platforms = [
     {'name' : 'bullseye', 'worker' : 'deb-build-bullseye'},
     # {'name' : 'sid', 'worker' : 'deb-build-sid'},
     {'name' : 'jammy', 'worker' : 'deb-build-jammy'},
+    {'name' : 'astra', 'worker' : 'deb-build-astra'},
 ]
 
 build_lock = util.MasterLock("deb_worker_builds")
