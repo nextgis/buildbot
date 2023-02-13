@@ -180,8 +180,8 @@ def create_release(packet_id, name, description, tag, distrib, distrib_version,
 
     return release['id']
 
-def write_changelog(package, version, counter, distro, repo_path, urgency='medium'):
-    full_message = '{} ({}+{}) {}; urgency={}\n\n'.format(package, version, counter, distro, urgency)
+def write_changelog(package, version, counter, distribution, repo_path, urgency='medium'):
+    full_message = '{} ({}+{}) {}; urgency={}\n\n'.format(package, version, counter, distribution, urgency)
     log_messages = subprocess.check_output(['git', 'log', format_debian, '-3', '--no-merges'], cwd=repo_path)
     full_message += log_messages.decode(sys.stdout.encoding)
     full_message += '\n\n -- '
@@ -240,7 +240,7 @@ if __name__ == "__main__":
         version = get_package_version(args.version_file)
         packet_id = get_packet_id(args.repo_id, args.package_name, args.login, args.password)
         counter = get_release_counter(packet_id, version, distro_codename, args.login, args.password)
-        write_changelog(args.package_name, version, counter, distro_codename, args.repo_path)
+        write_changelog(args.package_name, version, counter, 'unstable', args.repo_path)
 
     elif args.operation == 'tar':
         distro_version, distro_codename = get_distro()
