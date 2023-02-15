@@ -91,6 +91,10 @@ repositories = [
     {'repo':'py_levenshtein', 'args':[], 'requirements':['scikit-build'], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_rapidfuzz', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_tus', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_frozenlist', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_multidict', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_yarl', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_aiohttp', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 #skip_send2github = [
