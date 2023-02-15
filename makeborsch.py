@@ -95,6 +95,7 @@ repositories = [
     {'repo':'py_multidict', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_yarl', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_aiohttp', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'py_charset_normalizer', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
 ]
 
 #skip_send2github = [
