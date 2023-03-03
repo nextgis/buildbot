@@ -8,20 +8,20 @@ import os
 c = {}
 
 repositories = [
-    {'repo':'lib_geos', 'deb':'geos', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', 'astra',], 'repo_id':11},
-    {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'buster', 'jammy', 'astra',], 'repo_id':11},
-    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'buster', 'astra', ], 'repo_id':11},
-    {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'buster', 'jammy', ], 'repo_id':11},
-    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal','bullseye', 'jammy',], 'repo_id':12, 'apt_repos':[{
+    {'repo':'lib_geos', 'deb':'geos', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra',], 'repo_id':11},
+    {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'jammy', 'astra',], 'repo_id':11},
+    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'astra', ], 'repo_id':11},
+    {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', ], 'repo_id':11},
+    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal','bullseye', 'jammy',], 'repo_id':12, 'apt_repos':[{
             'repka_id':11,
             'type':'repka',
         },]
     },
-    {'repo':'postgis', 'deb':'postgis', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os': ['bionic', 'buster', 'focal', 'bullseye', 'jammy',], 'repo_id':11, 'apt_repos':[{
+    {'repo':'postgis', 'deb':'postgis', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os': ['focal', 'bullseye', 'jammy',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
@@ -31,7 +31,7 @@ repositories = [
     {'repo':'lib_ngstd', 'deb':'ngstd', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'astra',], 'repo_id':11},
     {'repo':'formbuilder', 'deb':'formbuilder', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy',], 'repo_id':11},
     {'repo':'manuscript', 'deb':'manuscript', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', ], 'repo_id':11},
-    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['bionic', 'buster', 'focal','bullseye', 'jammy',], 'repo_id':11, 'apt_repos':[{
+    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal','bullseye', 'jammy',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
@@ -59,11 +59,11 @@ c['builders'] = []
 
 platforms = [
     {'name' : 'focal', 'worker' : 'deb-build-focal'},
-    {'name' : 'bionic', 'worker' : 'deb-build-bionic'},
+    # {'name' : 'bionic', 'worker' : 'deb-build-bionic'},
     # {'name' : 'xenial', 'worker' : 'deb-build-xenial'},
     # {'name' : 'trusty', 'worker' : 'deb-build-trusty'},
-    {'name' : 'stretch', 'worker' : 'deb-build-stretch'},
-    {'name' : 'buster', 'worker' : 'deb-build-buster'},
+    # {'name' : 'stretch', 'worker' : 'deb-build-stretch'},
+    # {'name' : 'buster', 'worker' : 'deb-build-buster'},
     {'name' : 'bullseye', 'worker' : 'deb-build-bullseye'},
     # {'name' : 'sid', 'worker' : 'deb-build-sid'},
     {'name' : 'jammy', 'worker' : 'deb-build-jammy'},
