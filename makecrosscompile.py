@@ -55,15 +55,16 @@ for repository in repositories:
         if platform['name'] in repository['os']:
             builderNames.append(project_name + "_" + platform['name'])
     
+    scheduler_name = project_name + '_crosscompile'
     scheduler = schedulers.SingleBranchScheduler(
-                                name=project_name,
+                                name=scheduler_name,
                                 change_filter=util.ChangeFilter(project = git_project_name, branch=branch),
                                 treeStableTimer=1*60,
                                 builderNames=builderNames,)
     c['schedulers'].append(scheduler)
     
     forceScheduler = schedulers.ForceScheduler(
-                                name=project_name + "_force",
+                                name=scheduler_name + "_force",
                                 label="Force build",
                                 buttonName="Force build",
                                 builderNames=builderNames,)
