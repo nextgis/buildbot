@@ -16,7 +16,7 @@ platforms = [
     {'name' : 'jammy-crosscompile', 'worker' : 'deb-build-jammy-crosscompile'},
 ]
 
-build_lock = util.MasterLock("deb_worker_builds")
+build_lock = util.MasterLock("crosscompile_worker_builds")
 
 script_name = 'crosscompile.py'
 script_src = 'https://github.com/nextgis-borsch/borsch/raw/master/opt/' + script_name
