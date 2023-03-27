@@ -56,7 +56,7 @@ for repository in repositories:
     builderNames = []
     for platform in platforms:
         if platform['name'] in repository['os']:
-            builderNames.append(project_name + "_" + platform['name'])
+            builderNames.append(project_name + "_crosscompile")
     
     scheduler_name = project_name + '_crosscompile'
     scheduler = schedulers.SingleBranchScheduler(
