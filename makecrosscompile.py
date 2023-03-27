@@ -8,9 +8,11 @@ repositories = [
     {'repo':'lib_z', 'args':[], 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
 ]
 
-c['change_source'] = []
-c['schedulers'] = []
-c['builders'] = []
+c = {
+    'change_source': [],
+    'schedulers': [],
+    'builders': []
+}
 
 platforms = [
     {'name' : 'jammy-crosscompile', 'worker' : 'deb-build-jammy-crosscompile'},
