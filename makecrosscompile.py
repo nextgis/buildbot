@@ -5,7 +5,7 @@ from buildbot.plugins import *
 import os
 
 repositories = [
-    {'repo':'lib_z', 'args':[], 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
+    {'repo':'lib_z', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
 ]
 
 c = {
