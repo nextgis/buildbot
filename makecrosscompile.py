@@ -90,7 +90,7 @@ for repository in repositories:
         
         factory.addStep(steps.ShellSequence(commands=[
                 util.ShellArg(command=["curl", crosscompile_script_src, '-o', crosscompile_script_name, '-s', '-L'], logname=logname),
-                util.ShellArg(command=["curl", repka_release_script_src, '-o', repka_release_cript_name, '-s', '-L'], logname=logname),
+                util.ShellArg(command=["curl", repka_release_script_src, '-o', repka_release_script_name, '-s', '-L'], logname=logname),
             ],
             name="Download scripts",
             haltOnFailure=True,
