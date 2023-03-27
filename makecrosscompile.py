@@ -20,8 +20,11 @@ platforms = [
 
 build_lock = util.MasterLock("crosscompile_worker_builds")
 
-script_name = 'crosscompile.py'
-script_src = 'https://github.com/nextgis-borsch/borsch/raw/master/opt/' + script_name
+tools_base_url = 'https://github.com/nextgis-borsch/borsch/raw/master/opt/'
+crosscompile_script_name = 'crosscompile.py'
+crosscompile_script_src = tools_base_url + crosscompile_script_name
+repka_release_script_name = 'repka_release.py'
+repka_release_script_src = tools_base_url + repka_release_script_name
 
 logname = 'stdio'
 username = 'buildbot'
@@ -86,14 +89,15 @@ for repository in repositories:
             workdir=code_dir))
         
         factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["curl", script_src, '-o', script_name, '-s', '-L'], 
+                util.ShellArg(command=["curl", crosscompile_script_src, '-o', crosscompile_script_name, '-s', '-L'], 
+                util.ShellArg(command=["curl", repka_release_script_src, '-o', repka_release_cript_name, '-s', '-L'], 
                 logname=logname),
             ],
             name="Download scripts",
             haltOnFailure=True,
             workdir=root_dir))
         
-        factory.addStep(steps.ShellCommand(command=["python", script_name, '--packages', repo_name, 
+        factory.addStep(steps.ShellCommand(command=["python", crosscompile_script_name, '--packages', repo_name, 
                 '--login', username, '--password', userkey
             ],
             name="Crosscompile and send to repka", haltOnFailure=True, workdir=root_dir))
