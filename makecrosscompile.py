@@ -20,7 +20,6 @@ repositories = [
     {'repo':'lib_webp', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
     {'repo':'lib_sqlite', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
     {'repo':'lib_proj', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
-    {'repo':'lib_geotiff', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
     {'repo':'lib_szip', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
     {'repo':'lib_hdf4', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
     {'repo':'lib_jsonc', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
@@ -33,9 +32,6 @@ repositories = [
     {'repo':'lib_xml2', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
     {'repo':'lib_gdal', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
     {'repo':'lib_openssl', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
-    {'repo':'lib_sqlite', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
-    {'repo':'lib_z', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
-    {'repo':'lib_z', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
 ]
 
 c = {
