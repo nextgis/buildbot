@@ -5,7 +5,7 @@ from twisted.cred.checkers import ICredentialsChecker
 from twisted.cred.credentials import IUsernamePassword
 from twisted.cred.error import UnauthorizedLogin
 from twisted.internet import defer
-from zope.interface.declarations import implements
+# from zope.interface import implements
 from zope.interface import implementer
 from twisted.cred.portal import Portal
 from twisted.web.error import Error
