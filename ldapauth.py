@@ -8,11 +8,11 @@ from twisted.internet import defer
 # from zope.interface import implements
 from zope.interface import implementer
 from twisted.cred.portal import Portal
-from twisted.web.error import Error
+# from twisted.web.error import Error
 from twisted.web.guard import BasicCredentialFactory
 from twisted.web.guard import HTTPAuthSessionWrapper
 from buildbot.www import auth
-from buildbot.www import resource
+# from buildbot.www import resource
 from twisted.python import log
 
 class LDAPAuth(auth.AuthBase):
