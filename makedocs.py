@@ -97,7 +97,7 @@ for lang in langs:
                     util.ShellArg(command=['make', 'json'], logname=logname),
                     util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logname=logname),
                     util.ShellArg(command=['python', upload_script_name, '--build_path', 'build/json', '--ftp', 
-                                           'ftp://' + ftp_user + ':' + ftp_password + '@' + ftp_address + ':' + ftp_port '/' + lang], 
+                                           'ftp://' + ftp_user + ':' + ftp_password + '@' + ftp_address + ':' + ftp_port + '/' + lang], 
                                   logname=logname),
                 ],
                 name="Generate json for NextGIS Data",
