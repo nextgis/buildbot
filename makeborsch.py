@@ -109,7 +109,8 @@ mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.
 script_name = 'repka_release.py' # 'github_release.py'
 release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/' + script_name
 username = 'buildbot'
-userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
+userkey = os.environ.get("BUILDBOT_PASSWORD") 
+# userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
 upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
 upload_script_name = 'ftp_upload.py'
 install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py'
@@ -117,6 +118,7 @@ install_script_name = 'install_from_ftp.py'
 ci_project_name = 'create_installer'
 sentry_url = 'https://sentry.nextgis.com'
 sentry_auth_token = os.environ.get("SENTRY_AUTH_TOKEN")
+https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
 
 c['change_source'] = []
 c['schedulers'] = []
@@ -204,6 +206,7 @@ def get_env(os):
         ]
         env['PYTHONPATH'] = 'C:\\Python38'
         env['FLANG_HOME'] = 'C:\\Users\\root\\conda\\Library'
+        env['https_proxy'] = https_proxy
     elif 'mac' in os:
         env['PATH'] = [
             "/usr/local/bin",
