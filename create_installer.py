@@ -577,7 +577,8 @@ for platform in platforms:
                                         env=env))
 
     # remove https_proxy
-    del env["https_proxy"]
+    if 'https_proxy' in env:
+        del env['https_proxy']
 
     # 5. Upload installer to ftp
     # TODO: upload to repka
