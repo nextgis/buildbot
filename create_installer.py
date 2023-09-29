@@ -369,8 +369,6 @@ for platform in platforms:
         if_prefix = '_win'
         separator = '\\'
         env = {'PYTHONHTTPSVERIFY': '0'}
-        if https_proxy is not None:
-            env['https_proxy'] = https_proxy
         env['PYTHONPATH'] = 'C:\\Python38'
         env['FLANG_HOME'] = 'C:\\Users\\root\\conda\\Library'
         installer_ext = '.exe'
@@ -467,13 +465,16 @@ for platform in platforms:
         create_opt.append('-g')
         create_opt.append(generator)
         create_opt.append('-w64')
-    elif 'win32' == platform['name']:
-        create_opt.append('-g')
-        create_opt.append(generator)
-        create_opt.append('-A')
-        create_opt.append('Win32')
+        if https_proxy is not None:
+            env['https_proxy'] = https_proxy
+    # elif 'win32' == platform['name']:
+    #     create_opt.append('-g')
+    #     create_opt.append(generator)
+    #     create_opt.append('-A')
+    #     create_opt.append('Win32')
 
     installer_name_base = 'nextgis-setup-' + platform['name']
+
 
     # 3. Get compiled libraries
     factory.addStep(
@@ -574,6 +575,9 @@ for platform in platforms:
                                         haltOnFailure=True,
                                         workdir=code_dir,
                                         env=env))
+
+    # remove https_proxy
+    del env["https_proxy"]
 
     # 5. Upload installer to ftp
     # TODO: upload to repka
