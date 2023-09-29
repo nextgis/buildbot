@@ -475,10 +475,8 @@ for platform in platforms:
 
     installer_name_base = 'nextgis-setup-' + platform['name']
 
-    print(https_proxy)
     if 'win' in platform['name'] and https_proxy is not None:
-        env['https_proxy'] = https_proxy
-        print(env)
+        env['HTTPS_PROXY'] = https_proxy
 
     # 3. Get compiled libraries
     factory.addStep(
@@ -581,8 +579,8 @@ for platform in platforms:
                                         env=env))
 
     # remove https_proxy
-    if 'https_proxy' in env:
-        del env['https_proxy']
+    if 'HTTPS_PROXY' in env:
+        del env['HTTPS_PROXY']
 
     # 5. Upload installer to ftp
     # TODO: upload to repka
