@@ -29,7 +29,8 @@ repka_script_name = 'repka_release.py'
 if_project_name = 'inst_framework'
 login_keychain = os.environ.get("BUILDBOT_MACOSX_LOGIN_KEYCHAIN")
 username = 'buildbot' # username = 'bishopgis'
-userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
+userkey = os.environ.get("BUILDBOT_PASSWORD") 
+# userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
 https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
 installer_git = 'https://github.com/nextgis/nextgis_installer.git'
 
@@ -465,8 +466,7 @@ for platform in platforms:
         create_opt.append('-g')
         create_opt.append(generator)
         create_opt.append('-w64')
-        if https_proxy is not None:
-            env['https_proxy'] = https_proxy
+            
     # elif 'win32' == platform['name']:
     #     create_opt.append('-g')
     #     create_opt.append(generator)
@@ -475,6 +475,8 @@ for platform in platforms:
 
     installer_name_base = 'nextgis-setup-' + platform['name']
 
+    if 'win' in platform['name'] and https_proxy is not None:
+        env['https_proxy'] = https_proxy
 
     # 3. Get compiled libraries
     factory.addStep(
