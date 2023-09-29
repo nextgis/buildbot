@@ -30,7 +30,7 @@ if_project_name = 'inst_framework'
 login_keychain = os.environ.get("BUILDBOT_MACOSX_LOGIN_KEYCHAIN")
 username = 'buildbot' # username = 'bishopgis'
 userkey = os.environ.get("BUILDBOT_PASSWORD") # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
-
+https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
 installer_git = 'https://github.com/nextgis/nextgis_installer.git'
 
 timeout = 180
@@ -369,6 +369,10 @@ for platform in platforms:
         if_prefix = '_win'
         separator = '\\'
         env = {'PYTHONHTTPSVERIFY': '0'}
+        if https_proxy is not None:
+            env['https_proxy'] = https_proxy
+        env['PYTHONPATH'] = 'C:\\Python38'
+        env['FLANG_HOME'] = 'C:\\Users\\root\\conda\\Library'
         installer_ext = '.exe'
         # if 'win32' == platform['name']:
         #     env = { 

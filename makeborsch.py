@@ -206,7 +206,8 @@ def get_env(os):
         ]
         env['PYTHONPATH'] = 'C:\\Python38'
         env['FLANG_HOME'] = 'C:\\Users\\root\\conda\\Library'
-        env['https_proxy'] = https_proxy
+        if https_proxy is not None:
+            env['HTTPS_PROXY'] = https_proxy
     elif 'mac' in os:
         env['PATH'] = [
             "/usr/local/bin",
@@ -217,7 +218,8 @@ def get_env(os):
     env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
     env['SENTRY_URL'] = sentry_url
     env['SENTRY_ORG'] = 'nextgis'
-    env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
+    if sentry_auth_token is not None:
+        env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
     env['PYTHONHTTPSVERIFY'] = '0'
     return env
 
