@@ -475,8 +475,10 @@ for platform in platforms:
 
     installer_name_base = 'nextgis-setup-' + platform['name']
 
+    print(https_proxy)
     if 'win' in platform['name'] and https_proxy is not None:
         env['https_proxy'] = https_proxy
+        print(env)
 
     # 3. Get compiled libraries
     factory.addStep(
