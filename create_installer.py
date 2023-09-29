@@ -478,6 +478,7 @@ for platform in platforms:
     env_proxy = env.copy()
     if 'win' in platform['name'] and https_proxy is not None:
         env_proxy['HTTPS_PROXY'] = https_proxy
+        env_proxy['GIT_SSL_NO_VERIFY'] = 'true'
 
     # 3. Get compiled libraries
     factory.addStep(
