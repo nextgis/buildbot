@@ -14,7 +14,7 @@ repositories = [
     {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
     {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra',], 'repo_id':11},
     {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'jammy', 'astra',], 'repo_id':11},
-    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'astra', ], 'repo_id':11},
+    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
     {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', ], 'repo_id':11},
     {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal','bullseye', 'jammy',], 'repo_id':12, 'apt_repos':[{
             'repka_id':11,
