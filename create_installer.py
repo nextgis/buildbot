@@ -475,7 +475,7 @@ for platform in platforms:
 
     installer_name_base = 'nextgis-setup-' + platform['name']
 
-    env_proxy = env[:]
+    env_proxy = env.copy()
     if 'win' in platform['name'] and https_proxy is not None:
         env_proxy['HTTPS_PROXY'] = https_proxy
 
