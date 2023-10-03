@@ -148,6 +148,12 @@ build_lock = util.MasterLock("borsch_worker_builds")
 
 logname = 'stdio'
 
+def get_env_proxy(os):
+    env = get_env(os)
+    if 'win' in os and https_proxy is not None:
+        env['HTTPS_PROXY'] = https_proxy
+    return env
+
 def get_env(os):
     env = {}
     # if 'win32' == os:
@@ -206,8 +212,6 @@ def get_env(os):
         ]
         env['PYTHONPATH'] = 'C:\\Python38'
         env['FLANG_HOME'] = 'C:\\Users\\root\\conda\\Library'
-        if https_proxy is not None:
-            env['HTTPS_PROXY'] = https_proxy
     elif 'mac' in os:
         env['PATH'] = [
             "/usr/local/bin",
