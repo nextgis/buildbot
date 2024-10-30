@@ -7,6 +7,7 @@ import os
 
 c = {}
 
+# fmt: off
 repositories = [
     {'repo':'lib_geos', 'deb':'geos', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
     {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
@@ -53,166 +54,338 @@ repositories = [
     # {'repo':'protobuf','version':'3.5.1', 'deb':'protobuf', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
     # {'repo':'osrm-backend','version':'0.1', 'deb':'osrm-backend', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['bionic']},
 ]
+# fmt: on
 
-c['change_source'] = []
-c['schedulers'] = []
-c['builders'] = []
+c["change_source"] = []
+c["schedulers"] = []
+c["builders"] = []
 
 platforms = [
-    {'name' : 'focal', 'worker' : 'deb-build-focal'},
+    {"name": "focal", "worker": "deb-build-focal"},
     # {'name' : 'bionic', 'worker' : 'deb-build-bionic'},
     # {'name' : 'xenial', 'worker' : 'deb-build-xenial'},
     # {'name' : 'trusty', 'worker' : 'deb-build-trusty'},
     # {'name' : 'stretch', 'worker' : 'deb-build-stretch'},
     # {'name' : 'buster', 'worker' : 'deb-build-buster'},
-    {'name' : 'bullseye', 'worker' : 'deb-build-bullseye'},
+    {"name": "bullseye", "worker": "deb-build-bullseye"},
     # {'name' : 'sid', 'worker' : 'deb-build-sid'},
-    {'name' : 'jammy', 'worker' : 'deb-build-jammy'},
-    {'name' : 'astra', 'worker' : 'deb-build-astra'},
+    {"name": "jammy", "worker": "deb-build-jammy"},
+    {"name": "astra", "worker": "deb-build-astra"},
 ]
 
 build_lock = util.MasterLock("deb_worker_builds")
 
-script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/deb_util.py'
-script_name = 'deb_util.py'
-logname = 'stdio'
-username = 'buildbot'
+script_src = (
+    "https://raw.githubusercontent.com/nextgis/buildbot/master/worker/deb_util.py"
+)
+script_name = "deb_util.py"
+logname = "stdio"
+username = "buildbot"
 userkey = os.environ.get("BUILDBOT_PASSWORD")
 
-root_dir = 'build'
-ver_dir = root_dir + '/ver'
+root_dir = "build"
+ver_dir = root_dir + "/ver"
+
 
 def get_env(os):
     env = {
-            'BUILDBOT_USERPWD': '{}:{}'.format(username, userkey),
-        }
+        "BUILDBOT_USERPWD": "{}:{}".format(username, userkey),
+    }
     return env
+
 
 # Create builders
 for repository in repositories:
-
-    project_name = repository['repo']
-    org = repository['org']
-    repourl = '{}/{}/{}.git'.format(repository['repo_root'], org, project_name)
-    branch = 'master'
-    if 'branch' in repository:
-        branch = repository['branch']
-    git_project_name = '{}/{}'.format(org, project_name)
-    git_poller = changes.GitPoller(project = git_project_name,
-                           repourl = repourl,
-                        #    workdir = project_name + '-workdir',
-                           branches = [branch],
-                           pollinterval = 5400,)
-    c['change_source'].append(git_poller)
+    project_name = repository["repo"]
+    org = repository["org"]
+    repourl = "{}/{}/{}.git".format(repository["repo_root"], org, project_name)
+    branch = "master"
+    if "branch" in repository:
+        branch = repository["branch"]
+    git_project_name = "{}/{}".format(org, project_name)
+    git_poller = changes.GitPoller(
+        project=git_project_name,
+        repourl=repourl,
+        #    workdir = project_name + '-workdir',
+        branches=[branch],
+        pollinterval=5400,
+    )
+    c["change_source"].append(git_poller)
 
     builderNames = []
     for platform in platforms:
-        if platform['name'] in repository['os']:
-            builderNames.append(project_name + "_" + platform['name'])
+        if platform["name"] in repository["os"]:
+            builderNames.append(project_name + "_" + platform["name"])
 
     scheduler = schedulers.SingleBranchScheduler(
-                                name=project_name + "_deb",
-                                change_filter=util.ChangeFilter(project = git_project_name, branch=branch),
-                                treeStableTimer=1*60,
-                                builderNames=builderNames,)
-    c['schedulers'].append(scheduler)
+        name=project_name + "_deb",
+        change_filter=util.ChangeFilter(project=git_project_name, branch=branch),
+        treeStableTimer=1 * 60,
+        builderNames=builderNames,
+    )
+    c["schedulers"].append(scheduler)
 
-    c['schedulers'].append(schedulers.ForceScheduler(
-                                name=project_name + "_force_deb",
-                                builderNames=builderNames,))
+    c["schedulers"].append(
+        schedulers.ForceScheduler(
+            name=project_name + "_force_deb",
+            builderNames=builderNames,
+        )
+    )
 
-    deb_name = repository['deb']
-    code_dir_last = deb_name + '_code'
-    code_dir = root_dir + '/' + code_dir_last
+    deb_name = repository["deb"]
+    code_dir_last = deb_name + "_code"
+    code_dir = root_dir + "/" + code_dir_last
 
     for platform in platforms:
-        if platform['name'] not in repository['os']:
+        if platform["name"] not in repository["os"]:
             continue
 
-        factory = util.BuildFactory()        
+        factory = util.BuildFactory()
         # 1. checkout the source
-        factory.addStep(steps.Git(repourl=repourl,
-            mode='full', shallow=True, submodules=True, 
-            workdir=code_dir))
-        factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["curl", script_src, '-o', script_name, '-s', '-L'], 
-                logname=logname),
-            ],
-            name="Download scripts",
-            haltOnFailure=True,
-            workdir=root_dir))
+        factory.addStep(
+            steps.Git(
+                repourl=repourl,
+                mode="full",
+                shallow=True,
+                submodules=True,
+                workdir=code_dir,
+            )
+        )
+        factory.addStep(
+            steps.ShellSequence(
+                commands=[
+                    util.ShellArg(
+                        command=["curl", script_src, "-o", script_name, "-s", "-L"],
+                        logname=logname,
+                    ),
+                ],
+                name="Download scripts",
+                haltOnFailure=True,
+                workdir=root_dir,
+            )
+        )
 
-        factory.addStep(steps.ShellCommand(command=["python", script_name, '-op', 'add_repka_repo', 
-                '--repo_id', repository['repo_id'], '--login', username, '--password', userkey
-            ],
-            name="Add apt repository", haltOnFailure=True, workdir=root_dir))
-        if 'apt_repos' in repository:
-            for apt_repo_info in repository['apt_repos']:
-                if apt_repo_info['type'] == 'repka':
-                    factory.addStep(steps.ShellCommand(command=["python", script_name, 
-                            '-op', 'add_repka_repo', '--repo_id', apt_repo_info['repka_id'], 
-                            '--login', username, '--password', userkey
-                        ],
-                        name="Add additional repka apt repository", haltOnFailure=True, workdir=root_dir))
-                elif apt_repo_info['type'] == 'deb':
-                    factory.addStep(steps.ShellCommand(command=["python", script_name, 
-                            '-op', 'add_deb_repo', '--deb', apt_repo_info['deb'].format(platform['name']), 
-                            '--deb_key', apt_repo_info['key'], 
-                            '--deb_keyserver', apt_repo_info['keyserver']
-                        ],
-                        name="Add additional deb apt repository", haltOnFailure=True, workdir=root_dir))
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "python",
+                    script_name,
+                    "-op",
+                    "add_repka_repo",
+                    "--repo_id",
+                    repository["repo_id"],
+                    "--login",
+                    username,
+                    "--password",
+                    userkey,
+                ],
+                name="Add apt repository",
+                haltOnFailure=True,
+                workdir=root_dir,
+            )
+        )
+        if "apt_repos" in repository:
+            for apt_repo_info in repository["apt_repos"]:
+                if apt_repo_info["type"] == "repka":
+                    factory.addStep(
+                        steps.ShellCommand(
+                            command=[
+                                "python",
+                                script_name,
+                                "-op",
+                                "add_repka_repo",
+                                "--repo_id",
+                                apt_repo_info["repka_id"],
+                                "--login",
+                                username,
+                                "--password",
+                                userkey,
+                            ],
+                            name="Add additional repka apt repository",
+                            haltOnFailure=True,
+                            workdir=root_dir,
+                        )
+                    )
+                elif apt_repo_info["type"] == "deb":
+                    factory.addStep(
+                        steps.ShellCommand(
+                            command=[
+                                "python",
+                                script_name,
+                                "-op",
+                                "add_deb_repo",
+                                "--deb",
+                                apt_repo_info["deb"].format(platform["name"]),
+                                "--deb_key",
+                                apt_repo_info["key"],
+                                "--deb_keyserver",
+                                apt_repo_info["keyserver"],
+                            ],
+                            name="Add additional deb apt repository",
+                            haltOnFailure=True,
+                            workdir=root_dir,
+                        )
+                    )
 
-        factory.addStep(steps.ShellCommand(command=["apt-get", "-y", "upgrade"],
-                             env={'DEBIAN_FRONTEND': 'noninteractive'},
-                             name="Upgrade packages"))
+        factory.addStep(
+            steps.ShellCommand(
+                command=["apt-get", "-y", "upgrade"],
+                env={"DEBIAN_FRONTEND": "noninteractive"},
+                name="Upgrade packages",
+            )
+        )
 
-        factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'create_debian', '-vf', 'ver/version.str', 
-                '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
-                '--password', userkey
-            ],
-            name="Create debian directory", haltOnFailure=True, workdir=root_dir))
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "python",
+                    script_name,
+                    "-op",
+                    "create_debian",
+                    "-vf",
+                    "ver/version.str",
+                    "-rp",
+                    code_dir_last,
+                    "-dp",
+                    ".",
+                    "-pn",
+                    deb_name,
+                    "--repo_id",
+                    repository["repo_id"],
+                    "--login",
+                    username,
+                    "--password",
+                    userkey,
+                ],
+                name="Create debian directory",
+                haltOnFailure=True,
+                workdir=root_dir,
+            )
+        )
 
-        factory.addStep(steps.ShellCommand(command=['mk-build-deps', '--install', 
-                '--tool=apt -o Debug::pkgProblemResolver=yes --no-install-recommends --yes', 'debian/control'
-            ],
-            name="Install dependencies", haltOnFailure=True, timeout=25 * 60,
-            maxTime=2 * 60 * 60, workdir=code_dir))
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "mk-build-deps",
+                    "--install",
+                    "--tool=apt -o Debug::pkgProblemResolver=yes --no-install-recommends --yes",
+                    "debian/control",
+                ],
+                name="Install dependencies",
+                haltOnFailure=True,
+                timeout=25 * 60,
+                maxTime=2 * 60 * 60,
+                workdir=code_dir,
+            )
+        )
 
-        # 2. Make configure to generate version.str 
+        # 2. Make configure to generate version.str
         factory.addStep(steps.MakeDirectory(dir=ver_dir, name="Make ver directory"))
-        factory.addStep(steps.ShellCommand(command=["cmake", '-DBUILD_TESTING=OFF', '-DBUILD_NEXTGIS_PACKAGE=ON' ,'../' + code_dir_last],
-            name="Make configure to generate version.str",
-            workdir=ver_dir, warnOnFailure=True, env=get_env(platform['name'])
-        ))
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "cmake",
+                    "-DBUILD_TESTING=OFF",
+                    "-DBUILD_NEXTGIS_PACKAGE=ON",
+                    "../" + code_dir_last,
+                ],
+                name="Make configure to generate version.str",
+                workdir=ver_dir,
+                warnOnFailure=True,
+                env=get_env(platform["name"]),
+            )
+        )
 
         # 3. Create debian folder
-        factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'changelog', '-vf', 'ver/version.str', 
-                '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
-                '--password', userkey
-            ],
-            name="Create debian changelog", haltOnFailure=True, workdir=root_dir))
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "python",
+                    script_name,
+                    "-op",
+                    "changelog",
+                    "-vf",
+                    "ver/version.str",
+                    "-rp",
+                    code_dir_last,
+                    "-dp",
+                    ".",
+                    "-pn",
+                    deb_name,
+                    "--repo_id",
+                    repository["repo_id"],
+                    "--login",
+                    username,
+                    "--password",
+                    userkey,
+                ],
+                name="Create debian changelog",
+                haltOnFailure=True,
+                workdir=root_dir,
+            )
+        )
 
         # 4. Create packages
-        factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["dpkg-buildpackage", '-b', '-us', '-uc', '--compression=xz'], 
-                    logname=logname),
-            ],
-            name="Create packages", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=code_dir, env=get_env(platform['name']),
-        ))
+        factory.addStep(
+            steps.ShellSequence(
+                commands=[
+                    util.ShellArg(
+                        command=[
+                            "dpkg-buildpackage",
+                            "-b",
+                            "-us",
+                            "-uc",
+                            "--compression=xz",
+                        ],
+                        logname=logname,
+                    ),
+                ],
+                name="Create packages",
+                haltOnFailure=True,
+                timeout=125 * 60,
+                maxTime=5 * 60 * 60,
+                workdir=code_dir,
+                env=get_env(platform["name"]),
+            )
+        )
 
         # 5. Upload to repka
-        factory.addStep(steps.ShellCommand(command=['python', script_name, '-op', 'make_release', '-vf', 'ver/version.str', 
-                '-rp', code_dir_last, '-dp', '.', '-pn', deb_name, '--repo_id', repository['repo_id'], '--login', username, 
-                '--password', userkey
-            ],
-            name="Upload to repka", haltOnFailure=True, timeout=125 * 60,
-            maxTime=5 * 60 * 60, workdir=root_dir))
-        
-        builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
-            workernames = [platform['worker']],
-            factory = factory,
-            locks = [build_lock.access('exclusive')], # counting
-            description="Make {} on {}".format(project_name, platform['name']),)
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "python",
+                    script_name,
+                    "-op",
+                    "make_release",
+                    "-vf",
+                    "ver/version.str",
+                    "-rp",
+                    code_dir_last,
+                    "-dp",
+                    ".",
+                    "-pn",
+                    deb_name,
+                    "--repo_id",
+                    repository["repo_id"],
+                    "--login",
+                    username,
+                    "--password",
+                    userkey,
+                ],
+                name="Upload to repka",
+                haltOnFailure=True,
+                timeout=125 * 60,
+                maxTime=5 * 60 * 60,
+                workdir=root_dir,
+            )
+        )
 
-        c['builders'].append(builder)
+        builder = util.BuilderConfig(
+            name=project_name + "_" + platform["name"],
+            workernames=[platform["worker"]],
+            factory=factory,
+            locks=[build_lock.access("exclusive")],  # counting
+            description="Make {} on {}".format(project_name, platform["name"]),
+        )
+
+        c["builders"].append(builder)
