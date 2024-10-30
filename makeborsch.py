@@ -6,6 +6,7 @@ import os
 
 c = {}
 
+# fmt: off
 repositories = [
     {'repo':'lib_z', 'args':[], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     # Install via pip3 install sip {'repo':'py_sip', 'args':['-DWITH_PYTHON3=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
@@ -36,7 +37,7 @@ repositories = [
     {'repo':'lib_iconv', 'args':['-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_lzma', 'args':['-DWITH_ICONV=ON', '-DBUILD_TESTING=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_png', 'args':['-DWITH_ZLIB=ON', '-DPNG_TESTS=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
-    {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_BZip2=ON', '-DWITH_BZip2_EXTERNAL=ON', '-DWITH_HarfBuzz_EXTERNAL=ON','-DWITH_HarfBuzz=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]}, 
+    {'repo':'lib_freetype', 'args':['-DWITH_ZLIB=ON', '-DWITH_PNG_EXTERNAL=ON', '-DWITH_PNG=ON', '-DWITH_BZip2=ON', '-DWITH_BZip2_EXTERNAL=ON', '-DWITH_HarfBuzz_EXTERNAL=ON','-DWITH_HarfBuzz=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_agg', 'args':['-DWITH_Freetype=ON', '-DWITH_Freetype_EXTERNAL=ON'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_openssl', 'args':['-DOPENSSL_NO_DYNAMIC_ENGINE=ON', '-DWITH_ZLIB=ON', '-DBUILD_APPS=ON', '-DBUILD_TESTING=ON', '-DSTATIC_RUNTIME=ON'], 'requirements':[], 'os':['mac','win64','win32', 'win64-static'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'lib_curl', 'args':['-DENABLE_INET_PTON=OFF', '-DWITH_ZLIB=ON', '-DCMAKE_USE_OPENSSL=ON', '-DWITH_OpenSSL=ON', '-DWITH_OpenSSL_EXTERNAL=ON', '-DBUILD_TESTING=ON', '-DCMAKE_USE_LIBSSH2=OFF'], 'requirements':[], 'os':['win32','win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
@@ -98,62 +99,73 @@ repositories = [
     {'repo':'py_charset_normalizer', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_h3', 'args':[], 'requirements':['scikit-build'], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
 ]
+# fmt: on
 
-#skip_send2github = [
+# skip_send2github = [
 #    "nextgisqgis", "formbuilder", "manuscript",
-#]
+# ]
 
 vm_cpu_count = 8
-mac_os_min_version = '10.14'
-mac_os_sdks_path = '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs'
+mac_os_min_version = "10.14"
+mac_os_sdks_path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
 
-script_name = 'repka_release.py' # 'github_release.py'
-release_script_src = 'https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/' + script_name
-username = 'buildbot'
-userkey = os.environ.get("BUILDBOT_PASSWORD") 
+script_name = "repka_release.py"  # 'github_release.py'
+release_script_src = (
+    "https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/" + script_name
+)
+username = "buildbot"
+userkey = os.environ.get("BUILDBOT_PASSWORD")
 # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
-upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
-upload_script_name = 'ftp_upload.py'
-install_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py'
-install_script_name = 'install_from_ftp.py'
-ci_project_name = 'create_installer'
-sentry_url = 'https://sentry.nextgis.com'
+upload_script_src = (
+    "https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py"
+)
+upload_script_name = "ftp_upload.py"
+install_script_src = "https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py"
+install_script_name = "install_from_ftp.py"
+ci_project_name = "create_installer"
+sentry_url = "https://sentry.nextgis.com"
 sentry_auth_token = os.environ.get("SENTRY_AUTH_TOKEN")
 https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
 
-c['change_source'] = []
-c['schedulers'] = []
-c['builders'] = []
+c["change_source"] = []
+c["schedulers"] = []
+c["builders"] = []
 
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win'},
-    {'name': 'win64-old', 'worker': 'build-win', 'generator': 'Visual Studio 15 2017'},
-    {'name': 'win64', 'worker': 'build-win-py3', 'generator': 'Visual Studio 16 2019'},
-    {'name': 'mac-old', 'worker': 'build-mac', 'generator': ''},
-    {'name': 'mac', 'worker': 'build-mac-py3', 'generator': ''},
+    {"name": "win64-old", "worker": "build-win", "generator": "Visual Studio 15 2017"},
+    {"name": "win64", "worker": "build-win-py3", "generator": "Visual Studio 16 2019"},
+    {"name": "mac-old", "worker": "build-mac", "generator": ""},
+    {"name": "mac", "worker": "build-mac-py3", "generator": ""},
     # {'name' : 'win32-static', 'worker' : 'build-win'},
-    {'name': 'win64-static', 'worker': 'build-win-py3', 'generator': 'Visual Studio 16 2019'},
-    {'name': 'mac-static', 'worker': 'build-mac-py3', 'generator': ''},
+    {
+        "name": "win64-static",
+        "worker": "build-win-py3",
+        "generator": "Visual Studio 16 2019",
+    },
+    {"name": "mac-static", "worker": "build-mac-py3", "generator": ""},
 ]
 
 build_lock = util.MasterLock("borsch_worker_builds")
 # build_lock = util.WorkerLock("borsch_worker_builds",
 #                              maxCount=1,
 #                              maxCountForWorker={
-#                                 'build-win-py3': 1, 
-#                                 'build-win': 1, 
+#                                 'build-win-py3': 1,
+#                                 'build-win': 1,
 #                                 'build-mac': 1,
 #                                 'build-mac-py3': 1,
 #                                 }
 #                              )
 
-logname = 'stdio'
+logname = "stdio"
+
 
 def get_env_proxy(os):
     env = get_env(os)
-    if 'win' in os and https_proxy is not None:
-        env['HTTPS_PROXY'] = https_proxy
+    if "win" in os and https_proxy is not None:
+        env["HTTPS_PROXY"] = https_proxy
     return env
+
 
 def get_env(os):
     env = {}
@@ -182,7 +194,7 @@ def get_env(os):
     #     env['TARGET_VS'] = '2017'
     #     env['TARGET_VS_ARCH'] = 'x86'
     #     env['LANG'] = 'en_US'
-    #     env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)       
+    #     env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
     #     env['SENTRY_URL'] = sentry_url
     #     env['SENTRY_ORG'] = 'nextgis'
     #     env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
@@ -204,57 +216,68 @@ def get_env(os):
     #         "C:\\Python27\\lib\\site-packages\\pywin32_system32",
     #         "C:\\Program Files (x86)\\IntelSWTools\\compilers_and_libraries\\windows\\bin\\intel64",
     #     ]
-    if 'win' in os:
-        env['PATH'] = [
+    if "win" in os:
+        env["PATH"] = [
             "C:\\Windows",
             "C:\\Program Files\\Git\\cmd",
             "C:\\Program Files\\CMake\\bin",
             "${PATH}",
         ]
-        env['PYTHONPATH'] = 'C:\\Python38'
-        env['FLANG_HOME'] = 'C:\\Users\\root\\conda\\Library'
-    elif 'mac' in os:
-        env['PATH'] = [
+        env["PYTHONPATH"] = "C:\\Python38"
+        env["FLANG_HOME"] = "C:\\Users\\root\\conda\\Library"
+    elif "mac" in os:
+        env["PATH"] = [
             "/usr/local/bin",
             "/Users/admin/Library/Python/3.9/bin",
             "${PATH}",
         ]
-        env['MACOSX_DEPLOYMENT_TARGET'] = mac_os_min_version
-    env['BUILDBOT_USERPWD'] = '{}:{}'.format(username, userkey)
-    env['SENTRY_URL'] = sentry_url
-    env['SENTRY_ORG'] = 'nextgis'
+        env["MACOSX_DEPLOYMENT_TARGET"] = mac_os_min_version
+    env["BUILDBOT_USERPWD"] = "{}:{}".format(username, userkey)
+    env["SENTRY_URL"] = sentry_url
+    env["SENTRY_ORG"] = "nextgis"
     if sentry_auth_token is not None:
-        env['SENTRY_AUTH_TOKEN'] = sentry_auth_token
-    env['PYTHONHTTPSVERIFY'] = '0'
+        env["SENTRY_AUTH_TOKEN"] = sentry_auth_token
+    env["PYTHONHTTPSVERIFY"] = "0"
     return env
+
 
 def install_dependencies(factory, requirements, os):
     env = get_env(os)
 
-    pip_cmd = 'pip3'
-    if os.endswith('-old'):
-        pip_cmd = 'pip'
+    pip_cmd = "pip3"
+    if os.endswith("-old"):
+        pip_cmd = "pip"
 
     for requirement in requirements:
-        if requirement == 'perl' and 'win' in os: # This is example. Perl already installed in VM.
+        if (
+            requirement == "perl" and "win" in os
+        ):  # This is example. Perl already installed in VM.
             # Upload distro to worker
-            factory.addStep(steps.FileDownload(
-                            mastersrc="/opt/buildbot/distrib/perl.msi",
-                            workerdest="perl.msi"))
-            # Execute install
-            factory.addStep(steps.ShellCommand(command=['msiexec', '/package', 'perl.msi', '/quiet', '/norestart'],
-                                                name="install " + requirement,
-                                                description=[requirement, "install"],
-                                                descriptionDone=[requirement, "installed"],
-                                                haltOnFailure=True))
-        elif requirement == 'numpy':
             factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'numpy==1.22.2'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
+                steps.FileDownload(
+                    mastersrc="/opt/buildbot/distrib/perl.msi", workerdest="perl.msi"
+                )
+            )
+            # Execute install
+            factory.addStep(
+                steps.ShellCommand(
+                    command=["msiexec", "/package", "perl.msi", "/quiet", "/norestart"],
+                    name="install " + requirement,
+                    description=[requirement, "install"],
+                    descriptionDone=[requirement, "installed"],
+                    haltOnFailure=True,
+                )
+            )
+        elif requirement == "numpy":
+            factory.addStep(
+                steps.ShellCommand(
+                    command=[pip_cmd, "install", "--user", "numpy==1.22.2"],
+                    name="install " + requirement,
+                    description=[requirement, "install"],
+                    descriptionDone=[requirement, "installed"],
+                    haltOnFailure=True,
+                    env=env,
+                )
             )
         # elif requirement == 'six':
         #     factory.addStep(
@@ -265,50 +288,66 @@ def install_dependencies(factory, requirements, os):
         #                             haltOnFailure=True,
         #                             env=env)
         #     )
-        elif requirement == 'sip':
+        elif requirement == "sip":
             factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'sip==6.5.0'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
+                steps.ShellCommand(
+                    command=[pip_cmd, "install", "--user", "sip==6.5.0"],
+                    name="install " + requirement,
+                    description=[requirement, "install"],
+                    descriptionDone=[requirement, "installed"],
+                    haltOnFailure=True,
+                    env=env,
+                )
             )
-        elif requirement == 'PyQt5-sip':
+        elif requirement == "PyQt5-sip":
             factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'PyQt5-sip==12.10.1'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
+                steps.ShellCommand(
+                    command=[pip_cmd, "install", "--user", "PyQt5-sip==12.10.1"],
+                    name="install " + requirement,
+                    description=[requirement, "install"],
+                    descriptionDone=[requirement, "installed"],
+                    haltOnFailure=True,
+                    env=env,
+                )
             )
-        elif requirement == 'PyQt5-Qt5':
+        elif requirement == "PyQt5-Qt5":
             factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'PyQt5-Qt5==5.15.2'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
+                steps.ShellCommand(
+                    command=[pip_cmd, "install", "--user", "PyQt5-Qt5==5.15.2"],
+                    name="install " + requirement,
+                    description=[requirement, "install"],
+                    descriptionDone=[requirement, "installed"],
+                    haltOnFailure=True,
+                    env=env,
+                )
             )
-        elif requirement == 'PyQt5':
+        elif requirement == "PyQt5":
             factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'PyQt5==5.15.6', '--no-dependencies'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
+                steps.ShellCommand(
+                    command=[
+                        pip_cmd,
+                        "install",
+                        "--user",
+                        "PyQt5==5.15.6",
+                        "--no-dependencies",
+                    ],
+                    name="install " + requirement,
+                    description=[requirement, "install"],
+                    descriptionDone=[requirement, "installed"],
+                    haltOnFailure=True,
+                    env=env,
+                )
             )
-        elif requirement == 'PyQt-builder':
+        elif requirement == "PyQt-builder":
             factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'PyQt-builder==1.12.2'],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
+                steps.ShellCommand(
+                    command=[pip_cmd, "install", "--user", "PyQt-builder==1.12.2"],
+                    name="install " + requirement,
+                    description=[requirement, "install"],
+                    descriptionDone=[requirement, "installed"],
+                    haltOnFailure=True,
+                    env=env,
+                )
             )
         # elif requirement == 'cython': # Already installed on vm
         #     factory.addStep(
@@ -321,12 +360,14 @@ def install_dependencies(factory, requirements, os):
         #     )
         else:
             factory.addStep(
-                steps.ShellCommand(command=[pip_cmd, 'install', '--user', requirement],
-                                    name="install " + requirement,
-                                    description=[requirement, "install"],
-                                    descriptionDone=[requirement, "installed"],
-                                    haltOnFailure=True,
-                                    env=env)
+                steps.ShellCommand(
+                    command=[pip_cmd, "install", "--user", requirement],
+                    name="install " + requirement,
+                    description=[requirement, "install"],
+                    descriptionDone=[requirement, "installed"],
+                    haltOnFailure=True,
+                    env=env,
+                )
             )
         # elif requirement == 'PyQt4' and os == 'mac':
         #     factory.addStep(steps.ShellSequence(commands=[
@@ -339,191 +380,294 @@ def install_dependencies(factory, requirements, os):
         #         haltOnFailure=True,
         #         env=env))
 
+
 # Create builders
 for repository in repositories:
-    project_name = repository['repo']
-    org = repository['org']
-    repourl = '{}/{}/{}.git'.format(repository['repo_root'], org, project_name)
-    branch = 'master'
-    if 'branch' in repository:
-        branch = repository['branch']
-    git_project_name = '{}/{}'.format(org, project_name)
-    git_poller = changes.GitPoller(project = git_project_name,
-                           repourl = repourl,
-                        #    workdir = project_name + '-workdir',
-                           branches = [branch],
-                           pollinterval = 3600,)
-    c['change_source'].append(git_poller)
+    project_name = repository["repo"]
+    org = repository["org"]
+    repourl = "{}/{}/{}.git".format(repository["repo_root"], org, project_name)
+    branch = "master"
+    if "branch" in repository:
+        branch = repository["branch"]
+    git_project_name = "{}/{}".format(org, project_name)
+    git_poller = changes.GitPoller(
+        project=git_project_name,
+        repourl=repourl,
+        #    workdir = project_name + '-workdir',
+        branches=[branch],
+        pollinterval=3600,
+    )
+    c["change_source"].append(git_poller)
 
     builderNames = []
     for platform in platforms:
-        if platform['name'] not in repository['os']:
+        if platform["name"] not in repository["os"]:
             continue
-        builderNames.append(project_name + "_" + platform['name'])
+        builderNames.append(project_name + "_" + platform["name"])
 
     scheduler = schedulers.SingleBranchScheduler(
-                                name=project_name,
-                                change_filter=util.ChangeFilter(project = git_project_name, branch=branch),
-                                treeStableTimer=1*60,
-                                builderNames=builderNames,)
-    c['schedulers'].append(scheduler)
+        name=project_name,
+        change_filter=util.ChangeFilter(project=git_project_name, branch=branch),
+        treeStableTimer=1 * 60,
+        builderNames=builderNames,
+    )
+    c["schedulers"].append(scheduler)
 
     forceScheduler = schedulers.ForceScheduler(
-                                name=project_name + "_force",
-                                label="Force build",
-                                buttonName="Force build",
-                                builderNames=builderNames,)
-    c['schedulers'].append(forceScheduler)
+        name=project_name + "_force",
+        label="Force build",
+        buttonName="Force build",
+        builderNames=builderNames,
+    )
+    c["schedulers"].append(forceScheduler)
 
-    run_args = repository['args']
-    build_type = 'Release'
-    if project_name in ['nextgisqgis', 'formbuilder',]:
-        build_type = 'RelWithDebInfo'
-    run_args.extend(['-DSUPPRESS_VERBOSE_OUTPUT=ON', '-DCMAKE_BUILD_TYPE={}'.format(build_type), '-DSKIP_DEFAULTS=ON'])
-    cmake_build = ['cmake', '--build', '.', '--config', build_type, '--']
+    run_args = repository["args"]
+    build_type = "Release"
+    if project_name in [
+        "nextgisqgis",
+        "formbuilder",
+    ]:
+        build_type = "RelWithDebInfo"
+    run_args.extend(
+        [
+            "-DSUPPRESS_VERBOSE_OUTPUT=ON",
+            "-DCMAKE_BUILD_TYPE={}".format(build_type),
+            "-DSKIP_DEFAULTS=ON",
+        ]
+    )
+    cmake_build = ["cmake", "--build", ".", "--config", build_type, "--"]
 
     for platform in platforms:
-        if platform['name'] not in repository['os']:
+        if platform["name"] not in repository["os"]:
             continue
 
-        python_cmd = 'python3'
-        if platform['name'].endswith('-old'):
-            python_cmd = 'python'
+        python_cmd = "python3"
+        if platform["name"].endswith("-old"):
+            python_cmd = "python"
 
-        code_dir_last = 'src'
-        code_dir = os.path.join('build', code_dir_last)
-        build_subdir = 'bld'
+        code_dir_last = "src"
+        code_dir = os.path.join("build", code_dir_last)
+        build_subdir = "bld"
         build_dir = os.path.join(code_dir, build_subdir)
 
         run_args_ex = list(run_args)
         cmake_build_ex = list(cmake_build)
         env = {}
 
-        if 'win' in platform['name']:
-            if platform['name'].endswith('-static'):
-                run_args_ex.append('-DBUILD_STATIC_LIBS=ON')
+        if "win" in platform["name"]:
+            if platform["name"].endswith("-static"):
+                run_args_ex.append("-DBUILD_STATIC_LIBS=ON")
             else:
-                run_args_ex.append('-DBUILD_SHARED_LIBS=ON')
+                run_args_ex.append("-DBUILD_SHARED_LIBS=ON")
 
-            if '-DWITH_ICONV=ON' in repository['args']:
-                run_args_ex.append('-DWITH_ICONV_EXTERNAL=ON')
-            if '-DWITH_ZLIB=ON' in repository['args']:
-                run_args_ex.append('-DWITH_ZLIB_EXTERNAL=ON')
+            if "-DWITH_ICONV=ON" in repository["args"]:
+                run_args_ex.append("-DWITH_ICONV_EXTERNAL=ON")
+            if "-DWITH_ZLIB=ON" in repository["args"]:
+                run_args_ex.append("-DWITH_ZLIB_EXTERNAL=ON")
 
-            cmake_build_ex.append('/m:' + str(vm_cpu_count))
-            env = get_env('win64')
-            env['PATH'].append("C:\\buildbot\worker\\" + project_name + "_" + platform['name'] + "\\build\\" + code_dir_last + "\\" + build_subdir + "\\" + build_type)
-            if platform['name'].endswith('-old'):
-                run_args_ex.extend(['-G', platform['generator'] + ' Win64'])
+            cmake_build_ex.append("/m:" + str(vm_cpu_count))
+            env = get_env("win64")
+            env["PATH"].append(
+                "C:\\buildbot\worker\\"
+                + project_name
+                + "_"
+                + platform["name"]
+                + "\\build\\"
+                + code_dir_last
+                + "\\"
+                + build_subdir
+                + "\\"
+                + build_type
+            )
+            if platform["name"].endswith("-old"):
+                run_args_ex.extend(["-G", platform["generator"] + " Win64"])
             else:
-                run_args_ex.extend(['-G', platform['generator'], '-A', 'x64'])
-        elif 'mac' in platform['name']:
-            if platform['name'].endswith('-static'):
-                run_args_ex.append('-DBUILD_STATIC_LIBS=OM')
+                run_args_ex.extend(["-G", platform["generator"], "-A", "x64"])
+        elif "mac" in platform["name"]:
+            if platform["name"].endswith("-static"):
+                run_args_ex.append("-DBUILD_STATIC_LIBS=OM")
             else:
-                run_args_ex.append('-DOSX_FRAMEWORK=ON')
+                run_args_ex.append("-DOSX_FRAMEWORK=ON")
             run_args_ex.extend(
                 [
-                    '-DCMAKE_OSX_SYSROOT=' + mac_os_sdks_path + '/MacOSX.sdk', 
-                    '-DCMAKE_OSX_DEPLOYMENT_TARGET=' + mac_os_min_version
+                    "-DCMAKE_OSX_SYSROOT=" + mac_os_sdks_path + "/MacOSX.sdk",
+                    "-DCMAKE_OSX_DEPLOYMENT_TARGET=" + mac_os_min_version,
                 ]
             )
-            cmake_build_ex.append('-j' + str(vm_cpu_count))
-            env = get_env('mac')
+            cmake_build_ex.append("-j" + str(vm_cpu_count))
+            env = get_env("mac")
 
         factory = util.BuildFactory()
 
-        install_dependencies(factory, repository['requirements'], platform['name'])
+        install_dependencies(factory, repository["requirements"], platform["name"])
 
-        factory.addStep(steps.Git(repourl=repourl, mode='full', shallow=True,
-                                method='clobber', submodules=False, 
-                                timeout=65 * 60, workdir=code_dir))
+        factory.addStep(
+            steps.Git(
+                repourl=repourl,
+                mode="full",
+                shallow=True,
+                method="clobber",
+                submodules=False,
+                timeout=65 * 60,
+                workdir=code_dir,
+            )
+        )
 
-        factory.addStep(steps.ShellSequence(commands=[
-                util.ShellArg(command=["curl", release_script_src, '-o', script_name, '-s', '-L'], logname=logname),
-                util.ShellArg(command=["curl", upload_script_src, '-o', upload_script_name, '-s', '-L'], logname=logname),
-            ],
-            name="Download scripts",
-            haltOnFailure=True,
-            workdir=code_dir,
-            env=env))
+        factory.addStep(
+            steps.ShellSequence(
+                commands=[
+                    util.ShellArg(
+                        command=[
+                            "curl",
+                            release_script_src,
+                            "-o",
+                            script_name,
+                            "-s",
+                            "-L",
+                        ],
+                        logname=logname,
+                    ),
+                    util.ShellArg(
+                        command=[
+                            "curl",
+                            upload_script_src,
+                            "-o",
+                            upload_script_name,
+                            "-s",
+                            "-L",
+                        ],
+                        logname=logname,
+                    ),
+                ],
+                name="Download scripts",
+                haltOnFailure=True,
+                workdir=code_dir,
+                env=env,
+            )
+        )
 
         factory.addStep(steps.MakeDirectory(dir=build_dir, name="Make build directory"))
 
         # configure view cmake
-        factory.addStep(steps.ShellCommand(command=["cmake", run_args_ex, '..'],
-                                           name="configure",
-                                           haltOnFailure=True,
-                                           timeout=180 * 60,
-                                           maxTime=5 * 60 * 60,
-                                           workdir=build_dir,
-                                           env=env))
+        factory.addStep(
+            steps.ShellCommand(
+                command=["cmake", run_args_ex, ".."],
+                name="configure",
+                haltOnFailure=True,
+                timeout=180 * 60,
+                maxTime=5 * 60 * 60,
+                workdir=build_dir,
+                env=env,
+            )
+        )
 
         # make
-        factory.addStep(steps.ShellCommand(command=cmake_build_ex,
-                                           name="make",
-                                           haltOnFailure=True,
-                                           timeout=180 * 60,
-                                           maxTime=15 * 60 * 60,
-                                           workdir=build_dir,
-                                           env=env))
+        factory.addStep(
+            steps.ShellCommand(
+                command=cmake_build_ex,
+                name="make",
+                haltOnFailure=True,
+                timeout=180 * 60,
+                maxTime=15 * 60 * 60,
+                workdir=build_dir,
+                env=env,
+            )
+        )
 
         # make tests
-        test_cmd = ['ctest', '-C', build_type, '--output-on-failure']
-        if repository['test_regex']:
-            test_cmd.extend(repository['test_regex'])
-        factory.addStep(steps.ShellCommand(command=test_cmd,
-                                           name="test",
-                                           haltOnFailure=True,
-                                           timeout=180 * 60,
-                                           maxTime=5 * 60 * 60,
-                                           workdir=build_dir,
-                                           env=env))
+        test_cmd = ["ctest", "-C", build_type, "--output-on-failure"]
+        if repository["test_regex"]:
+            test_cmd.extend(repository["test_regex"])
+        factory.addStep(
+            steps.ShellCommand(
+                command=test_cmd,
+                name="test",
+                haltOnFailure=True,
+                timeout=180 * 60,
+                maxTime=5 * 60 * 60,
+                workdir=build_dir,
+                env=env,
+            )
+        )
 
         # make package
-        factory.addStep(steps.ShellCommand(command=['cpack', '-C', build_type, '-V', '.'],
-                                           name="pack",
-                                           haltOnFailure=True,
-                                           workdir=build_dir,
-                                           env=env))
+        factory.addStep(
+            steps.ShellCommand(
+                command=["cpack", "-C", build_type, "-V", "."],
+                name="pack",
+                haltOnFailure=True,
+                workdir=build_dir,
+                env=env,
+            )
+        )
 
         # send package to github
-        #if project_name not in skip_send2github:
-            # factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
-            #                                         username, '--key', userkey, '--build_path', build_subdir
-            #                                         ],
-            #                                name="send package to github",
-            #                                haltOnFailure=True,
-            #                                workdir=code_dir))
-        factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
-                                                username, '--password', userkey, '--build_path', build_subdir
-                                                ],
-                                       name="send package to rm.nextgis.com",
-                                       haltOnFailure=True,
-                                       workdir=code_dir,
-                                       env=env))
+        # if project_name not in skip_send2github:
+        # factory.addStep(steps.ShellCommand(command=[python_cmd, script_name, '--login',
+        #                                         username, '--key', userkey, '--build_path', build_subdir
+        #                                         ],
+        #                                name="send package to github",
+        #                                haltOnFailure=True,
+        #                                workdir=code_dir))
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    python_cmd,
+                    script_name,
+                    "--login",
+                    username,
+                    "--password",
+                    userkey,
+                    "--build_path",
+                    build_subdir,
+                ],
+                name="send package to rm.nextgis.com",
+                haltOnFailure=True,
+                workdir=code_dir,
+                env=env,
+            )
+        )
 
-        if 'sentry_project' in repository and len(repository['sentry_project']):
-            factory.addStep(steps.ShellCommand(command=['sentry-cli', 'upload-dif', '--include-sources', '-o', 'nextgis', '-p', repository['sentry_project'], '.'],
-                                               name="send debug symbols to sentry",
-                                               haltOnFailure=True,
-                                               workdir=build_dir,
-                                               env=env))
+        if "sentry_project" in repository and len(repository["sentry_project"]):
+            factory.addStep(
+                steps.ShellCommand(
+                    command=[
+                        "sentry-cli",
+                        "upload-dif",
+                        "--include-sources",
+                        "-o",
+                        "nextgis",
+                        "-p",
+                        repository["sentry_project"],
+                        ".",
+                    ],
+                    name="send debug symbols to sentry",
+                    haltOnFailure=True,
+                    workdir=build_dir,
+                    env=env,
+                )
+            )
 
         # create installer trigger
-        if platform['name'].endswith('-static') == False:
-            factory.addStep(steps.Trigger(schedulerNames=[ci_project_name + '_' + platform['name']],
-                                        waitForFinish=False,
-                                        set_properties={
-                                            'suffix' : '-dev',
-                                            'notes' : 'Update ' + project_name,
-                                            'url' : 'https://rm.nextgis.com/api/repo',
-                                        }))
+        if platform["name"].endswith("-static") == False:
+            factory.addStep(
+                steps.Trigger(
+                    schedulerNames=[ci_project_name + "_" + platform["name"]],
+                    waitForFinish=False,
+                    set_properties={
+                        "suffix": "-dev",
+                        "notes": "Update " + project_name,
+                        "url": "https://rm.nextgis.com/api/repo",
+                    },
+                )
+            )
 
-        builder = util.BuilderConfig(name = project_name + "_" + platform['name'],
-                                    workernames = [platform['worker']],
-                                    factory = factory,
-                                    locks = [build_lock.access('exclusive')], # counting
-                                    description="Make {} on {}".format(project_name, platform['name']),)
+        builder = util.BuilderConfig(
+            name=project_name + "_" + platform["name"],
+            workernames=[platform["worker"]],
+            factory=factory,
+            locks=[build_lock.access("exclusive")],  # counting
+            description="Make {} on {}".format(project_name, platform["name"]),
+        )
 
-        c['builders'].append(builder)
+        c["builders"].append(builder)
