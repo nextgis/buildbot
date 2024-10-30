@@ -2,7 +2,8 @@
 # ex: set syntax=python:
 
 import os
-from buildbot.plugins import *
+
+from buildbot.plugins import changes, schedulers, steps, util
 
 c = {}
 c["change_source"] = []

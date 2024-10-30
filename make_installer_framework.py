@@ -1,8 +1,9 @@
 # -*- python -*-
 # ex: set syntax=python:
 
-from buildbot.plugins import *
 import os
+
+from buildbot.plugins import schedulers, steps, util
 
 c = {}
 

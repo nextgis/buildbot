@@ -2,8 +2,9 @@
 # ex: set syntax=python:
 # production builds into nextgis ppa
 
-from buildbot.plugins import *
 import os
+
+from buildbot.plugins import changes, schedulers, steps, util
 
 c = {}
 

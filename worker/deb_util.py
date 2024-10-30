@@ -21,16 +21,16 @@
 #
 ################################################################################
 
-import sys
-import os
 import argparse
-import subprocess
-from datetime import datetime
-import json
 import base64
 import glob
+import json
+import os
 import shutil
-from urllib.request import urlopen, Request, HTTPError
+import subprocess
+import sys
+from datetime import datetime
+from urllib.request import HTTPError, Request, urlopen
 
 format_simple = "--pretty=format:%h - %an : %s"
 format_debian = "--pretty=format:  * %h - %an : %s"
@@ -232,7 +232,8 @@ def write_changelog(
 
 
 def get_distro():
-    import configparser, itertools
+    import configparser
+    import itertools
 
     config = configparser.ConfigParser()
     distro_version = ""

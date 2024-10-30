@@ -9,12 +9,12 @@
 ##
 ################################################################################
 
-import os
-import subprocess, shlex
-import sys
 import argparse
-import json
 import base64
+import json
+import os
+import subprocess
+import sys
 
 try:
     import urllib.request as urllib2

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import time
-from twisted.internet import defer
-from twisted.python import log
 
 from buildbot import config
-from buildbot.interfaces import LatentWorkerCannotSubstantiate
 from buildbot.interfaces import LatentWorkerFailedToSubstantiate
-
 from buildbot.worker.docker import DockerLatentWorker
+from twisted.internet import defer
+from twisted.python import log
 
 try:
     import docker

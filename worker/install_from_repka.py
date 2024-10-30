@@ -4,18 +4,18 @@
 
 # python install_from_ftp.py --ftp_user 'user:password' --ftp 'ftp://192.168.2.1:21' --build_path '/Volumes/Data/tmp/test/ftp' --platform 'mac' --packages lib_freetype lib_gif lib_jpeg lib_png lib_sqlite lib_tiff lib_z py_sip lib_qt4
 
-import os
-import subprocess
-import sys
 import argparse
+import json
+import os
 import shutil
 import site
-import json
+import subprocess
+import sys
 
 try:
     # For Python 3.0 and later
-    from urllib.request import urlopen
     import stat
+    from urllib.request import urlopen
 except ImportError:
     # Fall back to Python 2's urllib2
     from urllib2 import urlopen

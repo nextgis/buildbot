@@ -2,10 +2,10 @@
 
 # Script to upload pack to ftp
 
+import argparse
 import os
 import subprocess
 import sys
-import argparse
 
 
 class bcolors:

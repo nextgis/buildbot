@@ -1,8 +1,9 @@
 # -*- python -*-
 # ex: set syntax=python:
 
-from buildbot.plugins import *
 import os
+
+from buildbot.plugins import changes, schedulers, steps, util
 
 c = {}
 
@@ -468,7 +469,7 @@ for repository in repositories:
             cmake_build_ex.append("/m:" + str(vm_cpu_count))
             env = get_env("win64")
             env["PATH"].append(
-                "C:\\buildbot\worker\\"
+                "C:\\buildbot\\worker\\"
                 + project_name
                 + "_"
                 + platform["name"]

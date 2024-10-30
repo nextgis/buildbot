@@ -1,10 +1,11 @@
 # -*- python -*-
 # ex: set syntax=python:
 
-from buildbot.plugins import *
+import json
 import os
 import time
-import json
+
+from buildbot.plugins import schedulers, steps, util
 
 try:
     # For Python 3.0 and later

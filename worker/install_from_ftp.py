@@ -4,13 +4,13 @@
 
 # python install_from_ftp.py --ftp_user 'user:password' --ftp 'ftp://192.168.2.1:21' --build_path '/Volumes/Data/tmp/test/ftp' --platform 'mac' --packages lib_freetype lib_gif lib_jpeg lib_png lib_sqlite lib_tiff lib_z py_sip lib_qt4
 
-import os
-import subprocess
-import sys
 import argparse
+import os
 import shutil
 import site
 import stat
+import subprocess
+import sys
 
 
 def run(args):

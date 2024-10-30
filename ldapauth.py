@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
 
 import ldap
+from buildbot.www import auth
 from twisted.cred.checkers import ICredentialsChecker
 from twisted.cred.credentials import IUsernamePassword
 from twisted.cred.error import UnauthorizedLogin
-from twisted.internet import defer
-
-# from zope.interface import implements
-from zope.interface import implementer
 from twisted.cred.portal import Portal
-
-# from twisted.web.error import Error
-from twisted.web.guard import BasicCredentialFactory
-from twisted.web.guard import HTTPAuthSessionWrapper
-from buildbot.www import auth
+from twisted.internet import defer
 
 # from buildbot.www import resource
 from twisted.python import log
+
+# from twisted.web.error import Error
+from twisted.web.guard import BasicCredentialFactory, HTTPAuthSessionWrapper
+
+# from zope.interface import implements
+from zope.interface import implementer
 
 
 class LDAPAuth(auth.AuthBase):

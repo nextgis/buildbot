@@ -1,7 +1,7 @@
 # -*- python -*-
 # ex: set syntax=python:
 
-from buildbot.plugins import *
+from buildbot.plugins import changes, schedulers, steps, util
 
 c = {}
 c["change_source"] = []
