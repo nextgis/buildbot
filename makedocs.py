@@ -255,6 +255,7 @@ for lang in langs:
         workernames=["build-doc"],
         factory=factory,
         description="Make documentation [" + lang + "]",
+        tags=["docs"],
     )
     c["builders"].append(builder)
 

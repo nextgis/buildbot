@@ -111,6 +111,9 @@ for lang in langs:
     )
 
 builder = util.BuilderConfig(
-    name=project_name, workernames=["build-light"], factory=factory
+    name=project_name,
+    workernames=["build-light"],
+    factory=factory,
+    tags=["docs"],
 )
 c["builders"].append(builder)

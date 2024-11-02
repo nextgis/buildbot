@@ -1024,6 +1024,7 @@ for platform in platforms:
         factory=factory,
         locks=[build_lock.access("counting")],
         description="Create/update installer on " + platform["name"],
+        tags=["installer", platform["name"]],
     )
 
     c["builders"].append(builder)

@@ -381,6 +381,12 @@ for repository in repositories:
             )
         )
 
+        tags = []
+        if platform["name"] != "astra":
+            tags = ["ubuntu", platform["name"]]
+        else:
+            tags = [platform["name"]]
+
         builder = util.BuilderConfig(
             name=project_name + "_" + platform["name"],
             workernames=[platform["worker"]],
