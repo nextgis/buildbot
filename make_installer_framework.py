@@ -345,7 +345,7 @@ for platform in PLATFORMS:
     build_factory.addStep(
         steps.ShellCommand(
             command=build_installer_cmd,
-            name="build_installer_bb.py",
+            name="Build installer framework",
             haltOnFailure=True,
             workdir=os.path.join(installer_code_dir, "qtifw", "tools"),
             env=platform["env"],
@@ -364,7 +364,7 @@ for platform in PLATFORMS:
     build_factory.addStep(
         steps.ShellCommand(
             command=create_archive,
-            name="archive installer binaries",
+            name="Archive installer binaries",
             haltOnFailure=True,
             workdir=installer_code_dir,
             env=platform["env"],
@@ -373,7 +373,10 @@ for platform in PLATFORMS:
 
     build_factory.addStep(
         steps.StringDownload(
-            "0.0.0\nnow\narchive", workerdest="version.str", workdir=installer_code_dir
+            "0.0.0\nnow\narchive",
+            workerdest="version.str",
+            workdir=installer_code_dir,
+            name="Create version file",
         )
     )
 
