@@ -6,7 +6,9 @@ from typing import List
 
 from buildbot.plugins import schedulers, steps, util
 
-from .util import MACOS_REPO, WIN64_REPO
+# from .util import MACOS_REPO, WIN64_REPO
+WIN64_REPO = 5
+MACOS_REPO = 6
 
 # Common
 
