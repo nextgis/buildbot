@@ -212,7 +212,7 @@ force_scheduler = schedulers.ForceScheduler(
     label="Make installer framework",
     buttonName="Make installer framework",
     builderNames=list(
-        map(lambda platform: f"{PROJECT_NAME}_{platform["name"]}", PLATFORMS)
+        map(lambda platform: f"{PROJECT_NAME}_{platform['name']}", PLATFORMS)
     ),
 )
 c["schedulers"].append(force_scheduler)
