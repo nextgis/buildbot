@@ -421,7 +421,7 @@ for platform in PLATFORMS:
         workernames=[platform["worker"]],
         factory=build_factory,
         description=f"{DESCRIPTION} [" + platform["name"] + "]",
-        tags=[platform["os"]],
+        tags=["installer", platform["os"]],
     )
 
     c["builders"].append(builder)
