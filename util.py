@@ -1,0 +1,16 @@
+# Borsch repo
+BORSCH_REPO = 2
+
+# QGIS repos
+QGIS_MAIN_REPO = 1
+QGIS_DEV_REPO = 10
+
+# Installer
+WIN32_REPO = 4
+WIN64_REPO = 5
+MACOS_REPO = 6
+SOFTWARE_REPO = 14
+IMAGES_REPO = 15
+
+# Ubuntu
+DEBIAN_REPO = 11

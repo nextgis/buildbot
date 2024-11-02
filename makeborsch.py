@@ -106,9 +106,10 @@ repositories = [
 #    "nextgisqgis", "formbuilder", "manuscript",
 # ]
 
-vm_cpu_count = 8
-mac_os_min_version = "10.14"
-mac_os_sdks_path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
+VM_CPU_COUNT = 8
+
+MAC_OS_MIN_VERSION = "10.14"
+MAC_OS_SDKS_PATH = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
 
 script_name = "repka_release.py"  # 'github_release.py'
 release_script_src = (
@@ -232,7 +233,7 @@ def get_env(os):
             "/Users/admin/Library/Python/3.9/bin",
             "${PATH}",
         ]
-        env["MACOSX_DEPLOYMENT_TARGET"] = mac_os_min_version
+        env["MACOSX_DEPLOYMENT_TARGET"] = MAC_OS_MIN_VERSION
     env["BUILDBOT_USERPWD"] = "{}:{}".format(username, userkey)
     env["SENTRY_URL"] = sentry_url
     env["SENTRY_ORG"] = "nextgis"
@@ -466,7 +467,7 @@ for repository in repositories:
             if "-DWITH_ZLIB=ON" in repository["args"]:
                 run_args_ex.append("-DWITH_ZLIB_EXTERNAL=ON")
 
-            cmake_build_ex.append("/m:" + str(vm_cpu_count))
+            cmake_build_ex.append("/m:" + str(VM_CPU_COUNT))
             env = get_env("win64")
             env["PATH"].append(
                 "C:\\buildbot\\worker\\"
@@ -491,11 +492,11 @@ for repository in repositories:
                 run_args_ex.append("-DOSX_FRAMEWORK=ON")
             run_args_ex.extend(
                 [
-                    "-DCMAKE_OSX_SYSROOT=" + mac_os_sdks_path + "/MacOSX.sdk",
-                    "-DCMAKE_OSX_DEPLOYMENT_TARGET=" + mac_os_min_version,
+                    "-DCMAKE_OSX_SYSROOT=" + MAC_OS_SDKS_PATH + "/MacOSX.sdk",
+                    "-DCMAKE_OSX_DEPLOYMENT_TARGET=" + MAC_OS_MIN_VERSION,
                 ]
             )
-            cmake_build_ex.append("-j" + str(vm_cpu_count))
+            cmake_build_ex.append("-j" + str(VM_CPU_COUNT))
             env = get_env("mac")
 
         factory = util.BuildFactory()

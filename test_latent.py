@@ -3,13 +3,12 @@
 
 from buildbot.plugins import schedulers, steps, util
 
+VM_CPU_COUNT = 6
+
+MAC_OS_MIN_VERSION = "10.11"
+MAC_OS_SDKS_PATH = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
+
 c = {}
-
-vm_cpu_count = 6
-
-mac_os_min_version = "10.11"
-mac_os_sdks_path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
-
 c["change_source"] = []
 c["schedulers"] = []
 c["builders"] = []

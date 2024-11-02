@@ -16,10 +16,10 @@ except ImportError:
 
 c = {}
 
-vm_cpu_count = 8
+VM_CPU_COUNT = 8
 
-mac_os_min_version = "10.14"
-mac_os_sdks_path = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
+MAC_OS_MIN_VERSION = "10.14"
+MAC_OS_SDKS_PATH = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
 
 ngftp = "ftp://my-ftp-storage.vpn.nextgis.net:10411/software/installer"
 ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
