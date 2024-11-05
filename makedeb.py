@@ -393,6 +393,7 @@ for repository in repositories:
             factory=factory,
             locks=[build_lock.access("exclusive")],  # counting
             description="Make {} on {}".format(project_name, platform["name"]),
+            tags=tags,
         )
 
         c["builders"].append(builder)

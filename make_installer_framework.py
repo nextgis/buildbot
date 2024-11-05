@@ -275,7 +275,7 @@ for platform in PLATFORMS:
         steps.FileDownload(
             name="Download Repka script for Qt",
             mastersrc=os.path.join("worker", REPKA_SCRIPT_NAME),
-            workerdest=os.path.join(qt_code_dir, REPKA_SCRIPT_NAME),
+            workerdest=os.path.join("qt_code", REPKA_SCRIPT_NAME),
             haltOnFailure=True,
         )
     )
@@ -387,7 +387,7 @@ for platform in PLATFORMS:
         steps.FileDownload(
             name="Download Repka script for installer",
             mastersrc=os.path.join("worker", REPKA_SCRIPT_NAME),
-            workerdest=os.path.join(installer_code_dir, REPKA_SCRIPT_NAME),
+            workerdest=os.path.join("installer_code", REPKA_SCRIPT_NAME),
             haltOnFailure=True,
         )
     )
