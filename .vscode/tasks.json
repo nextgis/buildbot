@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"options": {
+		"env": {
+			"BUILDBOT_QEMU_CONNECTION": "X",
+			"BUILDBOT_DOCKER_CONNECTION": "X",
+		}
+	},
+	"tasks": [
+		{
+			"label": "Check buildbot config",
+			"type": "shell",
+			"group": "build",
+			"command": "buildbot",
+			"problemMatcher": [],
+			"args": [
+				"checkconfig"
+			],
+		}
+	]
+}
