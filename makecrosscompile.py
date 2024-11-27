@@ -5,6 +5,8 @@ import os
 
 from buildbot.plugins import changes, schedulers, steps, util
 
+from nextgis_utils import create_tags
+
 # fmt: off
 repositories = [
     {'repo':'lib_z', 'os':['jammy-crosscompile'], 'repo_root':'https://github.com', 'org':'nextgis-borsch'},
@@ -28,7 +30,11 @@ repositories = [
 ]
 # fmt: on
 
-c = {"change_source": [], "schedulers": [], "builders": []}
+c = {
+    "change_source": [],
+    "schedulers": [],
+    "builders": [],
+}
 
 platforms = [
     {"name": "jammy-crosscompile", "worker": "deb-build-jammy-crosscompile"},
@@ -171,6 +177,7 @@ for repository in repositories:
             factory=factory,
             locks=[build_lock.access("exclusive")],  # counting
             description="Make {} on {}".format(project_name, platform["name"]),
+            tags=create_tags([project_name]),
         )
 
         c["builders"].append(builder)

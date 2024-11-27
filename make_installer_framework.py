@@ -6,9 +6,7 @@ from typing import List
 
 from buildbot.plugins import schedulers, steps, util
 
-# from .util import MACOS_REPO, WIN64_REPO
-WIN64_REPO = 5
-MACOS_REPO = 6
+from nextgis_utils import RepkaRepository, create_tags
 
 # Common
 
@@ -185,7 +183,7 @@ PLATFORMS = [
         "name": "win",
         "os": "win64",
         "worker": "build-win-py3",
-        "repo_id": WIN64_REPO,
+        "repo_id": RepkaRepository.WIN64,
         "env": {},
         "cmake_configure_qt_command": CMAKE_CONFIGURE_QT_WIN_COMMAND,
         "cmake_build_qt_command": CMAKE_BUILD_QT_WIN_COMMAND,
@@ -194,7 +192,7 @@ PLATFORMS = [
         "name": "mac",
         "os": "mac",
         "worker": "build-mac-py3",
-        "repo_id": MACOS_REPO,
+        "repo_id": RepkaRepository.MACOS,
         "env": {
             "PATH": ["/usr/local/bin", "${PATH}"],
             "MACOSX_DEPLOYMENT_TARGET": MAC_OS_MIN_VERSION,
@@ -288,7 +286,7 @@ for platform in PLATFORMS:
                 "python3",
                 REPKA_SCRIPT_NAME,
                 "--repo_id",
-                platform["repo_id"],
+                int(platform["repo_id"]),
                 "--asset_build_path",
                 BUILD_SUBDIR_NAME,
                 "--packet_name",
@@ -400,7 +398,7 @@ for platform in PLATFORMS:
                 "python3",
                 REPKA_SCRIPT_NAME,
                 "--repo_id",
-                platform["repo_id"],
+                int(platform["repo_id"]),
                 "--asset_build_path",
                 ".",
                 "--packet_name",
@@ -421,7 +419,15 @@ for platform in PLATFORMS:
         workernames=[platform["worker"]],
         factory=build_factory,
         description=f"{DESCRIPTION} [" + platform["name"] + "]",
-        tags=["installer", platform["os"]],
+        tags=create_tags(["installer", platform["os"]]),
     )
 
     c["builders"].append(builder)
+
+if __name__ == "__main__":
+    import shlex
+
+    import mslex
+
+    print(f"\nCMAKE_CONFIGURE_QT_WIN\n{mslex.join(CMAKE_CONFIGURE_QT_WIN_COMMAND)}")
+    print(f"\nCMAKE_CONFIGURE_QT_MAC\n{shlex.join(CMAKE_CONFIGURE_QT_MAC_COMMAND)}")

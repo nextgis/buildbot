@@ -6,6 +6,8 @@ import os
 
 from buildbot.plugins import changes, schedulers, steps, util
 
+from nextgis_utils import create_tags
+
 c = {}
 
 # fmt: off
@@ -381,19 +383,13 @@ for repository in repositories:
             )
         )
 
-        tags = []
-        if platform["name"] != "astra":
-            tags = ["ubuntu", platform["name"]]
-        else:
-            tags = [platform["name"]]
-
         builder = util.BuilderConfig(
             name=project_name + "_" + platform["name"],
             workernames=[platform["worker"]],
             factory=factory,
             locks=[build_lock.access("exclusive")],  # counting
             description="Make {} on {}".format(project_name, platform["name"]),
-            tags=tags,
+            tags=create_tags(["deb", project_name, platform["name"]]),
         )
 
         c["builders"].append(builder)

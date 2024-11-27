@@ -4,22 +4,11 @@
 import json
 import os
 import time
+from urllib.request import urlopen
 
 from buildbot.plugins import schedulers, steps, util
 
-try:
-    # For Python 3.0 and later
-    from urllib.request import urlopen
-except ImportError:
-    # Fall back to Python 2's urllib2
-    from urllib2 import urlopen
-
-c = {}
-
-VM_CPU_COUNT = 8
-
-MAC_OS_MIN_VERSION = "10.14"
-MAC_OS_SDKS_PATH = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
+from nextgis_utils import create_tags
 
 ngftp = "ftp://my-ftp-storage.vpn.nextgis.net:10411/software/installer"
 ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
@@ -40,12 +29,13 @@ installer_git = "https://github.com/nextgis/nextgis_installer.git"
 timeout = 180
 max_time = 240
 
+c = {}
 c["change_source"] = []
 c["schedulers"] = []
 c["builders"] = []
 
-project_name = "create_installer"
-generator = "Visual Studio 16 2019"
+PROJECT_NAME = "create_installer"
+GENERATOR = "Visual Studio 16 2019"
 create_updater_package = False
 binary_repo_refix = "https://rm.nextgis.com/api/repo"
 # "http://nextgis.com/programs/desktop/repository-" //
@@ -62,12 +52,12 @@ build_lock = util.WorkerLock(
 
 builder_names = [
     # project_name + "_win32",
-    project_name + "_win64",
-    project_name + "_mac",
+    PROJECT_NAME + "_win64",
+    PROJECT_NAME + "_mac",
 ]
 
 forceScheduler_create = schedulers.ForceScheduler(
-    name=project_name + "_update",
+    name=PROJECT_NAME + "_update",
     label="Update installer",
     buttonName="Update installer",
     builderNames=builder_names,
@@ -101,7 +91,7 @@ forceScheduler_create = schedulers.ForceScheduler(
 )
 
 forceScheduler_update = schedulers.ForceScheduler(
-    name=project_name + "_create",
+    name=PROJECT_NAME + "_create",
     label="Create installer",
     buttonName="Create installer",
     builderNames=builder_names,
@@ -129,7 +119,7 @@ forceScheduler_update = schedulers.ForceScheduler(
 )
 
 forceScheduler_standalone = schedulers.ForceScheduler(
-    name=project_name + "_standalone",
+    name=PROJECT_NAME + "_standalone",
     label="Create standalone installer",
     buttonName="Create standalone installer",
     builderNames=builder_names,
@@ -144,7 +134,7 @@ forceScheduler_standalone = schedulers.ForceScheduler(
 )
 
 forceScheduler_standalone_ex = schedulers.ForceScheduler(
-    name=project_name + "_brand_standalone",
+    name=PROJECT_NAME + "_brand_standalone",
     label="Create branded standalone installer",
     buttonName="Create branded installer",
     builderNames=builder_names,
@@ -177,7 +167,7 @@ forceScheduler_standalone_ex = schedulers.ForceScheduler(
 )
 
 forceScheduler_local = schedulers.ForceScheduler(
-    name=project_name + "_local",
+    name=PROJECT_NAME + "_local",
     label="Create intranet installer",
     buttonName="Create intranet installer",
     builderNames=builder_names,
@@ -222,14 +212,14 @@ def now(props):
 @util.renderer
 def commandArgs(props):
     command = []
-    if props.getProperty("scheduler") == project_name + "_create":
+    if props.getProperty("scheduler") == PROJECT_NAME + "_create":
         command.append("create")
     elif props.getProperty("scheduler").endswith("_standalone"):
         # command.append('create')
         command.append("create_from_repository")
     elif props.getProperty("scheduler").endswith("_local"):
         command.append("create")
-    elif props.getProperty("scheduler") == project_name + "_update":
+    elif props.getProperty("scheduler") == PROJECT_NAME + "_update":
         command.extend(
             [
                 "update",
@@ -385,9 +375,9 @@ platforms = [
 # Create triggerable shcedulers
 for platform in platforms:
     triggerScheduler = schedulers.Triggerable(
-        name=project_name + "_" + platform["name"],
+        name=PROJECT_NAME + "_" + platform["name"],
         builderNames=[
-            project_name + "_" + platform["name"],
+            PROJECT_NAME + "_" + platform["name"],
         ],
     )
     c["schedulers"].append(triggerScheduler)
@@ -591,7 +581,7 @@ for platform in platforms:
     create_opt = []
     if "win64" == platform["name"]:
         create_opt.append("-g")
-        create_opt.append(generator)
+        create_opt.append(GENERATOR)
         create_opt.append("-w64")
 
     # elif 'win32' == platform['name']:
@@ -1019,12 +1009,12 @@ for platform in platforms:
     )
 
     builder = util.BuilderConfig(
-        name=project_name + "_" + platform["name"],
+        name=PROJECT_NAME + "_" + platform["name"],
         workernames=[platform["worker"]],
         factory=factory,
         locks=[build_lock.access("counting")],
         description="Create/update installer on " + platform["name"],
-        tags=["installer", platform["name"]],
+        tags=create_tags(["installer", platform["name"]]),
     )
 
     c["builders"].append(builder)

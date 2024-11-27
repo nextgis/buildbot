@@ -5,7 +5,12 @@ import os
 
 from buildbot.plugins import changes, schedulers, steps, util
 
-c = {}
+from nextgis_utils import (
+    MAC_OS_MIN_VERSION,
+    MAC_OS_SDKS_PATH,
+    VM_CPU_COUNT,
+    create_tags,
+)
 
 # fmt: off
 repositories = [
@@ -106,14 +111,11 @@ repositories = [
 #    "nextgisqgis", "formbuilder", "manuscript",
 # ]
 
-VM_CPU_COUNT = 8
 
-MAC_OS_MIN_VERSION = "10.14"
-MAC_OS_SDKS_PATH = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs"
-
-script_name = "repka_release.py"  # 'github_release.py'
+REPKA_SCRIPT_NAME = "repka_release.py"  # 'github_release.py'
 release_script_src = (
-    "https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/" + script_name
+    "https://raw.githubusercontent.com/nextgis-borsch/borsch/master/opt/"
+    + REPKA_SCRIPT_NAME
 )
 username = "buildbot"
 userkey = os.environ.get("BUILDBOT_PASSWORD")
@@ -124,14 +126,10 @@ upload_script_src = (
 upload_script_name = "ftp_upload.py"
 install_script_src = "https://raw.githubusercontent.com/nextgis/buildbot/master/worker/install_from_ftp.py"
 install_script_name = "install_from_ftp.py"
-ci_project_name = "create_installer"
+INSTALLER_PROJECT_NAME = "create_installer"
 sentry_url = "https://sentry.nextgis.com"
 sentry_auth_token = os.environ.get("SENTRY_AUTH_TOKEN")
 https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
-
-c["change_source"] = []
-c["schedulers"] = []
-c["builders"] = []
 
 platforms = [
     # {'name' : 'win32', 'worker' : 'build-win'},
@@ -383,6 +381,12 @@ def install_dependencies(factory, requirements, os):
         #         env=env))
 
 
+c = {
+    "change_source": [],
+    "schedulers": [],
+    "builders": [],
+}
+
 # Create builders
 for repository in repositories:
     project_name = repository["repo"]
@@ -523,7 +527,7 @@ for repository in repositories:
                             "curl",
                             release_script_src,
                             "-o",
-                            script_name,
+                            REPKA_SCRIPT_NAME,
                             "-s",
                             "-L",
                         ],
@@ -615,7 +619,7 @@ for repository in repositories:
             steps.ShellCommand(
                 command=[
                     python_cmd,
-                    script_name,
+                    REPKA_SCRIPT_NAME,
                     "--login",
                     username,
                     "--password",
@@ -651,10 +655,10 @@ for repository in repositories:
             )
 
         # create installer trigger
-        if platform["name"].endswith("-static") == False:
+        if not platform["name"].endswith("-static"):
             factory.addStep(
                 steps.Trigger(
-                    schedulerNames=[ci_project_name + "_" + platform["name"]],
+                    schedulerNames=[INSTALLER_PROJECT_NAME + "_" + platform["name"]],
                     waitForFinish=False,
                     set_properties={
                         "suffix": "-dev",
@@ -670,7 +674,7 @@ for repository in repositories:
             factory=factory,
             locks=[build_lock.access("exclusive")],  # counting
             description="Make {} on {}".format(project_name, platform["name"]),
-            tags=[platform["name"]],
+            tags=create_tags(["borsch", project_name, platform["name"]]),
         )
 
         c["builders"].append(builder)
