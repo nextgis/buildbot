@@ -34,7 +34,7 @@ repositories = [
     },
     {'repo':'lib_ngstd', 'deb':'ngstd', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'astra',], 'repo_id':11},
     {'repo':'formbuilder', 'deb':'formbuilder', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy',], 'repo_id':11},
-    {'repo':'manuscript', 'deb':'manuscript', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', ], 'repo_id':11},
+    # {'repo':'manuscript', 'deb':'manuscript', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', ], 'repo_id':11},
     {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal','bullseye', 'jammy',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
