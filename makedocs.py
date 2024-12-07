@@ -236,6 +236,7 @@ for lang in langs:
                     command=[
                         "rsync",
                         "-avz",
+                        "--delete",
                         "-e",
                         "ssh -p {} -i /root/.ssh/www".format(ssh_port),
                         "_build/html/",
