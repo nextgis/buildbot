@@ -817,46 +817,33 @@ for platform in platforms:
         )
     )
 
-    # 5. Upload installer to ftp
-    # TODO: upload to repka
+    # 5. Upload installer to repka
     factory.addStep(
-        steps.ShellSequence(
-            commands=[
-                util.ShellArg(
-                    command=[
-                        "curl",
-                        "-u",
-                        ngftp_user,
-                        "-T",
-                        get_installer_name.withArgs(
-                            installer_name_base, installer_ext
-                        ),  # util.Interpolate('%(kw:basename)s%(prop:suffix)s' + installer_ext, basename=installer_name_base),
-                        "-s",
-                        "--ftp-create-dirs",
-                        ngftp + "/",
-                    ],
-                    logname=logname,
-                ),
-                util.ShellArg(
-                    command=[
-                        "echo",
-                        get_installer_name.withArgs(
-                            "Download installer from this url: https://my.nextgis.com/downloads/software/installer/{}".format(
-                                installer_name_base
-                            ),
-                            installer_ext,
-                        ),
-                    ],
-                    logname=logname,
-                ),
-            ],
-            name="Upload installer to ftp",
-            haltOnFailure=True,
-            doStepIf=(lambda step: not skip_step(step, "create+local")),
-            workdir=build_dir,
-            env=env,
+            steps.ShellCommand(
+                command=[
+                    "python3",
+                    repka_script_name,
+                    "--repo_id",
+                    platform["repo_id"],
+                    "--asset_path",
+                    get_installer_name.withArgs(
+                        installer_name_base, installer_ext
+                    ),
+                    # build_dir + "/package.zip",
+                    "--packet_name",
+                    "package",
+                    "--login",
+                    username,
+                    "--password",
+                    userkey,
+                ],
+                name="Send installer package to repka",
+                doStepIf=(lambda step: not skip_step(step, "create+local")),
+                haltOnFailure=True,
+                workdir=build_dir,
+                env=env,
+            )
         )
-    )
 
     factory.addStep(
         steps.ShellSequence(
