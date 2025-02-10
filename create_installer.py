@@ -813,7 +813,8 @@ for platform in platforms:
     )
 
     # 5. Upload installer to repka
-    repka_script_path = os.path.join('../', repka_script_name)
+    repka_script_path = os.path.join('..' + separator, repka_script_name)
+    package_suffix = "-dev" if props.getProperty("suffix") == "_dev" else "_stable"
     
     factory.addStep(
             steps.ShellCommand(
@@ -827,7 +828,7 @@ for platform in platforms:
                         installer_name_base, installer_ext
                     ),
                     "--packet_name",
-                    "package",
+                    "package" + package_suffix,
                     "--login",
                     username,
                     "--password",
@@ -856,7 +857,7 @@ for platform in platforms:
                     ),
                 ),
                 "--packet_name",
-                "standalone_package",
+                "standalone_package" + package_suffix,
                 "--login",
                 username,
                 "--password",
