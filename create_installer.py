@@ -814,7 +814,7 @@ for platform in platforms:
 
     # 5. Upload installer to repka
     repka_script_path = os.path.join('..' + separator, repka_script_name)
-    package_suffix = "-dev" if props.getProperty("suffix") == "_dev" else "_stable"
+    package_suffix = "_dev" if props.getProperty("suffix") == "-dev" else "_stable"
     
     factory.addStep(
             steps.ShellCommand(
