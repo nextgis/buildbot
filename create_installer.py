@@ -844,28 +844,24 @@ for platform in platforms:
     factory.addStep(
         steps.ShellSequence(
             commands=[
-                util.ShellArg(
-                    command=[
-                        "python3",
-                        repka_script_path,
-                        "--repo_id",
-                        platform["repo_id"],
-                        "--asset_path",
-                        get_installer_name.withArgs(
-                            installer_name_base + "-standalone",
-                            util.Interpolate(
-                                "-%(kw:now)s%(kw:ext)s", now=now, ext=installer_ext
-                            ),
-                        ),
-                        "--packet_name",
-                        "standalone_package",
-                        "--login",
-                        username,
-                        "--password",
-                        userkey,
-                    ],
-                    logname=logname,
+                "python3",
+                repka_script_path,
+                "--repo_id",
+                platform["repo_id"],
+                "--asset_path",
+                get_installer_name.withArgs(
+                    installer_name_base + "-standalone",
+                    util.Interpolate(
+                        "-%(kw:now)s%(kw:ext)s", now=now, ext=installer_ext
+                    ),
                 ),
+                "--packet_name",
+                "standalone_package",
+                "--login",
+                username,
+                "--password",
+                userkey,
+
             ],
             name="Send standalone installer package to repka",
             haltOnFailure=True,
