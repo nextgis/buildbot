@@ -10,10 +10,6 @@ from buildbot.plugins import schedulers, steps, util
 
 from nextgis_utils import create_tags
 
-ngftp = "ftp://my-ftp-storage.vpn.nextgis.net:10411/software/installer"
-ngftp_user = os.environ.get("BUILDBOT_MYFTP_USER")
-# upload_script_src = 'https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py'
-# upload_script_name = 'ftp_upload.py'
 repka_script_src = (
     "https://raw.githubusercontent.com/nextgis/buildbot/master/worker/repka_release.py"
 )
@@ -818,18 +814,18 @@ for platform in platforms:
     )
 
     # 5. Upload installer to repka
+    repka_script_path = os.path.join('../', repka_script_name)
     factory.addStep(
             steps.ShellCommand(
                 command=[
                     "python3",
-                    os.path.join('../', repka_script_name),
+                    repka_script_path,
                     "--repo_id",
                     platform["repo_id"],
                     "--asset_path",
                     get_installer_name.withArgs(
                         installer_name_base, installer_ext
                     ),
-                    # build_dir + "/package.zip",
                     "--packet_name",
                     "package",
                     "--login",
@@ -850,40 +846,28 @@ for platform in platforms:
             commands=[
                 util.ShellArg(
                     command=[
-                        "curl",
-                        "-u",
-                        ngftp_user,
-                        "-T",
+                        "python3",
+                        repka_script_path,
+                        "--repo_id",
+                        platform["repo_id"],
+                        "--asset_path",
                         get_installer_name.withArgs(
                             installer_name_base + "-standalone",
                             util.Interpolate(
                                 "-%(kw:now)s%(kw:ext)s", now=now, ext=installer_ext
                             ),
                         ),
-                        # util.Interpolate('%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext, basename=installer_name_base + '-standalone', now=now),
-                        "-s",
-                        "--ftp-create-dirs",
-                        ngftp + "/",
-                    ],
-                    logname=logname,
-                ),
-                util.ShellArg(
-                    command=[
-                        "echo",
-                        get_installer_name.withArgs(
-                            "Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/{}-standalone".format(
-                                installer_name_base
-                            ),
-                            util.Interpolate(
-                                "-%(kw:now)s%(kw:ext)s", now=now, ext=installer_ext
-                            ),
-                        ),
-                        # util.Interpolate('Download standalone installer from this url: https://my.nextgis.com/downloads/software/installer/%(kw:basename)s%(prop:suffix)s-%(kw:now)s' + installer_ext,  basename=installer_name_base + '-standalone', now=now)
+                        "--packet_name",
+                        "package",
+                        "--login",
+                        username,
+                        "--password",
+                        userkey,
                     ],
                     logname=logname,
                 ),
             ],
-            name="Upload standalone installer to ftp",
+            name="Send standalone installer package to repka",
             haltOnFailure=True,
             doStepIf=(
                 lambda step: step.getProperty("scheduler").endswith("_standalone")
