@@ -858,7 +858,7 @@ for platform in platforms:
                             ),
                         ),
                         "--packet_name",
-                        "package",
+                        "standalone_package",
                         "--login",
                         username,
                         "--password",
