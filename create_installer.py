@@ -815,6 +815,7 @@ for platform in platforms:
 
     # 5. Upload installer to repka
     repka_script_path = os.path.join('../', repka_script_name)
+    
     factory.addStep(
             steps.ShellCommand(
                 command=[
@@ -843,7 +844,7 @@ for platform in platforms:
 
     factory.addStep(
         steps.ShellSequence(
-            commands=[
+            command=[
                 "python3",
                 repka_script_path,
                 "--repo_id",
