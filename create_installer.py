@@ -542,7 +542,7 @@ for platform in platforms:
             ],
             name="Download repka script",
             haltOnFailure=True,
-            doStepIf=(lambda step: skip_step(step, "standalone+local")),
+            doStepIf=(lambda step: skip_step(step, "local")),
             workdir=code_dir,
             env=env,
         )
@@ -865,10 +865,8 @@ for platform in platforms:
 
             ],
             name="Send standalone installer package to repka",
+            doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
             haltOnFailure=True,
-            doStepIf=(
-                lambda step: step.getProperty("scheduler").endswith("_standalone")
-            ),
             workdir=build_dir,
             env=env,
         )
