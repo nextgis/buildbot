@@ -542,7 +542,6 @@ for platform in platforms:
             ],
             name="Download repka script",
             haltOnFailure=True,
-            doStepIf=(lambda step: skip_step(step, "local")),
             workdir=code_dir,
             env=env,
         )
