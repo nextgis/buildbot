@@ -843,7 +843,7 @@ for platform in platforms:
         )
 
     factory.addStep(
-        steps.ShellSequence(
+        steps.ShellCommand(
             command=[
                 "python3",
                 repka_script_path,
