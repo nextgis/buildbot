@@ -822,7 +822,7 @@ for platform in platforms:
             steps.ShellCommand(
                 command=[
                     "python3",
-                    os.path.join('../', code_dir, repka_script_name),
+                    os.path.join('../', repka_script_name),
                     "--repo_id",
                     platform["repo_id"],
                     "--asset_path",
