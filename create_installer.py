@@ -193,6 +193,13 @@ c["schedulers"].append(forceScheduler_local)
 def get_repka_suffix(suffix):
     return "devel" if suffix == "-dev" else "stable_new"
 
+@util.renderer
+def get_installer_package_name(props):
+    suffix = "_dev" if props.getProperty("suffix") == "-dev" else "_stable"
+    if props.getProperty("scheduler").endswith("_standalone"):
+        return 'package' + suffix
+    else:
+        return 'standalone_package' + suffix
 
 @util.renderer
 def get_packet_name(props):
@@ -814,7 +821,7 @@ for platform in platforms:
 
     # 5. Upload installer to repka
     repka_script_path = os.path.join('..' + separator, repka_script_name)
-    package_suffix = "_dev" if props.getProperty("suffix") == "-dev" else "_stable"
+
     
     factory.addStep(
             steps.ShellCommand(
@@ -828,7 +835,7 @@ for platform in platforms:
                         installer_name_base, installer_ext
                     ),
                     "--packet_name",
-                    "package" + package_suffix,
+                    get_installer_package_name,
                     "--login",
                     username,
                     "--password",
@@ -857,7 +864,7 @@ for platform in platforms:
                     ),
                 ),
                 "--packet_name",
-                "standalone_package" + package_suffix,
+                get_installer_package_name,
                 "--login",
                 username,
                 "--password",
