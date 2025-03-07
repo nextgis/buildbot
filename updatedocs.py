@@ -19,7 +19,7 @@ repos = [
     {"repo": "docs_ngid", "langs": ["ru", "en"]},
     {"repo": "docs_formbuilder", "langs": ["ru", "en"]},
     {"repo": "docs_ngcourses", "langs": ["ru", "en"]},
-    {"repo": "docs_howto", "langs": ["master"]},
+    {"repo": "docs_howto", "langs": "ru", "en"]},
 ]
 
 base_repourl = "https://github.com/nextgis/"
