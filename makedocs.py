@@ -100,26 +100,26 @@ for lang in langs:
             env=env,
         )
     )
-    factory.addStep(
-        steps.ShellCommand(
-            command=["make", "latexpdf", 'LATEXMKOPTS="--interaction=nonstopmode"'],
-            name="Generate pdf for NextGIS FormBuilder",
-            description=["make", "pdf for NextGIS FormBuilder"],
-            workdir="build/source/docs_formbuilder",
-            warnOnFailure=True,
-            env=env,
-        )
-    )
-    factory.addStep(
-        steps.ShellCommand(
-            command=["make", "latexpdf", 'LATEXMKOPTS="--interaction=nonstopmode"'],
-            name="Generate pdf for NextGIS QGIS",
-            description=["make", "pdf for NextGIS QGIS"],
-            workdir="build/source/docs_ngqgis",
-            warnOnFailure=True,
-            env=env,
-        )
-    )
+    # factory.addStep(
+    #     steps.ShellCommand(
+    #         command=["make", "latexpdf", 'LATEXMKOPTS="--interaction=nonstopmode"'],
+    #         name="Generate pdf for NextGIS FormBuilder",
+    #         description=["make", "pdf for NextGIS FormBuilder"],
+    #         workdir="build/source/docs_formbuilder",
+    #         warnOnFailure=True,
+    #         env=env,
+    #     )
+    # )
+    # factory.addStep(
+    #     steps.ShellCommand(
+    #         command=["make", "latexpdf", 'LATEXMKOPTS="--interaction=nonstopmode"'],
+    #         name="Generate pdf for NextGIS QGIS",
+    #         description=["make", "pdf for NextGIS QGIS"],
+    #         workdir="build/source/docs_ngqgis",
+    #         warnOnFailure=True,
+    #         env=env,
+    #     )
+    # )
 
     factory.addStep(
         steps.ShellSequence(
@@ -186,15 +186,15 @@ for lang in langs:
     #                                   descriptionDone=["made", "javadoc for mobile (android)"],
     #                                   workdir="build/source/ngmobile_dev"))
 
-    factory.addStep(
-        steps.ShellCommand(
-            command=["sh", "make_kotlindoc.sh"],
-            description=["make", "kotlindoc for mobile (android)"],
-            workdir="build/source/ngmobile_dev",
-            warnOnFailure=True,
-            env=env,
-        )
-    )
+    # factory.addStep(
+    #     steps.ShellCommand(
+    #         command=["sh", "make_kotlindoc.sh"],
+    #         description=["make", "kotlindoc for mobile (android)"],
+    #         workdir="build/source/ngmobile_dev",
+    #         warnOnFailure=True,
+    #         env=env,
+    #     )
+    # )
 
     # Disable NGM API
     # factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
