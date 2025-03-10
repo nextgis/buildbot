@@ -10,16 +10,24 @@ c["builders"] = []
 
 repos = [
     {"repo": "docs_ngcom", "langs": ["ru", "en"]},
-    {"repo": "docs_ngmobile", "langs": ["ru", "en"]},
-    {"repo": "docs_ngqgis", "langs": ["ru", "en"]},
-    {"repo": "docs_ngweb", "langs": ["ru", "en"]},
     {"repo": "docs_toolbox", "langs": ["ru", "en"]},
     {"repo": "docs_data", "langs": ["ru", "en"]},
-    {"repo": "docs_collector", "langs": ["ru", "en"]},
-    {"repo": "docs_ngid", "langs": ["ru", "en"]},
+    {"repo": "docs_geoservices", "langs": ["ru", "en"]},
+    {"repo": "docs_ngweb", "langs": ["ru", "en"]},
+    {"repo": "docs_ngqgis", "langs": ["ru"]},
+    {"repo": "docs_ngmobile", "langs": ["ru", "en"]},
+    {"repo": "docs_geoserv_prem", "langs": ["ru", "en"]},
+    {"repo": "docs_toolbox_prem", "langs": ["ru"]},
     {"repo": "docs_formbuilder", "langs": ["ru", "en"]},
-    {"repo": "docs_ngcourses", "langs": ["ru", "en"]},
-    {"repo": "docs_howto", "langs": ["ru", "en"]},
+    {"repo": "docs_collector", "langs": ["ru", "en"]},
+    {"repo": "docs_ngtracker", "langs": ["ru", "en"]},
+    {"repo": "docs_ngid", "langs": ["ru", "en"]},
+    {"repo": "docs_ngconnect", "langs": ["ru", "en"]},
+    {"repo": "docs_rosreestr_tools", "langs": ["ru"]},
+    {"repo": "docs_ngweb_3D", "langs": ["ru", "en"]},
+    {"repo": "ngmobile_dev", "langs": ["ru", "en"]},
+    {"repo": "tracker_hub_dev", "langs": ["ru", "en"]},
+    {"repo": "docs_howto", "langs": ["ru", "en"]}
 ]
 
 base_repourl = "https://github.com/nextgis/"
