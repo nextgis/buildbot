@@ -54,8 +54,8 @@ builder_names = [
 
 forceScheduler_create = schedulers.ForceScheduler(
     name=PROJECT_NAME + "_update",
-    label="Update installer",
-    buttonName="Update installer",
+    label="Update installer Test",
+    buttonName="Update installer Test",
     builderNames=builder_names,
     properties=[
         util.StringParameter(
@@ -197,9 +197,9 @@ def get_repka_suffix(suffix):
 def get_installer_package_name(props):
     suffix = "_dev" if props.getProperty("suffix") == "-dev" else "_stable"
     if props.getProperty("scheduler").endswith("_standalone"):
-        return 'package' + suffix
-    else:
         return 'standalone_package' + suffix
+    else:
+        return 'package' + suffix
 
 @util.renderer
 def get_packet_name(props):
