@@ -26,7 +26,7 @@ git_poller = changes.GitPoller(
     repourl=repourl,
     #    workdir = poller_name + '-workdir',
     branches=langs,
-    pollinterval=600,
+    pollInterval=600,
 )
 c["change_source"].append(git_poller)
 

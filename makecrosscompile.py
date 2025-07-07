@@ -74,7 +74,7 @@ for repository in repositories:
         repourl=repourl,
         #    workdir = project_name + '-workdir',
         branches=[branch],
-        pollinterval=5400,
+        pollInterval=5400,
     )
     c["change_source"].append(git_poller)
 

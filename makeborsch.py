@@ -401,7 +401,7 @@ for repository in repositories:
         repourl=repourl,
         #    workdir = project_name + '-workdir',
         branches=[branch],
-        pollinterval=3600,
+        pollInterval=3600,
     )
     c["change_source"].append(git_poller)
 
