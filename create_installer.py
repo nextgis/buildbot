@@ -52,7 +52,7 @@ builder_names = [
     PROJECT_NAME + "_mac",
 ]
 
-forceScheduler_create = schedulers.ForceScheduler(
+scheduler_update = schedulers.ForceScheduler(
     name=PROJECT_NAME + "_update",
     label="Update installer Test",
     buttonName="Update installer Test",
@@ -86,7 +86,7 @@ forceScheduler_create = schedulers.ForceScheduler(
     ],
 )
 
-forceScheduler_update = schedulers.ForceScheduler(
+scheduler_create = schedulers.ForceScheduler(
     name=PROJECT_NAME + "_create",
     label="Create installer",
     buttonName="Create installer",
@@ -114,7 +114,7 @@ forceScheduler_update = schedulers.ForceScheduler(
     ],
 )
 
-forceScheduler_standalone = schedulers.ForceScheduler(
+scheduler_standalone = schedulers.ForceScheduler(
     name=PROJECT_NAME + "_standalone",
     label="Create standalone installer",
     buttonName="Create standalone installer",
@@ -129,40 +129,7 @@ forceScheduler_standalone = schedulers.ForceScheduler(
     ],
 )
 
-forceScheduler_standalone_ex = schedulers.ForceScheduler(
-    name=PROJECT_NAME + "_brand_standalone",
-    label="Create branded standalone installer",
-    buttonName="Create branded installer",
-    builderNames=builder_names,
-    properties=[
-        util.StringParameter(
-            name="suffix",
-            label="Installer name and URL path suffix (use '-dev' for default):",
-            default="",
-            size=40,
-        ),
-        util.StringParameter(
-            name="plugins",
-            label="Plugins names separated by comma to include to installer:",
-            default="",
-            size=80,
-        ),
-        util.StringParameter(
-            name="valid_user",
-            label="User name for supported dialog:",
-            default="",
-            size=80,
-        ),
-        util.StringParameter(
-            name="valid_date",
-            label="Validity period for supported functions (YYYY-MM-DD):",
-            default="2024-01-01",
-            size=40,
-        ),
-    ],
-)
-
-forceScheduler_local = schedulers.ForceScheduler(
+scheduler_local = schedulers.ForceScheduler(
     name=PROJECT_NAME + "_local",
     label="Create intranet installer",
     buttonName="Create intranet installer",
@@ -183,23 +150,24 @@ forceScheduler_local = schedulers.ForceScheduler(
     ],
 )
 
-c["schedulers"].append(forceScheduler_create)
-c["schedulers"].append(forceScheduler_update)
-c["schedulers"].append(forceScheduler_standalone)
-c["schedulers"].append(forceScheduler_standalone_ex)
-c["schedulers"].append(forceScheduler_local)
+c["schedulers"].append(scheduler_update)
+c["schedulers"].append(scheduler_create)
+c["schedulers"].append(scheduler_standalone)
+c["schedulers"].append(scheduler_local)
 
 
 def get_repka_suffix(suffix):
     return "devel" if suffix == "-dev" else "stable_new"
 
+
 @util.renderer
 def get_installer_package_name(props):
     suffix = "_dev" if props.getProperty("suffix") == "-dev" else "_stable"
     if props.getProperty("scheduler").endswith("_standalone"):
-        return 'standalone_package' + suffix
+        return "standalone_package" + suffix
     else:
-        return 'package' + suffix
+        return "package" + suffix
+
 
 @util.renderer
 def get_packet_name(props):
@@ -820,34 +788,31 @@ for platform in platforms:
     )
 
     # 5. Upload installer to repka
-    repka_script_path = os.path.join('..' + separator, repka_script_name)
+    repka_script_path = os.path.join(".." + separator, repka_script_name)
 
-    
     factory.addStep(
-            steps.ShellCommand(
-                command=[
-                    "python3",
-                    repka_script_path,
-                    "--repo_id",
-                    platform["repo_id"],
-                    "--asset_path",
-                    get_installer_name.withArgs(
-                        installer_name_base, installer_ext
-                    ),
-                    "--packet_name",
-                    get_installer_package_name,
-                    "--login",
-                    username,
-                    "--password",
-                    userkey,
-                ],
-                name="Send installer package to repka",
-                doStepIf=(lambda step: not skip_step(step, "create+local")),
-                haltOnFailure=True,
-                workdir=build_dir,
-                env=env,
-            )
+        steps.ShellCommand(
+            command=[
+                "python3",
+                repka_script_path,
+                "--repo_id",
+                platform["repo_id"],
+                "--asset_path",
+                get_installer_name.withArgs(installer_name_base, installer_ext),
+                "--packet_name",
+                get_installer_package_name,
+                "--login",
+                username,
+                "--password",
+                userkey,
+            ],
+            name="Send installer package to repka",
+            doStepIf=(lambda step: not skip_step(step, "create+local")),
+            haltOnFailure=True,
+            workdir=build_dir,
+            env=env,
         )
+    )
 
     factory.addStep(
         steps.ShellCommand(
@@ -869,10 +834,11 @@ for platform in platforms:
                 username,
                 "--password",
                 userkey,
-
             ],
             name="Send standalone installer package to repka",
-            doStepIf=(lambda step: step.getProperty("scheduler").endswith("_standalone")),
+            doStepIf=(
+                lambda step: step.getProperty("scheduler").endswith("_standalone")
+            ),
             haltOnFailure=True,
             workdir=build_dir,
             env=env,
