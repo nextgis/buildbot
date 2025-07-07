@@ -54,8 +54,8 @@ builder_names = [
 
 scheduler_update = schedulers.ForceScheduler(
     name=PROJECT_NAME + "_update",
-    label="Update installer Test",
-    buttonName="Update installer Test",
+    label="Update installer",
+    buttonName="Update installer",
     builderNames=builder_names,
     properties=[
         util.StringParameter(
