@@ -393,11 +393,6 @@ for platform in platforms:
         env["PYTHONPATH"] = "C:\\Python38"
         env["FLANG_HOME"] = "C:\\Users\\root\\conda\\Library"
         installer_ext = ".exe"
-        # if 'win32' == platform['name']:
-        #     env = {
-        #         'PYTHONPATH': 'C:\\Python27_32',
-        #         'PYTHONHTTPSVERIFY': '0'
-        #     }
 
     repo_name_base = "repository-" + platform["name"]
     logname = "stdio"
