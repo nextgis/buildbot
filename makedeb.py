@@ -113,7 +113,7 @@ for repository in repositories:
         branches=[branch],
         pollInterval=5400,
     )
-    c["change_source"].append(git_poller)
+    #c["change_source"].append(git_poller)
 
     builderNames = []
     for platform in platforms:
