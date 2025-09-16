@@ -113,17 +113,14 @@ for repository in repositories:
         branches=[branch],
         pollInterval=5400,
     )
-    #c["change_source"].append(git_poller)
 
     builderNames = []
     for platform in platforms:
         if platform["name"] in repository["os"]:
             builderNames.append(project_name + "_" + platform["name"])
 
-    scheduler = schedulers.SingleBranchScheduler(
+    scheduler = schedulers.ForceScheduler(
         name=project_name + "_deb",
-        change_filter=util.ChangeFilter(project=git_project_name, branch=branch),
-        treeStableTimer=1 * 60,
         builderNames=builderNames,
     )
     c["schedulers"].append(scheduler)
