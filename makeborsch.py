@@ -248,138 +248,89 @@ def install_dependencies(factory, requirements, os):
     if os.endswith("-old"):
         pip_cmd = "pip"
 
-    for requirement in requirements:
-        if (
-            requirement == "perl" and "win" in os
-        ):  # This is example. Perl already installed in VM.
-            # Upload distro to worker
+    if requirements is None:
+        reqs = []
+    elif isinstance(requirements, (str, bytes)):
+        reqs = [requirements]
+    else:
+        reqs = list(requirements)
+
+    normalized = []
+    seen = set()
+    for r in reqs:
+        if r is None:
+            continue
+        s = str(r).strip()
+        if not s:
+            continue
+        if s in seen:
+            continue
+        seen.add(s)
+        normalized.append(s)
+
+    if not normalized:
+        return
+
+    for req in normalized:
+        factory.addStep(
+            steps.ShellCommand(
+                command=["echo", "Installing requirement:", req],
+                name="log install " + req,
+                description=["install", req],
+                workdir=".",
+                env=env,
+            )
+        )
+
+        if req == "perl" and "win" in os:
             factory.addStep(
                 steps.FileDownload(
                     mastersrc="/opt/buildbot/distrib/perl.msi", workerdest="perl.msi"
                 )
             )
-            # Execute install
             factory.addStep(
                 steps.ShellCommand(
                     command=["msiexec", "/package", "perl.msi", "/quiet", "/norestart"],
-                    name="install " + requirement,
-                    description=[requirement, "install"],
-                    descriptionDone=[requirement, "installed"],
-                    haltOnFailure=True,
-                )
-            )
-        elif requirement == "numpy":
-            factory.addStep(
-                steps.ShellCommand(
-                    command=[pip_cmd, "install", "--user", "numpy==1.22.2"],
-                    name="install " + requirement,
-                    description=[requirement, "install"],
-                    descriptionDone=[requirement, "installed"],
+                    name="install " + req,
+                    description=[req, "install"],
+                    descriptionDone=[req, "installed"],
                     haltOnFailure=True,
                     env=env,
                 )
             )
-        # elif requirement == 'six':
-        #     factory.addStep(
-        #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'six'],
-        #                             name="install " + requirement,
-        #                             description=[requirement, "install"],
-        #                             descriptionDone=[requirement, "installed"],
-        #                             haltOnFailure=True,
-        #                             env=env)
-        #     )
-        elif requirement == "sip":
-            factory.addStep(
-                steps.ShellCommand(
-                    command=[pip_cmd, "install", "--user", "sip==6.5.0"],
-                    name="install " + requirement,
-                    description=[requirement, "install"],
-                    descriptionDone=[requirement, "installed"],
-                    haltOnFailure=True,
-                    env=env,
-                )
-            )
-        elif requirement == "PyQt5-sip":
-            factory.addStep(
-                steps.ShellCommand(
-                    command=[pip_cmd, "install", "--user", "PyQt5-sip==12.10.1"],
-                    name="install " + requirement,
-                    description=[requirement, "install"],
-                    descriptionDone=[requirement, "installed"],
-                    haltOnFailure=True,
-                    env=env,
-                )
-            )
-        elif requirement == "PyQt5-Qt5":
-            factory.addStep(
-                steps.ShellCommand(
-                    command=[pip_cmd, "install", "--user", "PyQt5-Qt5==5.15.2"],
-                    name="install " + requirement,
-                    description=[requirement, "install"],
-                    descriptionDone=[requirement, "installed"],
-                    haltOnFailure=True,
-                    env=env,
-                )
-            )
-        elif requirement == "PyQt5":
-            factory.addStep(
-                steps.ShellCommand(
-                    command=[
-                        pip_cmd,
-                        "install",
-                        "--user",
-                        "PyQt5==5.15.6",
-                        "--no-dependencies",
-                    ],
-                    name="install " + requirement,
-                    description=[requirement, "install"],
-                    descriptionDone=[requirement, "installed"],
-                    haltOnFailure=True,
-                    env=env,
-                )
-            )
-        elif requirement == "PyQt-builder":
-            factory.addStep(
-                steps.ShellCommand(
-                    command=[pip_cmd, "install", "--user", "PyQt-builder==1.12.2"],
-                    name="install " + requirement,
-                    description=[requirement, "install"],
-                    descriptionDone=[requirement, "installed"],
-                    haltOnFailure=True,
-                    env=env,
-                )
-            )
-        # elif requirement == 'cython': # Already installed on vm
-        #     factory.addStep(
-        #         steps.ShellCommand(command=[pip_cmd, 'install', '--user', 'cython'],
-        #                             name="install " + requirement,
-        #                             description=[requirement, "install"],
-        #                             descriptionDone=[requirement, "installed"],
-        #                             haltOnFailure=True,
-        #                             env=env)
-        #     )
-        else:
-            factory.addStep(
-                steps.ShellCommand(
-                    command=[pip_cmd, "install", "--user", requirement],
-                    name="install " + requirement,
-                    description=[requirement, "install"],
-                    descriptionDone=[requirement, "installed"],
-                    haltOnFailure=True,
-                    env=env,
-                )
-            )
-        # elif requirement == 'PyQt4' and os == 'mac':
-        #     factory.addStep(steps.ShellSequence(commands=[
-        #             util.ShellArg(command=["curl", install_script_src, '-o', install_script_name, '-s', '-L'], logname=logname),
-        #             util.ShellArg(command=["python", install_script_name, '--ftp_user', ngftp_user,
-        #                 '--ftp', ngftp_base, '--build_path', 'install',
-        #                 '--platform', 'mac', '--create_pth', '--packages', 'lib_freetype', 'lib_gif', 'lib_jpeg', 'lib_png', 'lib_sqlite', 'lib_tiff', 'lib_z', 'py_sip', 'lib_qt4', 'py_qt4'], logname=logname),
-        #         ],
-        #         name="Install PyQt4",
-        #         haltOnFailure=True,
-        #         env=env))
+            continue
 
+        if req == "numpy":
+            pkg_cmd = [pip_cmd, "install", "--user", "numpy==1.22.2"]
+        elif req == "sip":
+            pkg_cmd = [pip_cmd, "install", "--user", "sip==6.5.0"]
+        elif req == "PyQt5-sip":
+            pkg_cmd = [pip_cmd, "install", "--user", "PyQt5-sip==12.10.1"]
+        elif req == "PyQt5-Qt5":
+            pkg_cmd = [pip_cmd, "install", "--user", "PyQt5-Qt5==5.15.2"]
+        elif req == "PyQt5":
+            pkg_cmd = [
+                pip_cmd,
+                "install",
+                "--user",
+                "PyQt5==5.15.6",
+                "--no-dependencies",
+            ]
+        elif req == "PyQt-builder":
+            pkg_cmd = [pip_cmd, "install", "--user", "PyQt-builder==1.12.2"]
+        else:
+            pkg_cmd = [pip_cmd, "install", "--user", req]
+
+        factory.addStep(
+            steps.ShellCommand(
+                command=pkg_cmd,
+                name="install " + req,
+                description=[req, "install"],
+                descriptionDone=[req, "installed"],
+                haltOnFailure=True,
+                env=env,
+            )
+        )
 
 c = {
     "change_source": [],
