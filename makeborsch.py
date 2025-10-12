@@ -255,10 +255,33 @@ def install_dependencies(factory, requirements, os):
     else:
         reqs = list(requirements)
 
-    if not reqs:
+    normalized = []
+    seen = set()
+    for r in reqs:
+        if r is None:
+            continue
+        s = str(r).strip()
+        if not s:
+            continue
+        if s in seen:
+            continue
+        seen.add(s)
+        normalized.append(s)
+
+    if not normalized:
         return
 
-    for req in reqs:
+    for req in normalized:
+        factory.addStep(
+            steps.ShellCommand(
+                command=["echo", "Installing requirement:", req],
+                name="log install " + req,
+                description=["install", req],
+                workdir=".",
+                env=env,
+            )
+        )
+
         if req == "perl" and "win" in os:
             factory.addStep(
                 steps.FileDownload(
