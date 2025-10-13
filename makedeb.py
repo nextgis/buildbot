@@ -120,12 +120,6 @@ for repository in repositories:
         if platform["name"] in repository["os"]:
             builderNames.append(project_name + "_" + platform["name"])
 
-    scheduler = schedulers.ForceScheduler(
-        name=project_name + "_deb",
-        builderNames=builderNames,
-    )
-    c["schedulers"].append(scheduler)
-
     c["schedulers"].append(
         schedulers.ForceScheduler(
             name=project_name + "_force_deb",
