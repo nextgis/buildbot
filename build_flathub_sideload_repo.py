@@ -191,6 +191,7 @@ schedulers_list = [
     schedulers.ForceScheduler(
         name=f"{BUILDER_NAME}_force",
         label="Build Flathub Sideload Repo",
+        buttonName="Build Flathub Sideload Repo",
         builderNames=[BUILDER_NAME],
     )
 ]
