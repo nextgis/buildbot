@@ -74,6 +74,7 @@ platforms = [
     # {'name' : 'sid', 'worker' : 'deb-build-sid'},
     {"name": "jammy", "worker": "deb-build-jammy"},
     {"name": "astra", "worker": "deb-build-astra"},
+    {"name": "noble", "worker": "noble"},
 ]
 
 build_lock = util.MasterLock("deb_worker_builds")
