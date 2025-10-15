@@ -85,7 +85,7 @@ script_src = (
 script_name = "deb_util.py"
 logname = "stdio"
 username = "buildbot"
-userkey = os.environ.get("BUILDBOT_PASSWORD")
+buildbot_password = os.environ.get("BUILDBOT_PASSWORD")
 
 root_dir = "build"
 ver_dir = root_dir + "/ver"
@@ -93,7 +93,7 @@ ver_dir = root_dir + "/ver"
 
 def get_env(os):
     env = {
-        "BUILDBOT_USERPWD": "{}:{}".format(username, userkey),
+        "BUILDBOT_USERPWD": "{}:{}".format(username, buildbot_password),
     }
     return env
 
@@ -172,7 +172,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Add apt repository",
                 haltOnFailure=True,
@@ -194,7 +194,7 @@ for repository in repositories:
                                 "--login",
                                 username,
                                 "--password",
-                                userkey,
+                                util.Secret("buildbot_password"),
                             ],
                             name="Add additional repka apt repository",
                             haltOnFailure=True,
@@ -250,7 +250,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Create debian directory",
                 haltOnFailure=True,
@@ -312,7 +312,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Create debian changelog",
                 haltOnFailure=True,
@@ -365,7 +365,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Upload to repka",
                 haltOnFailure=True,

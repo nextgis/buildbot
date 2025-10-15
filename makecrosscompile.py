@@ -50,12 +50,12 @@ repka_release_script_src = tools_base_url + repka_release_script_name
 
 logname = "stdio"
 username = "buildbot"
-userkey = os.environ.get("BUILDBOT_PASSWORD")
+buildbot_password = os.environ.get("BUILDBOT_PASSWORD")
 
 
 def get_env(os):
     env = {
-        "BUILDBOT_USERPWD": "{}:{}".format(username, userkey),
+        "BUILDBOT_USERPWD": "{}:{}".format(username, buildbot_password),
     }
     return env
 
@@ -163,7 +163,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Crosscompile and send to repka",
                 haltOnFailure=True,

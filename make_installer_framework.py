@@ -33,7 +33,6 @@ QT_GIT_URL = "https://github.com/nextgis-borsch/lib_qt5.git"
 INSTALLER_GIT_URL = "https://github.com/nextgis/nextgis_installer.git"
 
 USERNAME = "buildbot"
-userkey = os.environ.get("BUILDBOT_PASSWORD")
 
 # Helpers
 
@@ -294,7 +293,7 @@ for platform in PLATFORMS:
                 "--login",
                 USERNAME,
                 "--password",
-                userkey,
+                util.Secret("buildbot_password"),
             ],
             haltOnFailure=True,
             workdir=qt_code_dir,
@@ -406,7 +405,7 @@ for platform in PLATFORMS:
                 "--login",
                 USERNAME,
                 "--password",
-                userkey,
+                util.Secret("buildbot_password"),
             ],
             haltOnFailure=True,
             workdir=installer_code_dir,

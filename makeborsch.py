@@ -118,7 +118,7 @@ release_script_src = (
     + REPKA_SCRIPT_NAME
 )
 username = "buildbot"
-userkey = os.environ.get("BUILDBOT_PASSWORD")
+buildbot_password = os.environ.get("BUILDBOT_PASSWORD")
 # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
 upload_script_src = (
     "https://raw.githubusercontent.com/nextgis/buildbot/master/worker/ftp_uploader.py"
@@ -232,7 +232,7 @@ def get_env(os):
             "${PATH}",
         ]
         env["MACOSX_DEPLOYMENT_TARGET"] = MAC_OS_MIN_VERSION
-    env["BUILDBOT_USERPWD"] = "{}:{}".format(username, userkey)
+    env["BUILDBOT_USERPWD"] = "{}:{}".format(username, buildbot_password)
     env["SENTRY_URL"] = sentry_url
     env["SENTRY_ORG"] = "nextgis"
     if sentry_auth_token is not None:
@@ -574,7 +574,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                     "--build_path",
                     build_subdir,
                 ],
