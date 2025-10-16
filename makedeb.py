@@ -124,6 +124,7 @@ for repository in repositories:
         schedulers.ForceScheduler(
             name=project_name + "_force_deb",
             builderNames=builderNames,
+            buttonName="Build " + project_name + " deb",
         )
     )
 

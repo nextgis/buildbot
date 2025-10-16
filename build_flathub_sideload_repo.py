@@ -81,7 +81,7 @@ def make_sideload_repo_factory():
     for dependency in RUNTIME_DEPENDENCIES:
         factory.addStep(
             steps.ShellSequence(
-                name=f"Download {dependency[dependency.find('/')]}",
+                name=f"Download {dependency}",
                 commands=[
                     util.ShellArg(
                         command=[
@@ -189,7 +189,7 @@ builders = [
 
 schedulers_list = [
     schedulers.ForceScheduler(
-        name=f"{BUILDER_NAME}_force",
+        name=f"{BUILDER_NAME}_force_scheduler",
         label="Build Flathub Sideload Repo",
         buttonName="Build Flathub Sideload Repo",
         builderNames=[BUILDER_NAME],
