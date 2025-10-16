@@ -120,7 +120,7 @@ for lang in langs:
 
 builder = util.BuilderConfig(
     name=project_name,
-    workernames=["build-light"],
+    workernames=["build-doc"],
     factory=factory,
     tags=["docs"],
 )

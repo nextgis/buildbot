@@ -1,6 +1,6 @@
 variable "REGISTRY" { default = "harbor.nextgis.net/ngqgis/ngqgis" }
 
-group "base" {
+group "all" {
   targets = [
     "ubuntu-worker-focal",
     "ubuntu-worker-jammy",
@@ -56,10 +56,20 @@ target "flatpak-worker-kde-515-2408" {
   tags       = ["${REGISTRY}/flatpak-worker:kde-5.15-24.08"]
 }
 
+# Environment for cross-compilation of Android applications
 target "crosscompile-worker-r25c" {
   inherits   = ["common"]
   context    = "."
-  dockerfile = "crosscompile-worker/Dockerfile"
+  dockerfile = "crosscompile-worker-r25c/Dockerfile"
   tags       = ["${REGISTRY}/crosscompile-worker:r25c"]
+  depends_on = ["ubuntu-worker-jammy"]
+}
+
+# Environment for cross-compilation of Android applications
+target "docs-worker" {
+  inherits   = ["common"]
+  context    = "."
+  dockerfile = "docs-worker/Dockerfile"
+  tags       = ["${REGISTRY}/docs-worker:latest"]
   depends_on = ["ubuntu-worker-jammy"]
 }
