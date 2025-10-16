@@ -79,9 +79,18 @@ def make_sideload_repo_factory():
 
     # Download dependencies
     for dependency in RUNTIME_DEPENDENCIES:
+        step_name = "Download "
+        full_name_len = len(step_name + dependency)
+        max_name_len = 50
+        if full_name_len <= max_name_len:
+            step_name += dependency
+        else:
+            stripped_dependency = "…" +  dependency[full_name_len - max_name_len + 1:]
+            step_name += stripped_dependency
+
         factory.addStep(
             steps.ShellSequence(
-                name=f"Download {dependency}",
+                name=step_name,
                 commands=[
                     util.ShellArg(
                         command=[
@@ -97,7 +106,7 @@ def make_sideload_repo_factory():
                         command=[
                             "flatpak",
                             "create-usb",
-                            "--allow-partial",
+                            # "--allow-partial",
                             "--user",
                             SIDELOAD_REPO_NAME,
                             dependency,
