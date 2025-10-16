@@ -337,7 +337,6 @@ def get_updater_package_path(props, platform):
 
 
 platforms = [
-    # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
     {"name": "win64", "worker": "build-win-py3", "repo_id": 5},
     {"name": "mac", "worker": "build-mac-py3", "repo_id": 6},
 ]
