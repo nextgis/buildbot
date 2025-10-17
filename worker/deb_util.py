@@ -442,7 +442,7 @@ if __name__ == "__main__":
             )
             try:
                 with open("/etc/apt/preferences.d/nextgis", "w") as apt_preferences:
-                    apt_preferences.write("""Package: *\nPin: origin rm.nextgis.com\nPin-Priority: 100\n""")
+                    apt_preferences.write("""Package: *\nPin: origin rm.nextgis.com\nPin-Priority: 1001\n""")
             except Exception as e:
                 print(f"Failed to write APT preferences: {e}")
         except:
