@@ -16,7 +16,7 @@ repositories = [
     {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', 'astra', ], 'repo_id':11},
     {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra', ], 'repo_id':11},
     {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', 'astra', 'noble'], 'repo_id':11},
-    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', 'astra', 'noble'], 'repo_id':11},
+    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', 'astra'], 'repo_id':11},
     {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra', 'noble'], 'repo_id':11},
     {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra', ], 'repo_id':11},
     {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', ], 'repo_id':11},
