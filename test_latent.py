@@ -14,8 +14,6 @@ c["schedulers"] = []
 c["builders"] = []
 
 platforms = [
-    {"name": "win", "worker": "build-win"},
-    {"name": "mac", "worker": "build-mac"},
     {"name": "nix", "worker": "build-nix"},
 ]
 

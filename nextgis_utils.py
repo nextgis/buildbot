@@ -31,7 +31,7 @@ MAC_OS_SDKS_PATH = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.
 
 
 def create_tags(identifiers: Iterable[str]) -> List[str]:
-    UBUNTU_DISTROS = ("focal", "bullseye", "jammy")
+    UBUNTU_DISTROS = ("focal", "jammy", "noble")
     ASTRA_DISTROS = ("astra",)
     LINUX_DISTROS = (*UBUNTU_DISTROS, *ASTRA_DISTROS)
 

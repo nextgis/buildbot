@@ -440,6 +440,11 @@ if __name__ == "__main__":
                     ),
                 ]
             )
+            try:
+                with open("/etc/apt/preferences.d/nextgis", "w") as apt_preferences:
+                    apt_preferences.write("""Package: libgdal-dev libgdal36 libgdal31 gdal-bin gdal-data python3-gdal\nPin: origin rm.nextgis.com\nPin-Priority: 1001\n""")
+            except Exception as e:
+                print(f"Failed to write APT preferences: {e}")
         except:
             print(
                 "Skip add repo: {}/api/repo/{}/deb {} {}".format(

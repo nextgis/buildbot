@@ -12,41 +12,41 @@ c = {}
 
 # fmt: off
 repositories = [
-    {'repo':'lib_geos', 'deb':'geos', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', 'astra',], 'repo_id':11},
-    {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'jammy', 'astra',], 'repo_id':11},
-    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bullseye', 'focal', 'jammy', 'astra', ], 'repo_id':11},
-    {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'bullseye', 'focal', 'jammy', ], 'repo_id':11},
-    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal','bullseye', 'jammy',], 'repo_id':12, 'apt_repos':[{
+    {'repo':'lib_geos', 'deb':'geos', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_proj', 'deb':'proj', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_geotiff', 'deb':'libgeotiff', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'lib_opencad', 'deb':'opencad', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', 'astra', 'noble'], 'repo_id':11},
+    {'repo':'lib_oci', 'deb':'oci', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', 'astra'], 'repo_id':11},
+    {'repo':'lib_gdal', 'deb':'gdal', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra', 'noble'], 'repo_id':11},
+    {'repo':'lib_spatialite', 'deb':'spatialite', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra', ], 'repo_id':11},
+    {'repo':'mapserver', 'deb':'mapserver', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['bionic', 'focal', 'jammy', ], 'repo_id':11},
+    {'repo':'nextgisutilities', 'deb':'nextgisutilities', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal','jammy',], 'repo_id':12, 'apt_repos':[{
             'repka_id':11,
             'type':'repka',
         },]
     },
-    {'repo':'postgis', 'deb':'postgis', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os': ['focal', 'bullseye', 'jammy',], 'repo_id':11, 'apt_repos':[{
+    {'repo':'postgis', 'deb':'postgis', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os': ['focal', 'jammy',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
             'type':'deb',
         },]
     },
-    {'repo':'lib_ngstd', 'deb':'ngstd', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'astra',], 'repo_id':11},
+    {'repo':'lib_ngstd', 'deb':'ngstd', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'astra', 'noble'], 'repo_id':11},
     {'repo':'formbuilder', 'deb':'formbuilder', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy',], 'repo_id':11},
     # {'repo':'manuscript', 'deb':'manuscript', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', ], 'repo_id':11},
-    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal','bullseye', 'jammy',], 'repo_id':11, 'apt_repos':[{
+    {'repo':'mapnik-german-l10n', 'deb':'osml10n', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal','jammy',], 'repo_id':11, 'apt_repos':[{
             'deb':'deb http://apt.postgresql.org/pub/repos/apt/ {}-pgdg main',
             'key':'B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8',
             'keyserver':'keyserver.ubuntu.com',
             'type':'deb',
         },]
     },
-    {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'astra',], 'repo_id':11, 'branch': 'master'},
-    {'repo':'qgis_headless', 'deb':'qgis-headless', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'bullseye', 'jammy',], 'repo_id':11, 'branch': 'master'},
-    {'repo':'terratile', 'deb':'python-terratile', 'repo_root':'https://github.com', 'org': 'nextgis', 'os':['focal', 'bullseye', 'jammy'], 'repo_id':11, 'branch': 'gdal3'},
-    {'repo':'lib_sentrynative', 'deb':'sentry-native', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'bullseye', 'jammy', 'astra',], 'repo_id':11, 'branch': 'master'},
-    {'repo':'lib_jsonc', 'deb':'jsonc', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'bullseye', 'jammy', 'astra',], 'repo_id':11, 'branch': 'master'},
+    {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'astra', 'noble'], 'repo_id':11, 'branch': 'master'},
+    {'repo':'qgis_headless', 'deb':'qgis-headless', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'noble'], 'repo_id':11, 'branch': 'master'},
+    {'repo':'terratile', 'deb':'python-terratile', 'repo_root':'https://github.com', 'org': 'nextgis', 'os':['focal', 'jammy'], 'repo_id':11, 'branch': 'gdal3'},
+    {'repo':'lib_sentrynative', 'deb':'sentry-native', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra', 'noble'], 'repo_id':11, 'branch': 'master'},
+    {'repo':'lib_jsonc', 'deb':'jsonc', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra',], 'repo_id':11, 'branch': 'master'},
     # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
     # {'repo':'py_future', 'version':'0.17.1', 'deb':'python-future', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/90/52/e20466b85000a181e1e144fd8305caf2cf475e2f9674e797b222f8105f5f/future-0.17.1.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
     # {'repo':'py_raven', 'version':'6.10.0', 'deb':'python-raven', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': 'https://files.pythonhosted.org/packages/79/57/b74a86d74f96b224a477316d418389af9738ba7a63c829477e7a86dd6f47/raven-6.10.0.tar.gz', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
@@ -65,14 +65,8 @@ c["builders"] = []
 
 platforms = [
     {"name": "focal", "worker": "deb-build-focal"},
-    # {'name' : 'bionic', 'worker' : 'deb-build-bionic'},
-    # {'name' : 'xenial', 'worker' : 'deb-build-xenial'},
-    # {'name' : 'trusty', 'worker' : 'deb-build-trusty'},
-    # {'name' : 'stretch', 'worker' : 'deb-build-stretch'},
-    # {'name' : 'buster', 'worker' : 'deb-build-buster'},
-    {"name": "bullseye", "worker": "deb-build-bullseye"},
-    # {'name' : 'sid', 'worker' : 'deb-build-sid'},
     {"name": "jammy", "worker": "deb-build-jammy"},
+    {"name": "noble", "worker": "deb-build-noble"},
     {"name": "astra", "worker": "deb-build-astra"},
 ]
 
@@ -84,7 +78,7 @@ script_src = (
 script_name = "deb_util.py"
 logname = "stdio"
 username = "buildbot"
-userkey = os.environ.get("BUILDBOT_PASSWORD")
+buildbot_password = os.environ.get("BUILDBOT_PASSWORD")
 
 root_dir = "build"
 ver_dir = root_dir + "/ver"
@@ -92,7 +86,7 @@ ver_dir = root_dir + "/ver"
 
 def get_env(os):
     env = {
-        "BUILDBOT_USERPWD": "{}:{}".format(username, userkey),
+        "BUILDBOT_USERPWD": "{}:{}".format(username, buildbot_password),
     }
     return env
 
@@ -119,16 +113,11 @@ for repository in repositories:
         if platform["name"] in repository["os"]:
             builderNames.append(project_name + "_" + platform["name"])
 
-    scheduler = schedulers.ForceScheduler(
-        name=project_name + "_deb",
-        builderNames=builderNames,
-    )
-    c["schedulers"].append(scheduler)
-
     c["schedulers"].append(
         schedulers.ForceScheduler(
             name=project_name + "_force_deb",
             builderNames=builderNames,
+            buttonName="Build " + project_name + " deb",
         )
     )
 
@@ -177,7 +166,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Add apt repository",
                 haltOnFailure=True,
@@ -199,7 +188,7 @@ for repository in repositories:
                                 "--login",
                                 username,
                                 "--password",
-                                userkey,
+                                util.Secret("buildbot_password"),
                             ],
                             name="Add additional repka apt repository",
                             haltOnFailure=True,
@@ -255,7 +244,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Create debian directory",
                 haltOnFailure=True,
@@ -317,7 +306,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Create debian changelog",
                 haltOnFailure=True,
@@ -370,7 +359,7 @@ for repository in repositories:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Upload to repka",
                 haltOnFailure=True,

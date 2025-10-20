@@ -17,7 +17,6 @@ repka_script_name = "repka_release.py"
 if_project_name = "inst_framework"
 login_keychain = os.environ.get("BUILDBOT_MACOSX_LOGIN_KEYCHAIN")
 username = "buildbot"  # username = 'bishopgis'
-userkey = os.environ.get("BUILDBOT_PASSWORD")
 # userkey = os.environ.get("BUILDBOT_APITOKEN_GITHUB")
 https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
 installer_git = "https://github.com/nextgis/nextgis_installer.git"
@@ -338,7 +337,6 @@ def get_updater_package_path(props, platform):
 
 
 platforms = [
-    # {'name' : 'win32', 'worker' : 'build-win', 'repo_id': 4},
     {"name": "win64", "worker": "build-win-py3", "repo_id": 5},
     {"name": "mac", "worker": "build-mac-py3", "repo_id": 6},
 ]
@@ -590,7 +588,7 @@ for platform in platforms:
                 "-vu",
                 util.Interpolate("%(prop:valid_user)s"),
                 "--sign_pwd",
-                "{}:{}".format(username, userkey),
+                util.Interpolate(f"{username}:%(secret:buildbot_password)s"),
             ],
             name="Prepare packages data",
             maxTime=max_time * 60,
@@ -799,7 +797,7 @@ for platform in platforms:
                 "--login",
                 username,
                 "--password",
-                userkey,
+                util.Secret("buildbot_password"),
             ],
             name="Send installer package to repka",
             doStepIf=(lambda step: not skip_step(step, "create+local")),
@@ -828,7 +826,7 @@ for platform in platforms:
                 "--login",
                 username,
                 "--password",
-                userkey,
+                util.Secret("buildbot_password"),
             ],
             name="Send standalone installer package to repka",
             doStepIf=(
@@ -899,7 +897,7 @@ for platform in platforms:
                     "--login",
                     username,
                     "--password",
-                    userkey,
+                    util.Secret("buildbot_password"),
                 ],
                 name="Send updater package to repka",
                 doStepIf=(
@@ -932,7 +930,7 @@ for platform in platforms:
                 "--login",
                 username,
                 "--password",
-                userkey,
+                util.Secret("buildbot_password"),
             ],
             name="Create release in repka",
             doStepIf=(lambda step: skip_step(step, "standalone+local")),
