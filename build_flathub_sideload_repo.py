@@ -11,6 +11,8 @@ The process includes:
 
 from buildbot.plugins import schedulers, steps, util
 
+from nextgis_buildbot.steps.repka import RepkaUpload
+
 BUILDER_NAME = "flathub_sideload_repo"
 
 RUNTIME_DEPENDENCIES = [
@@ -172,7 +174,12 @@ def make_sideload_repo_factory():
     )
 
     # Upload artifacts
-    # TODO
+    factory.addStep(
+        RepkaUpload(
+            name="Upload sideload repo to Repka",
+            files=f"build/{SIDELOAD_REPO_NAME}.zip",
+        )
+    )
 
     return factory
 
