@@ -94,13 +94,6 @@ def make_sideload_repo_factory():
                 commands=[
                     util.ShellArg(
                         command=[
-                            "pwd",
-                        ],
-                        logname="pwd",
-                    ),
-                    util.ShellArg(command=["ls", "-la"], logname="ls"),
-                    util.ShellArg(
-                        command=[
                             "flatpak",
                             "install",
                             "--assumeyes",
