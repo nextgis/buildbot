@@ -77,6 +77,17 @@ def make_sideload_repo_factory():
     # Make directory
     factory.addStep(steps.MakeDirectory(dir=SIDELOAD_REPO_NAME))
 
+    factory.addStep(
+        steps.ShellCommand(
+            name="Test command",
+            command=[
+                "echo",
+                "Sideload repo prepared successfully.",
+            ],
+            haltOnFailure=True,
+        )
+    )
+
     # Download dependencies
     for dependency in RUNTIME_DEPENDENCIES:
         step_name = "Download "
@@ -126,17 +137,6 @@ def make_sideload_repo_factory():
                 "-o",
                 f"{SIDELOAD_REPO_NAME}/flathub.flatpakrepo",
                 "https://dl.flathub.org/repo/flathub.flatpakrepo",
-            ],
-            haltOnFailure=True,
-        )
-    )
-
-    factory.addStep(
-        steps.ShellCommand(
-            name="Test command",
-            command=[
-                "echo",
-                "Sideload repo prepared successfully.",
             ],
             haltOnFailure=True,
         )
