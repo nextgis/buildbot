@@ -75,7 +75,7 @@ def make_sideload_repo_factory():
     )
 
     # Make directory
-    factory.addStep(steps.MakeDirectory(dir=SIDELOAD_REPO_NAME))
+    factory.addStep(steps.MakeDirectory(dir=f"build/{SIDELOAD_REPO_NAME}"))
 
     # Download dependencies
     for dependency in RUNTIME_DEPENDENCIES:
@@ -85,7 +85,7 @@ def make_sideload_repo_factory():
         if full_name_len <= max_name_len:
             step_name += dependency
         else:
-            stripped_dependency = "…" +  dependency[full_name_len - max_name_len + 1:]
+            stripped_dependency = "…" + dependency[full_name_len - max_name_len + 1 :]
             step_name += stripped_dependency
 
         factory.addStep(
@@ -96,15 +96,9 @@ def make_sideload_repo_factory():
                         command=[
                             "pwd",
                         ],
-                        logname="pwd"
+                        logname="pwd",
                     ),
-                    util.ShellArg(
-                        command=[
-                            "ls",
-                            "-la"
-                        ],
-                        logname="ls"
-                    ),
+                    util.ShellArg(command=["ls", "-la"], logname="ls"),
                     util.ShellArg(
                         command=[
                             "flatpak",
@@ -114,7 +108,7 @@ def make_sideload_repo_factory():
                             "flathub",
                             dependency,
                         ],
-                        logname="install"
+                        logname="install",
                     ),
                     util.ShellArg(
                         command=[
@@ -125,7 +119,7 @@ def make_sideload_repo_factory():
                             SIDELOAD_REPO_NAME,
                             dependency,
                         ],
-                        logname="create-usb"
+                        logname="create-usb",
                     ),
                 ],
                 haltOnFailure=True,
@@ -148,23 +142,22 @@ def make_sideload_repo_factory():
 
     # Add helper script
     factory.addStep(
-        steps.ShellSequence(
+        steps.StringDownload(
+            SIDELOAD_SCRIPT_CONTENT,
+            workerdest=f"{SIDELOAD_REPO_NAME}/{SIDELOAD_SCRIPT_NAME}",
             name="Add install script",
-            commands=[
-                util.ShellArg(
-                    command=[
-                        "bash",
-                        "-c",
-                        f'echo "{SIDELOAD_SCRIPT_CONTENT}" > {SIDELOAD_REPO_NAME}/{SIDELOAD_SCRIPT_NAME}',
-                    ]
-                ),
-                util.ShellArg(
-                    command=[
-                        "chmod",
-                        "+x",
-                        f"{SIDELOAD_REPO_NAME}/{SIDELOAD_SCRIPT_NAME}",
-                    ]
-                ),
+            haltOnFailure=True,
+        )
+    )
+
+    # Set mode
+    factory.addStep(
+        steps.ShellCommand(
+            name="Set script executable",
+            command=[
+                "chmod",
+                "+x",
+                f"{SIDELOAD_REPO_NAME}/{SIDELOAD_SCRIPT_NAME}",
             ],
             haltOnFailure=True,
         )
