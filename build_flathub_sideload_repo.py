@@ -77,17 +77,6 @@ def make_sideload_repo_factory():
     # Make directory
     factory.addStep(steps.MakeDirectory(dir=SIDELOAD_REPO_NAME))
 
-    factory.addStep(
-        steps.ShellCommand(
-            name="Test command",
-            command=[
-                "echo",
-                "Sideload repo prepared successfully.",
-            ],
-            haltOnFailure=True,
-        )
-    )
-
     # Download dependencies
     for dependency in RUNTIME_DEPENDENCIES:
         step_name = "Download "
@@ -111,7 +100,8 @@ def make_sideload_repo_factory():
                             "--user",
                             "flathub",
                             dependency,
-                        ]
+                        ],
+                        logname="install"
                     ),
                     util.ShellArg(
                         command=[
@@ -121,7 +111,8 @@ def make_sideload_repo_factory():
                             "--user",
                             SIDELOAD_REPO_NAME,
                             dependency,
-                        ]
+                        ],
+                        logname="create-usb"
                     ),
                 ],
                 haltOnFailure=True,
