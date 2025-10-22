@@ -131,6 +131,17 @@ def make_sideload_repo_factory():
         )
     )
 
+    factory.addStep(
+        steps.ShellCommand(
+            name="Test command",
+            command=[
+                "echo",
+                "Sideload repo prepared successfully.",
+            ],
+            haltOnFailure=True,
+        )
+    )
+
     # Add helper script
     factory.addStep(
         steps.ShellSequence(
