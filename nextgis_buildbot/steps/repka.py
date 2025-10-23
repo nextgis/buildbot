@@ -218,9 +218,11 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
 
         assert self.build is not None  # help type checkers
 
+        release_name = yield self.build.render(self._release_name)
+
         payload = {
             "packet": packet_id,
-            "name": self.build.render(self._release_name),
+            "name": release_name,
             "files": uploaded_files,
         }
         if self._release_description is not None:
