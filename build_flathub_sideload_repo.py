@@ -188,20 +188,26 @@ def make_sideload_repo_factory():
     )
 
     # Create Repka release
+    version = (
+        util.Interpolate(
+            "%(kw:year)s.%(kw:month)s.%(kw:day)s",
+            year=renderers.current_year,
+            month=renderers.current_month,
+            day=renderers.current_day,
+        ),
+    )
     factory.addStep(
         RepkaCreateRelease(
             name="Create Repka release for sideload repo",
             package=PACKAGE_ID,
-            release_name=util.Interpolate(
-                "%(kw:year)s.%(kw:month)s.%(kw:day)s",
-                year=renderers.current_year,
-                month=renderers.current_month,
-                day=renderers.current_day,
-            ),
+            release_name=version,
             release_description="Sideload repository for Flathub Flatpak packages.",
-            distribution="offline",
-            os="linux",
-            channel="stable",
+            tags=["sideload-repo", "flatpak"],
+            options={
+                "dist": "offline",
+                "os": "linux",
+                "type": "stable",
+            },
             mark_latest=True,
         )
     )

@@ -1,7 +1,7 @@
 """Custom Buildbot steps for interacting with Repka service."""
 
 import json
-from typing import List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 from buildbot.plugins import util
 from buildbot.process import buildstep
@@ -145,10 +145,7 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
     - release_description: Optional release description.
     - tags: Optional list of tags; may be empty. Use ``mark_latest`` flag to
       auto-append ``"latest"``.
-    - distribution: Optional distribution option value.
-    - os: Optional operating system option value.
-    - channel: Optional release channel (e.g., stable, beta, dev).
-    - mark_latest: If ``True``, ensure ``"latest"`` is present in tags.
+    - options: Dictionary containing optional parameters.
 
     Behavior:
     - Read ``repka_uploaded_files`` property produced by :class:`RepkaUpload`.
@@ -164,9 +161,7 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         release_name: str,
         release_description: Optional[str] = None,
         tags: Optional[List[str]] = None,
-        distribution: Optional[str] = None,
-        os: Optional[str] = None,
-        channel: Optional[str] = None,
+        options: Optional[Dict[str, str]] = None,
         mark_latest: bool = False,
         **kwargs,
     ) -> None:
@@ -174,9 +169,7 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         self._release_name = release_name
         self._release_description = release_description
         self._tags = list(tags) if tags else []
-        self._distribution = distribution
-        self._os = os
-        self._channel = channel
+        self._options = options or {}
         self._mark_latest = mark_latest
 
         kwargs = self.setupShellMixin(kwargs, prohibitArgs=["command"])
@@ -208,13 +201,9 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
             tags.append("latest")
 
         # Options mapping
-        options: List[dict] = []
-        if self._distribution is not None:
-            options.append({"key": "dist", "value": str(self._distribution)})
-        if self._os is not None:
-            options.append({"key": "os", "value": str(self._os)})
-        if self._channel is not None:
-            options.append({"key": "type", "value": str(self._channel)})
+        options: List[Dict[str, str]] = [
+            {"key": key, "value": value} for key, value in self._options.items()
+        ]
 
         assert self.build is not None  # help type checkers
 
@@ -352,9 +341,7 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
                     )
                     continue
 
-                download_url = (
-                    f"{ENDPOINT.rstrip('/')}/api/asset/{file_id}/download"
-                )
+                download_url = f"{ENDPOINT.rstrip('/')}/api/asset/{file_id}/download"
                 yield self.addURL(file_name, download_url)
 
         except Exception as exc:
