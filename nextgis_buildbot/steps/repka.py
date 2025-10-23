@@ -307,7 +307,7 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
             "Package in Repka", f"{ENDPOINT.rstrip('/')}/packet/{packet_id}"
         )
 
-        api_release_url = f"{ENDPOINT.rstrip('/')}/api/release/{packet_id}"
+        api_release_url = f"{ENDPOINT.rstrip('/')}/api/release/{release_id}"
 
         cmdline = [
             "curl",
