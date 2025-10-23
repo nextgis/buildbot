@@ -8,6 +8,8 @@ from buildbot.process import buildstep
 from buildbot.process.results import FAILURE, SUCCESS
 from twisted.internet import defer
 
+from nextgis_buildbot.utils import human_readable_size
+
 ENDPOINT = "https://rm.nextgis.com"
 USERNAME = "buildbot"
 
@@ -157,7 +159,7 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
 
     def __init__(
         self,
-        package: int,
+        packet: int,
         release_name: str,
         release_description: Optional[str] = None,
         tags: Optional[List[str]] = None,
@@ -165,7 +167,7 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         mark_latest: bool = False,
         **kwargs,
     ) -> None:
-        self._package = package
+        self._packet = packet
         self._release_name = release_name
         self._release_description = release_description
         self._tags = list(tags) if tags else []
@@ -186,33 +188,142 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         # Validate files from previous RepkaUpload step
         uploaded_files = self.getProperty("repka_uploaded_files")
         if not uploaded_files or not isinstance(uploaded_files, list):
-            self.descriptionDone = [
-                "repka-release",
-                "no-files",
-            ]
+            self.descriptionDone = ["repka-release", "no-files"]
             defer.returnValue(FAILURE)
 
-        # Prepare packet id
-        packet_id = self._package
+        packet_id = self._packet
 
-        # Tags handling
+        try:
+            json_body = yield self._build_release_payload(
+                packet_id=packet_id, files=uploaded_files
+            )
+            credentials = yield self._get_credentials()
+
+        except Exception as exc:
+            self.addCompleteLog(
+                "repka-release-error",
+                f"Failed to prepare release request: {exc}\n",
+            )
+            self.descriptionDone = ["repka-release", "bad-payload"]
+            defer.returnValue(FAILURE)
+
+        try:
+            release_id = yield self._post_release(credentials, json_body)
+
+        except _CurlFailedError:
+            self.addCompleteLog(
+                "repka-release-error",
+                f"Failed to create release for packet {packet_id}\n",
+            )
+            self.descriptionDone = ["repka-release", "failed"]
+            defer.returnValue(FAILURE)
+
+        except Exception as exc:
+            self.addCompleteLog(
+                "repka-release-error",
+                f"Failed to parse response: {exc}\n",
+            )
+            self.descriptionDone = ["repka-release", "invalid-response"]
+            defer.returnValue(FAILURE)
+
+        # Save release id for downstream steps
+        if not self._save_release_id(release_id):
+            self.descriptionDone = ["repka-release", "cant-set-property"]
+            defer.returnValue(FAILURE)
+
+        # Add package page URL
+        yield self._add_package_url(packet_id)
+
+        # Fetch files and add download URLs
+        try:
+            files_array = yield self._fetch_release_files(credentials, release_id)
+        except _CurlFailedError:
+            self.addCompleteLog(
+                "repka-release-error",
+                f"Failed to fetch release info for packet {packet_id}\n",
+            )
+            self.descriptionDone = ["repka-release", "fetch-failed"]
+            defer.returnValue(FAILURE)
+        except Exception as exc:
+            self.addCompleteLog(
+                "repka-release-error",
+                f"Failed to parse release files: {exc}\n",
+            )
+            self.descriptionDone = ["repka-release", "invalid-release-response"]
+            defer.returnValue(FAILURE)
+
+        yield self._add_file_urls(files_array)
+
+        self.descriptionDone = ["repka-release", "ok", str(release_id)]
+        defer.returnValue(SUCCESS)
+
+    def _compute_tags(self) -> List[str]:
+        """Compute final tags list based on init parameters.
+
+        :returns: List of tags; adds "latest" when requested.
+        :rtype: list[str]
+        """
+
         tags: List[str] = list(self._tags) if self._tags else []
         if self._mark_latest and "latest" not in tags:
             tags.append("latest")
+        return tags
 
-        # Options mapping
-        options: List[Dict[str, str]] = [
-            {"key": key, "value": value} for key, value in self._options.items()
-        ]
+    def _compute_options(self) -> List[Dict[str, str]]:
+        """Convert options dict into Repka options array.
 
-        assert self.build is not None  # help type checkers
+        :returns: Array of objects with keys ``key`` and ``value``.
+        :rtype: list[dict]
+        """
 
-        release_name = yield self.build.render(self._release_name)
+        return [{"key": k, "value": v} for k, v in self._options.items()]
+
+    @defer.inlineCallbacks
+    def _render_release_name(self):
+        """Render the release name through Buildbot renderer.
+
+        :returns: Rendered release name.
+        :rtype: str
+        """
+
+        assert self.build is not None
+        name = yield self.build.render(self._release_name)
+        defer.returnValue(name)
+
+    @defer.inlineCallbacks
+    def _get_credentials(self):
+        """Render credentials for curl basic auth.
+
+        :returns: Credentials string in the form ``user:password``.
+        :rtype: str
+        """
+
+        assert self.build is not None
+        creds = yield self.build.render(
+            util.Interpolate(f"{USERNAME}:%(secret:buildbot_password)s")
+        )
+        defer.returnValue(creds)
+
+    @defer.inlineCallbacks
+    def _build_release_payload(
+        self,
+        *,
+        packet_id: int,
+        files: List[Dict[str, str]],
+    ):
+        """Build the request payload for release creation.
+
+        :returns: JSON-serialized payload.
+        :rtype: str
+        """
+        release_name = yield self._render_release_name()
+        tags = self._compute_tags()
+        options = self._compute_options()
 
         payload = {
             "packet": packet_id,
             "name": release_name,
-            "files": uploaded_files,
+            "files": files,
         }
         if self._release_description is not None:
             payload["description"] = self._release_description
@@ -221,23 +332,20 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         if options:
             payload["options"] = options
 
+        json_payload = json.dumps(payload, ensure_ascii=False)
+        defer.returnValue(json_payload)
+
+    @defer.inlineCallbacks
+    def _post_release(self, credentials: str, json_body: str):
+        """Perform POST /api/release and return created release id.
+
+        :raises _CurlFailedError: When curl command fails.
+        :raises Exception: When response cannot be parsed.
+        :returns: Release identifier from server response.
+        :rtype: int
+        """
+
         api_url = f"{ENDPOINT.rstrip('/')}/api/release"
-
-        credentials = yield self.build.render(
-            util.Interpolate(f"{USERNAME}:%(secret:buildbot_password)s")
-        )
-
-        # Execute curl on worker to create release
-        try:
-            json_body = json.dumps(payload, ensure_ascii=False)
-        except Exception as exc:
-            self.addCompleteLog(
-                "repka-release-error",
-                f"Failed to serialize payload: {exc}\n",
-            )
-            self.descriptionDone = ["repka-release", "bad-payload"]
-            defer.returnValue(FAILURE)
-
         cmdline = [
             "curl",
             "-sS",
@@ -255,49 +363,54 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         ]
 
         cmd = yield self.makeRemoteShellCommand(
-            command=cmdline,
-            collectStdout=True,
-            logEnviron=False,
+            command=cmdline, collectStdout=True, logEnviron=False
         )
         yield self.runCommand(cmd)
 
         if cmd.didFail():
-            self.descriptionDone = ["repka-release", "failed"]
-            defer.returnValue(FAILURE)
+            raise _CurlFailedError("curl POST /api/release failed")
 
-        # Parse response
-        try:
-            stdout_text = cmd.stdout if cmd.stdout else ""
-            response = json.loads(stdout_text.strip())
-            release_id = response["id"]
-        except Exception as exc:
-            self.addCompleteLog(
-                "repka-release-error",
-                f"Failed to parse response: {exc}\n",
-            )
-            self.descriptionDone = ["repka-release", "invalid-response"]
-            defer.returnValue(FAILURE)
+        stdout_text = cmd.stdout if cmd.stdout else ""
+        response = json.loads(stdout_text.strip())
+        release_id = response["id"]
+        defer.returnValue(release_id)
 
-        # Save release id for downstream steps
+    def _save_release_id(self, release_id: int) -> bool:
+        """Save release id into build property.
+
+        :returns: True on success, False otherwise.
+        :rtype: bool
+        """
+
         try:
             self.setProperty("repka_release_id", release_id, "RepkaCreateRelease")
+            return True
         except Exception:
             self.addCompleteLog(
                 "repka-release-error",
                 "Failed to set property repka_release_id\n",
             )
-            self.descriptionDone = [
-                "repka-release",
-                "cant-set-property",
-            ]
-            defer.returnValue(FAILURE)
+            return False
+
+    @defer.inlineCallbacks
+    def _add_package_url(self, packet_id: int):
+        """Add a link to the Repka package page to the build summary."""
 
         yield self.addURL(
             "Package in Repka", f"{ENDPOINT.rstrip('/')}/packet/{packet_id}"
         )
 
-        api_release_url = f"{ENDPOINT.rstrip('/')}/api/release/{release_id}"
+    @defer.inlineCallbacks
+    def _fetch_release_files(self, credentials: str, release_id: int):
+        """Fetch release object and return its files array.
 
+        :raises _CurlFailedError: When curl GET fails.
+        :raises Exception: When response cannot be parsed or malformed.
+        :returns: List of file descriptors from release object.
+        :rtype: list[dict]
+        """
+
+        api_release_url = f"{ENDPOINT.rstrip('/')}/api/release/{release_id}"
         cmdline = [
             "curl",
             "-sS",
@@ -316,41 +429,35 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         yield self.runCommand(cmd)
 
         if cmd.didFail():
-            self.addCompleteLog(
-                "repka-release-error",
-                f"Failed to fetch release info for packet {packet_id}\n",
-            )
-            self.descriptionDone = ["repka-release", "fetch-failed"]
-            defer.returnValue(FAILURE)
+            raise _CurlFailedError("curl GET /api/release/{id} failed")
 
-        try:
-            stdout_text = cmd.stdout if cmd.stdout else ""
-            response = json.loads(stdout_text.strip())
-            files_array = response.get("files", [])
-            if not isinstance(files_array, list):
-                raise ValueError("field 'files' is not a list")
+        stdout_text = cmd.stdout if cmd.stdout else ""
+        response = json.loads(stdout_text.strip())
+        files_array = response.get("files", [])
+        if not isinstance(files_array, list):
+            raise ValueError("field 'files' is not a list")
+        defer.returnValue(files_array)
 
-            for file_obj in files_array:
-                file_id = file_obj.get("id")
-                file_name = file_obj.get("name")
-                if not file_id or not file_name:
-                    # Skip entries without necessary fields but log the issue.
-                    self.addCompleteLog(
-                        "repka-release-error",
-                        f"Skipping invalid file entry: {file_obj}\n",
-                    )
-                    continue
+    @defer.inlineCallbacks
+    def _add_file_urls(self, files_array: List[dict]):
+        """Add download URLs for each file in the release."""
+        for file_obj in files_array:
+            file_id = file_obj.get("id")
+            file_name = file_obj.get("name")
+            file_size = file_obj.get("size", 0)
 
-                download_url = f"{ENDPOINT.rstrip('/')}/api/asset/{file_id}/download"
-                yield self.addURL(file_name, download_url)
+            url_name = f"{file_name} ({human_readable_size(file_size)}) "
 
-        except Exception as exc:
-            self.addCompleteLog(
-                "repka-release-error",
-                f"Failed to parse release files: {exc}\n",
-            )
-            self.descriptionDone = ["repka-release", "invalid-release-response"]
-            defer.returnValue(FAILURE)
+            if not file_id or not file_name:
+                self.addCompleteLog(
+                    "repka-release-error",
+                    f"Skipping invalid file entry: {file_obj}\n",
+                )
+                continue
 
-        self.descriptionDone = ["repka-release", "ok", str(release_id)]
-        defer.returnValue(SUCCESS)
+            download_url = f"{ENDPOINT.rstrip('/')}/api/asset/{file_id}/download"
+            yield self.addURL(url_name, download_url)
+
+
+class _CurlFailedError(Exception):
+    """Internal exception indicating curl command failure."""

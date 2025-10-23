@@ -199,7 +199,7 @@ def make_sideload_repo_factory():
     factory.addStep(
         RepkaCreateRelease(
             name="Create Repka release for sideload repo",
-            package=PACKAGE_ID,
+            packet=PACKAGE_ID,
             release_name=version,
             release_description="Sideload repository for Flathub Flatpak packages.",
             tags=["sideload-repo", "flatpak"],
