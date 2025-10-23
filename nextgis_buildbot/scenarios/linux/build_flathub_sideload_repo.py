@@ -24,9 +24,10 @@ RUNTIME_DEPENDENCIES = [
     "org.freedesktop.Platform.GL.default/x86_64/24.08",
     "org.freedesktop.Platform.GL.default/x86_64/24.08extra",
     # "org.freedesktop.Platform.openh264/x86_64/2.5.1",
-    "org.kde.KStyle.Adwaita/x86_64/5.15-24.08",
     "org.kde.Platform/x86_64/5.15-24.08",
     "org.kde.Platform.Locale/x86_64/5.15-24.08",
+    "org.kde.KStyle.Adwaita/x86_64/5.15-24.08",
+    "org.gtk.Gtk3theme.Breeze/x86_64/3.22",
 ]
 
 SIDELOAD_REPO_NAME = "flathub-sideload-repo"
