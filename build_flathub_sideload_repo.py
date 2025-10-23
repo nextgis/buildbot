@@ -11,6 +11,7 @@ The process includes:
 
 from buildbot.plugins import schedulers, steps, util
 
+from nextgis_buildbot import renderers
 from nextgis_buildbot.steps.repka import RepkaCreateRelease, RepkaUpload
 
 BUILDER_NAME = "flathub_sideload_repo"
@@ -188,7 +189,12 @@ def make_sideload_repo_factory():
         RepkaCreateRelease(
             name="Create Repka release for sideload repo",
             package=PACKAGE_ID,
-            release_name="flathub-sideload-repo",
+            release_name=util.Interpolate(
+                "%(kw:year)s.%(kw:month)s.%(kw:day)s",
+                year=renderers.current_year,
+                month=renderers.current_month,
+                day=renderers.current_day,
+            ),
             release_description="Sideload repository for Flathub Flatpak packages.",
             distribution="offline",
             os="linux",

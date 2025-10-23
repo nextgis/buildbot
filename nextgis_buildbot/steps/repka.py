@@ -216,9 +216,11 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         if self._channel is not None:
             options.append({"key": "type", "value": str(self._channel)})
 
+        assert self.build is not None  # help type checkers
+
         payload = {
             "packet": packet_id,
-            "name": self._release_name,
+            "name": self.build.render(self._release_name),
             "files": uploaded_files,
         }
         if self._release_description is not None:
@@ -230,7 +232,6 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
 
         api_url = f"{ENDPOINT.rstrip('/')}/api/release"
 
-        assert self.build is not None  # help type checkers
         credentials = yield self.build.render(
             util.Interpolate(f"{USERNAME}:%(secret:buildbot_password)s")
         )
