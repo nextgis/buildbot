@@ -88,6 +88,7 @@ class RepkaUpload(buildstep.ShellMixin, buildstep.BuildStep):
 
             cmd = yield self.makeRemoteShellCommand(
                 command=cmdline,
+                collectStdout=True,
                 logEnviron=False,
             )
             yield self.runCommand(cmd)
@@ -104,8 +105,7 @@ class RepkaUpload(buildstep.ShellMixin, buildstep.BuildStep):
             # Parse JSON from stdout
             try:
                 # Access stdio log content
-                stdio_log = cmd.logs.get("stdio")
-                stdout_text = stdio_log.getText() if stdio_log else ""
+                stdout_text = cmd.stdout.decode("utf-8") if cmd.stdout else ""
                 response = json.loads(stdout_text.strip())
                 file_uid = response["file"]
                 file_name = response["name"]
