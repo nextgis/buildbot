@@ -105,7 +105,7 @@ class RepkaUpload(buildstep.ShellMixin, buildstep.BuildStep):
             # Parse JSON from stdout
             try:
                 # Access stdio log content
-                stdout_text = cmd.stdout.decode("utf-8") if cmd.stdout else ""
+                stdout_text = cmd.stdout if cmd.stdout else ""
                 response = json.loads(stdout_text.strip())
                 file_uid = response["file"]
                 file_name = response["name"]
