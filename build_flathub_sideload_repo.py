@@ -80,7 +80,11 @@ def make_sideload_repo_factory():
     )
 
     # Make directory
-    factory.addStep(steps.MakeDirectory(dir=f"build/{SIDELOAD_REPO_NAME}"))
+    factory.addStep(
+        steps.MakeDirectory(
+            name="Make sideload repo directory", dir=f"build/{SIDELOAD_REPO_NAME}"
+        )
+    )
 
     # Download dependencies
     for dependency in RUNTIME_DEPENDENCIES:
@@ -112,7 +116,6 @@ def make_sideload_repo_factory():
                         command=[
                             "flatpak",
                             "create-usb",
-                            # "--allow-partial",
                             "--user",
                             SIDELOAD_REPO_NAME,
                             dependency,
