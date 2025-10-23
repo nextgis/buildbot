@@ -194,7 +194,7 @@ def make_sideload_repo_factory():
             year=renderers.current_year,
             month=renderers.current_month,
             day=renderers.current_day,
-        ),
+        )
     )
     factory.addStep(
         RepkaCreateRelease(
