@@ -11,7 +11,7 @@ The process includes:
 
 from buildbot.plugins import schedulers, steps, util
 
-from nextgis_buildbot.steps.repka import RepkaUpload
+from nextgis_buildbot.steps.repka import RepkaCreateRelease, RepkaUpload
 
 BUILDER_NAME = "flathub_sideload_repo"
 
@@ -43,6 +43,8 @@ flatpak remote-modify ${user_arg} --collection-id=org.flathub.Stable flathub
 
 flatpak install ${user_arg} --assumeyes --sideload-repo="${REPO_DIR}/.ostree/repo/" flathub """
 SIDELOAD_SCRIPT_CONTENT += " ".join(RUNTIME_DEPENDENCIES) + "\n"
+
+PACKAGE_ID = 174
 
 
 def make_sideload_repo_factory():
@@ -178,6 +180,20 @@ def make_sideload_repo_factory():
         RepkaUpload(
             name="Upload sideload repo to Repka",
             files=f"{SIDELOAD_REPO_NAME}.zip",
+        )
+    )
+
+    # Create Repka release
+    factory.addStep(
+        RepkaCreateRelease(
+            name="Create Repka release for sideload repo",
+            package=PACKAGE_ID,
+            release_name="flathub-sideload-repo",
+            release_description="Sideload repository for Flathub Flatpak packages.",
+            distribution="offline",
+            os="linux",
+            channel="stable",
+            mark_latest=True,
         )
     )
 
