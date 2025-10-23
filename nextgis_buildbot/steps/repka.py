@@ -303,7 +303,67 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
             ]
             defer.returnValue(FAILURE)
 
-        yield self.addURL("repka-package", f"{ENDPOINT.rstrip('/')}/packet/{packet_id}")
+        yield self.addURL(
+            "Package in Repka", f"{ENDPOINT.rstrip('/')}/packet/{packet_id}"
+        )
+
+        api_release_url = f"{ENDPOINT.rstrip('/')}/api/release/{packet_id}"
+
+        cmdline = [
+            "curl",
+            "-sS",
+            "-fL",
+            "-k",
+            "-u",
+            credentials,
+            "-H",
+            "Accept: application/json",
+            api_release_url,
+        ]
+
+        cmd = yield self.makeRemoteShellCommand(
+            command=cmdline, collectStdout=True, logEnviron=False
+        )
+        yield self.runCommand(cmd)
+
+        if cmd.didFail():
+            self.addCompleteLog(
+                "repka-release-error",
+                f"Failed to fetch release info for packet {packet_id}\n",
+            )
+            self.descriptionDone = ["repka-release", "fetch-failed"]
+            defer.returnValue(FAILURE)
+
+        try:
+            stdout_text = cmd.stdout if cmd.stdout else ""
+            response = json.loads(stdout_text.strip())
+            files_array = response.get("files", [])
+            if not isinstance(files_array, list):
+                raise ValueError("field 'files' is not a list")
+
+            for file_obj in files_array:
+                file_id = file_obj.get("id")
+                file_name = file_obj.get("name")
+                if not file_id or not file_name:
+                    # Skip entries without necessary fields but log the issue.
+                    self.addCompleteLog(
+                        "repka-release-error",
+                        f"Skipping invalid file entry: {file_obj}\n",
+                    )
+                    continue
+
+                download_url = (
+                    f"{ENDPOINT.rstrip('/')}/api/asset/{file_id}/download"
+                )
+                yield self.addURL(file_name, download_url)
+
+        except Exception as exc:
+            self.addCompleteLog(
+                "repka-release-error",
+                f"Failed to parse release files: {exc}\n",
+            )
+            self.descriptionDone = ["repka-release", "invalid-release-response"]
+            defer.returnValue(FAILURE)
 
         self.descriptionDone = ["repka-release", "ok", str(release_id)]
         defer.returnValue(SUCCESS)
