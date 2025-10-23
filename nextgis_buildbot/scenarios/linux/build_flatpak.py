@@ -21,6 +21,7 @@ class FlatpakApplication:
     def bundle_file(self) -> str:
         return f"{self.app_id}.flatpak"
 
+
 APPLICATIONS = [
     FlatpakApplication(
         name="NextGIS QGIS",
@@ -35,6 +36,7 @@ APPLICATIONS = [
 ]
 
 RUNTIME_REPO = "https://flatpak.nextgis.com/repo/nextgis.flatpakrepo"
+
 
 def make_build_factory(application: FlatpakApplication):
     factory = util.BuildFactory()

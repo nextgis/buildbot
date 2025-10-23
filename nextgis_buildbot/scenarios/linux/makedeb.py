@@ -3,10 +3,11 @@
 # production builds into nextgis ppa
 
 import os
+from typing import Any, Dict
 
 from buildbot.plugins import changes, schedulers, steps, util
 
-from nextgis_utils import create_tags
+from nextgis_buildbot.utils import create_tags
 
 c = {}
 
@@ -379,3 +380,13 @@ for repository in repositories:
         )
 
         c["builders"].append(builder)
+
+
+def make_config() -> Dict[str, Any]:
+    """
+    Create the Buildbot configuration.
+
+    :returns: Configuration dictionary for Buildbot.
+    :rtype: dict
+    """
+    return c

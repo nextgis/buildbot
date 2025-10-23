@@ -2,10 +2,11 @@
 # ex: set syntax=python:
 
 import os
+from typing import Any, Dict
 
 from buildbot.plugins import changes, schedulers, steps, util
 
-from nextgis_utils import (
+from nextgis_buildbot.utils import (
     MAC_OS_MIN_VERSION,
     MAC_OS_SDKS_PATH,
     VM_CPU_COUNT,
@@ -327,6 +328,7 @@ def install_dependencies(factory, requirements, os):
             )
         )
 
+
 c = {
     "change_source": [],
     "schedulers": [],
@@ -624,3 +626,13 @@ for repository in repositories:
         )
 
         c["builders"].append(builder)
+
+
+def make_config() -> Dict[str, Any]:
+    """
+    Create the Buildbot configuration.
+
+    :returns: Configuration dictionary for Buildbot.
+    :rtype: dict
+    """
+    return c

@@ -11,6 +11,8 @@ The process includes:
 This configuration simplifies the deployment of Flatpak packages in offline environments.
 """
 
+from typing import Any, Dict
+
 from buildbot.plugins import schedulers, steps, util
 
 from nextgis_buildbot import renderers
@@ -207,13 +209,11 @@ def make_sideload_repo_factory():
     )
 
     # Create Repka release
-    version = (
-        util.Interpolate(
-            "%(kw:year)s.%(kw:month)s.%(kw:day)s",
-            year=renderers.current_year,
-            month=renderers.current_month,
-            day=renderers.current_day,
-        )
+    version = util.Interpolate(
+        "%(kw:year)s.%(kw:month)s.%(kw:day)s",
+        year=renderers.current_year,
+        month=renderers.current_month,
+        day=renderers.current_day,
     )
     factory.addStep(
         RepkaCreateRelease(
@@ -229,7 +229,7 @@ def make_sideload_repo_factory():
     return factory
 
 
-def make_config():
+def make_config() -> Dict[str, Any]:
     """
     Create the Buildbot configuration for the Flathub sideload repository.
 
@@ -254,7 +254,7 @@ def make_config():
             label="Build Flathub Sideload Repo",
             buttonName="Build Flathub Sideload Repo",
             builderNames=[BUILDER_NAME],
-            codebases=[util.CodebaseParameter(codebase='', hide=True)]
+            codebases=[util.CodebaseParameter(codebase="", hide=True)],
         )
     ]
 

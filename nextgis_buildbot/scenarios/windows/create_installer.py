@@ -4,11 +4,12 @@
 import json
 import os
 import time
+from typing import Any, Dict
 from urllib.request import urlopen
 
 from buildbot.plugins import schedulers, steps, util
 
-from nextgis_utils import create_tags
+from nextgis_buildbot.utils import create_tags
 
 repka_script_src = (
     "https://raw.githubusercontent.com/nextgis/buildbot/master/worker/repka_release.py"
@@ -950,3 +951,13 @@ for platform in platforms:
     )
 
     c["builders"].append(builder)
+
+
+def make_config() -> Dict[str, Any]:
+    """
+    Create the Buildbot configuration.
+
+    :returns: Configuration dictionary for Buildbot.
+    :rtype: dict
+    """
+    return c

@@ -2,6 +2,7 @@
 # ex: set syntax=python:
 
 import os
+from typing import Any, Dict
 
 from buildbot.plugins import changes, schedulers, steps, util
 
@@ -261,3 +262,13 @@ c["schedulers"].append(
         builderNames=builderNames,
     )
 )
+
+
+def make_config() -> Dict[str, Any]:
+    """
+    Create the Buildbot configuration.
+
+    :returns: Configuration dictionary for Buildbot.
+    :rtype: dict
+    """
+    return c

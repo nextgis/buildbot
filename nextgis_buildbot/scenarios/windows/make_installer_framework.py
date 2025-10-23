@@ -2,11 +2,11 @@
 # ex: set syntax=python:
 
 import os
-from typing import List
+from typing import Any, Dict, List
 
 from buildbot.plugins import schedulers, steps, util
 
-from nextgis_utils import RepkaRepository, create_tags
+from nextgis_buildbot.utils import RepkaRepository, create_tags
 
 # Common
 
@@ -430,3 +430,13 @@ if __name__ == "__main__":
 
     print(f"\nCMAKE_CONFIGURE_QT_WIN\n{mslex.join(CMAKE_CONFIGURE_QT_WIN_COMMAND)}")
     print(f"\nCMAKE_CONFIGURE_QT_MAC\n{shlex.join(CMAKE_CONFIGURE_QT_MAC_COMMAND)}")
+
+
+def make_config() -> Dict[str, Any]:
+    """
+    Create the Buildbot configuration.
+
+    :returns: Configuration dictionary for Buildbot.
+    :rtype: dict
+    """
+    return c

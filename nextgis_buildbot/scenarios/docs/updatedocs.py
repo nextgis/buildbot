@@ -1,6 +1,7 @@
 # -*- python -*-
 # ex: set syntax=python:
 
+from typing import Any, Dict
 from buildbot.plugins import changes, schedulers, steps, util
 
 c = {}
@@ -125,3 +126,13 @@ builder = util.BuilderConfig(
     tags=["docs"],
 )
 c["builders"].append(builder)
+
+
+def make_config() -> Dict[str, Any]:
+    """
+    Create the Buildbot configuration.
+
+    :returns: Configuration dictionary for Buildbot.
+    :rtype: dict
+    """
+    return c
