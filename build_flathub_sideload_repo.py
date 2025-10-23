@@ -203,11 +203,11 @@ def make_sideload_repo_factory():
             release_name=version,
             release_description="Sideload repository for Flathub Flatpak packages.",
             tags=["sideload-repo", "flatpak"],
-            options={
-                "dist": "offline",
-                "os": "linux",
-                "type": "stable",
-            },
+            # options={
+            #     "dist": "offline",
+            #     "os": "linux",
+            #     "type": "stable",
+            # },
             mark_latest=True,
         )
     )

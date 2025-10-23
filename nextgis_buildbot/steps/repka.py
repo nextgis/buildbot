@@ -231,6 +231,30 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
             self.descriptionDone = ["repka-release", "cant-set-property"]
             defer.returnValue(FAILURE)
 
+        # When mark_latest is set, remove 'latest' from previous releases
+        if self._mark_latest:
+            try:
+                yield self._cleanup_latest_tags(credentials, packet_id, release_id)
+
+            except _CurlFailedError:
+                self.addCompleteLog(
+                    "repka-release-error",
+                    "Failed to cleanup latest tag on previous releases\n",
+                )
+                self.descriptionDone = ["repka-release", "cleanup-failed"]
+                defer.returnValue(FAILURE)
+
+            except Exception as exc:
+                self.addCompleteLog(
+                    "repka-release-error",
+                    f"Failed to cleanup latest tags: {exc}\n",
+                )
+                self.descriptionDone = [
+                    "repka-release",
+                    "cleanup-invalid-response",
+                ]
+                defer.returnValue(FAILURE)
+
         # Add package page URL
         yield self._add_package_url(packet_id)
 
@@ -457,6 +481,79 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
 
             download_url = f"{ENDPOINT.rstrip('/')}/api/asset/{file_id}/download"
             yield self.addURL(url_name, download_url)
+
+    @defer.inlineCallbacks
+    def _cleanup_latest_tags(
+        self, credentials: str, packet_id: int, current_release: int
+    ):
+        """Remove 'latest' tag from all existing releases of the packet.
+
+        This ensures only the new release will carry the 'latest' tag.
+        """
+
+        list_url = f"{ENDPOINT.rstrip('/')}/api/release?packet={packet_id}"
+        list_cmdline = [
+            "curl",
+            "-sS",
+            "-fL",
+            "-k",
+            "-u",
+            credentials,
+            "-H",
+            "Accept: application/json",
+            list_url,
+        ]
+
+        list_cmd = yield self.makeRemoteShellCommand(
+            command=list_cmdline, collectStdout=True, logEnviron=False
+        )
+        yield self.runCommand(list_cmd)
+
+        if list_cmd.didFail():
+            raise _CurlFailedError("curl GET /api/release?packet= failed")
+
+        stdout_text = list_cmd.stdout if list_cmd.stdout else ""
+        releases = json.loads(stdout_text.strip())
+        if not isinstance(releases, list):
+            raise ValueError("releases list expected")
+
+        for release in releases:
+            release_id = release.get("id")
+            if release_id == current_release:
+                continue  # Skip current release
+
+            tags = release.get("tags", []) or []
+            if not release_id or not isinstance(tags, list):
+                continue
+            if "latest" not in tags:
+                continue
+
+            new_tags = [tag for tag in tags if tag != "latest"]
+            put_url = f"{ENDPOINT.rstrip('/')}/api/release/{release_id}"
+            body = json.dumps({"tags": new_tags}, ensure_ascii=False)
+            put_cmdline = [
+                "curl",
+                "-sS",
+                "-fL",
+                "-k",
+                "-u",
+                credentials,
+                "-H",
+                "Accept: application/json",
+                "-H",
+                "Content-Type: application/json",
+                "-X",
+                "PUT",
+                "-d",
+                body,
+                put_url,
+            ]
+            put_cmd = yield self.makeRemoteShellCommand(
+                command=put_cmdline, collectStdout=True, logEnviron=False
+            )
+            yield self.runCommand(put_cmd)
+            if put_cmd.didFail():
+                raise _CurlFailedError("curl PUT /api/release/{id} failed")
 
 
 class _CurlFailedError(Exception):
