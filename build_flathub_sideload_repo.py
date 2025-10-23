@@ -241,6 +241,7 @@ schedulers_list = [
         label="Build Flathub Sideload Repo",
         buttonName="Build Flathub Sideload Repo",
         builderNames=[BUILDER_NAME],
+        codebases=[util.CodebaseParameter(codebase='', hide=True)]
     )
 ]
 
