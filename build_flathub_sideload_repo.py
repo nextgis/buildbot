@@ -16,12 +16,12 @@ from nextgis_buildbot.steps.repka import RepkaUpload
 BUILDER_NAME = "flathub_sideload_repo"
 
 RUNTIME_DEPENDENCIES = [
-    "org.freedesktop.Platform.GL.default/x86_64/24.08",
-    "org.freedesktop.Platform.GL.default/x86_64/24.08extra",
+    # "org.freedesktop.Platform.GL.default/x86_64/24.08",
+    # "org.freedesktop.Platform.GL.default/x86_64/24.08extra",
     # "org.freedesktop.Platform.openh264/x86_64/2.5.1",
-    "org.kde.KStyle.Adwaita/x86_64/5.15-24.08",
-    "org.kde.Platform.Locale/x86_64/5.15-24.08",
-    "org.kde.Platform/x86_64/5.15-24.08",
+    # "org.kde.KStyle.Adwaita/x86_64/5.15-24.08",
+    # "org.kde.Platform/x86_64/5.15-24.08",
+    # "org.kde.Platform.Locale/x86_64/5.15-24.08",
 ]
 
 SIDELOAD_REPO_NAME = "flathub-sideload-repo"
@@ -177,7 +177,7 @@ def make_sideload_repo_factory():
     factory.addStep(
         RepkaUpload(
             name="Upload sideload repo to Repka",
-            files=f"build/{SIDELOAD_REPO_NAME}.zip",
+            files=f"{SIDELOAD_REPO_NAME}.zip",
         )
     )
 

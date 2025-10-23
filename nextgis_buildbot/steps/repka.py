@@ -66,6 +66,10 @@ class RepkaUpload(buildstep.ShellMixin, buildstep.BuildStep):
             self.descriptionDone = ["repka-upload", "no-files"]
             defer.returnValue(FAILURE)
 
+        credentials = yield self.build.render(
+            util.Interpolate(f"{USERNAME}:%(secret:buildbot_password)s")
+        )
+
         for file_path in self._files:
             # Build curl command for worker-side execution
             cmdline = [
@@ -74,7 +78,7 @@ class RepkaUpload(buildstep.ShellMixin, buildstep.BuildStep):
                 "-fL",  # fail on HTTP errors, follow redirects
                 "-k",  # allow self-signed TLS if needed (optional safety)
                 "-u",
-                util.Interpolate(f"{USERNAME}:%(secret:buildbot_password)s"),
+                credentials,
                 "-H",
                 "Accept: application/json",
                 "-F",
