@@ -1,12 +1,14 @@
 """
-This module defines the Buildbot configuration for creating a Flathub sideload repository.
+This module defines the Buildbot configuration for automating the creation of a Flathub sideload repository.
 
 The process includes:
-- Ensuring the Flathub remote repository is added and configured.
-- Downloading runtime dependencies.
-- Generating a sideload repository with the required Flatpak packages.
-- Adding a helper script for installing dependencies.
-- Zipping the repository for distribution.
+- Adding and configuring the Flathub remote repository.
+- Downloading required Flatpak runtime dependencies.
+- Creating and zipping a sideload repository.
+- Adding a helper script for dependency installation.
+- Uploading the repository and creating a release in Repka.
+
+This configuration simplifies the deployment of Flatpak packages in offline environments.
 """
 
 from buildbot.plugins import schedulers, steps, util
@@ -49,6 +51,21 @@ PACKAGE_ID = 174
 
 
 def make_sideload_repo_factory():
+    """
+    Create a BuildFactory for generating a Flathub sideload repository.
+
+    Steps include:
+    - Ensuring the Flathub repository is configured.
+    - Creating a directory for the sideload repository.
+    - Downloading runtime dependencies.
+    - Adding a helper script for installing dependencies.
+    - Zipping the repository for easy distribution.
+    - Uploading the repository to Repka and creating a release.
+
+    :returns: Configured BuildFactory for the sideload repository.
+    :rtype: BuildFactory
+    """
+
     factory = util.BuildFactory()
 
     # Ensure Flathub repo
@@ -56,6 +73,7 @@ def make_sideload_repo_factory():
         steps.ShellSequence(
             name="Ensure Flathub repo",
             commands=[
+                # Add the Flathub remote repository if it doesn't exist
                 util.ShellArg(
                     command=[
                         "flatpak",
@@ -66,6 +84,7 @@ def make_sideload_repo_factory():
                         "https://flathub.org/repo/flathub.flatpakrepo",
                     ],
                 ),
+                # Modify the Flathub repository to set the collection ID
                 util.ShellArg(
                     command=[
                         "flatpak",
@@ -210,42 +229,36 @@ def make_sideload_repo_factory():
     return factory
 
 
-# -------------------------
-# Builders
-# -------------------------
+def make_config():
+    """
+    Create the Buildbot configuration for the Flathub sideload repository.
 
-builders = [
-    util.BuilderConfig(
-        name=BUILDER_NAME,
-        workernames=["flatpak"],
-        factory=make_sideload_repo_factory(),
-        collapseRequests=True,
-        description="Build sideload repo for flathub",
-        tags=["linux", "flatpak"],
-    )
-]
+    :returns: Configuration dictionary for Buildbot.
+    :rtype: dict
+    """
 
+    builders = [
+        util.BuilderConfig(
+            name=BUILDER_NAME,
+            workernames=["flatpak"],
+            factory=make_sideload_repo_factory(),
+            collapseRequests=True,
+            description="Build sideload repo for flathub",
+            tags=["linux", "flatpak"],
+        )
+    ]
 
-# -------------------------
-# Schedulers
-# -------------------------
+    schedulers_list = [
+        schedulers.ForceScheduler(
+            name=f"{BUILDER_NAME}_force_scheduler",
+            label="Build Flathub Sideload Repo",
+            buttonName="Build Flathub Sideload Repo",
+            builderNames=[BUILDER_NAME],
+            codebases=[util.CodebaseParameter(codebase='', hide=True)]
+        )
+    ]
 
-schedulers_list = [
-    schedulers.ForceScheduler(
-        name=f"{BUILDER_NAME}_force_scheduler",
-        label="Build Flathub Sideload Repo",
-        buttonName="Build Flathub Sideload Repo",
-        builderNames=[BUILDER_NAME],
-        codebases=[util.CodebaseParameter(codebase='', hide=True)]
-    )
-]
-
-
-# -------------------------
-# Config
-# -------------------------
-
-c = {
-    "builders": builders,
-    "schedulers": schedulers_list,
-}
+    return {
+        "builders": builders,
+        "schedulers": schedulers_list,
+    }

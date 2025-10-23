@@ -141,20 +141,25 @@ class RepkaUpload(buildstep.ShellMixin, buildstep.BuildStep):
 class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
     """Create a Repka release using uploaded files from a previous step.
 
-    Constructor arguments:
-    - package: Packet identifier.
-    - release_name: Release name to display.
-    - release_description: Optional release description.
-    - tags: Optional list of tags; may be empty. Use ``mark_latest`` flag to
-      auto-append ``"latest"``.
-    - options: Dictionary containing optional parameters.
-
     Behavior:
     - Read ``repka_uploaded_files`` property produced by :class:`RepkaUpload`.
     - Compose JSON payload and perform a POST request to ``/api/release``
       using ``curl`` on the worker.
     - On success, set build property ``repka_release_id`` with created ID.
     - Fail the step when inputs are invalid or server returned an error.
+
+    :param packet: Packet identifier.
+    :type packet: int
+    :param release_name: Release name to display.
+    :type release_name: str
+    :param release_description: Optional release description.
+    :type release_description: Optional[str]
+    :param tags: Optional list of tags; may be empty. Use ``mark_latest`` flag to auto-append ``"latest"``.
+    :type tags: List[str]
+    :param options: Dictionary containing optional parameters.
+    :type options: Optional[Dict[str, str]]
+    :param mark_latest: Flag to mark this release as the latest.
+    :type mark_latest: bool
     """
 
     def __init__(
@@ -428,9 +433,14 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
     def _fetch_release_files(self, credentials: str, release_id: int):
         """Fetch release object and return its files array.
 
-        :raises _CurlFailedError: When curl GET fails.
-        :raises Exception: When response cannot be parsed or malformed.
-        :returns: List of file descriptors from release object.
+        :param credentials: Credentials string for authentication.
+        :type credentials: str
+        :param release_id: Identifier of the release to fetch.
+        :type release_id: int
+        :raises _CurlFailedError: When `curl` GET request fails.
+        :raises ValueError: When the `files` field in the response is not a list.
+        :raises Exception: When the response cannot be parsed or is malformed.
+        :returns: List of file descriptors from the release object.
         :rtype: list[dict]
         """
 
@@ -464,7 +474,16 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
 
     @defer.inlineCallbacks
     def _add_file_urls(self, files_array: List[dict]):
-        """Add download URLs for each file in the release."""
+        """Add download URLs for each file in the release.
+
+        Behavior:
+        - Iterates through the provided array of file descriptors.
+        - Validates each file descriptor for required fields (`id` and `name`).
+        - Adds a download URL for each valid file to the build summary.
+
+        :param files_array: List of file descriptors from the release.
+        :type files_array: list[dict]
+        """
         for file_obj in files_array:
             file_id = file_obj.get("id")
             file_name = file_obj.get("name")
@@ -489,6 +508,12 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
         """Remove 'latest' tag from all existing releases of the packet.
 
         This ensures only the new release will carry the 'latest' tag.
+
+        Behavior:
+        - Fetches the list of releases for the given packet using `curl`.
+        - Iterates through the releases and removes the 'latest' tag from all except the current release.
+
+        :raises _CurlFailedError: When the `curl` command fails.
         """
 
         list_url = f"{ENDPOINT.rstrip('/')}/api/release?packet={packet_id}"
