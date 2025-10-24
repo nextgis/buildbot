@@ -18,7 +18,7 @@ from buildbot.plugins import schedulers, steps, util
 from nextgis_buildbot import renderers
 from nextgis_buildbot.steps.repka import RepkaCreateRelease, RepkaUpload
 
-BUILDER_NAME = "flathub_sideload_repo"
+BUILDER_NAME = "flathub_sideload_repo_builder"
 
 RUNTIME_DEPENDENCIES = [
     "org.freedesktop.Platform.GL.default/x86_64/24.08",
