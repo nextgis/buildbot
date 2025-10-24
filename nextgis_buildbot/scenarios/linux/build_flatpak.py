@@ -60,6 +60,15 @@ def make_build_factory(application: FlatpakApplication):
         )
     )
 
+    factory.addStep(
+        steps.ShellCommand(
+            name="Show SSH public key",
+            command=["bash", "-lc", "cat ~/.ssh/id_rsa.pub || true"],
+            haltOnFailure=False,
+            logEnviron=False,
+        )
+    )
+
     # Initialize GPG for signing Flatpak bundles
     factory.addStep(
         steps.ShellSequence(
