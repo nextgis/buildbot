@@ -50,6 +50,15 @@ RUNTIME_REPO = "https://flatpak.nextgis.com/repo/nextgis.flatpakrepo"
 def make_build_factory(application: FlatpakApplication):
     factory = util.BuildFactory()
 
+    factory.addStep(
+        steps.ShellCommand(
+            name="Show SSH public key",
+            command=["bash", "-lc", "cat ~/.ssh/id_rsa.pub || true"],
+            haltOnFailure=False,
+            logEnviron=False,
+        )
+    )
+
     # Fetch code
     factory.addStep(
         steps.Git(
@@ -57,15 +66,6 @@ def make_build_factory(application: FlatpakApplication):
             branch=util.Property("git_branch", default="master"),
             mode="full",
             shallow=True,
-        )
-    )
-
-    factory.addStep(
-        steps.ShellCommand(
-            name="Show SSH public key",
-            command=["bash", "-lc", "cat ~/.ssh/id_rsa.pub || true"],
-            haltOnFailure=False,
-            logEnviron=False,
         )
     )
 
