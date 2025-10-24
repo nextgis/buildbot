@@ -45,7 +45,7 @@ repositories = [
     },
     {'repo':'nextgisqgis', 'deb':'nextgisqgis', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'astra', 'noble'], 'repo_id':11, 'branch': 'master'},
     {'repo':'qgis_headless', 'deb':'qgis-headless', 'repo_root':'https://github.com', 'org': 'nextgis', 'os': ['focal', 'jammy', 'noble'], 'repo_id':11, 'branch': 'master'},
-    {'repo':'terratile', 'deb':'python-terratile', 'repo_root':'https://github.com', 'org': 'nextgis', 'os':['focal', 'jammy'], 'repo_id':11, 'branch': 'gdal3'},
+    {'repo':'terratile', 'deb':'python-terratile', 'repo_root':'https://github.com', 'org': 'nextgis', 'os':['focal', 'jammy', 'noble'], 'repo_id':11, 'branch': 'gdal3'},
     {'repo':'lib_sentrynative', 'deb':'sentry-native', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra', 'noble'], 'repo_id':11, 'branch': 'master'},
     {'repo':'lib_jsonc', 'deb':'jsonc', 'repo_root':'https://github.com', 'org': 'nextgis-borsch', 'os':['focal', 'jammy', 'astra',], 'repo_id':11, 'branch': 'master'},
     # {'repo':'lib_qscintilla', 'version':'2.10.4', 'deb':'qscintilla', 'subdir': '', 'repo_root':'nextgis-borsch', 'url': '', 'ubuntu_distributions': ['trusty', 'focal', 'bionic']},
