@@ -54,7 +54,7 @@ def make_build_factory(application: FlatpakApplication):
     factory.addStep(
         steps.Git(
             repourl=application.git,
-            branch=util.Property("GIT_BRANCH", default="master"),
+            branch=util.Property("git_branch", default="master"),
             mode="full",
             shallow=True,
         )
@@ -66,7 +66,7 @@ def make_build_factory(application: FlatpakApplication):
             name="Initialise GPG",
             commands=[
                 util.ShellArg(
-                    command=["gpg", "--list-keys", "--with-keygrip"],
+                    command=["gpg", "--list-keys", "--with-keygrip"], logname="stdio"
                 ),
                 util.ShellArg(
                     command=[
@@ -74,9 +74,11 @@ def make_build_factory(application: FlatpakApplication):
                         "-c",
                         "echo 'allow-preset-passphrase' >> ~/.gnupg/gpg-agent.conf",
                     ],
+                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=["gpg-connect-agent", "reloadagent", "/bye"],
+                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=[
@@ -86,6 +88,7 @@ def make_build_factory(application: FlatpakApplication):
                             "cat '%(secret:flatpak_gpg_passphrase)s' | /usr/libexec/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_grep)s'"
                         ),
                     ],
+                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=[
@@ -94,6 +97,7 @@ def make_build_factory(application: FlatpakApplication):
                         "--batch",
                         util.Secret("gpg_private_key"),
                     ],
+                    logname="stdio",
                 ),
             ],
             haltOnFailure=True,
@@ -144,7 +148,7 @@ def make_build_factory(application: FlatpakApplication):
                 "--disable-updates",
                 "--force-clean",
                 "--repo=repo",
-                util.Interpolate("--branch=%(prop:FLATPAK_BRANCH)s"),
+                util.Interpolate("--branch=%(prop:flatpak_branch)s"),
                 application.manifest_file,
             ],
         ),
@@ -162,7 +166,7 @@ def make_build_factory(application: FlatpakApplication):
                 application.bundle_file,
                 f"--runtime-repo={RUNTIME_REPO}",
                 application.app_id,
-                util.Interpolate("%(prop:FLATPAK_BRANCH)s"),
+                util.Interpolate("%(prop:flatpak_branch)s"),
             ],
         )
     )
@@ -215,13 +219,15 @@ def make_config() -> Dict[str, Any]:
     schedulers_list = [
         schedulers.ForceScheduler(
             name=f"flatpak_{application.short_name}_force_scheduler",
+            label=f"Build {application.app_id} flatpak",
+            buttonName=f"Build {application.app_id} flatpak",
             builderNames=[build_config_name(application)],
             properties=[
                 util.StringParameter(
-                    name="GIT_BRANCH", label="git branch", default="master"
+                    name="git_branch", label="git branch", default="master"
                 ),
                 util.ChoiceStringParameter(
-                    name="FLATPAK_BRANCH",
+                    name="flatpak_branch",
                     label="Flatpak branch",
                     choices=["stable", "dev"],
                     default="stable",
