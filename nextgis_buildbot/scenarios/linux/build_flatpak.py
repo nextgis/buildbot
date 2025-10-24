@@ -52,8 +52,15 @@ def make_build_factory(application: FlatpakApplication):
 
     factory.addStep(
         steps.ShellCommand(
-            name="Show SSH public key",
-            command=["bash", "-lc", "cat ~/.ssh/id_rsa.pub || true"],
+            name="Add gitlab.com to known_hosts",
+            command=[
+                "ssh-keyscan",
+                "-t",
+                "rsa",
+                "gitlab.com",
+                ">>",
+                "~/.ssh/known_hosts",
+            ],
             haltOnFailure=False,
             logEnviron=False,
         )
