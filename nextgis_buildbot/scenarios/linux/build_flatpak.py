@@ -53,9 +53,29 @@ def make_build_factory(application: FlatpakApplication):
     factory.addStep(
         steps.ShellCommand(
             name="Show SSH public key",
-            command=["cat", "/.ssh/id_ed25519.pub"],
+            command=["cat", "~/.ssh/id_ed25519.pub"],
             haltOnFailure=False,
             logEnviron=False,
+        )
+    )
+
+    # Append SSH host configuration for gitlab.com using StringDownload
+    ssh_config = (
+        "Host gitlab.com\n"
+        "    HostName gitlab.com\n"
+        "    User git\n"
+        "    IdentityFile ~/.ssh/id_ed25519\n"
+        "    IdentitiesOnly yes\n"
+        "    AddKeysToAgent yes\n"
+    )
+
+    factory.addStep(
+        steps.StringDownload(
+            name="Write SSH config for gitlab.com",
+            content=ssh_config,
+            filename="~/.ssh/config",
+            mode=0o600,
+            haltOnFailure=False,
         )
     )
 
