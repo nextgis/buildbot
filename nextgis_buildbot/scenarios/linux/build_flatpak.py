@@ -73,7 +73,7 @@ def make_build_factory(application: FlatpakApplication):
         "Host gitlab.com\n"
         "    HostName gitlab.com\n"
         "    User git\n"
-        "    IdentityFile ~/.ssh/id_ed25519\n"
+        "    IdentityFile /root/.ssh/id_ed25519\n"
         "    IdentitiesOnly yes\n"
         "    AddKeysToAgent yes\n"
     )
@@ -81,7 +81,7 @@ def make_build_factory(application: FlatpakApplication):
     factory.addStep(
         steps.StringDownload(
             ssh_config,
-            workerdest="~/.ssh/config",
+            workerdest="/root/.ssh/config",
             name="Write SSH config for gitlab.com",
             haltOnFailure=True,
         )
@@ -93,7 +93,7 @@ def make_build_factory(application: FlatpakApplication):
             command=[
                 "bash",
                 "-c",
-                "ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts",
+                "ssh-keyscan -t rsa gitlab.com >> /root/.ssh/known_hosts",
             ],
             haltOnFailure=False,
             logEnviron=False,
@@ -122,7 +122,7 @@ def make_build_factory(application: FlatpakApplication):
                     command=[
                         "bash",
                         "-c",
-                        "echo 'allow-preset-passphrase' >> ~/.gnupg/gpg-agent.conf",
+                        "echo 'allow-preset-passphrase' >> /root/.gnupg/gpg-agent.conf",
                     ],
                     logname="stdio",
                 ),
