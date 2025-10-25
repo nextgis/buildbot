@@ -69,6 +69,20 @@ def make_build_factory(application: FlatpakApplication):
     #     )
     # )
 
+    # Add SSH host configuration for gitlab.com using ssh-keyscan
+    factory.addStep(
+        steps.ShellCommand(
+            name="Add gitlab.com to known_hosts",
+            command=[
+                "bash",
+                "-c",
+                "ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts",
+            ],
+            haltOnFailure=False,
+            logEnviron=False,
+        )
+    )
+
     # Fetch code
     factory.addStep(
         steps.Git(
@@ -76,7 +90,6 @@ def make_build_factory(application: FlatpakApplication):
             branch=util.Property("git_branch", default="master"),
             mode="full",
             shallow=True,
-            sshPrivateKey="/root/.ssh/id_ed25519",
         )
     )
 
