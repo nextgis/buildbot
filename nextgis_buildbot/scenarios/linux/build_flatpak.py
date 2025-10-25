@@ -50,25 +50,6 @@ RUNTIME_REPO = "https://flatpak.nextgis.com/repo/nextgis.flatpakrepo"
 def make_build_factory(application: FlatpakApplication):
     factory = util.BuildFactory()
 
-    # Append SSH host configuration for gitlab.com using StringDownload
-    ssh_config = (
-        "Host gitlab.com\n"
-        "    HostName gitlab.com\n"
-        "    User git\n"
-        "    IdentityFile /root/.ssh/id_ed25519\n"
-        "    IdentitiesOnly yes\n"
-        "    AddKeysToAgent yes\n"
-    )
-
-    # factory.addStep(
-    #     steps.StringDownload(
-    #         ssh_config,
-    #         workerdest="/root/.ssh/config",
-    #         name="Write SSH config for gitlab.com",
-    #         haltOnFailure=True,
-    #     )
-    # )
-
     # Add SSH host configuration for gitlab.com using ssh-keyscan
     factory.addStep(
         steps.ShellCommand(
@@ -98,20 +79,16 @@ def make_build_factory(application: FlatpakApplication):
         steps.ShellSequence(
             name="Initialise GPG",
             commands=[
-                util.ShellArg(
-                    command=["gpg", "--list-keys", "--with-keygrip"], logname="stdio"
-                ),
+                util.ShellArg(command=["gpg", "--list-keys", "--with-keygrip"]),
                 util.ShellArg(
                     command=[
                         "bash",
                         "-c",
                         "echo 'allow-preset-passphrase' >> /root/.gnupg/gpg-agent.conf",
                     ],
-                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=["gpg-connect-agent", "reloadagent", "/bye"],
-                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=[
@@ -121,7 +98,6 @@ def make_build_factory(application: FlatpakApplication):
                             "cat '%(secret:flatpak_gpg_passphrase)s' | /usr/libexec/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_grep)s'"
                         ),
                     ],
-                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=[
@@ -130,7 +106,6 @@ def make_build_factory(application: FlatpakApplication):
                         "--batch",
                         util.Secret("gpg_private_key"),
                     ],
-                    logname="stdio",
                 ),
             ],
             haltOnFailure=True,
