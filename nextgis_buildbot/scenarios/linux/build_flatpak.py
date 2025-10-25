@@ -50,24 +50,6 @@ RUNTIME_REPO = "https://flatpak.nextgis.com/repo/nextgis.flatpakrepo"
 def make_build_factory(application: FlatpakApplication):
     factory = util.BuildFactory()
 
-    factory.addStep(
-        steps.ShellCommand(
-            name="Show ssh dir content",
-            command=["ls", "-la", "/root/.ssh"],
-            haltOnFailure=False,
-            logEnviron=False,
-        )
-    )
-
-    factory.addStep(
-        steps.ShellCommand(
-            name="Show SSH public key",
-            command=["cat", "/root/.ssh/id_ed25519.pub"],
-            haltOnFailure=False,
-            logEnviron=False,
-        )
-    )
-
     # Append SSH host configuration for gitlab.com using StringDownload
     ssh_config = (
         "Host gitlab.com\n"
@@ -78,25 +60,12 @@ def make_build_factory(application: FlatpakApplication):
         "    AddKeysToAgent yes\n"
     )
 
-    factory.addStep(
-        steps.StringDownload(
-            ssh_config,
-            workerdest="/root/.ssh/config",
-            name="Write SSH config for gitlab.com",
-            haltOnFailure=True,
-        )
-    )
-
     # factory.addStep(
-    #     steps.ShellCommand(
-    #         name="Ensure newline at end of SSH key",
-    #         command=[
-    #             "bash",
-    #             "-c",
-    #             r"printf '\n' >> /root/.ssh/id_ed25519",
-    #         ],
-    #         haltOnFailure=False,
-    #         logEnviron=False,
+    #     steps.StringDownload(
+    #         ssh_config,
+    #         workerdest="/root/.ssh/config",
+    #         name="Write SSH config for gitlab.com",
+    #         haltOnFailure=True,
     #     )
     # )
 
@@ -107,6 +76,7 @@ def make_build_factory(application: FlatpakApplication):
             branch=util.Property("git_branch", default="master"),
             mode="full",
             shallow=True,
+            sshPrivateKey="/root/.ssh/id_ed25519",
         )
     )
 
