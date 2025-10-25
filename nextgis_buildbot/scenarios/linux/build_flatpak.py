@@ -87,18 +87,18 @@ def make_build_factory(application: FlatpakApplication):
         )
     )
 
-    factory.addStep(
-        steps.ShellCommand(
-            name="Ensure newline at end of SSH key",
-            command=[
-                "bash",
-                "-c",
-                r"printf '\n' >> /root/.ssh/id_ed25519",
-            ],
-            haltOnFailure=False,
-            logEnviron=False,
-        )
-    )
+    # factory.addStep(
+    #     steps.ShellCommand(
+    #         name="Ensure newline at end of SSH key",
+    #         command=[
+    #             "bash",
+    #             "-c",
+    #             r"printf '\n' >> /root/.ssh/id_ed25519",
+    #         ],
+    #         haltOnFailure=False,
+    #         logEnviron=False,
+    #     )
+    # )
 
     # Fetch code
     factory.addStep(
