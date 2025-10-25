@@ -100,7 +100,7 @@ def make_build_factory(application: FlatpakApplication):
                         "bash",
                         "-c",
                         util.Interpolate(
-                            "cat '%(secret:flatpak_gpg_passphrase)s' | /usr/libexec/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_grep)s'"
+                            "cat '%(prop:flatpak_gpg_passphrase_path)s' | /usr/gnupg/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_grep)s'"
                         ),
                     ],
                     logname="stdio",
@@ -110,7 +110,7 @@ def make_build_factory(application: FlatpakApplication):
                         "gpg",
                         "--import",
                         "--batch",
-                        util.Secret("flatpak_gpg_private_key"),
+                        util.Interpolate("%(prop:flatpak_gpg_private_key_path)s"),
                     ],
                     logname="stdio",
                 ),
