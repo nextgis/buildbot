@@ -71,11 +71,10 @@ def make_build_factory(application: FlatpakApplication):
 
     factory.addStep(
         steps.StringDownload(
+            ssh_config,
+            workerdest="~/.ssh/config",
             name="Write SSH config for gitlab.com",
-            content=ssh_config,
-            filename="~/.ssh/config",
-            mode=0o600,
-            haltOnFailure=False,
+            haltOnFailure=True,
         )
     )
 
