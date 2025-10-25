@@ -89,11 +89,11 @@ def make_build_factory(application: FlatpakApplication):
 
     factory.addStep(
         steps.ShellCommand(
-            name="Add gitlab.com to known_hosts",
+            name="Ensure newline at end of SSH key",
             command=[
                 "bash",
                 "-c",
-                "ssh-keyscan -t rsa gitlab.com >> /root/.ssh/known_hosts",
+                r"printf '\n' >> /root/.ssh/id_ed25519",
             ],
             haltOnFailure=False,
             logEnviron=False,
