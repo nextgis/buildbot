@@ -79,16 +79,21 @@ def make_build_factory(application: FlatpakApplication):
         steps.ShellSequence(
             name="Initialise GPG",
             commands=[
-                util.ShellArg(command=["gpg", "--list-keys", "--with-keygrip"]),
+                util.ShellArg(
+                    command=["gpg", "--list-keys", "--with-keygrip"],
+                    logname="stdio",
+                ),
                 util.ShellArg(
                     command=[
                         "bash",
                         "-c",
                         "echo 'allow-preset-passphrase' >> /root/.gnupg/gpg-agent.conf",
                     ],
+                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=["gpg-connect-agent", "reloadagent", "/bye"],
+                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=[
@@ -98,14 +103,16 @@ def make_build_factory(application: FlatpakApplication):
                             "cat '%(secret:flatpak_gpg_passphrase)s' | /usr/libexec/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_grep)s'"
                         ),
                     ],
+                    logname="stdio",
                 ),
                 util.ShellArg(
                     command=[
                         "gpg",
                         "--import",
                         "--batch",
-                        util.Secret("gpg_private_key"),
+                        util.Secret("flatpak_gpg_private_key"),
                     ],
+                    logname="stdio",
                 ),
             ],
             haltOnFailure=True,
