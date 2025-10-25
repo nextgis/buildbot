@@ -53,7 +53,7 @@ def make_build_factory(application: FlatpakApplication):
     factory.addStep(
         steps.ShellCommand(
             name="Show ssh dir content",
-            command=["ls", "-la", "~/.ssh"],
+            command=["ls", "-la", "/root/.ssh"],
             haltOnFailure=False,
             logEnviron=False,
         )
@@ -62,7 +62,7 @@ def make_build_factory(application: FlatpakApplication):
     factory.addStep(
         steps.ShellCommand(
             name="Show SSH public key",
-            command=["cat", "~/.ssh/id_ed25519.pub"],
+            command=["cat", "/root/.ssh/id_ed25519.pub"],
             haltOnFailure=False,
             logEnviron=False,
         )
