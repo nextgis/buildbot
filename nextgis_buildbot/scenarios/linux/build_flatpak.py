@@ -80,7 +80,11 @@ def make_build_factory(application: FlatpakApplication):
             name="Initialise GPG",
             commands=[
                 util.ShellArg(
-                    command=["gpg", "--list-keys", "--with-keygrip"],
+                    command=[
+                        "bash",
+                        "-lc",
+                        "mkdir -p ~/.gnupg && chmod 700 ~/.gnupg",
+                    ],
                     logname="stdio",
                 ),
                 util.ShellArg(
@@ -89,6 +93,10 @@ def make_build_factory(application: FlatpakApplication):
                         "-c",
                         "echo 'allow-preset-passphrase' >> /root/.gnupg/gpg-agent.conf",
                     ],
+                    logname="stdio",
+                ),
+                util.ShellArg(
+                    command=["gpg", "--list-keys", "--with-keygrip"],
                     logname="stdio",
                 ),
                 util.ShellArg(
