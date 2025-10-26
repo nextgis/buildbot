@@ -35,8 +35,10 @@ RUN mkdir -p /worker/info \
     && echo "Ivan Barsukov <ivan.barsukov@nextgis.com>" > /worker/info/admin \
     && echo "Provides Ubuntu 24.04 environment with preconfigured Flathub remote, and cached runtimes/SDKs" > /worker/info/host
 
-# Create buildbot user and working directory
-RUN mkdir -p /home/root/.cache /home/root/.local/share/flatpak
+# Update working directory
+RUN mkdir -p /root/.ssh && mkdir -p /root/.cache /root/.local/share/flatpak \
+    && touch /root/.ssh/authorized_keys \
+    && chmod 700 /root/.ssh && chmod 600 /root/.ssh/authorized_keys
 
 # Preconfigure Flathub remote and pre-pull commonly used runtimes/SDKs for caching
 RUN flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo \
