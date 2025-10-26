@@ -48,11 +48,26 @@ RUNTIME_REPO = "https://flatpak.nextgis.com/repo/nextgis.flatpakrepo"
 
 
 @util.renderer
-def builder_branch(props):
+def flatpak_builder_command(props, manifest_file: str):
+    command = [
+        "flatpak-builder",
+        "build",
+        "--user",
+        "--install-deps-from=flathub",
+        util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_uid)s"),
+        "--disable-rofiles-fuse",
+        "--disable-updates",
+        "--force-clean",
+        "--repo=repo",
+    ]
+
     branch = props.getProperty("flatpak_branch")
-    if branch == "stable":
-        return ""
-    return f"--default-branch={branch}"
+    if branch != "stable":
+        command.append(f"--default-branch={branch}")
+
+    command.append(manifest_file)
+
+    return command
 
 
 def make_build_factory(application: FlatpakApplication):
@@ -166,19 +181,7 @@ def make_build_factory(application: FlatpakApplication):
     factory.addStep(
         steps.ShellCommand(
             name="Build Flatpak",
-            command=[
-                "flatpak-builder",
-                "build",
-                "--user",
-                "--install-deps-from=flathub",
-                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_uid)s"),
-                "--disable-rofiles-fuse",
-                "--disable-updates",
-                "--force-clean",
-                "--repo=repo",
-                builder_branch,
-                application.manifest_file,
-            ],
+            command=flatpak_builder_command.withArgs(application.manifest_file),
         ),
     )
 
