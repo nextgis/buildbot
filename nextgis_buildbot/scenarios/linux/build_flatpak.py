@@ -47,13 +47,21 @@ APPLICATIONS = [
 RUNTIME_REPO = "https://flatpak.nextgis.com/repo/nextgis.flatpakrepo"
 
 
+@util.renderer
+def builder_branch(props):
+    branch = props.getProperty("flatpak_branch")
+    if branch == "stable":
+        return ""
+    return f"--default-branch={branch}"
+
+
 def make_build_factory(application: FlatpakApplication):
     factory = util.BuildFactory()
 
     # Add SSH host configuration for gitlab.com using ssh-keyscan
     factory.addStep(
         steps.ShellCommand(
-            name="Add gitlab.com to known_hosts",
+            name="Prepare SSH",
             command=[
                 "bash",
                 "-c",
@@ -67,6 +75,7 @@ def make_build_factory(application: FlatpakApplication):
     # Fetch code
     factory.addStep(
         steps.Git(
+            name=f"Checkout {application.name} source code",
             repourl=application.git,
             branch=util.Property("git_branch", default="master"),
             mode="full",
@@ -167,7 +176,7 @@ def make_build_factory(application: FlatpakApplication):
                 "--disable-updates",
                 "--force-clean",
                 "--repo=repo",
-                util.Interpolate("--branch=%(prop:flatpak_branch)s"),
+                builder_branch,
                 application.manifest_file,
             ],
         ),
