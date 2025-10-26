@@ -108,7 +108,7 @@ def make_build_factory(application: FlatpakApplication):
                         "bash",
                         "-c",
                         util.Interpolate(
-                            "cat '%(prop:flatpak_gpg_passphrase_path)s' | /usr/lib/gnupg/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_grep)s'"
+                            "cat '%(prop:flatpak_gpg_passphrase_path)s' | /usr/lib/gnupg/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_uid)s'"
                         ),
                     ],
                     logname="stdio",
@@ -166,7 +166,7 @@ def make_build_factory(application: FlatpakApplication):
                 "build",
                 "--user",
                 "--install-deps-from=flathub",
-                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_id)s"),
+                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_fingerprint)s"),
                 "--disable-rofiles-fuse",
                 "--disable-updates",
                 "--force-clean",
@@ -184,7 +184,7 @@ def make_build_factory(application: FlatpakApplication):
             command=[
                 "flatpak",
                 "build-bundle",
-                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_id)s"),
+                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_fingerprint)s"),
                 "repo",
                 application.bundle_file,
                 f"--runtime-repo={RUNTIME_REPO}",
