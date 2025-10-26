@@ -82,8 +82,8 @@ def make_build_factory(application: FlatpakApplication):
                 util.ShellArg(
                     command=[
                         "bash",
-                        "-lc",
-                        "mkdir -p ~/.gnupg && chmod 700 ~/.gnupg",
+                        "-c",
+                        "mkdir -p /root/.gnupg && chmod 700 /root/.gnupg",
                     ],
                     logname="stdio",
                 ),
@@ -91,12 +91,8 @@ def make_build_factory(application: FlatpakApplication):
                     command=[
                         "bash",
                         "-c",
-                        "echo 'allow-preset-passphrase' >> /root/.gnupg/gpg-agent.conf",
+                        "printf 'allow-preset-passphrase\n' >> /root/.gnupg/gpg-agent.conf",
                     ],
-                    logname="stdio",
-                ),
-                util.ShellArg(
-                    command=["gpg", "--list-keys", "--with-keygrip"],
                     logname="stdio",
                 ),
                 util.ShellArg(
@@ -105,20 +101,20 @@ def make_build_factory(application: FlatpakApplication):
                 ),
                 util.ShellArg(
                     command=[
-                        "bash",
-                        "-c",
-                        util.Interpolate(
-                            "cat '%(prop:flatpak_gpg_passphrase_path)s' | /usr/lib/gnupg/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_uid)s'"
-                        ),
+                        "gpg",
+                        "--batch",
+                        "--import",
+                        util.Interpolate("%(prop:flatpak_gpg_private_key_path)s"),
                     ],
                     logname="stdio",
                 ),
                 util.ShellArg(
                     command=[
-                        "gpg",
-                        "--import",
-                        "--batch",
-                        util.Interpolate("%(prop:flatpak_gpg_private_key_path)s"),
+                        "bash",
+                        "-c",
+                        util.Interpolate(
+                            "cat '%(prop:flatpak_gpg_passphrase_path)s' | /usr/lib/gnupg/gpg-preset-passphrase --preset '%(prop:flatpak_gpg_key_fingerprint)s'"
+                        ),
                     ],
                     logname="stdio",
                 ),
@@ -166,7 +162,7 @@ def make_build_factory(application: FlatpakApplication):
                 "build",
                 "--user",
                 "--install-deps-from=flathub",
-                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_fingerprint)s"),
+                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_uid)s"),
                 "--disable-rofiles-fuse",
                 "--disable-updates",
                 "--force-clean",
@@ -184,7 +180,7 @@ def make_build_factory(application: FlatpakApplication):
             command=[
                 "flatpak",
                 "build-bundle",
-                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_fingerprint)s"),
+                util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_uid)s"),
                 "repo",
                 application.bundle_file,
                 f"--runtime-repo={RUNTIME_REPO}",
