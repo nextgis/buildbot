@@ -53,7 +53,6 @@ def flatpak_builder_command(props, manifest_file: str):
         "flatpak-builder",
         "build",
         "--user",
-        "--install-deps-from=flathub",
         util.Interpolate("--gpg-sign=%(prop:flatpak_gpg_key_uid)s"),
         "--disable-rofiles-fuse",
         "--disable-updates",
