@@ -40,7 +40,7 @@ REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Parse --user argument
 user_arg=""
-if [[ "$1" == "--user" ]]; then
+if [[ "${1:-}" == "--user" ]]; then
     user_arg="--user"
 fi
 
