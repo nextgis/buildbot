@@ -461,7 +461,7 @@ for repository in repositories:
                 mode="full",
                 shallow=True,
                 method="clobber",
-                submodules=False,
+                submodules=True,
                 timeout=65 * 60,
                 workdir=code_dir,
             )
