@@ -181,7 +181,7 @@ PLATFORMS = [
     {
         "name": "win",
         "os": "win64",
-        "worker": "build-win-py3",
+        "worker": "buildbot-win7",
         "repo_id": RepkaRepository.WIN64,
         "env": {},
         "cmake_configure_qt_command": CMAKE_CONFIGURE_QT_WIN_COMMAND,

@@ -134,11 +134,11 @@ sentry_auth_token = os.environ.get("SENTRY_AUTH_TOKEN")
 https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
 
 platforms = [
-    {"name": "win64", "worker": "build-win-py3", "generator": "Visual Studio 16 2019"},
+    {"name": "win64", "worker": "buildbot-win7", "generator": "Visual Studio 16 2019"},
     {"name": "mac", "worker": "build-mac-py3", "generator": ""},
     {
         "name": "win64-static",
-        "worker": "build-win-py3",
+        "worker": "buildbot-win7",
         "generator": "Visual Studio 16 2019",
     },
     {"name": "mac-static", "worker": "build-mac-py3", "generator": ""},
@@ -148,7 +148,7 @@ build_lock = util.MasterLock("borsch_worker_builds")
 # build_lock = util.WorkerLock("borsch_worker_builds",
 #                              maxCount=1,
 #                              maxCountForWorker={
-#                                 'build-win-py3': 1,
+#                                 'buildbot-win7': 1,
 #                                 'build-mac-py3': 1,
 #                                 }
 #                              )

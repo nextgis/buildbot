@@ -43,7 +43,7 @@ repka_endpoint = "https://rm.nextgis.com"
 build_lock = util.WorkerLock(
     "create_installer_worker_builds",
     maxCount=1,
-    maxCountForWorker={"build-win-py3": 1, "build-mac-py3": 1},
+    maxCountForWorker={"buildbot-win7": 1, "build-mac-py3": 1},
 )
 
 builder_names = [
@@ -338,7 +338,7 @@ def get_updater_package_path(props, platform):
 
 
 platforms = [
-    {"name": "win64", "worker": "build-win-py3", "repo_id": 5},
+    {"name": "win64", "worker": "buildbot-win7", "repo_id": 5},
     {"name": "mac", "worker": "build-mac-py3", "repo_id": 6},
 ]
 
