@@ -190,7 +190,7 @@ PLATFORMS = [
     {
         "name": "mac",
         "os": "mac",
-        "worker": "build-mac-py3",
+        "worker": "buildbot-mac",
         "repo_id": RepkaRepository.MACOS,
         "env": {
             "PATH": ["/usr/local/bin", "${PATH}"],

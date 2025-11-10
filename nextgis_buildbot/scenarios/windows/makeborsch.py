@@ -135,13 +135,13 @@ https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
 
 platforms = [
     {"name": "win64", "worker": "buildbot-win7", "generator": "Visual Studio 16 2019"},
-    {"name": "mac", "worker": "build-mac-py3", "generator": ""},
+    {"name": "mac", "worker": "buildbot-mac", "generator": ""},
     {
         "name": "win64-static",
         "worker": "buildbot-win7",
         "generator": "Visual Studio 16 2019",
     },
-    {"name": "mac-static", "worker": "build-mac-py3", "generator": ""},
+    {"name": "mac-static", "worker": "buildbot-mac", "generator": ""},
 ]
 
 build_lock = util.MasterLock("borsch_worker_builds")
@@ -149,7 +149,7 @@ build_lock = util.MasterLock("borsch_worker_builds")
 #                              maxCount=1,
 #                              maxCountForWorker={
 #                                 'buildbot-win7': 1,
-#                                 'build-mac-py3': 1,
+#                                 'buildbot-mac': 1,
 #                                 }
 #                              )
 
