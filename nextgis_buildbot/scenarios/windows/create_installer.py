@@ -593,7 +593,7 @@ for platform in platforms:
             ],
             name="Prepare packages data",
             maxTime=max_time * 60,
-            timeout=timeout * 60,
+            timeout=0,
             haltOnFailure=True,
             workdir=code_dir,
             env=env_proxy,
