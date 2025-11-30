@@ -22,8 +22,8 @@ username = "buildbot"  # username = 'bishopgis'
 https_proxy = os.environ.get("BUILDBOT_HTTPS_PROXY")
 installer_git = "https://github.com/nextgis/nextgis_installer.git"
 
-timeout = 180
-max_time = 240
+timeout = 180 * 1000
+max_time = 240 * 1000
 
 c = {}
 c["change_source"] = []
