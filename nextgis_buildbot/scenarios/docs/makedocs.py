@@ -104,9 +104,9 @@ for lang in langs:
     factory.addStep(
         steps.ShellCommand(
             command=["make", "latexpdf", 'LATEXMKOPTS="--interaction=nonstopmode"'],
-            name="Generate pdf for NextGIS FormBuilder",
-            description=["make", "pdf for NextGIS FormBuilder"],
-            workdir="build/source/docs_formbuilder",
+            name="Generate pdf for NextGIS QGIS",
+            description=["make", "pdf for NextGIS QGIS"],
+            workdir="build/source/docs_ngqgis",
             warnOnFailure=True,
             env=env,
         )
@@ -114,9 +114,9 @@ for lang in langs:
     factory.addStep(
         steps.ShellCommand(
             command=["make", "latexpdf", 'LATEXMKOPTS="--interaction=nonstopmode"'],
-            name="Generate pdf for NextGIS QGIS",
-            description=["make", "pdf for NextGIS QGIS"],
-            workdir="build/source/docs_ngqgis",
+            name="Generate pdf for NextGIS GeoServices",
+            description=["make", "pdf for NextGIS GeoServices"],
+            workdir="build/source/docs_geoserv_prem",
             warnOnFailure=True,
             env=env,
         )
@@ -158,50 +158,6 @@ for lang in langs:
             env=env,
         )
     )
-
-    if lang == "ru":
-        factory.addStep(
-            steps.ShellCommand(
-                command=["make", "latexpdf", 'LATEXMKOPTS="--interaction=nonstopmode"'],
-                description=["make", "pdf for NextGIS Manager"],
-                workdir="build/source/docs_ngmanager",
-                warnOnFailure=True,
-                env=env,
-            )
-        )
-        # Create PDF only on common products
-        # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-        #                               description=["make", "pdf for NextGIS Bio"],
-        #                               workdir="build/source/docs_ngbio"))
-
-        # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-        #                               description=["make", "pdf for NextGIS open geodata portal"],
-        #                               workdir="build/source/docs_ogportal"))
-        # factory.addStep(steps.ShellCommand(command=['make', 'latexpdf', 'LATEXMKOPTS="--interaction=nonstopmode"'],
-        #                               description=["make", "pdf for NextGIS forest inspector"],
-        #                               workdir="build/source/docs_forestinspector"))
-
-    # Skip javadoc for outdated mobile SDK v2
-    # factory.addStep(steps.ShellCommand(command=["sh", "make_javadoc.sh"],
-    #                                   description=["make", "javadoc for mobile (android)"],
-    #                                   descriptionDone=["made", "javadoc for mobile (android)"],
-    #                                   workdir="build/source/ngmobile_dev"))
-
-    # factory.addStep(
-    #     steps.ShellCommand(
-    #         command=["sh", "make_kotlindoc.sh"],
-    #         description=["make", "kotlindoc for mobile (android)"],
-    #         workdir="build/source/ngmobile_dev",
-    #         warnOnFailure=True,
-    #         env=env,
-    #     )
-    # )
-
-    # Disable NGM API
-    # factory.addStep(steps.ShellCommand(command=["anarchysphinx", "--overwrite", "ios_maplib_src", "ios_maplib"],
-    #                                   description=["make", "swiftdoc for mobile (ios)"],
-    #                                   workdir="build/source/ngmobile_dev", warnOnFailure=True,
-    #                                   env=env,))
 
     # 3. build html
     factory.addStep(
