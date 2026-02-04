@@ -106,6 +106,7 @@ repositories = [
     {'repo':'py_charset_normalizer', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_h3', 'args':[], 'requirements':['scikit-build'], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
     {'repo':'py_versioneer', 'args':[], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis-borsch', 'test_regex':[]},
+    {'repo':'gdal_sxf_plugin', 'args':['-DWITH_GDAL_EXTERNAL=ON'], 'requirements':[], 'os':['win64','mac'], 'repo_root':'https://github.com', 'org':'nextgis', 'test_regex':[]},
 ]
 # fmt: on
 
