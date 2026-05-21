@@ -222,8 +222,8 @@ def make_sideload_repo_factory():
             name="Create Repka release for sideload repo",
             package=PACKAGE_ID,
             release_name=version,
-            release_description="Release for RepkaSDK",
-            tags=["sideload-repo", "flatpak", "repka-sdk"],
+            #release_description="Release for RepkaSDK",
+            #tags=["sideload-repo", "flatpak", "repka-sdk"],
             mark_latest=True,
             files=f"{SIDELOAD_REPO_NAME}.zip"
         )
