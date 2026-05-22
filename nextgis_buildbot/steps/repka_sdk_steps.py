@@ -10,8 +10,8 @@ class RepkaEnsureSdk(buildstep.ShellMixin, buildstep.BuildStep):
     """Ensure Repka CLI is available and optionally authenticated.
 
     Behavior:
-    - Check if the ``repka`` command exists by running ``command -v repka``.
-    - If the command is not found, the step fails immediately.
+    - Ensure repka-sdk exists by running ``pip install repka-sdk``.
+    - If the installation failed, the step fails immediately.
     - If both ``username`` and ``password`` are provided, authenticate against
       the Repka server using ``repka auth login ... dotenv``, which stores
       credentials in a ``.env`` file on the worker.
@@ -35,14 +35,15 @@ class RepkaEnsureSdk(buildstep.ShellMixin, buildstep.BuildStep):
     @defer.inlineCallbacks
     def run(self):
         cmd = yield self.makeRemoteShellCommand(
-            command=['command', '-v', 'repka'],
+            command=['pip', 'install', 'repka-sdk'],
             collectStdout=True,
             logEnviron=False
         )
         yield self.runCommand(cmd)
         if cmd.didFail():
             defer.returnValue(FAILURE)
-        elif self.username is not None and self.password is not None:
+        
+        if self.username is not None and self.password is not None:
             cmd = yield self.makeRemoteShellCommand(
                 command=['repka', 'auth', 'login', '-f', '-u', self.username, '-p', self.password, '--url', self.server_url, 'dotenv'],
                 collectStdout=True,
@@ -55,6 +56,8 @@ class RepkaEnsureSdk(buildstep.ShellMixin, buildstep.BuildStep):
 
             self.descriptionDone = ["repka-ensure-sdk", "ok"]
             defer.returnValue(SUCCESS)
+        else:
+            defer.returnValue(FAILURE)
 
 
 class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
@@ -88,10 +91,12 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
     :type options: dict or None
     """
 
-    def __init__(self, package, release_name, files, version_tag=None, mark_latest=False, options=None, **kwargs):
+    def __init__(self, package, release_name, release_description, files, version_tag=None, mark_latest=False, tags=None, options=None, **kwargs):
         self.package = package
         self.release_name = release_name
+        self.release_description = release_description
         self.files = files
+        self.tags = tags or []
         self.version_tag = version_tag
         self.mark_latest = mark_latest
         self.options = options or {}
@@ -118,10 +123,20 @@ class RepkaCreateRelease(buildstep.ShellMixin, buildstep.BuildStep):
                 package_id = result['id']
                 self.setProperty("repka_package_id", package_id, "RepkaCreateRelease")
 
-                cmd = ['repka', '--json', 'release', 'create', '-p', package_id, '-n', self.release_name]
+                cmd = [
+                    'repka', '--json', 'release', 'create', 
+                    '-p', package_id, 
+                    '-n', self.release_name, 
+                    '-d', self.release_description
+                ]
         
-                for f in self.files:
-                    cmd.extend(['--file', f])
+                for file in self.files:
+                    cmd.extend(['--file', file])
+                for tag in self.tags:
+                    cmd.extend(['--tag', tag])
+                for option in self.options:
+                    cmd.extend(['--option', option])
+
 
                 if self.version_tag:
                     cmd.extend(['--version-tag', self.version_tag])

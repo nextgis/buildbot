@@ -222,8 +222,8 @@ def make_sideload_repo_factory():
             name="Create Repka release for sideload repo",
             package=PACKAGE_ID,
             release_name=version,
-            #release_description="Release for RepkaSDK",
-            #tags=["sideload-repo", "flatpak", "repka-sdk"],
+            release_description="Release for RepkaSDK",
+            tags=["sideload-repo", "flatpak", "repka-sdk"],
             mark_latest=True,
             files=f"{SIDELOAD_REPO_NAME}.zip"
         )
@@ -246,7 +246,7 @@ def make_config() -> Dict[str, Any]:
             workernames=["flatpak"],
             factory=make_sideload_repo_factory(),
             collapseRequests=True,
-            description="Build sideload repo for flathub",
+            description="Build sideload repo for RepkaSDK",
             tags=["linux", "flatpak"],
         )
     ]
@@ -254,8 +254,8 @@ def make_config() -> Dict[str, Any]:
     schedulers_list = [
         schedulers.ForceScheduler(
             name=f"{BUILDER_NAME}_force_scheduler",
-            label="Build Flathub Sideload Repo",
-            buttonName="Build Flathub Sideload Repo",
+            label="Build Flathub Sideload Repo for RepkaSDK",
+            buttonName="Build Flathub Sideload Repo for RepkaSDK",
             builderNames=[BUILDER_NAME],
             codebases=[util.CodebaseParameter(codebase="", hide=True)],
         )
