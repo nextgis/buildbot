@@ -10,7 +10,7 @@ class RepkaEnsureSdk(buildstep.ShellMixin, buildstep.BuildStep):
     """Ensure Repka CLI is available and optionally authenticated.
 
     Behavior:
-    - Ensure repka-sdk exists by running ``pip install repka-sdk``.
+    - Ensure repka-sdk exists by running ``command``.
     - If the installation failed, the step fails immediately.
     - If both ``username`` and ``password`` are provided, authenticate against
       the Repka server using ``repka auth login ... dotenv``, which stores
@@ -25,17 +25,18 @@ class RepkaEnsureSdk(buildstep.ShellMixin, buildstep.BuildStep):
     :type server_url: str
     """
 
-    def __init__(self, username=None, password=None, server_url="https://rm.staging.nextgis.com", **kwargs):
+    def __init__(self, username=None, password=None, server_url="https://rm.staging.nextgis.com", command=None, **kwargs):
         self.username = username
         self.password = password
         self.server_url = server_url
+        self.command = command or ['pip', 'install', 'repka-sdk']
         kwargs = self.setupShellMixin(kwargs)
         super().__init__(**kwargs)
 
     @defer.inlineCallbacks
     def run(self):
         cmd = yield self.makeRemoteShellCommand(
-            command=['pip', 'install', 'repka-sdk'],
+            command=self.command,
             collectStdout=True,
             logEnviron=False
         )

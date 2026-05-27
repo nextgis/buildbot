@@ -205,7 +205,9 @@ def make_sideload_repo_factory():
     factory.addStep(
         RepkaEnsureSdk(
             username="buildbot_test",
-            password="buildbot_test"
+            password="buildbot_test",
+            command=['apt-get', 'install', '-y', '--no-install-recommends', 'python3-repka-sdk'],
+            haltOnFailure=True,
         )
     )
 
@@ -225,7 +227,8 @@ def make_sideload_repo_factory():
             release_description="Release for RepkaSDK",
             tags=["sideload-repo", "flatpak", "repka-sdk"],
             mark_latest=True,
-            files=f"{SIDELOAD_REPO_NAME}.zip"
+            files=f"{SIDELOAD_REPO_NAME}.zip",
+            haltOnFailure=True,
         )
     )
 
