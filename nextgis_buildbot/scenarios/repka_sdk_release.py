@@ -204,9 +204,9 @@ def make_sideload_repo_factory():
     # Ensure repka SDK
     factory.addStep(
         RepkaEnsureSdk(
+            name="Ensure Repka SDK",
             username="buildbot_test",
             password="buildbot_test",
-            command=['apt-get', 'install', '-y', '--no-install-recommends', 'python3-repka-sdk'],
             haltOnFailure=True,
         )
     )
