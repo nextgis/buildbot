@@ -159,7 +159,51 @@ for lang in langs:
         )
     )
 
-    # 3. build html
+    # 3. upload to web server
+    factory.addStep(
+        steps.ShellSequence(
+            commands=[
+                util.ShellArg(
+                    command=[
+                        "pybabel",
+                        "compile",
+                        "--directory=source/locale",
+                        "--domain=messages",
+                    ],
+                    logname=logname,
+                ),
+                util.ShellArg(
+                    command=[
+                        "pybabel",
+                        "compile",
+                        "--directory=source/locale",
+                        "--domain=sphinx",
+                    ],
+                    logname=logname,
+                ),
+                util.ShellArg(
+                    command=[
+                        "npm",
+                        "install",
+                    ],
+                    logname=logname,
+                ),
+                util.ShellArg(
+                    command=[
+                        "npm",
+                        "run",
+                        "build:assets",
+                    ],
+                    logname=logname,
+                ),
+            ],
+            name="Build node dependencies and i18n",
+            haltOnFailure=True,
+            workdir="build",
+        )
+    )
+
+    # 4. build html
     factory.addStep(
         steps.Sphinx(
             sphinx_builddir="_build/html",
@@ -168,7 +212,6 @@ for lang in langs:
         )
     )
 
-    # 4. upload to web server
     factory.addStep(
         steps.ShellSequence(
             commands=[
