@@ -8,16 +8,25 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Add additional ubuntu packages
 RUN apt-get update \
   && apt-get install -y \
+    locales \
     cmake git ssh rsync \
     texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended \
     texlive-lang-cyrillic texlive-fonts-extra latexmk \
     hunspell-en-gb hunspell-en-us python3-enchant \
     nodejs npm \
+  && sed -i 's/^# *\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+  && sed -i 's/^# *\(ru_RU.UTF-8 UTF-8\)/\1/' /etc/locale.gen \
+  && locale-gen \
   && apt-get clean && apt-get autoclean \
   && rm -rf /var/cache/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
 RUN pip3 install --break-system-packages sphinx==9.1.0 sphinxcontrib-httpdomain \
-      sphinxcontrib-spelling pydata-sphinx-theme==0.17.0 Babel==2.18.0
+      sphinxcontrib-spelling pydata-sphinx-theme==0.17.0 Babel==2.18.0 \
+      sphinx-notfound-page==1.1.0 sphinx-llm==0.4.1
 
 # RUN git clone https://github.com/nextgis/kotlin_sphinx.git \
 #   && git clone https://github.com/nextgis/anarchy_sphinx.git \
