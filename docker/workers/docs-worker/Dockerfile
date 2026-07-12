@@ -26,7 +26,7 @@ ENV LC_ALL=en_US.UTF-8
 
 RUN pip3 install --break-system-packages sphinx==9.1.0 sphinxcontrib-httpdomain \
       sphinxcontrib-spelling pydata-sphinx-theme==0.17.0 Babel==2.18.0 \
-      sphinx-notfound-page==1.1.0 sphinx-llm==0.4.1
+      sphinx-notfound-page==1.1.0 sphinx-llm==0.4.1 sphinxext-opengraph==0.13.0
 
 # RUN git clone https://github.com/nextgis/kotlin_sphinx.git \
 #   && git clone https://github.com/nextgis/anarchy_sphinx.git \
