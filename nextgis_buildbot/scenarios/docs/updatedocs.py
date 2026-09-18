@@ -19,7 +19,6 @@ repos = [
     {"repo": "docs_ngmobile", "langs": ["ru", "en"]},
     {"repo": "docs_geoserv_prem", "langs": ["ru", "en"]},
     {"repo": "docs_toolbox_prem", "langs": ["ru"]},
-    {"repo": "docs_formbuilder", "langs": ["ru", "en"]},
     {"repo": "docs_collector", "langs": ["ru", "en"]},
     {"repo": "docs_ngtracker", "langs": ["ru", "en"]},
     {"repo": "docs_ngid", "langs": ["ru", "en"]},
@@ -29,6 +28,7 @@ repos = [
     {"repo": "ngmobile_dev", "langs": ["ru", "en"]},
     {"repo": "tracker_hub_dev", "langs": ["ru", "en"]},
     {"repo": "docs_howto", "langs": ["ru", "en"]},
+    {"repo": "docs_onpremise", "langs": ["ru", "en"]},
 ]
 
 base_repourl = "https://github.com/nextgis/"
