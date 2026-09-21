@@ -27,7 +27,6 @@ repos = [
     {"repo": "docs_rosreestr_tools", "langs": ["ru"]},
     {"repo": "docs_toolbox", "langs": ["ru", "en"]},
     {"repo": "docs_toolbox_prem", "langs": ["ru"]},
-    {"repo": "ngmobile_dev", "langs": ["ru", "en"]},
     {"repo": "tracker_hub_dev", "langs": ["ru", "en"]},
 ]
 
