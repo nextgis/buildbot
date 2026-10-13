@@ -13,6 +13,17 @@ c["builders"] = []
 
 repourl = "https://github.com/nextgis/docs_ng.git"
 langs = ["ru", "en"]
+
+typesense_host = os.environ.get("DOCS_TYPESENSE_HOST", "")
+typesense_api_key = os.environ.get("DOCS_TYPESENSE_API_KEY", "")
+typesense_search_key = os.environ.get("DOCS_TYPESENSE_SEARCH_API_KEY", "")
+if typesense_host and not typesense_api_key:
+    raise ValueError("DOCS_TYPESENSE_API_KEY is required with DOCS_TYPESENSE_HOST")
+if typesense_host and not typesense_search_key:
+    raise ValueError("DOCS_TYPESENSE_SEARCH_API_KEY is required with DOCS_TYPESENSE_HOST")
+if typesense_host and typesense_search_key == typesense_api_key:
+    raise ValueError("DOCS_TYPESENSE_SEARCH_API_KEY must differ from DOCS_TYPESENSE_API_KEY")
+
 ssh_user = os.environ.get("DOCS_UPLOADER", "user")
 ssh_port = os.environ.get("DOCS_UPLOAD_SERVER_PORT", "11425")
 ftp_address = os.environ.get("FTP_DOCS_ADDRESS", "192.168.6.12")
@@ -79,6 +90,17 @@ for lang in langs:
             "LANGUAGE": "en_US:en",
             "LC_ALL": "en_US.UTF-8",
         }
+
+    search_env = {
+        "TYPESENSE_SEARCH_ENDPOINT": typesense_host,
+        "TYPESENSE_SEARCH_API_KEY": typesense_search_key if typesense_host else "",
+        "TYPESENSE_SEARCH_COLLECTION": "nextgis_docs_search_" + lang,
+    }
+    index_env = {
+        **env,
+        "TYPESENSE_HOST": typesense_host,
+        "TYPESENSE_API_KEY": typesense_api_key,
+    }
 
     # 2. build pdf for each doc except dev
     factory.addStep(
@@ -209,8 +231,29 @@ for lang in langs:
             sphinx_builddir="_build/html",
             sphinx_sourcedir="source",
             sphinx_builder="html",
+            env=search_env,
+            logEnviron=False,
         )
     )
+
+    # Prepare a new collection without changing the currently published language alias.
+    if typesense_host:
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "python3", "scripts/typesense_search.py", "prepare", "_build/html/typesense-docs.jsonl",
+                    "--language", lang,
+                    "--base-url", "https://docs.nextgis.ru/" if lang == "ru" else "https://docs.nextgis.com/",
+                    "--collection", util.Interpolate("nextgis_docs_search_" + lang + "_build%(prop:buildnumber)s"),
+                    "--state", "_build/typesense-state.json",
+                ],
+                name="Prepare documentation search index",
+                workdir="build",
+                env=index_env,
+                logEnviron=False,
+                haltOnFailure=True,
+            )
+        )
 
     factory.addStep(
         steps.ShellSequence(
@@ -243,6 +286,22 @@ for lang in langs:
             workdir="build",
         )
     )
+
+    # Switch the language alias only after the HTML upload succeeds.
+    if typesense_host:
+        factory.addStep(
+            steps.ShellCommand(
+                command=[
+                    "python3", "scripts/typesense_search.py", "publish",
+                    "--state", "_build/typesense-state.json",
+                ],
+                name="Publish documentation search index",
+                workdir="build",
+                env=index_env,
+                logEnviron=False,
+                haltOnFailure=True,
+            )
+        )
 
     builder = util.BuilderConfig(
         name=project_name,
